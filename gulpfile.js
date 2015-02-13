@@ -1,5 +1,14 @@
-var gulp = require('gulp');
+var gulp = require('gulp'),
+  eslint = require('gulp-eslint');
 
-gulp.task("default", function() {
-  console.log("Default task: doing nothing");
+gulp.task("lint", function() {
+  return gulp
+    .src("fingerprint2.js")
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failOnError());
+});
+
+gulp.task("default", ["lint"], function() {
+
 });

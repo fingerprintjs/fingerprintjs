@@ -16,7 +16,8 @@
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-;(function (name, context, definition) {
+(function (name, context, definition) {
+  "use strict";
   if (typeof module !== "undefined" && module.exports) { module.exports = definition(); }
   else if (typeof define === "function" && define.amd) { define(definition); }
   else { context[name] = definition(); }
