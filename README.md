@@ -18,8 +18,4 @@ fingerprintjs.
 
 ### WIP
 
-### Any help will be greatly appreciated, please send your ideas, links
-and pull requests.
-
-
 #### License: MIT or Apache, whichever you prefer.

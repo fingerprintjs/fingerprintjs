@@ -23,4 +23,40 @@
   else { context[name] = definition(); }
 })("Fingerprint2", this, function() {
   "use strict";
+  var Fingerprint2 = function(options) {
+    var nativeForEach, nativeMap;
+    nativeForEach = Array.prototype.forEach;
+    nativeMap = Array.prototype.map;
+
+    this.each = function (obj, iterator, context) {
+      if (obj === null) {
+        return;
+      }
+      if (nativeForEach && obj.forEach === nativeForEach) {
+        obj.forEach(iterator, context);
+      } else if (obj.length === +obj.length) {
+        for (var i = 0, l = obj.length; i < l; i++) {
+          if (iterator.call(context, obj[i], i, obj) === {}) { return; }
+        }
+      } else {
+        for (var key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            if (iterator.call(context, obj[key], key, obj) === {}) { return; }
+          }
+        }
+      }
+    };
+
+    this.map = function(obj, iterator, context) {
+      var results = [];
+      // Not using strict equality so that this acts as a
+      // shortcut to checking for `null` and `undefined`.
+      if (obj == null) { return results; }
+      if (nativeMap && obj.map === nativeMap) { return obj.map(iterator, context); }
+      this.each(obj, function(value, index, list) {
+        results[results.length] = iterator.call(context, value, index, list);
+      });
+      return results;
+    };
+  };
 });
