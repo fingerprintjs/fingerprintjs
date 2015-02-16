@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head>
+  <title>Fingerprintjs2 test</title>
+</head>
+<body>
+  <h1>Your browser fingerprint:</h1>
+  <h2><i id="fp"/></h2>
+  <script src="fingerprint2.js"></script>
+  <script>
+    var fp = new Fingerprint2().get();
+    document.getElementById("fp").innerHTML = fp;
+  </script>
+</body>
+</html>
