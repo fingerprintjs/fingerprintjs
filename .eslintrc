@@ -5,6 +5,7 @@
     "amd": true
   },
   "rules": {
+    "no-fallthrough": false
   },
 
 }
