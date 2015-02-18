@@ -32,6 +32,18 @@
     get: function(){
       var keys = [];
       keys = this.userAgentKey(keys);
+      keys = this.languageKey(keys);
+      keys = this.colorDepthKey(keys);
+      keys = this.screenResolutionKey(keys);
+      keys = this.timezoneOffsetKey(keys);
+      keys = this.sessionStorageKey(keys);
+      keys = this.localStorageKey(keys);
+      keys = this.indexedDbKey(keys);
+      keys = this.addBehaviorKey(keys);
+      keys = this.openDatabaseKey(keys);
+      keys = this.cpuClassKey(keys);
+      keys = this.platformKey(keys);
+      keys = this.doNotTrackKey(keys);
       return this.x64hash128(keys.join("~~~"), 31);
     },
 
@@ -40,6 +52,130 @@
         keys.push(navigator.userAgent);
       }
       return keys;
+    },
+    languageKey: function(keys) {
+      if(!this.options.excludeLanguage) {
+        keys.push(navigator.language);
+      }
+      return keys;
+    },
+    colorDepthKey: function(keys) {
+      if(!this.options.excludeColorDepth) {
+        keys.push(screen.colorDepth);
+      }
+      return keys;
+    },
+    screenResolutionKey: function(keys) {
+      if(!this.options.excludeScreenResolution) {
+        var resolution = this.getScreenResolution();
+        if (typeof resolution !== "undefined"){ // headless browsers, such as phantomjs
+          keys.push(resolution.join("x"));
+        }
+      }
+      return keys;
+    },
+    getScreenResolution: function () {
+      var resolution;
+      if(this.options.detectScreenOrientation) {
+        resolution = (screen.height > screen.width) ? [screen.height, screen.width] : [screen.width, screen.height];
+      } else {
+        resolution = [screen.height, screen.width];
+      }
+      return resolution;
+    },
+    timezoneOffsetKey: function(keys) {
+      if(!this.options.excludeTimezoneOffset) {
+        keys.push(new Date().getTimezoneOffset());
+      }
+      return keys;
+    },
+    sessionStorageKey: function(keys) {
+      if(!this.options.excludeSessionStorage && this.hasSessionStorage()) {
+        keys.push("sessionStorageKey");
+      }
+      return keys;
+    },
+    localStorageKey: function(keys) {
+      if(!this.options.excludeSessionStorage && this.hasLocalStorage()) {
+        keys.push("localStorageKey");
+      }
+      return keys;
+    },
+    indexedDbKey: function(keys) {
+      if(!this.options.excludeIndexedDB && this.hasIndexedDB()) {
+        keys.push("indexedDbKey");
+      }
+      return keys;
+    },
+    addBehaviorKey: function(keys) {
+      //body might not be defined at this point or removed programmatically
+      if(document.body && !this.options.excludeAddBehavior && document.body.addBehavior) {
+        keys.push("addBehaviorKey");
+      }
+      return keys;
+    },
+    openDatabaseKey: function(keys) {
+      if(!this.options.excludeOpenDatabase && window.openDatabase) {
+        keys.push("openDatabase");
+      }
+      return keys;
+    },
+    cpuClassKey: function(keys) {
+      if(!this.options.excludeCpuClass) {
+        keys.push(this.getNavigatorCpuClass());
+      }
+      return keys;
+    },
+    platformKey: function(keys) {
+      if(!this.options.excludePlatform) {
+        keys.push(this.getNavigatorPlatform());
+      }
+      return keys;
+    },
+    doNotTrackKey: function(keys) {
+      if(!this.options.excludeDoNotTrack) {
+        keys.push(this.getDoNotTrack());
+      }
+      return keys;
+    },
+    hasSessionStorage: function () {
+      try {
+        return !!window.sessionStorage;
+      } catch(e) {
+        return true; // SecurityError when referencing it means it exists
+      }
+    },
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=781447
+    hasLocalStorage: function () {
+      try {
+        return !!window.localStorage;
+      } catch(e) {
+        return true; // SecurityError when referencing it means it exists
+      }
+    },
+    hasIndexedDB: function (){
+      return !!window.indexedDB;
+    },
+    getNavigatorCpuClass: function () {
+      if(navigator.cpuClass){
+        return "navigatorCpuClass: " + navigator.cpuClass;
+      } else {
+        return "navigatorCpuClass: unknown";
+      }
+    },
+    getNavigatorPlatform: function () {
+      if(navigator.platform) {
+        return "navigatorPlatform: " + navigator.platform;
+      } else {
+        return "navigatorPlatform: unknown";
+      }
+    },
+    getDoNotTrack: function () {
+      if(navigator.doNotTrack) {
+        return "doNotTrack: " + navigator.doNotTrack;
+      } else {
+        return "doNotTrack: unknown";
+      }
     },
     each: function (obj, iterator, context) {
       if (obj === null) {
