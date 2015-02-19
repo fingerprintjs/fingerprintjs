@@ -18,4 +18,10 @@ fingerprintjs.
 
 ### WIP
 
+#### To recompile the FontList.swf file:
+
+* Download Adobe Flex SDK from:  http://www.adobe.com/devnet/flex/flex-sdk-download.html
+* Unzip it, add the bin/ directory to your $PATH  (mxmlc binary should be in path)
+* Run "make"
+
 #### License: MIT or Apache, whichever you prefer.
