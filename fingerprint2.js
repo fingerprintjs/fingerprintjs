@@ -44,6 +44,9 @@
       keys = this.cpuClassKey(keys);
       keys = this.platformKey(keys);
       keys = this.doNotTrackKey(keys);
+      // flash
+
+      this.loadSwf();
       return this.x64hash128(keys.join("~~~"), 31);
     },
 
@@ -176,6 +179,24 @@
       } else {
         return "doNotTrack: unknown";
       }
+    },
+    addFlashDivNode: function(id) {
+      var node = document.createElement("div");
+      node.setAttribute("id", id);
+      node.setAttribute("style", "'width': 1px; height: 1px;");
+      document.body.appendChild(node);
+    },
+    loadSwf: function() {
+      var id = "fingerprintjs2-swf";
+      this.addFlashDivNode(id);
+      var flashvars = { onReady: this.onSwfLoaded, swfObjectId: id };
+      var flashparams = { allowScriptAccess: "always", menu: "false" };
+      var flashattrs = { id: id, name: id };
+      swfobject.embedSWF("flash/compiled/FontList.swf", id, "1", "1", "9.0.0", false, flashvars, flashparams, flashattrs);
+    },
+    onSwfLoaded: function() {
+      alert("swf loaded");
+      console.log("loaded");
     },
     each: function (obj, iterator, context) {
       if (obj === null) {
