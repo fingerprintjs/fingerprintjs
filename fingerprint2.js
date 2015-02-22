@@ -24,7 +24,9 @@
 })("Fingerprint2", this, function() {
   "use strict";
   var Fingerprint2 = function(options) {
-    this.options = options || {};
+    this.options = {
+      swfContainerId: "fingerprintjs2-swf"
+    };
     this.nativeForEach = Array.prototype.forEach;
     this.nativeMap = Array.prototype.map;
   };
@@ -46,7 +48,9 @@
       keys = this.doNotTrackKey(keys);
       // flash
 
-      this.loadSwf();
+      this.loadSwf(function(fonts){
+        console.table(fonts);
+      });
       return this.x64hash128(keys.join("~~~"), 31);
     },
 
@@ -180,23 +184,27 @@
         return "doNotTrack: unknown";
       }
     },
-    addFlashDivNode: function(id) {
+    hasMinFlashInstalled: function () {
+      return swfobject.hasFlashPlayerVersion("9.0.0");
+    },
+    addFlashDivNode: function() {
       var node = document.createElement("div");
-      node.setAttribute("id", id);
+      node.setAttribute("id", this.options.swfContainerId);
       node.setAttribute("style", "'width': 1px; height: 1px;");
       document.body.appendChild(node);
     },
-    loadSwf: function() {
-      var id = "fingerprintjs2-swf";
-      this.addFlashDivNode(id);
-      var flashvars = { onReady: this.onSwfLoaded, swfObjectId: id };
+    loadSwf: function(done) {
+      var onLoaded = function(id) {
+        var swfElement = document.getElementById(id);
+        var fonts = swfElement.fonts().join(";");
+        console.table(fonts);
+      };
+      var id = this.options.swfContainerId;
+      this.addFlashDivNode();
+      var flashvars = { onReady: onLoaded, swfObjectId: id };
       var flashparams = { allowScriptAccess: "always", menu: "false" };
       var flashattrs = { id: id, name: id };
       swfobject.embedSWF("flash/compiled/FontList.swf", id, "1", "1", "9.0.0", false, flashvars, flashparams, flashattrs);
-    },
-    onSwfLoaded: function() {
-      alert("swf loaded");
-      console.log("loaded");
     },
     each: function (obj, iterator, context) {
       if (obj === null) {
