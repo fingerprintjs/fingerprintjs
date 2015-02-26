@@ -18,6 +18,31 @@ fingerprintjs.
 
 ### WIP
 
+
+### List of fingerprinting sources
+
+1. UserAgent
+2. Language
+3. Color Depth
+4. Screen Resolution
+5. Timezone
+6. Has session storage or not
+7. Has local storage or not
+8. Has indexed DB
+9. Has IE specific 'AddBehavior'
+10. Has open DB
+11. CPU class
+12. Platform
+13. DoNotTrack or not
+14. Full list of installed fonts (maintaining their order, which increases the entropy), implemented with Flash.
+
+
+### Many more fingerprinting sources will be implemented, such as
+
+Canvas fingerprinting, Font css detection using side-channel technique, multi-monitor detection, silverlight integration, flash linux kernel version,
+numerous ActiveX controls and plugins, and many more.
+
+
 #### To recompile the FontList.swf file:
 
 * Download Adobe Flex SDK from:  http://www.adobe.com/devnet/flex/flex-sdk-download.html
