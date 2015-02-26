@@ -18,6 +18,17 @@ fingerprintjs.
 
 ### WIP
 
+### Usage
+
+```javascript
+
+new Fingerprint2().get(function(result){
+  console.log(result);
+});
+```
+
+To use flash font enumeration, make sure you have swfobject available.
+
 
 ### List of fingerprinting sources
 
