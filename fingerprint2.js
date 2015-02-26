@@ -15,6 +15,7 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+var fp = function(fonts){alert(fonts)};
 
 (function (name, context, definition) {
   "use strict";
@@ -25,14 +26,15 @@
   "use strict";
   var Fingerprint2 = function(options) {
     this.options = {
-      swfContainerId: "fingerprintjs2-swf"
+      swfContainerId: "fingerprintjs2"
     };
     this.nativeForEach = Array.prototype.forEach;
     this.nativeMap = Array.prototype.map;
   };
   Fingerprint2.prototype = {
-    get: function(){
+    get: function(done){
       var keys = [];
+      var _this = this;
       keys = this.userAgentKey(keys);
       keys = this.languageKey(keys);
       keys = this.colorDepthKey(keys);
@@ -46,12 +48,12 @@
       keys = this.cpuClassKey(keys);
       keys = this.platformKey(keys);
       keys = this.doNotTrackKey(keys);
-      // flash
-
+      // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
       this.loadSwf(function(fonts){
-        console.table(fonts);
+        keys.push(fonts.join(";"));
+        var murmur =  _this.x64hash128(keys.join("~~~"), 31);
+        done(murmur);
       });
-      return this.x64hash128(keys.join("~~~"), 31);
     },
 
     userAgentKey: function(keys) {
@@ -190,21 +192,18 @@
     addFlashDivNode: function() {
       var node = document.createElement("div");
       node.setAttribute("id", this.options.swfContainerId);
-      node.setAttribute("style", "'width': 1px; height: 1px;");
       document.body.appendChild(node);
     },
     loadSwf: function(done) {
-      var onLoaded = function(id) {
-        var swfElement = document.getElementById(id);
-        var fonts = swfElement.fonts().join(";");
-        console.table(fonts);
-      };
+      var hiddenCallback = "___fp_swf_loaded";
+      window[hiddenCallback] = function(fonts) {
+        done(fonts);
+      }
       var id = this.options.swfContainerId;
       this.addFlashDivNode();
-      var flashvars = { onReady: onLoaded, swfObjectId: id };
+      var flashvars = { onReady: hiddenCallback};
       var flashparams = { allowScriptAccess: "always", menu: "false" };
-      var flashattrs = { id: id, name: id };
-      swfobject.embedSWF("flash/compiled/FontList.swf", id, "1", "1", "9.0.0", false, flashvars, flashparams, flashattrs);
+      swfobject.embedSWF("flash/compiled/FontList.swf", id, "1", "1", "9.0.0", false, flashvars, flashparams, {});
     },
     each: function (obj, iterator, context) {
       if (obj === null) {

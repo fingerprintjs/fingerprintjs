@@ -2,9 +2,7 @@ package {
   import flash.display.Sprite;
   import flash.display.LoaderInfo;
   import flash.text.Font;
-  import flash.text.FontType;
-  import flash.text.FontStyle;
-  import flash.external.*;
+  import flash.external.ExternalInterface;
   
   public class FontList extends Sprite {
     
@@ -18,12 +16,10 @@ package {
     }
     
     private function loadExternalInterface(params:Object):void {
-      ExternalInterface.marshallExceptions = true;
-      ExternalInterface.addCallback("fonts", fonts);
-      ExternalInterface.call(params.onReady, params.swfObjectId);
+      ExternalInterface.call(params.onReady, fonts());
     }
     
-    public function fonts():Array {
+    private function fonts():Array {
       var fontNames:Array = [];
       for each (var font:Font in Font.enumerateFonts(true) )
       {
