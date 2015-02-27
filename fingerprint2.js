@@ -24,17 +24,23 @@ var fp = function(fonts){alert(fonts)};
   else { context[name] = definition(); }
 })("Fingerprint2", this, function() {
   "use strict";
+  var DEBUG = true;
   var Fingerprint2 = function(options) {
     this.options = {
-      swfContainerId: "fingerprintjs2"
+      swfContainerId: "fingerprintjs2",
+      swfPath: "flash/compiled/FontList.swf"
     };
     this.nativeForEach = Array.prototype.forEach;
     this.nativeMap = Array.prototype.map;
   };
   Fingerprint2.prototype = {
+    log: function(msg){
+      if(window.console){
+        console.log(msg);
+      }
+    },
     get: function(done){
       var keys = [];
-      var _this = this;
       keys = this.userAgentKey(keys);
       keys = this.languageKey(keys);
       keys = this.colorDepthKey(keys);
@@ -48,11 +54,10 @@ var fp = function(fonts){alert(fonts)};
       keys = this.cpuClassKey(keys);
       keys = this.platformKey(keys);
       keys = this.doNotTrackKey(keys);
-      // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
-      this.loadSwf(function(fonts){
-        keys.push(fonts.join(";"));
+      var _this = this;
+      this.flashFontsKey(keys, function(keys){
         var murmur =  _this.x64hash128(keys.join("~~~"), 31);
-        done(murmur);
+        return done(murmur);
       });
     },
 
@@ -147,6 +152,38 @@ var fp = function(fonts){alert(fonts)};
       }
       return keys;
     },
+    // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
+    flashFontsKey: function(keys, done) {
+      if(this.options.excludeFlashFonts) {
+        if(DEBUG){
+          this.log("Skipping flash fonts detection per excludeFlashFonts configuration option");
+        }
+        return done(keys);
+      }
+      // we do flash if swfobject is loaded
+      if(!this.hasSwfObjectLoaded()){
+        if(DEBUG){
+          this.log("Swfobject is not detected, Flash fonts enumeration is skipped")
+        }
+        return done(keys);
+      }
+      if(!this.hasMinFlashInstalled()){
+        if(DEBUG){
+          this.log("Flash is not installed, skipping Flash fonts enumeration");
+        }
+        return done(keys);
+      }
+      if(typeof this.options.swfPath === "undefined"){
+        if(DEBUG){
+          this.log("To use Flash fonts detection, you must pass the swfPath option, skipping Flash fonts enumeration");
+        }
+        return done(keys);
+      }
+      this.loadSwfAndDetectFonts(function(fonts){
+        keys.push(fonts.join(";"));
+        done(keys);
+      });
+    },
     hasSessionStorage: function () {
       try {
         return !!window.sessionStorage;
@@ -186,6 +223,9 @@ var fp = function(fonts){alert(fonts)};
         return "doNotTrack: unknown";
       }
     },
+    hasSwfObjectLoaded: function(){
+      return typeof window.swfobject !== "undefined";
+    },
     hasMinFlashInstalled: function () {
       return swfobject.hasFlashPlayerVersion("9.0.0");
     },
@@ -194,7 +234,7 @@ var fp = function(fonts){alert(fonts)};
       node.setAttribute("id", this.options.swfContainerId);
       document.body.appendChild(node);
     },
-    loadSwf: function(done) {
+    loadSwfAndDetectFonts: function(done) {
       var hiddenCallback = "___fp_swf_loaded";
       window[hiddenCallback] = function(fonts) {
         done(fonts);
@@ -203,7 +243,7 @@ var fp = function(fonts){alert(fonts)};
       this.addFlashDivNode();
       var flashvars = { onReady: hiddenCallback};
       var flashparams = { allowScriptAccess: "always", menu: "false" };
-      swfobject.embedSWF("flash/compiled/FontList.swf", id, "1", "1", "9.0.0", false, flashvars, flashparams, {});
+      swfobject.embedSWF(this.options.swfPath, id, "1", "1", "9.0.0", false, flashvars, flashparams, {});
     },
     each: function (obj, iterator, context) {
       if (obj === null) {

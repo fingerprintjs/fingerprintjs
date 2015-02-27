@@ -27,7 +27,18 @@ new Fingerprint2().get(function(result){
 });
 ```
 
+#### You can pass an object with options (all of which are optional):
+
+```javascript
+new Fingerprint2({swfPath: '/assets/FontList.swf', excludeUserAgent: true}).get(function(result){
+  console.log(result);
+});
+```
+
+Full list of options will be in the wiki. (wip)
+
 To use flash font enumeration, make sure you have swfobject available.
+If you don't, the library will skip the flash part entirely.
 
 
 ### List of fingerprinting sources
