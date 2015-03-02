@@ -62,6 +62,7 @@ If you don't, the library will skip the flash part entirely.
 12. Platform
 13. DoNotTrack or not
 14. Full list of installed fonts (maintaining their order, which increases the entropy), implemented with Flash.
+15. Browser plugins
 
 
 ### Many more fingerprinting sources will be implemented, such as

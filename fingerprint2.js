@@ -54,6 +54,7 @@ var fp = function(fonts){alert(fonts)};
       keys = this.cpuClassKey(keys);
       keys = this.platformKey(keys);
       keys = this.doNotTrackKey(keys);
+      keys = this.getPlugins(keys);
       var _this = this;
       this.flashFontsKey(keys, function(keys){
         var murmur =  _this.x64hash128(keys.join("~~~"), 31);
@@ -222,6 +223,20 @@ var fp = function(fonts){alert(fonts)};
       } else {
         return "doNotTrack: unknown";
       }
+    },
+    getPlugins: function(keys) {
+      if(!this.options.excludePlugins) {
+        var result = $.map(navigator.plugins, function (plugin) {
+            return [plugin.name,
+                    plugin.description, 
+              $.map(plugin, function (mimetype) {
+                return [mimetype.type, mimetype.suffixes].join("~");
+              }).join(",")
+            ].join("::");
+        }).join(";");
+        keys.push(result);
+      }
+      return keys;
     },
     hasSwfObjectLoaded: function(){
       return typeof window.swfobject !== "undefined";
