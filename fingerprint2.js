@@ -266,7 +266,7 @@ var fp = function(fonts){alert(fonts)};
       }
       if (this.nativeForEach && obj.forEach === this.nativeForEach) {
         obj.forEach(iterator, context);
-      } else if (obj.pluginArray[i].MimeType === +obj.length) {
+      } else if (obj.length === +obj.length) {
         for (var i = 0, l = obj.length; i < l; i++) {
           if (iterator.call(context, obj[i], i, obj) === {}) { return; }
         }
