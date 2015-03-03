@@ -15,8 +15,6 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-var fp = function(fonts){alert(fonts)};
-
 (function (name, context, definition) {
   "use strict";
   if (typeof module !== "undefined" && module.exports) { module.exports = definition(); }
@@ -26,6 +24,7 @@ var fp = function(fonts){alert(fonts)};
   "use strict";
   var DEBUG = true;
   var Fingerprint2 = function(options) {
+    // TODO: merge options
     this.options = {
       swfContainerId: "fingerprintjs2",
       swfPath: "flash/compiled/FontList.swf"
@@ -54,9 +53,10 @@ var fp = function(fonts){alert(fonts)};
       keys = this.cpuClassKey(keys);
       keys = this.platformKey(keys);
       keys = this.doNotTrackKey(keys);
-      var _this = this;
-      this.flashFontsKey(keys, function(keys){
-        var murmur =  _this.x64hash128(keys.join("~~~"), 31);
+      keys = this.canvasKey(keys);
+      var that = this;
+      this.flashFontsKey(keys, function(newKeys){
+        var murmur = that.x64hash128(newKeys.join("~~~"), 31);
         return done(murmur);
       });
     },
@@ -152,6 +152,12 @@ var fp = function(fonts){alert(fonts)};
       }
       return keys;
     },
+    canvasKey: function(keys) {
+      if(!this.options.excludeCanvas && this.isCanvasSupported()) {
+        keys.push(this.getCanvasFp());
+      }
+      return keys;
+    },
     // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
     flashFontsKey: function(keys, done) {
       if(this.options.excludeFlashFonts) {
@@ -163,7 +169,7 @@ var fp = function(fonts){alert(fonts)};
       // we do flash if swfobject is loaded
       if(!this.hasSwfObjectLoaded()){
         if(DEBUG){
-          this.log("Swfobject is not detected, Flash fonts enumeration is skipped")
+          this.log("Swfobject is not detected, Flash fonts enumeration is skipped");
         }
         return done(keys);
       }
@@ -223,6 +229,27 @@ var fp = function(fonts){alert(fonts)};
         return "doNotTrack: unknown";
       }
     },
+    getCanvasFp: function() {
+      // Very simple now, need to make it more complex (geo shapes etc)
+      var canvas = document.createElement("canvas");
+      var ctx = canvas.getContext("2d");
+      // https://www.browserleaks.com/canvas#how-does-it-work
+      var txt = "Cwm fjordbank glyphs vext quiz, https://github.com/valve ὠ";
+      ctx.textBaseline = "top";
+      ctx.font = "70px 'Arial'";
+      ctx.textBaseline = "alphabetic";
+      ctx.fillStyle = "#f60";
+      ctx.fillRect(125, 1, 62, 20);
+      ctx.fillStyle = "#069";
+      ctx.fillText(txt, 2, 15);
+      ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
+      ctx.fillText(txt, 4, 17);
+      return canvas.toDataURL();
+    },
+    isCanvasSupported: function () {
+      var elem = document.createElement("canvas");
+      return !!(elem.getContext && elem.getContext("2d"));
+    },
     hasSwfObjectLoaded: function(){
       return typeof window.swfobject !== "undefined";
     },
@@ -238,7 +265,7 @@ var fp = function(fonts){alert(fonts)};
       var hiddenCallback = "___fp_swf_loaded";
       window[hiddenCallback] = function(fonts) {
         done(fonts);
-      }
+      };
       var id = this.options.swfContainerId;
       this.addFlashDivNode();
       var flashvars = { onReady: hiddenCallback};

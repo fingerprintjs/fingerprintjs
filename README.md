@@ -41,6 +41,23 @@ To use flash font enumeration, make sure you have swfobject available.
 If you don't, the library will skip the flash part entirely.
 
 
+#### View the fingerprint locally
+
+You can view your browser fingerprint locally by starting a webserver and viewing the index.html page.
+Loading index.html from the filesystem won't work due to Flash's ExternalInterface security restrictions.
+
+To start a web server you can use either Ruby:
+
+```
+ruby -run -e httpd . -p 8080
+```
+or Python 
+
+```
+# will load on port 8000
+python -m SimpleHTTPServer
+```
+
 ### List of fingerprinting sources
 
 1. UserAgent

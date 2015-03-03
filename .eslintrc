@@ -4,6 +4,9 @@
     "node": true,
     "amd": true
   },
+  "globals": {
+    "swfobject": true
+  },
   "rules": {
     "no-fallthrough": false
   },
