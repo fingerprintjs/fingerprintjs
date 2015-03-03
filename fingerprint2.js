@@ -54,7 +54,7 @@ var fp = function(fonts){alert(fonts)};
       keys = this.cpuClassKey(keys);
       keys = this.platformKey(keys);
       keys = this.doNotTrackKey(keys);
-      keys = this.getPlugins(keys);
+      keys = this.pluginsKey(keys);
       var _this = this;
       this.flashFontsKey(keys, function(keys){
         var murmur =  _this.x64hash128(keys.join("~~~"), 31);
@@ -153,6 +153,12 @@ var fp = function(fonts){alert(fonts)};
       }
       return keys;
     },
+    pluginsKey: function(keys) {
+      if(!this.options.excludePlugins) {
+        keys.push(this.getPlugins());
+      }
+      return keys;
+    },
     // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
     flashFontsKey: function(keys, done) {
       if(this.options.excludeFlashFonts) {
@@ -224,19 +230,19 @@ var fp = function(fonts){alert(fonts)};
         return "doNotTrack: unknown";
       }
     },
-    getPlugins: function(keys) {
-      if(!this.options.excludePlugins) {
-        var result = $.map(navigator.plugins, function (plugin) {
-            return [plugin.name,
-                    plugin.description, 
-              $.map(plugin, function (mimetype) {
-                return [mimetype.type, mimetype.suffixes].join("~");
-              }).join(",")
-            ].join("::");
+    getPlugins: function() {
+      if (navigator.plugins && navigator.plugins.length > 0) {
+        var self = this;   
+        var result = this.map(navigator.plugins, function(plugin){
+          return [plugin.name,
+                  plugin.description, 
+                  self.map(plugin, function (mimetype) {
+                    return [mimetype.type, mimetype.suffixes].join("~");
+                  }).join(",")
+                 ].join("::");
         }).join(";");
-        keys.push(result);
-      }
-      return keys;
+        return result;
+      }      
     },
     hasSwfObjectLoaded: function(){
       return typeof window.swfobject !== "undefined";
