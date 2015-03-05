@@ -21,7 +21,7 @@ This project will not be backwards compatible with original
 fingerprintjs.
 
 
-### WIP
+### The library is currently under development and not usable.
 
 ### Usage
 
