@@ -1,10 +1,8 @@
 <p align="center">
   <h1>Fingerprintjs2</h1>
-  <br/>
 
   <a href="https://gitter.im/Valve/fingerprintjs2"><img src="https://badges.gitter.im/Valve/fingerprintjs2.png"/></a>
 </p>
-
 
 Original fingerprintjs library was developed in 2012, it's now impossible to evolve it
 without breaking backwards compatibilty, so this project will be where
