@@ -21,7 +21,7 @@ This project will not be backwards compatible with original
 fingerprintjs.
 
 
-### The library is currently under development and not usable.
+### The library is currently under development and only partially usable.
 
 ### Usage
 
@@ -35,7 +35,8 @@ new Fingerprint2().get(function(result){
 #### You can pass an object with options (all of which are optional):
 
 ```javascript
-new Fingerprint2({swfPath: '/assets/FontList.swf', excludeUserAgent: true}).get(function(result){
+var options = {swfPath: '/assets/FontList.swf', excludeUserAgent: true};
+new Fingerprint2(options).get(function(result){
   console.log(result);
 });
 ```
@@ -79,11 +80,12 @@ python -m SimpleHTTPServer
 12. Platform
 13. DoNotTrack or not
 14. Full list of installed fonts (maintaining their order, which increases the entropy), implemented with Flash.
+15. Canvas fingerprinting
 
 
 ### Many more fingerprinting sources will be implemented, such as
 
-Canvas fingerprinting, Font css detection using side-channel technique, multi-monitor detection, silverlight integration, flash linux kernel version,
+Font css detection using side-channel technique, multi-monitor detection, silverlight integration, flash linux kernel version,OpenGL fingerprinting,
 numerous ActiveX controls and plugins, and many more.
 
 
