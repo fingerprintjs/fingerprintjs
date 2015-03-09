@@ -24,15 +24,24 @@
   "use strict";
   var DEBUG = true;
   var Fingerprint2 = function(options) {
-    // TODO: merge options
-    this.options = {
+    var defaultOptions = {
       swfContainerId: "fingerprintjs2",
       swfPath: "flash/compiled/FontList.swf"
     };
+    this.options = this.extend(options, defaultOptions);
     this.nativeForEach = Array.prototype.forEach;
     this.nativeMap = Array.prototype.map;
   };
   Fingerprint2.prototype = {
+    extend: function(source, target) {
+      if (source == null) { return target; }
+      for (var k in source) {
+        if(source[k] != null && target[k] !== source[k]) {
+          target[k] = source[k];
+        }
+      }
+      return target;
+    },
     log: function(msg){
       if(window.console){
         console.log(msg);
