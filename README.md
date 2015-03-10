@@ -1,6 +1,5 @@
 <p align="center">
   <h1>Fingerprintjs2</h1>
-
   <a href="https://gitter.im/Valve/fingerprintjs2"><img src="https://badges.gitter.im/Valve/fingerprintjs2.png"/></a>
 </p>
 
@@ -78,13 +77,19 @@ python -m SimpleHTTPServer
 12. Platform
 13. DoNotTrack or not
 14. Full list of installed fonts (maintaining their order, which increases the entropy), implemented with Flash.
+15. A list of installed fonts, detected with JS/CSS (side-channel technique)
 15. Canvas fingerprinting
 
 
 ### Many more fingerprinting sources will be implemented, such as
 
-Font css detection using side-channel technique, multi-monitor detection, silverlight integration, flash linux kernel version,OpenGL fingerprinting,
-numerous ActiveX controls and plugins, and many more.
+* Multi-monitor detection, 
+* silverlight integration, 
+* Flash linux kernel version,
+* OpenGL fingerprinting,
+* Internal HashTable implementation detection
+* Numerous ActiveX controls and plugins
+* and many more.
 
 
 #### To recompile the FontList.swf file:
