@@ -64,7 +64,7 @@
       keys = this.doNotTrackKey(keys);
       keys = this.canvasKey(keys);
       var that = this;
-      this.flashFontsKey(keys, function(newKeys){
+      this.fontsKey(keys, function(newKeys){
         var murmur = that.x64hash128(newKeys.join("~~~"), 31);
         return done(murmur);
       });
@@ -167,37 +167,97 @@
       }
       return keys;
     },
-    // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
-    flashFontsKey: function(keys, done) {
+    fontsKey: function(keys, done) {
       if(this.options.excludeFlashFonts) {
         if(DEBUG){
           this.log("Skipping flash fonts detection per excludeFlashFonts configuration option");
         }
-        return done(keys);
+        if(this.options.excludeJsFonts) {
+          if(DEBUG) {
+            this.log("Skipping js fonts detection per excludeJsFonts configuration option");
+          }
+          return done(keys);
+        }
+        return done(this.jsFontsKey(keys));
       }
       // we do flash if swfobject is loaded
       if(!this.hasSwfObjectLoaded()){
         if(DEBUG){
           this.log("Swfobject is not detected, Flash fonts enumeration is skipped");
         }
-        return done(keys);
+        return done(this.jsFontsKey(keys));
       }
       if(!this.hasMinFlashInstalled()){
         if(DEBUG){
           this.log("Flash is not installed, skipping Flash fonts enumeration");
         }
-        return done(keys);
+        return done(this.jsFontsKey(keys));
       }
       if(typeof this.options.swfPath === "undefined"){
         if(DEBUG){
-          this.log("To use Flash fonts detection, you must pass the swfPath option, skipping Flash fonts enumeration");
+          this.log("To use Flash fonts detection, you must pass a valid swfPath option, skipping Flash fonts enumeration");
         }
-        return done(keys);
+        return done(this.jsFontsKey(keys));
       }
+      return this.flashFontsKey(keys, done);
+    },
+    // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
+    flashFontsKey: function(keys, done) {
       this.loadSwfAndDetectFonts(function(fonts){
         keys.push(fonts.join(";"));
         done(keys);
       });
+    },
+    // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
+    jsFontsKey: function(keys) {
+      // a font will be compared against all the three default fonts.
+      // and if it doesn't match all 3 then that font is not available.
+      var baseFonts = ["monospace", "sans-serif", "serif"];
+
+      //we use m or w because these two characters take up the maximum width.
+      // And we use a LLi so that the same matching fonts can get separated
+      var testString = "mmmmmmmmmmlli";
+
+      //we test using 72px font size, we may use any size. I guess larger the better.
+      var testSize = "72px";
+
+      var h = document.getElementsByTagName("body")[0];
+
+      // create a SPAN in the document to get the width of the text we use to test
+      var s = document.createElement("span");
+      s.style.fontSize = testSize;
+      s.innerHTML = testString;
+      var defaultWidth = {};
+      var defaultHeight = {};
+      for (var index in baseFonts) {
+          //get the default width for the three base fonts
+          s.style.fontFamily = baseFonts[index];
+          h.appendChild(s);
+          defaultWidth[baseFonts[index]] = s.offsetWidth; //width for the default font
+          defaultHeight[baseFonts[index]] = s.offsetHeight; //height for the defualt font
+          h.removeChild(s);
+      }
+      var detect = function (font) {
+          var detected = false;
+          for (var index in baseFonts) {
+              s.style.fontFamily = font + "," + baseFonts[index]; // name of the font along with the base font for fallback.
+              h.appendChild(s);
+              var matched = (s.offsetWidth !== defaultWidth[baseFonts[index]] || s.offsetHeight !== defaultHeight[baseFonts[index]]);
+              h.removeChild(s);
+              detected = detected || matched;
+          }
+          return detected;
+      };
+
+      var fontList = ["Arial Black", "Arial Narrow", "Arial Rounded MT Bold", "Arial", "Bookman Old Style", "Bradley Hand ITC", "Century Gothic", "Century", "Comic Sans MS", "Courier New", "Courier", "Cursive", "Fantasy", "Gentium", "Georgia", "Impact", "King", "Lalit", "Lucida Console", "Modena", "Monospace", "Monotype Corsiva", "Papyrus", "Sans-Serif", "Serif", "Tahoma", "TeX", "Times New Roman", "Times", "Trebuchet MS", "Verdana", "Verona"];
+      var available = [];
+      for (var i = 0, l = fontList.length; i < l; i++) {
+        if(detect(fontList[i])) {
+          available.push(fontList[i]);
+        }
+      }
+      keys.push(available.join(";"));
+      return keys;
     },
     hasSessionStorage: function () {
       try {
