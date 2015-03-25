@@ -324,15 +324,20 @@
     },
 
     getWebglFp: function() {
+      var gl;
       var fa2s = function(fa) {
-        return "[" + fa[0] + ", " + fa[1] + "]"
+      gl.clearColor(0.0, 0.0, 0.0, 1.0);
+      gl.enable(gl.DEPTH_TEST);
+      gl.depthFunc(gl.LEQUAL);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        return "[" + fa[0] + ", " + fa[1] + "]";
       };
       var maxAnisotropy = function(gl) {
         var anisotropy, ext = gl.getExtension("EXT_texture_filter_anisotropic") || gl.getExtension("WEBKIT_EXT_texture_filter_anisotropic") || gl.getExtension("MOZ_EXT_texture_filter_anisotropic");
-        return ext ? (anisotropy = gl.getParameter(ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT), 0 === anisotropy && (anisotropy = 2), anisotropy) : null
+        return ext ? (anisotropy = gl.getParameter(ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT), 0 === anisotropy && (anisotropy = 2), anisotropy) : null;
       };
-      var gl = this.getWebglCanvas();
-      if(!gl) return null;
+      gl = this.getWebglCanvas();
+      if(!gl) { return null; }
       // WebGL fingerprinting is a combination of techniques, found in MaxMind antifraud script & Augur fingerprinting.
       // First it draws a gradient object with shaders and convers the image to the Base64 string.
       // Then it enumerates all WebGL extensions & capabilities and appends them to the Base64 string, resulting in a huge WebGL string, potentially very unique on each device
@@ -344,9 +349,12 @@
       var vertexPosBuffer = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
       var vertices = new Float32Array([-.2, -.9, 0, .4, -.26, 0, 0, .732134444, 0]);
-      gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW), vertexPosBuffer.itemSize = 3, vertexPosBuffer.numItems = 3;
+      gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+      vertexPosBuffer.itemSize = 3;
+      vertexPosBuffer.numItems = 3;
       var program = gl.createProgram(), vshader = gl.createShader(gl.VERTEX_SHADER);
-      gl.shaderSource(vshader, vShaderTemplate), gl.compileShader(vshader);
+      gl.shaderSource(vshader, vShaderTemplate);
+      gl.compileShader(vshader);
       var fshader = gl.createShader(gl.FRAGMENT_SHADER);
       gl.shaderSource(fshader, fShaderTemplate);
       gl.compileShader(fshader);
