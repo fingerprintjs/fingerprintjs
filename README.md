@@ -79,6 +79,7 @@ python -m SimpleHTTPServer
 14. Full list of installed fonts (maintaining their order, which increases the entropy), implemented with Flash.
 15. A list of installed fonts, detected with JS/CSS (side-channel technique)
 15. Canvas fingerprinting
+16. WebGL fingerprinting
 
 
 ### Many more fingerprinting sources will be implemented, such as
@@ -86,7 +87,6 @@ python -m SimpleHTTPServer
 * Multi-monitor detection, 
 * silverlight integration, 
 * Flash linux kernel version,
-* OpenGL fingerprinting,
 * Internal HashTable implementation detection
 * Numerous ActiveX controls and plugins
 * and many more.
