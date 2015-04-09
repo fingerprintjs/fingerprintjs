@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 0.0.5 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 0.0.6 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -7,7 +7,7 @@
 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-* ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+* ARE DISCLAIMED. IN NO EVENT SHALL VALENTIN VASILYEV BE LIABLE FOR ANY
 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
@@ -62,6 +62,7 @@
       keys = this.cpuClassKey(keys);
       keys = this.platformKey(keys);
       keys = this.doNotTrackKey(keys);
+      keys = this.pluginsKey(keys);
       keys = this.canvasKey(keys);
       keys = this.webglKey(keys);
       var that = this;
@@ -255,8 +256,131 @@
           }
           return detected;
       };
+      var fontList = [
+        "Abadi MT Condensed Light", "Academy Engraved LET",
+        "ADOBE CASLON PRO", "Adobe Garamond", "ADOBE GARAMOND PRO",
+        "Agency FB", "Aharoni", "Albertus Extra Bold", "Albertus Medium",
+        "Algerian", "Amazone BT", "American Typewriter",
+        "American Typewriter Condensed", "AmerType Md BT", "Andale Mono",
+        "Andalus", "Angsana New", "AngsanaUPC", "Antique Olive", "Aparajita",
+        "Apple Chancery", "Apple Color Emoji", "Apple SD Gothic Neo",
+        "Arabic Typesetting", "ARCHER", "Arial", "Arial Black", "Arial Hebrew",
+        "Arial MT", "Arial Narrow", "Arial Rounded MT Bold",
+        "Arial Unicode MS", "ARNO PRO", "Arrus BT", "Aurora Cn BT",
+        "AvantGarde Bk BT", "AvantGarde Md BT", "AVENIR", "Ayuthaya", "Bandy",
+        "Bangla Sangam MN", "Bank Gothic", "BankGothic Md BT", "Baskerville",
+        "Baskerville Old Face", "Batang", "BatangChe", "Bauer Bodoni",
+        "Bauhaus 93", "Bazooka", "Bell MT", "Bembo", "Benguiat Bk BT",
+        "Berlin Sans FB", "Berlin Sans FB Demi", "Bernard MT Condensed",
+        "BernhardFashion BT", "BernhardMod BT", "Big Caslon", "BinnerD",
+        "Bitstream Vera Sans Mono", "Blackadder ITC", "BlairMdITC TT",
+        "Bodoni 72", "Bodoni 72 Oldstyle", "Bodoni 72 Smallcaps", "Bodoni MT",
+        "Bodoni MT Black", "Bodoni MT Condensed",
+        "Bodoni MT Poster Compressed", "Book Antiqua", "Bookman Old Style",
+        "Bookshelf Symbol 7", "Boulder", "Bradley Hand", "Bradley Hand ITC",
+        "Bremen Bd BT", "Britannic Bold", "Broadway", "Browallia New",
+        "BrowalliaUPC", "Brush Script MT", "Calibri", "Californian FB",
+        "Calisto MT", "Calligrapher", "Cambria", "Cambria Math", "Candara",
+        "CaslonOpnface BT", "Castellar", "Centaur", "Century",
+        "Century Gothic", "Century Schoolbook", "Cezanne", "CG Omega",
+        "CG Times", "Chalkboard", "Chalkboard SE", "Chalkduster",
+        "Charlesworth", "Charter Bd BT", "Charter BT", "Chaucer",
+        "ChelthmITC Bk BT", "Chiller", "Clarendon", "Clarendon Condensed",
+        "CloisterBlack BT", "Cochin", "Colonna MT", "Comic Sans",
+        "Comic Sans MS", "Consolas", "Constantia", "Cooper Black",
+        "Copperplate", "Copperplate Gothic", "Copperplate Gothic Bold",
+        "Copperplate Gothic Light", "CopperplGoth Bd BT", "Corbel",
+        "Cordia New", "CordiaUPC", "Cornerstone", "Coronet", "Courier",
+        "Courier New", "Cuckoo", "Curlz MT", "DaunPenh", "Dauphin", "David",
+        "DB LCD Temp", "DELICIOUS", "Denmark", "Devanagari Sangam MN",
+        "DFKai-SB", "Didot", "DilleniaUPC", "DIN", "DokChampa", "Dotum",
+        "DotumChe", "Ebrima", "Edwardian Script ITC", "Elephant",
+        "English 111 Vivace BT", "Engravers MT", "EngraversGothic BT",
+        "Eras Bold ITC", "Eras Demi ITC", "Eras Light ITC", "Eras Medium ITC",
+        "Estrangelo Edessa", "EucrosiaUPC", "Euphemia", "Euphemia UCAS",
+        "EUROSTILE", "Exotc350 Bd BT", "FangSong", "Felix Titling", "Fixedsys",
+        "FONTIN", "Footlight MT Light", "Forte", "Franklin Gothic",
+        "Franklin Gothic Book", "Franklin Gothic Demi",
+        "Franklin Gothic Demi Cond", "Franklin Gothic Heavy",
+        "Franklin Gothic Medium", "Franklin Gothic Medium Cond", "FrankRuehl",
+        "Fransiscan", "Freefrm721 Blk BT", "FreesiaUPC", "Freestyle Script",
+        "French Script MT", "FrnkGothITC Bk BT", "Fruitger", "FRUTIGER",
+        "Futura", "Futura Bk BT", "Futura Lt BT", "Futura Md BT",
+        "Futura ZBlk BT", "FuturaBlack BT", "Gabriola", "Galliard BT",
+        "Garamond", "Gautami", "Geeza Pro", "Geneva", "Geometr231 BT",
+        "Geometr231 Hv BT", "Geometr231 Lt BT", "Georgia", "GeoSlab 703 Lt BT",
+        "GeoSlab 703 XBd BT", "Gigi", "Gill Sans", "Gill Sans MT",
+        "Gill Sans MT Condensed", "Gill Sans MT Ext Condensed Bold",
+        "Gill Sans Ultra Bold", "Gill Sans Ultra Bold Condensed", "Gisha",
+        "Gloucester MT Extra Condensed", "GOTHAM", "GOTHAM BOLD",
+        "Goudy Old Style", "Goudy Stout", "GoudyHandtooled BT", "GoudyOLSt BT",
+        "Gujarati Sangam MN", "Gulim", "GulimChe", "Gungsuh", "GungsuhChe",
+        "Gurmukhi MN", "Haettenschweiler", "Harlow Solid Italic", "Harrington",
+        "Heather", "Heiti SC", "Heiti TC", "HELV", "Helvetica",
+        "Helvetica Neue", "Herald", "High Tower Text",
+        "Hiragino Kaku Gothic ProN", "Hiragino Mincho ProN", "Hoefler Text",
+        "Humanst 521 Cn BT", "Humanst521 BT", "Humanst521 Lt BT", "Impact",
+        "Imprint MT Shadow", "Incised901 Bd BT", "Incised901 BT",
+        "Incised901 Lt BT", "INCONSOLATA", "Informal Roman", "Informal011 BT",
+        "INTERSTATE", "IrisUPC", "Iskoola Pota", "JasmineUPC", "Jazz LET",
+        "Jenson", "Jester", "Jokerman", "Juice ITC", "Kabel Bk BT",
+        "Kabel Ult BT", "Kailasa", "KaiTi", "Kalinga", "Kannada Sangam MN",
+        "Kartika", "Kaufmann Bd BT", "Kaufmann BT", "Khmer UI", "KodchiangUPC",
+        "Kokila", "Korinna BT", "Kristen ITC", "Krungthep", "Kunstler Script",
+        "Lao UI", "Latha", "Leelawadee", "Letter Gothic", "Levenim MT",
+        "LilyUPC", "Lithograph", "Lithograph Light", "Long Island",
+        "Lucida Bright", "Lucida Calligraphy", "Lucida Console", "Lucida Fax",
+        "LUCIDA GRANDE", "Lucida Handwriting", "Lucida Sans",
+        "Lucida Sans Typewriter", "Lucida Sans Unicode", "Lydian BT",
+        "Magneto", "Maiandra GD", "Malayalam Sangam MN", "Malgun Gothic",
+        "Mangal", "Marigold", "Marion", "Marker Felt", "Market", "Marlett",
+        "Matisse ITC", "Matura MT Script Capitals", "Meiryo", "Meiryo UI",
+        "Microsoft Himalaya", "Microsoft JhengHei", "Microsoft New Tai Lue",
+        "Microsoft PhagsPa", "Microsoft Sans Serif", "Microsoft Tai Le",
+        "Microsoft Uighur", "Microsoft YaHei", "Microsoft Yi Baiti", "MingLiU",
+        "MingLiU_HKSCS", "MingLiU_HKSCS-ExtB", "MingLiU-ExtB", "Minion",
+        "Minion Pro", "Miriam", "Miriam Fixed", "Mistral", "Modern",
+        "Modern No. 20", "Mona Lisa Solid ITC TT", "Monaco", "Mongolian Baiti",
+        "MONO", "Monotype Corsiva", "MoolBoran", "Mrs Eaves", "MS Gothic",
+        "MS LineDraw", "MS Mincho", "MS Outlook", "MS PGothic", "MS PMincho",
+        "MS Reference Sans Serif", "MS Reference Specialty", "MS Sans Serif",
+        "MS Serif", "MS UI Gothic", "MT Extra", "MUSEO", "MV Boli", "MYRIAD",
+        "MYRIAD PRO", "Nadeem", "Narkisim", "NEVIS", "News Gothic",
+        "News GothicMT", "NewsGoth BT", "Niagara Engraved", "Niagara Solid",
+        "Noteworthy", "NSimSun", "Nyala", "OCR A Extended", "Old Century",
+        "Old English Text MT", "Onyx", "Onyx BT", "OPTIMA", "Oriya Sangam MN",
+        "OSAKA", "OzHandicraft BT", "Palace Script MT", "Palatino",
+        "Palatino Linotype", "Papyrus", "Parchment", "Party LET", "Pegasus",
+        "Perpetua", "Perpetua Titling MT", "PetitaBold", "Pickwick",
+        "Plantagenet Cherokee", "Playbill", "PMingLiU", "PMingLiU-ExtB",
+        "Poor Richard", "Poster", "PosterBodoni BT", "PRINCETOWN LET",
+        "Pristina", "PTBarnum BT", "Pythagoras", "Raavi", "Rage Italic",
+        "Ravie", "Ribbon131 Bd BT", "Rockwell", "Rockwell Condensed",
+        "Rockwell Extra Bold", "Rod", "Roman", "Sakkal Majalla",
+        "Santa Fe LET", "Savoye LET", "Sceptre", "Script", "Script MT Bold",
+        "SCRIPTINA", "Segoe Print", "Segoe Script", "Segoe UI",
+        "Segoe UI Light", "Segoe UI Semibold", "Segoe UI Symbol", "Serifa",
+        "Serifa BT", "Serifa Th BT", "ShelleyVolante BT", "Sherwood",
+        "Shonar Bangla", "Showcard Gothic", "Shruti", "Signboard",
+        "SILKSCREEN", "SimHei", "Simplified Arabic", "Simplified Arabic Fixed",
+        "SimSun", "SimSun-ExtB", "Sinhala Sangam MN", "Sketch Rockwell",
+        "Skia", "Small Fonts", "Snap ITC", "Snell Roundhand", "Socket",
+        "Souvenir Lt BT", "Staccato222 BT", "Steamer", "Stencil", "Storybook",
+        "Styllo", "Subway", "Swis721 BlkEx BT", "Swiss911 XCm BT", "Sylfaen",
+        "Symbol", "Synchro LET", "System", "Tahoma", "Tamil Sangam MN",
+        "Technical", "Teletype", "Telugu Sangam MN", "Tempus Sans ITC",
+        "Terminal", "Thonburi", "Times", "Times New Roman",
+        "Times New Roman PS", "Traditional Arabic", "Trajan", "TRAJAN PRO",
+        "Trebuchet MS", "Tristan", "Tubular", "Tunga", "Tw Cen MT",
+        "Tw Cen MT Condensed", "Tw Cen MT Condensed Extra Bold",
+        "TypoUpright BT", "Unicorn", "Univers", "Univers CE 55 Medium",
+        "Univers Condensed", "Utsaah", "Vagabond", "Vani", "Verdana", "Vijaya",
+        "Viner Hand ITC", "VisualUI", "Vivaldi", "Vladimir Script", "Vrinda",
+        "Webdings", "Westminster", "WHITNEY", "Wide Latin", "Wingdings",
+        "Wingdings 2", "Wingdings 3", "ZapfEllipt BT", "ZapfHumnst BT",
+        "ZapfHumnst Dm BT", "Zapfino", "Zurich BlkEx BT", "Zurich Ex BT",
+        "ZWAdobeF"];
 
-      var fontList = ["Arial Black", "Arial Narrow", "Arial Rounded MT Bold", "Arial", "Bookman Old Style", "Bradley Hand ITC", "Century Gothic", "Century", "Comic Sans MS", "Courier New", "Courier", "Cursive", "Fantasy", "Gentium", "Georgia", "Impact", "King", "Lalit", "Lucida Console", "Modena", "Monospace", "Monotype Corsiva", "Papyrus", "Sans-Serif", "Serif", "Tahoma", "TeX", "Times New Roman", "Times", "Trebuchet MS", "Verdana", "Verona"];
       var available = [];
       for (var i = 0, l = fontList.length; i < l; i++) {
         if(detect(fontList[i])) {
@@ -265,6 +389,61 @@
       }
       keys.push(available.join(";"));
       return keys;
+    },
+    pluginsKey: function(keys) {
+      if(this.isIE()){
+        keys.push(this.getIEPluginsString());
+      } else {
+        keys.push(this.getRegularPluginsString());
+      }
+      return keys;
+    },
+    getRegularPluginsString: function () {
+      return this.map(navigator.plugins, function (p) {
+        var mimeTypes = this.map(p, function(mt){
+          return [mt.type, mt.suffixes].join("~");
+        }).join(",");
+        return [p.name, p.description, mimeTypes].join("::");
+      }, this).join(";");
+    },
+    getIEPluginsString: function () {
+      if(window.ActiveXObject){
+        var names = [
+          "AcroPDF.PDF", // Adobe PDF reader 7+
+          "Adodb.Stream",
+          "AgControl.AgControl", // Silverlight
+          "DevalVRXCtrl.DevalVRXCtrl.1",
+          "MacromediaFlashPaper.MacromediaFlashPaper",
+          "Msxml2.DOMDocument",
+          "Msxml2.XMLHTTP",
+          "PDF.PdfCtrl", // Adobe PDF reader 6 and earlier, brrr
+          "QuickTime.QuickTime", // QuickTime
+          "QuickTimeCheckObject.QuickTimeCheck.1",
+          "RealPlayer",
+          "RealPlayer.RealPlayer(tm) ActiveX Control (32-bit)",
+          "RealVideo.RealVideo(tm) ActiveX Control (32-bit)",
+          "Scripting.Dictionary",
+          "SWCtl.SWCtl", // ShockWave player
+          "Shell.UIHelper",
+          "ShockwaveFlash.ShockwaveFlash", //flash plugin
+          "Skype.Detection",
+          "TDCCtl.TDCCtl",
+          "WMPlayer.OCX", // Windows media player
+          "rmocx.RealPlayer G2 Control",
+          "rmocx.RealPlayer G2 Control.1"
+        ];
+        // starting to detect plugins in IE
+        return this.map(names, function(name){
+          try{
+            new ActiveXObject(name);
+            return name;
+          } catch(e){
+            return null;
+          }
+        }).join(";");
+      } else {
+        return "";
+      }
     },
     hasSessionStorage: function () {
       try {
@@ -401,6 +580,14 @@
     isCanvasSupported: function () {
       var elem = document.createElement("canvas");
       return !!(elem.getContext && elem.getContext("2d"));
+    },
+    isIE: function () {
+      if(navigator.appName === "Microsoft Internet Explorer") {
+        return true;
+      } else if(navigator.appName === "Netscape" && /Trident/.test(navigator.userAgent)) { // IE 11
+        return true;
+      }
+      return false;
     },
     hasSwfObjectLoaded: function(){
       return typeof window.swfobject !== "undefined";
