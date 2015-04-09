@@ -54,7 +54,7 @@ To start a web server you can use either Ruby:
 ```
 ruby -run -e httpd . -p 8080
 ```
-or Python 
+or Python
 
 ```
 # will load on port 8000
@@ -77,18 +77,18 @@ python -m SimpleHTTPServer
 12. Platform
 13. DoNotTrack or not
 14. Full list of installed fonts (maintaining their order, which increases the entropy), implemented with Flash.
-15. A list of installed fonts, detected with JS/CSS (side-channel technique)
+15. A list of installed fonts, detected with JS/CSS (side-channel technique) - can detect up to 100 installed fonts without flash
 15. Canvas fingerprinting
 16. WebGL fingerprinting
+17. Plugins (IE included)
 
 
 ### Many more fingerprinting sources will be implemented, such as
 
-* Multi-monitor detection, 
-* silverlight integration, 
+* Multi-monitor detection,
+* silverlight integration,
 * Flash linux kernel version,
 * Internal HashTable implementation detection
-* Numerous ActiveX controls and plugins
 * and many more.
 
 
