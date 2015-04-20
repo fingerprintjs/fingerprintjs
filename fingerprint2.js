@@ -522,7 +522,6 @@
       // Then it enumerates all WebGL extensions & capabilities and appends them to the Base64 string, resulting in a huge WebGL string, potentially very unique on each device
       // Since iOS supports webgl starting from version 8.1 and 8.1 runs on several graphics chips, the results may be different across ios devices, but we need to verify it.
       var result = [];
-      var canvas = document.createElement("canvas");
       var vShaderTemplate = "attribute vec2 attrVertex;varying vec2 varyinTexCoordinate;uniform vec2 uniformOffset;void main(){varyinTexCoordinate=attrVertex+uniformOffset;gl_Position=vec4(attrVertex,0,1);}";
       var fShaderTemplate = "precision mediump float;varying vec2 varyinTexCoordinate;void main() {gl_FragColor=vec4(varyinTexCoordinate,0,1);}";
       var vertexPosBuffer = gl.createBuffer();
@@ -547,7 +546,7 @@
       gl.vertexAttribPointer(program.vertexPosAttrib, vertexPosBuffer.itemSize, gl.FLOAT, !1, 0, 0);
       gl.uniform2f(program.offsetUniform, 1, 1);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexPosBuffer.numItems);
-      result.push(canvas.toDataURL());
+      if (gl.canvas != null) result.push(gl.canvas.toDataURL());
       result.push("extensions:" + gl.getSupportedExtensions().join(";"));
       result.push("webgl aliased line width range:" + fa2s(gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE)));
       result.push("webgl aliased point size range:" + fa2s(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)));
