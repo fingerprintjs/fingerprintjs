@@ -1,6 +1,6 @@
 {
   "name": "fingerprintjs2",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Modern & flexible browser fingerprinting library",
   "main": "fingerprint2.js",
   "dependencies": {

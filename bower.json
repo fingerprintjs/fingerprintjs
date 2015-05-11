@@ -8,7 +8,11 @@
     "es6"
   ],
   "keywords": [
-    "fingerprinting"
+    "browser",
+    "fingerprint",
+    "fingerprinting",
+    "security",
+    "privacy"
   ],
   "authors": [
     "Valentin Vasilev"
