@@ -1,6 +1,6 @@
 {
   "name": "fingerprintjs2",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/Valve/fingerprintjs2",
   "description": "Modern & flexible browser fingerprinting library",
   "main": "dist/fingerprint2.js",
