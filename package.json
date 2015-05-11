@@ -1,6 +1,6 @@
 {
   "name": "fingerprintjs2",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Modern & flexible browser fingerprinting library",
   "main": "fingerprint2.js",
   "dependencies": {
@@ -9,7 +9,8 @@
   "devDependencies": {
     "eslint": "^0.14.1",
     "gulp": "^3.8.11",
-    "gulp-eslint": "^0.4.2"
+    "gulp-eslint": "^0.4.2",
+    "gulp-uglify": "^1.1.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
