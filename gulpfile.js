@@ -1,5 +1,6 @@
 var gulp = require('gulp'),
-  eslint = require('gulp-eslint');
+    eslint = require('gulp-eslint'),
+    uglify = require('gulp-uglify');
 
 gulp.task("lint", function() {
   return gulp
@@ -9,6 +10,13 @@ gulp.task("lint", function() {
     .pipe(eslint.failOnError());
 });
 
-gulp.task("default", ["lint"], function() {
+gulp.task("minify", function() {
+  return gulp
+      .src("fingerprint2.js")
+      .pipe(uglify())
+      .pipe(gulp.dest("dist"));
+});
+
+gulp.task("default", ["lint", "minify"], function() {
 
 });
