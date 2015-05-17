@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 0.0.6 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 0.1.1 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -487,18 +487,22 @@
     getCanvasFp: function() {
       // Very simple now, need to make it more complex (geo shapes etc)
       var canvas = document.createElement("canvas");
+      document.body.appendChild(canvas);
+      canvas.width = 1600;
+      canvas.height = 100;
       var ctx = canvas.getContext("2d");
       // https://www.browserleaks.com/canvas#how-does-it-work
-      var txt = "Cwm fjordbank glyphs vext quiz, https://github.com/valve ὠ";
+      var txt = "https://github.com/valve for PEACE in Ukraine!";
       ctx.textBaseline = "top";
-      ctx.font = "70px 'Arial'";
-      ctx.textBaseline = "alphabetic";
+      ctx.font = "72px 'DamascusLight'";
       ctx.fillStyle = "#f60";
-      ctx.fillRect(125, 1, 62, 20);
+      ctx.fillRect(2, 0, 1000, 70);
       ctx.fillStyle = "#069";
-      ctx.fillText(txt, 2, 15);
+      ctx.fillText(txt, 2, 0);
       ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
-      ctx.fillText(txt, 4, 17);
+      ctx.fillText(txt, 4, 2);
+      ctx.strokeStyle = "rgba(202, 104, 0, 0.9)";
+      ctx.strokeText(txt, 8, 4);
       return canvas.toDataURL();
     },
 
@@ -522,7 +526,6 @@
       // Then it enumerates all WebGL extensions & capabilities and appends them to the Base64 string, resulting in a huge WebGL string, potentially very unique on each device
       // Since iOS supports webgl starting from version 8.1 and 8.1 runs on several graphics chips, the results may be different across ios devices, but we need to verify it.
       var result = [];
-      var canvas = document.createElement("canvas");
       var vShaderTemplate = "attribute vec2 attrVertex;varying vec2 varyinTexCoordinate;uniform vec2 uniformOffset;void main(){varyinTexCoordinate=attrVertex+uniformOffset;gl_Position=vec4(attrVertex,0,1);}";
       var fShaderTemplate = "precision mediump float;varying vec2 varyinTexCoordinate;void main() {gl_FragColor=vec4(varyinTexCoordinate,0,1);}";
       var vertexPosBuffer = gl.createBuffer();
@@ -547,7 +550,7 @@
       gl.vertexAttribPointer(program.vertexPosAttrib, vertexPosBuffer.itemSize, gl.FLOAT, !1, 0, 0);
       gl.uniform2f(program.offsetUniform, 1, 1);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexPosBuffer.numItems);
-      result.push(canvas.toDataURL());
+      if (gl.canvas != null) result.push(gl.canvas.toDataURL());
       result.push("extensions:" + gl.getSupportedExtensions().join(";"));
       result.push("webgl aliased line width range:" + fa2s(gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE)));
       result.push("webgl aliased point size range:" + fa2s(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)));
