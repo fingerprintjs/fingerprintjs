@@ -486,20 +486,69 @@
     },
     getCanvasFp: function() {
       // Very simple now, need to make it more complex (geo shapes etc)
+      var result = [];
       var canvas = document.createElement("canvas");
+      canvas.width = 2000;
+      canvas.height = 200;
       var ctx = canvas.getContext("2d");
+      // detect browser support of canvas blending
+      // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
+      // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/blending.js
+      try {
+        ctx.globalCompositeOperation = "screen";
+      } catch (e) { /* squelch */ }
+      result.push("canvas blending:" + ((ctx.globalCompositeOperation === "screen") ? "yes" : "no"));
+      // detect browser support of canvas winding
+      // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
+      // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/winding.js
+      ctx.rect(0, 0, 10, 10);
+      ctx.rect(2, 2, 6, 6);
+      result.push("canvas winding:" + ((ctx.isPointInPath(5, 5, "evenodd") === false) ? "yes" : "no"));
       // https://www.browserleaks.com/canvas#how-does-it-work
-      var txt = "Cwm fjordbank glyphs vext quiz, https://github.com/valve ὠ";
+      var txt = "https://github.com/valve for PEACE in Ukraine!";
       ctx.textBaseline = "top";
-      ctx.font = "70px 'Arial'";
-      ctx.textBaseline = "alphabetic";
+      // ios8 specific font
+      ctx.font = "72px 'DamascusLight'";
       ctx.fillStyle = "#f60";
-      ctx.fillRect(125, 1, 62, 20);
+      ctx.fillRect(2, 0, 1000, 70);
       ctx.fillStyle = "#069";
-      ctx.fillText(txt, 2, 15);
+      ctx.fillText(txt, 2, 0);
+      // android specific font
+      ctx.font = "72px 'Roboto Condensed'";
       ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
-      ctx.fillText(txt, 4, 17);
-      return canvas.toDataURL();
+      ctx.fillText(txt, 4, 2);
+      ctx.strokeStyle = "rgba(202, 104, 0, 0.9)";
+      // osx specific font
+      ctx.font = "72px 'Menlo'";
+      ctx.strokeText(txt, 8, 4);
+      // canvas blending
+      // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
+      // http://jsfiddle.net/NDYV8/16/
+      ctx.globalCompositeOperation = "multiply";
+      ctx.fillStyle = "rgb(255,0,255)";
+      ctx.beginPath();
+      ctx.arc(50, 50, 50, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "rgb(0,255,255)";
+      ctx.beginPath();
+      ctx.arc(100, 50, 50, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "rgb(255,255,0)";
+      ctx.beginPath();
+      ctx.arc(75, 100, 50, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "rgb(255,0,255)";
+      // canvas winding
+      // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
+      // http://jsfiddle.net/NDYV8/19/
+      ctx.arc(75, 75, 75, 0, Math.PI * 2, true);
+      ctx.arc(75, 75, 25, 0, Math.PI * 2, true);
+      ctx.fill("evenodd");
+      result.push("canvas fp:" + canvas.toDataURL());
+      return result.join("§");
     },
 
     getWebglFp: function() {
@@ -546,7 +595,7 @@
       gl.vertexAttribPointer(program.vertexPosAttrib, vertexPosBuffer.itemSize, gl.FLOAT, !1, 0, 0);
       gl.uniform2f(program.offsetUniform, 1, 1);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexPosBuffer.numItems);
-      if (gl.canvas != null) result.push(gl.canvas.toDataURL());
+      if (gl.canvas != null) { result.push(gl.canvas.toDataURL()); }
       result.push("extensions:" + gl.getSupportedExtensions().join(";"));
       result.push("webgl aliased line width range:" + fa2s(gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE)));
       result.push("webgl aliased point size range:" + fa2s(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)));
@@ -615,8 +664,8 @@
       var gl = null;
       try {
         gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-      } catch(e) {}
-      if(!gl){gl = null;}
+      } catch(e) { /* squelch */ }
+      if (!gl) { gl = null; }
       return gl;
     },
     each: function (obj, iterator, context) {
