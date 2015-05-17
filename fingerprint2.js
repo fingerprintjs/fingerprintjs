@@ -487,18 +487,22 @@
     getCanvasFp: function() {
       // Very simple now, need to make it more complex (geo shapes etc)
       var canvas = document.createElement("canvas");
+      document.body.appendChild(canvas);
+      canvas.width = 1600;
+      canvas.height = 100;
       var ctx = canvas.getContext("2d");
       // https://www.browserleaks.com/canvas#how-does-it-work
-      var txt = "Cwm fjordbank glyphs vext quiz, https://github.com/valve ὠ";
+      var txt = "https://github.com/valve for PEACE in Ukraine!";
       ctx.textBaseline = "top";
-      ctx.font = "70px 'Arial'";
-      ctx.textBaseline = "alphabetic";
+      ctx.font = "72px 'DamascusLight'";
       ctx.fillStyle = "#f60";
-      ctx.fillRect(125, 1, 62, 20);
+      ctx.fillRect(2, 0, 1000, 70);
       ctx.fillStyle = "#069";
-      ctx.fillText(txt, 2, 15);
+      ctx.fillText(txt, 2, 0);
       ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
-      ctx.fillText(txt, 4, 17);
+      ctx.fillText(txt, 4, 2);
+      ctx.strokeStyle = "rgba(202, 104, 0, 0.9)";
+      ctx.strokeText(txt, 8, 4);
       return canvas.toDataURL();
     },
 
