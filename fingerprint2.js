@@ -486,10 +486,15 @@
     },
     getCanvasFp: function() {
       // Very simple now, need to make it more complex (geo shapes etc)
+      var result = [];
       var canvas = document.createElement("canvas");
-      canvas.width = 1600;
-      canvas.height = 100;
+      canvas.width = 2000;
+      canvas.height = 200;
       var ctx = canvas.getContext("2d");
+      // detect browser support of canvas blending
+      // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
+      ctx.globalCompositeOperation = 'screen';
+      result.push("canvas blending:" + ((ctx.globalCompositeOperation == 'screen') ? "yes" : "no"));      
       // https://www.browserleaks.com/canvas#how-does-it-work
       var txt = "https://github.com/valve for PEACE in Ukraine!";
       ctx.textBaseline = "top";
@@ -507,7 +512,8 @@
       // osx specific font
       ctx.font = "72px 'Menlo'";
       ctx.strokeText(txt, 8, 4);
-      return canvas.toDataURL();
+      result.push("canvas fp:" + canvas.toDataURL());
+      return result.join("§");
     },
 
     getWebglFp: function() {
@@ -554,7 +560,7 @@
       gl.vertexAttribPointer(program.vertexPosAttrib, vertexPosBuffer.itemSize, gl.FLOAT, !1, 0, 0);
       gl.uniform2f(program.offsetUniform, 1, 1);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexPosBuffer.numItems);
-      if (gl.canvas != null) result.push(gl.canvas.toDataURL());
+      if (gl.canvas != null) { result.push(gl.canvas.toDataURL()); }
       result.push("extensions:" + gl.getSupportedExtensions().join(";"));
       result.push("webgl aliased line width range:" + fa2s(gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE)));
       result.push("webgl aliased point size range:" + fa2s(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)));
@@ -623,8 +629,8 @@
       var gl = null;
       try {
         gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-      } catch(e) {}
-      if(!gl){gl = null;}
+      } catch(e) { /* squelch */ }
+      if (!gl) { gl = null; }
       return gl;
     },
     each: function (obj, iterator, context) {
