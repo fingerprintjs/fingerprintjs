@@ -493,8 +493,17 @@
       var ctx = canvas.getContext("2d");
       // detect browser support of canvas blending
       // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
-      ctx.globalCompositeOperation = 'screen';
-      result.push("canvas blending:" + ((ctx.globalCompositeOperation == 'screen') ? "yes" : "no"));      
+      // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/blending.js
+      try {
+        ctx.globalCompositeOperation = "screen";
+      } catch (e) { /* squelch */ }
+      result.push("canvas blending:" + ((ctx.globalCompositeOperation === "screen") ? "yes" : "no"));
+      // detect browser support of canvas winding
+      // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
+      // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/winding.js
+      ctx.rect(0, 0, 10, 10);
+      ctx.rect(2, 2, 6, 6);
+      result.push("canvas winding:" + ((ctx.isPointInPath(5, 5, "evenodd") === false) ? "yes" : "no"));
       // https://www.browserleaks.com/canvas#how-does-it-work
       var txt = "https://github.com/valve for PEACE in Ukraine!";
       ctx.textBaseline = "top";
