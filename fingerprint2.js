@@ -524,28 +524,28 @@
       // canvas blending
       // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
       // http://jsfiddle.net/NDYV8/16/
-      ctx.globalCompositeOperation = 'multiply';
-      ctx.fillStyle = 'rgb(255,0,255)';
+      ctx.globalCompositeOperation = "multiply";
+      ctx.fillStyle = "rgb(255,0,255)";
       ctx.beginPath();
-      ctx.arc(50, 50, 50, 0, Math.PI*2, true);
+      ctx.arc(50, 50, 50, 0, Math.PI * 2, true);
       ctx.closePath();
       ctx.fill();
-      ctx.fillStyle = 'rgb(0,255,255)';
+      ctx.fillStyle = "rgb(0,255,255)";
       ctx.beginPath();
-      ctx.arc(100, 50, 50, 0, Math.PI*2, true);
+      ctx.arc(100, 50, 50, 0, Math.PI * 2, true);
       ctx.closePath();
       ctx.fill();
-      ctx.fillStyle = 'rgb(255,255,0)';
+      ctx.fillStyle = "rgb(255,255,0)";
       ctx.beginPath();
-      ctx.arc(75, 100, 50, 0, Math.PI*2, true);
+      ctx.arc(75, 100, 50, 0, Math.PI * 2, true);
       ctx.closePath();
       ctx.fill();
-      ctx.fillStyle = 'rgb(255,0,255)'
+      ctx.fillStyle = "rgb(255,0,255)";
       // canvas winding
-      // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/ 
+      // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
       // http://jsfiddle.net/NDYV8/19/
-      ctx.arc(75, 75, 75, 0, Math.PI*2, true); 
-      ctx.arc(75, 75, 25, 0, Math.PI*2, true); 
+      ctx.arc(75, 75, 75, 0, Math.PI * 2, true);
+      ctx.arc(75, 75, 25, 0, Math.PI * 2, true);
       ctx.fill("evenodd");
       result.push("canvas fp:" + canvas.toDataURL());
       return result.join("§");
