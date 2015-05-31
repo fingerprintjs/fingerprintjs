@@ -367,7 +367,7 @@
         "Skia", "Small Fonts", "Snap ITC", "Snell Roundhand", "Socket",
         "Souvenir Lt BT", "Staccato222 BT", "Steamer", "Stencil", "Storybook",
         "Styllo", "Subway", "Swis721 BlkEx BT", "Swiss911 XCm BT", "Sylfaen",
-        "Symbol", "Synchro LET", "System", "Tahoma", "Tamil Sangam MN",
+        "Synchro LET", "System", "Tahoma", "Tamil Sangam MN",
         "Technical", "Teletype", "Telugu Sangam MN", "Tempus Sans ITC",
         "Terminal", "Thonburi", "Times", "Times New Roman",
         "Times New Roman PS", "Traditional Arabic", "Trajan", "TRAJAN PRO",
@@ -376,7 +376,7 @@
         "TypoUpright BT", "Unicorn", "Univers", "Univers CE 55 Medium",
         "Univers Condensed", "Utsaah", "Vagabond", "Vani", "Verdana", "Vijaya",
         "Viner Hand ITC", "VisualUI", "Vivaldi", "Vladimir Script", "Vrinda",
-        "Webdings", "Westminster", "WHITNEY", "Wide Latin", "Wingdings",
+        "Westminster", "WHITNEY", "Wide Latin", "Wingdings",
         "Wingdings 2", "Wingdings 3", "ZapfEllipt BT", "ZapfHumnst BT",
         "ZapfHumnst Dm BT", "Zapfino", "Zurich BlkEx BT", "Zurich Ex BT",
         "ZWAdobeF"];
