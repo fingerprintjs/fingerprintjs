@@ -22,9 +22,9 @@
   else { context[name] = definition(); }
 })("Fingerprint2", this, function() {
   "use strict";
-  var DEBUG = true;
   var Fingerprint2 = function(options) {
     var defaultOptions = {
+      debug: false,
       swfContainerId: "fingerprintjs2",
       swfPath: "flash/compiled/FontList.swf"
     };
@@ -177,11 +177,11 @@
     },
     fontsKey: function(keys, done) {
       if(this.options.excludeFlashFonts) {
-        if(DEBUG){
+        if(this.options.debug){
           this.log("Skipping flash fonts detection per excludeFlashFonts configuration option");
         }
         if(this.options.excludeJsFonts) {
-          if(DEBUG) {
+          if(this.options.debug) {
             this.log("Skipping js fonts detection per excludeJsFonts configuration option");
           }
           return done(keys);
@@ -190,19 +190,19 @@
       }
       // we do flash if swfobject is loaded
       if(!this.hasSwfObjectLoaded()){
-        if(DEBUG){
+        if(this.options.debug){
           this.log("Swfobject is not detected, Flash fonts enumeration is skipped");
         }
         return done(this.jsFontsKey(keys));
       }
       if(!this.hasMinFlashInstalled()){
-        if(DEBUG){
+        if(this.options.debug){
           this.log("Flash is not installed, skipping Flash fonts enumeration");
         }
         return done(this.jsFontsKey(keys));
       }
       if(typeof this.options.swfPath === "undefined"){
-        if(DEBUG){
+        if(this.options.debug){
           this.log("To use Flash fonts detection, you must pass a valid swfPath option, skipping Flash fonts enumeration");
         }
         return done(this.jsFontsKey(keys));
