@@ -176,41 +176,38 @@
       return keys;
     },
     fontsKey: function(keys, done) {
+      if (this.options.excludeJsFonts) {
+        return this.flashFontsKey(keys, done);
+      }      
+      return done(this.jsFontsKey(keys));
+    },
+    // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
+    flashFontsKey: function(keys, done) {
       if(this.options.excludeFlashFonts) {
         if(DEBUG){
           this.log("Skipping flash fonts detection per excludeFlashFonts configuration option");
         }
-        if(this.options.excludeJsFonts) {
-          if(DEBUG) {
-            this.log("Skipping js fonts detection per excludeJsFonts configuration option");
-          }
-          return done(keys);
-        }
-        return done(this.jsFontsKey(keys));
-      }
+        return done(keys);
+      }      
       // we do flash if swfobject is loaded
       if(!this.hasSwfObjectLoaded()){
         if(DEBUG){
           this.log("Swfobject is not detected, Flash fonts enumeration is skipped");
         }
-        return done(this.jsFontsKey(keys));
-      }
+        return done(keys);
+      }      
       if(!this.hasMinFlashInstalled()){
         if(DEBUG){
           this.log("Flash is not installed, skipping Flash fonts enumeration");
         }
-        return done(this.jsFontsKey(keys));
+        return done(keys);
       }
       if(typeof this.options.swfPath === "undefined"){
         if(DEBUG){
           this.log("To use Flash fonts detection, you must pass a valid swfPath option, skipping Flash fonts enumeration");
         }
-        return done(this.jsFontsKey(keys));
+        return done(keys);
       }
-      return this.flashFontsKey(keys, done);
-    },
-    // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
-    flashFontsKey: function(keys, done) {
       this.loadSwfAndDetectFonts(function(fonts){
         keys.push(fonts.join(";"));
         done(keys);
