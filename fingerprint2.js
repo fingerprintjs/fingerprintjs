@@ -176,41 +176,38 @@
       return keys;
     },
     fontsKey: function(keys, done) {
+      if (this.options.excludeJsFonts) {
+        return this.flashFontsKey(keys, done);
+      }      
+      return done(this.jsFontsKey(keys));
+    },
+    // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
+    flashFontsKey: function(keys, done) {
       if(this.options.excludeFlashFonts) {
         if(DEBUG){
           this.log("Skipping flash fonts detection per excludeFlashFonts configuration option");
         }
-        if(this.options.excludeJsFonts) {
-          if(DEBUG) {
-            this.log("Skipping js fonts detection per excludeJsFonts configuration option");
-          }
-          return done(keys);
-        }
-        return done(this.jsFontsKey(keys));
-      }
+        return done(keys);
+      }      
       // we do flash if swfobject is loaded
       if(!this.hasSwfObjectLoaded()){
         if(DEBUG){
           this.log("Swfobject is not detected, Flash fonts enumeration is skipped");
         }
-        return done(this.jsFontsKey(keys));
-      }
+        return done(keys);
+      }      
       if(!this.hasMinFlashInstalled()){
         if(DEBUG){
           this.log("Flash is not installed, skipping Flash fonts enumeration");
         }
-        return done(this.jsFontsKey(keys));
+        return done(keys);
       }
       if(typeof this.options.swfPath === "undefined"){
         if(DEBUG){
           this.log("To use Flash fonts detection, you must pass a valid swfPath option, skipping Flash fonts enumeration");
         }
-        return done(this.jsFontsKey(keys));
+        return done(keys);
       }
-      return this.flashFontsKey(keys, done);
-    },
-    // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
-    flashFontsKey: function(keys, done) {
       this.loadSwfAndDetectFonts(function(fonts){
         keys.push(fonts.join(";"));
         done(keys);
@@ -367,7 +364,7 @@
         "Skia", "Small Fonts", "Snap ITC", "Snell Roundhand", "Socket",
         "Souvenir Lt BT", "Staccato222 BT", "Steamer", "Stencil", "Storybook",
         "Styllo", "Subway", "Swis721 BlkEx BT", "Swiss911 XCm BT", "Sylfaen",
-        "Symbol", "Synchro LET", "System", "Tahoma", "Tamil Sangam MN",
+        "Synchro LET", "System", "Tahoma", "Tamil Sangam MN",
         "Technical", "Teletype", "Telugu Sangam MN", "Tempus Sans ITC",
         "Terminal", "Thonburi", "Times", "Times New Roman",
         "Times New Roman PS", "Traditional Arabic", "Trajan", "TRAJAN PRO",
@@ -376,7 +373,7 @@
         "TypoUpright BT", "Unicorn", "Univers", "Univers CE 55 Medium",
         "Univers Condensed", "Utsaah", "Vagabond", "Vani", "Verdana", "Vijaya",
         "Viner Hand ITC", "VisualUI", "Vivaldi", "Vladimir Script", "Vrinda",
-        "Webdings", "Westminster", "WHITNEY", "Wide Latin", "Wingdings",
+        "Westminster", "WHITNEY", "Wide Latin", "Wingdings",
         "Wingdings 2", "Wingdings 3", "ZapfEllipt BT", "ZapfHumnst BT",
         "ZapfHumnst Dm BT", "Zapfino", "Zurich BlkEx BT", "Zurich Ex BT",
         "ZWAdobeF"];
@@ -486,10 +483,24 @@
     },
     getCanvasFp: function() {
       // Very simple now, need to make it more complex (geo shapes etc)
+      var result = [];
       var canvas = document.createElement("canvas");
-      canvas.width = 1600;
-      canvas.height = 100;
+      canvas.width = 2000;
+      canvas.height = 200;
       var ctx = canvas.getContext("2d");
+      // detect browser support of canvas blending
+      // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
+      // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/blending.js
+      try {
+        ctx.globalCompositeOperation = "screen";
+      } catch (e) { /* squelch */ }
+      result.push("canvas blending:" + ((ctx.globalCompositeOperation === "screen") ? "yes" : "no"));
+      // detect browser support of canvas winding
+      // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
+      // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/winding.js
+      ctx.rect(0, 0, 10, 10);
+      ctx.rect(2, 2, 6, 6);
+      result.push("canvas winding:" + ((ctx.isPointInPath(5, 5, "evenodd") === false) ? "yes" : "no"));
       // https://www.browserleaks.com/canvas#how-does-it-work
       var txt = "https://github.com/valve for PEACE in Ukraine!";
       ctx.textBaseline = "top";
@@ -507,7 +518,34 @@
       // osx specific font
       ctx.font = "72px 'Menlo'";
       ctx.strokeText(txt, 8, 4);
-      return canvas.toDataURL();
+      // canvas blending
+      // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
+      // http://jsfiddle.net/NDYV8/16/
+      ctx.globalCompositeOperation = "multiply";
+      ctx.fillStyle = "rgb(255,0,255)";
+      ctx.beginPath();
+      ctx.arc(50, 50, 50, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "rgb(0,255,255)";
+      ctx.beginPath();
+      ctx.arc(100, 50, 50, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "rgb(255,255,0)";
+      ctx.beginPath();
+      ctx.arc(75, 100, 50, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "rgb(255,0,255)";
+      // canvas winding
+      // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
+      // http://jsfiddle.net/NDYV8/19/
+      ctx.arc(75, 75, 75, 0, Math.PI * 2, true);
+      ctx.arc(75, 75, 25, 0, Math.PI * 2, true);
+      ctx.fill("evenodd");
+      result.push("canvas fp:" + canvas.toDataURL());
+      return result.join("§");
     },
 
     getWebglFp: function() {
@@ -554,7 +592,7 @@
       gl.vertexAttribPointer(program.vertexPosAttrib, vertexPosBuffer.itemSize, gl.FLOAT, !1, 0, 0);
       gl.uniform2f(program.offsetUniform, 1, 1);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexPosBuffer.numItems);
-      if (gl.canvas != null) result.push(gl.canvas.toDataURL());
+      if (gl.canvas != null) { result.push(gl.canvas.toDataURL()); }
       result.push("extensions:" + gl.getSupportedExtensions().join(";"));
       result.push("webgl aliased line width range:" + fa2s(gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE)));
       result.push("webgl aliased point size range:" + fa2s(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)));
@@ -581,7 +619,42 @@
       result.push("webgl stencil bits:" + gl.getParameter(gl.STENCIL_BITS));
       result.push("webgl vendor:" + gl.getParameter(gl.VENDOR));
       result.push("webgl version:" + gl.getParameter(gl.VERSION));
-      //TODO: implement vertex shader & fragment shader precision
+      result.push("webgl vertex shader high float precision:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT ).precision);
+      result.push("webgl vertex shader high float precision rangeMin:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT ).rangeMin);
+      result.push("webgl vertex shader high float precision rangeMax:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT ).rangeMax);
+      result.push("webgl vertex shader medium float precision:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_FLOAT ).precision);
+      result.push("webgl vertex shader medium float precision rangeMin:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_FLOAT ).rangeMin);
+      result.push("webgl vertex shader medium float precision rangeMax:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_FLOAT ).rangeMax);
+      result.push("webgl vertex shader low float precision:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.LOW_FLOAT ).precision);
+      result.push("webgl vertex shader low float precision rangeMin:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.LOW_FLOAT ).rangeMin);
+      result.push("webgl vertex shader low float precision rangeMax:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.LOW_FLOAT ).rangeMax);
+      result.push("webgl fragment shader high float precision:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT ).precision);
+      result.push("webgl fragment shader high float precision rangeMin:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT ).rangeMin);
+      result.push("webgl fragment shader high float precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT ).rangeMax);
+      result.push("webgl fragment shader medium float precision:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT ).precision);
+      result.push("webgl fragment shader medium float precision rangeMin:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT ).rangeMin);
+      result.push("webgl fragment shader medium float precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT ).rangeMax);
+      result.push("webgl fragment shader low float precision:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_FLOAT ).precision);
+      result.push("webgl fragment shader low float precision rangeMin:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_FLOAT ).rangeMin);
+      result.push("webgl fragment shader low float precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_FLOAT ).rangeMax);
+      result.push("webgl vertex shader high int precision:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_INT ).precision);
+      result.push("webgl vertex shader high int precision rangeMin:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_INT ).rangeMin);
+      result.push("webgl vertex shader high int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_INT ).rangeMax);
+      result.push("webgl vertex shader medium int precision:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_INT ).precision);
+      result.push("webgl vertex shader medium int precision rangeMin:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_INT ).rangeMin);
+      result.push("webgl vertex shader medium int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_INT ).rangeMax);
+      result.push("webgl vertex shader low int precision:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.LOW_INT ).precision);
+      result.push("webgl vertex shader low int precision rangeMin:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.LOW_INT ).rangeMin);
+      result.push("webgl vertex shader low int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.LOW_INT ).rangeMax);
+      result.push("webgl fragment shader high int precision:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_INT ).precision);
+      result.push("webgl fragment shader high int precision rangeMin:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_INT ).rangeMin);
+      result.push("webgl fragment shader high int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_INT ).rangeMax);
+      result.push("webgl fragment shader medium int precision:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_INT ).precision);
+      result.push("webgl fragment shader medium int precision rangeMin:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_INT ).rangeMin);
+      result.push("webgl fragment shader medium int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_INT ).rangeMax);
+      result.push("webgl fragment shader low int precision:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).precision);
+      result.push("webgl fragment shader low int precision rangeMin:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).rangeMin);
+      result.push("webgl fragment shader low int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).rangeMax);
       return result.join("§");
     },
     isCanvasSupported: function () {
@@ -623,8 +696,8 @@
       var gl = null;
       try {
         gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-      } catch(e) {}
-      if(!gl){gl = null;}
+      } catch(e) { /* squelch */ }
+      if (!gl) { gl = null; }
       return gl;
     },
     each: function (obj, iterator, context) {
