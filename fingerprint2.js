@@ -92,21 +92,32 @@
     },
     screenResolutionKey: function(keys) {
       if(!this.options.excludeScreenResolution) {
-        var resolution = this.getScreenResolution();
-        if (typeof resolution !== "undefined"){ // headless browsers, such as phantomjs
-          keys.push(resolution.join("x"));
-        }
+        return this.getScreenResolution(keys);
       }
       return keys;
     },
-    getScreenResolution: function () {
+    getScreenResolution: function(keys) {
       var resolution;
+      var available;
       if(this.options.detectScreenOrientation) {
         resolution = (screen.height > screen.width) ? [screen.height, screen.width] : [screen.width, screen.height];
       } else {
         resolution = [screen.height, screen.width];
       }
-      return resolution;
+      if(typeof resolution !== "undefined") { // headless browsers
+        keys.push(resolution);
+      }
+      if(screen.availWidth && screen.availHeight) {
+        if(this.options.detectScreenOrientation) {
+          available = (screen.availHeight > screen.availWidth) ? [screen.availHeight, screen.availWidth] : [screen.availWidth, screen.availHeight];
+        } else {
+          available = [screen.availHeight, screen.availWidth];
+        }
+      }
+      if(typeof available !== "undefined") { // headless browsers
+        keys.push(available);
+      }
+      return keys;
     },
     timezoneOffsetKey: function(keys) {
       if(!this.options.excludeTimezoneOffset) {
@@ -178,7 +189,7 @@
     fontsKey: function(keys, done) {
       if (this.options.excludeJsFonts) {
         return this.flashFontsKey(keys, done);
-      }      
+      }
       return done(this.jsFontsKey(keys));
     },
     // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
@@ -188,14 +199,14 @@
           this.log("Skipping flash fonts detection per excludeFlashFonts configuration option");
         }
         return done(keys);
-      }      
+      }
       // we do flash if swfobject is loaded
       if(!this.hasSwfObjectLoaded()){
         if(DEBUG){
           this.log("Swfobject is not detected, Flash fonts enumeration is skipped");
         }
         return done(keys);
-      }      
+      }
       if(!this.hasMinFlashInstalled()){
         if(DEBUG){
           this.log("Flash is not installed, skipping Flash fonts enumeration");
