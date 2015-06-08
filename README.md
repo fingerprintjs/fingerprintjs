@@ -77,7 +77,7 @@ python -m SimpleHTTPServer
 12. Platform
 13. DoNotTrack or not
 14. Full list of installed fonts (maintaining their order, which increases the entropy), implemented with Flash.
-15. A list of installed fonts, detected with JS/CSS (side-channel technique) - can detect up to 100 installed fonts without flash
+15. A list of installed fonts, detected with JS/CSS (side-channel technique) - can detect up to 500 installed fonts without flash
 16. Canvas fingerprinting
 17. WebGL fingerprinting
 18. Plugins (IE included)
