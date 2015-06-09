@@ -22,7 +22,6 @@
   else { context[name] = definition(); }
 })("Fingerprint2", this, function() {
   "use strict";
-  var DEBUG = true;
   var Fingerprint2 = function(options) {
     var defaultOptions = {
       swfContainerId: "fingerprintjs2",
@@ -47,6 +46,7 @@
         console.log(msg);
       }
     },
+
     get: function(done){
       var keys = [];
       keys = this.userAgentKey(keys);
@@ -195,26 +195,26 @@
     // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
     flashFontsKey: function(keys, done) {
       if(this.options.excludeFlashFonts) {
-        if(DEBUG){
+        if(typeof NODEBUG === "undefined"){
           this.log("Skipping flash fonts detection per excludeFlashFonts configuration option");
         }
         return done(keys);
       }
       // we do flash if swfobject is loaded
       if(!this.hasSwfObjectLoaded()){
-        if(DEBUG){
+        if(typeof NODEBUG === "undefined"){
           this.log("Swfobject is not detected, Flash fonts enumeration is skipped");
         }
         return done(keys);
       }
       if(!this.hasMinFlashInstalled()){
-        if(DEBUG){
+        if(typeof NODEBUG === "undefined"){
           this.log("Flash is not installed, skipping Flash fonts enumeration");
         }
         return done(keys);
       }
       if(typeof this.options.swfPath === "undefined"){
-        if(DEBUG){
+        if(typeof NODEBUG === "undefined"){
           this.log("To use Flash fonts detection, you must pass a valid swfPath option, skipping Flash fonts enumeration");
         }
         return done(keys);

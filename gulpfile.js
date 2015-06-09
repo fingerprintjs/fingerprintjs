@@ -13,7 +13,13 @@ gulp.task("lint", function() {
 gulp.task("minify", function() {
   return gulp
       .src("fingerprint2.js")
-      .pipe(uglify())
+      .pipe(uglify({
+          compress: {
+            global_defs: {
+              NODEBUG: true
+            }
+          }
+      }))
       .pipe(gulp.dest("dist"));
 });
 
