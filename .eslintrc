@@ -5,12 +5,14 @@
     "amd": true
   },
   "globals": {
-    "swfobject": true
+    "swfobject": true,
+    "ActiveXObject": true
   },
   "rules": {
     "no-fallthrough": false,
     "yoda": false,
-    "no-shadow": false
+    "no-shadow": false,
+    "no-new": false
   },
 
 }

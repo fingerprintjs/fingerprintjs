@@ -1,6 +1,6 @@
 {
   "name": "fingerprintjs2",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/Valve/fingerprintjs2",
   "description": "Modern & flexible browser fingerprinting library",
   "main": "dist/fingerprint2.js",
@@ -15,7 +15,10 @@
     "privacy"
   ],
   "authors": [
-    "Valentin Vasilev"
+    "Valentin Vasilev",
+    "Mark Huisman",
+    "Kevin Lamshöft",
+    "dj0nes"
   ],
   "license": "MIT",
   "ignore": [
