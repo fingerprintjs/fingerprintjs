@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 0.1.2 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 0.1.3 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -467,7 +467,7 @@
       ctx.arc(75, 75, 25, 0, Math.PI * 2, true);
       ctx.fill("evenodd");
       result.push("canvas fp:" + canvas.toDataURL());
-      return result.join("§");
+      return result.join("~");
     },
 
     getWebglFp: function() {
@@ -577,7 +577,7 @@
       result.push("webgl fragment shader low int precision:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).precision);
       result.push("webgl fragment shader low int precision rangeMin:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).rangeMin);
       result.push("webgl fragment shader low int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).rangeMax);
-      return result.join("§");
+      return result.join("~");
     },
     isCanvasSupported: function () {
       var elem = document.createElement("canvas");
