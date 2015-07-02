@@ -65,7 +65,7 @@
       keys = this.pluginsKey(keys);
       keys = this.canvasKey(keys);
       keys = this.webglKey(keys);
-      keys = this.adBlock(keys);
+      keys = this.adBlockKey(keys);
       var that = this;
       this.fontsKey(keys, function(newKeys){
         var murmur = that.x64hash128(newKeys.join("~~~"), 31);
@@ -187,7 +187,7 @@
       }
       return keys;
     },
-    adBlock: function(keys){
+    adBlockKey: function(keys){
       if(!this.options.excludeAdBlock) {
         keys.push(this.getAdBlock());
       }
