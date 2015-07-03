@@ -65,6 +65,7 @@
       keys = this.pluginsKey(keys);
       keys = this.canvasKey(keys);
       keys = this.webglKey(keys);
+      keys = this.adBlockKey(keys);
       var that = this;
       this.fontsKey(keys, function(newKeys){
         var murmur = that.x64hash128(newKeys.join("~~~"), 31);
@@ -183,6 +184,12 @@
     webglKey: function(keys) {
       if(!this.options.excludeWebGL && this.isCanvasSupported()) {
         keys.push(this.getWebglFp());
+      }
+      return keys;
+    },
+    adBlockKey: function(keys){
+      if(!this.options.excludeAdBlock) {
+        keys.push(this.getAdBlock());
       }
       return keys;
     },
@@ -579,6 +586,12 @@
       result.push("webgl fragment shader low int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).rangeMax);
       return result.join("~");
     },
+    getAdBlock: function(){
+      var ads = document.createElement("div");
+      ads.setAttribute("id", "ads");
+      document.body.appendChild(ads);
+      return document.getElementById('ads')? false : true;
+    },  
     isCanvasSupported: function () {
       var elem = document.createElement("canvas");
       return !!(elem.getContext && elem.getContext("2d"));
