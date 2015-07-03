@@ -590,8 +590,8 @@
       var ads = document.createElement("div");
       ads.setAttribute("id", "ads");
       document.body.appendChild(ads);
-      return document.getElementById('ads')? false : true;
-    },  
+      return document.getElementById("ads") ? false : true;
+    },
     isCanvasSupported: function () {
       var elem = document.createElement("canvas");
       return !!(elem.getContext && elem.getContext("2d"));
