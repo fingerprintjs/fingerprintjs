@@ -18,7 +18,8 @@ This project will not be backwards compatible with original
 fingerprintjs.
 
 
-### The library is currently under development and only partially usable.
+### The library is currently under development and backwards compatibility is not guaranteed!
+#### However, it follows the semver so you should be able to figure breaking changes from the version.
 
 ### Usage
 
