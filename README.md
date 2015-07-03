@@ -81,6 +81,7 @@ python -m SimpleHTTPServer
 16. Canvas fingerprinting
 17. WebGL fingerprinting
 18. Plugins (IE included)
+19. Is AdBlock installed or not
 
 
 ### Many more fingerprinting sources will be implemented, such as
@@ -89,7 +90,9 @@ python -m SimpleHTTPServer
 * silverlight integration,
 * Flash linux kernel version,
 * Internal HashTable implementation detection
-* and many more.
+* WebRTC fingerprinting
+* Touch screen implementation fingerprinting
+* Many more
 
 
 #### To recompile the FontList.swf file:
