@@ -46,7 +46,6 @@
         console.log(msg);
       }
     },
-
     get: function(done){
       var keys = [];
       keys = this.userAgentKey(keys);

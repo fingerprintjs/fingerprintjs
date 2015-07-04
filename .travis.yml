@@ -1,0 +1,1 @@
+script: "phantomjs specs/lib/phantom-jasmine/run_jasmine_test.coffee specs/test_runner.html"
