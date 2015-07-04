@@ -6,7 +6,7 @@ Contributing to FingerprintJS2 is super easy:
 1. Fork the project and make the required changes in it.
 2. Run `gulp` to catch stylistic errors and produce the minified
    version.
-3. Run specs (not implemented yet)
+3. Run specs by opening the specs/test_runner.html
 4. Make a PR.
 
 If your code changes the list of fingerprinting sources, please update
