@@ -65,7 +65,7 @@
       keys = this.canvasKey(keys);
       keys = this.webglKey(keys);
       keys = this.adBlockKey(keys);
-      keys = this.liedLanguages(keys);
+      keys = this.hasLiedLanguagesKey(keys);
       var that = this;
       this.fontsKey(keys, function(newKeys){
         var murmur = that.x64hash128(newKeys.join("~~~"), 31);
@@ -190,6 +190,12 @@
     adBlockKey: function(keys){
       if(!this.options.excludeAdBlock) {
         keys.push(this.getAdBlock());
+      }
+      return keys;
+    },
+    hasLiedLanguagesKey: function(keys){
+      if(!this.options.excludeHasLiedLanguages){
+        keys.push(this.getHasLiedLanguages());
       }
       return keys;
     },
@@ -591,6 +597,21 @@
       ads.setAttribute("id", "ads");
       document.body.appendChild(ads);
       return document.getElementById("ads") ? false : true;
+    },
+    getHasLiedLanguages : function(){
+      //We check if navigator.language is equal to the first language of navigator.languages
+      if(navigator.languages != undefined){
+        try{
+          var firstLanguages = navigator.languages[0].substr(0,2);
+          if(firstLanguages != navigator.language){
+            return true;
+          }
+        }catch(err){
+          return true;
+        }
+      }
+
+      return false;
     },
     isCanvasSupported: function () {
       var elem = document.createElement("canvas");

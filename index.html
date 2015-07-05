@@ -13,6 +13,10 @@
   <script>
     var d1 = new Date();
     var fp = new Fingerprint2();
+    for(var v in fp){
+      console.log("v = "+v);
+    }
+    console.log("lied on languages ? "+fp.getHasLiedLanguages());
     fp.get(function(result) {
       var d2 = new Date();
       console.log("Time taken to calculate the fingerprint: " + (d2 - d1) + "ms");
