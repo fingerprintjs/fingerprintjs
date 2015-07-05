@@ -66,6 +66,8 @@
       keys = this.webglKey(keys);
       keys = this.adBlockKey(keys);
       keys = this.hasLiedLanguagesKey(keys);
+      keys = this.hasLiedResolutionKey(keys);
+      keys = this.hasLiedOsKey(keys);
       var that = this;
       this.fontsKey(keys, function(newKeys){
         var murmur = that.x64hash128(newKeys.join("~~~"), 31);
@@ -612,7 +614,7 @@
     },
     getHasLiedLanguages: function(){
       //We check if navigator.language is equal to the first language of navigator.languages
-      if(navigator.languages !== undefined){
+      if(typeof navigator.languages !== "undefined"){
         try{
           var firstLanguages = navigator.languages[0].substr(0, 2);
           if(firstLanguages !== navigator.language.substr(0, 2)){
@@ -643,17 +645,17 @@
       //We extract the OS from the user agent (respect theorder of the if else if statement)
       if(userAgent.toLowerCase().indexOf("windows phone") >= 0){
         os = "Windows Phone";
-      }else if(userAgent.toLowerCase().indexOf("win") >= 0){
+      } else if(userAgent.toLowerCase().indexOf("win") >= 0){
         os = "Windows";
-      }else if(userAgent.toLowerCase().indexOf("android") >= 0){
+      } else if(userAgent.toLowerCase().indexOf("android") >= 0){
         os = "Android";
-      }else if(userAgent.toLowerCase().indexOf("linux") >= 0){
+      } else if(userAgent.toLowerCase().indexOf("linux") >= 0){
         os = "Linux";
-      }else if(userAgent.toLowerCase().indexOf("iPhone") >= 0 || userAgent.toLowerCase().indexOf("iPad") >= 0 ){
+      } else if(userAgent.toLowerCase().indexOf("iPhone") >= 0 || userAgent.toLowerCase().indexOf("iPad") >= 0 ){
         os = "iOS";
-      }else if(userAgent.toLowerCase().indexOf("mac") >= 0){
+      } else if(userAgent.toLowerCase().indexOf("mac") >= 0){
         os = "Mac";
-      }else{
+      } else{
         os = "Other";
       }
       //We detect if the person uses a mobile device
@@ -662,7 +664,7 @@
            (navigator.maxTouchPoints > 0) ||
            (navigator.msMaxTouchPoints > 0)) {
             mobileDevice = true;
-      }else{
+      } else{
         mobileDevice = false;
       }
 
@@ -671,7 +673,7 @@
       }
 
       //We compare oscpu with the os extracted from the ua
-      if(oscpu !== undefined){
+      if(typeof oscpu !== "undefined"){
         if(oscpu.toLowerCase().indexOf("win") >= 0 && os !== "Windows" && os !== "Windows Phone"){
           return true;
         }else if(oscpu.toLowerCase().indexOf("linux") >= 0 && os !== "Linux" && os !== "Android"){
