@@ -199,6 +199,18 @@
       }
       return keys;
     },
+    hasLiedResolutionKey : function(keys){
+      if(!this.options.excludeHasLiedResolution){
+        keys.push(this.getHasLiedResolution());
+      }
+      return keys;
+    },
+    hasLiedOsKey : function(keys){
+      if(!this.options.excludeHasLiedOs){
+        keys.push(this.getHasLiedOs());
+      }
+      return keys;
+    },
     fontsKey: function(keys, done) {
       if (this.options.excludeJsFonts) {
         return this.flashFontsKey(keys, done);
@@ -603,12 +615,88 @@
       if(navigator.languages != undefined){
         try{
           var firstLanguages = navigator.languages[0].substr(0,2);
-          if(firstLanguages != navigator.language){
+          if(firstLanguages != navigator.language.substr(0,2)){
             return true;
           }
         }catch(err){
           return true;
         }
+      }
+
+      return false;
+    },
+    getHasLiedResolution : function(){
+      if(screen.width < screen.availWidth){
+        return true;
+      }
+      if(screen.height < screen.availHeight){
+        return true;
+      }
+
+      return false;
+    },
+    getHasLiedOs: function(){
+      var userAgent = navigator.userAgent;
+      var oscpu = navigator.oscpu;
+      var platform = navigator.platform;
+      
+      //We extract the OS from the user agent (respect theorder of the if else if statement)
+      if(userAgent.toLowerCase().indexOf("windows phone") >= 0){
+        var os ="Windows Phone";
+      }else if(userAgent.toLowerCase().indexOf("win") >= 0){
+        var os = "Windows";
+      }else if(userAgent.toLowerCase().indexOf("android") >= 0){
+        var os = "Android";
+      }else if(userAgent.toLowerCase().indexOf("linux") >= 0){
+        var os ="Linux";
+      }else if(userAgent.toLowerCase().indexOf("iPhone") >= 0 || userAgent.toLowerCase().indexOf("iPad") >=0 ){
+        var os = "iOS";
+      }else if(userAgent.toLowerCase().indexOf("mac") >= 0){
+        var os ="Mac";
+      }else{
+        var os = "Other";
+      }
+      
+      //We detect if the person uses a mobile device
+      if (('ontouchstart' in window) ||
+           (navigator.maxTouchPoints > 0) ||
+           (navigator.msMaxTouchPoints > 0)) {
+            var mobileDevice = true;
+      }else{
+        var mobileDevice = false;
+      }
+
+      if(mobileDevice && os !== "Windows Phone" && os !=="Android" && os !=="iOS" && os !=="Other"){
+        return true;
+      }
+
+      //We compare oscpu with the os extracted from the ua
+      if(oscpu != undefined){
+        if(oscpu.toLowerCase().indexOf("win") >= 0 && os !=="Windows" && os !=="Windows Phone"){
+          return true;
+        }else if(oscpu.toLowerCase().indexOf("linux") >= 0 && os !=="Linux" && os !=="Android"){
+          return true;
+        }else if(oscpu.toLowerCase().indexOf("mac") >= 0 && os !=="Mac" && os !=="iOS"){
+          return true;
+        }else if(oscpu.toLowerCase().indexOf("win") == 0 && oscpu.toLowerCase().indexOf("linux") == 0 && oscpu.toLowerCase().indexOf("mac") >= 0 && os != "other"){
+          return true;
+        }
+      }
+
+      //We compare platform with the os extracted from the ua
+      if(platform.toLowerCase().indexOf("win") >= 0 && os !=="Windows" && os !=="Windows Phone"){
+        return true;
+      }else if((platform.toLowerCase().indexOf("linux") >= 0 || platform.toLowerCase().indexOf("android") >= 0 || platform.toLowerCase().indexOf("pike") >= 0) && os !=="Linux" && os !=="Android"){
+        return true;
+      }else if((platform.toLowerCase().indexOf("mac") >= 0 ||  platform.toLowerCase().indexOf("ipad") >= 0 || platform.toLowerCase().indexOf("ipod") >= 0 || platform.toLowerCase().indexOf("iphone") >= 0) && os !=="Mac" && os !=="iOS"){
+        return true;
+      }else if(platform.toLowerCase().indexOf("win") == 0 && platform.toLowerCase().indexOf("linux") == 0 && platform.toLowerCase().indexOf("mac") >= 0 && os != "other"){
+        return true;
+      }
+
+      if(navigator.plugins == undefined && os !=="Windows" && os !=="Windows Phone"){
+        //We are are in the case where the person uses ie, therefore we can infer that it's windows
+        return true;
       }
 
       return false;
