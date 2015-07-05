@@ -15,6 +15,36 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+
+if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function(searchElement, fromIndex) {
+      var k;
+      if (this == null) {
+        throw new TypeError("'this' is null or undefined");
+      }
+      var O = Object(this);
+      var len = O.length >>> 0;
+      if (len === 0) {
+        return -1;
+      }
+      var n = +fromIndex || 0;
+      if (Math.abs(n) === Infinity) {
+        n = 0;
+      }
+      if (n >= len) {
+        return -1;
+      }
+      k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+      while (k < len) {
+        if (k in O && O[k] === searchElement) {
+          return k;
+        }
+        k++;
+      }
+      return -1;
+    };
+  }
+
 (function (name, context, definition) {
   "use strict";
   if (typeof module !== "undefined" && module.exports) { module.exports = definition(); }
@@ -74,7 +104,6 @@
         return done(murmur);
       });
     },
-
     userAgentKey: function(keys) {
       if(!this.options.excludeUserAgent) {
         keys.push(navigator.userAgent);
