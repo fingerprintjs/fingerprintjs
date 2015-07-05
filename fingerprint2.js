@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 0.1.3 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 0.1.4 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -46,7 +46,6 @@
         console.log(msg);
       }
     },
-
     get: function(done){
       var keys = [];
       keys = this.userAgentKey(keys);
@@ -591,8 +590,8 @@
       var ads = document.createElement("div");
       ads.setAttribute("id", "ads");
       document.body.appendChild(ads);
-      return document.getElementById('ads')? false : true;
-    },  
+      return document.getElementById("ads") ? false : true;
+    },
     isCanvasSupported: function () {
       var elem = document.createElement("canvas");
       return !!(elem.getContext && elem.getContext("2d"));

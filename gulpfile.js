@@ -1,6 +1,7 @@
-var gulp = require('gulp'),
-    eslint = require('gulp-eslint'),
-    uglify = require('gulp-uglify');
+var gulp = require("gulp"),
+    eslint = require("gulp-eslint"),
+    uglify = require("gulp-uglify"),
+    phantom = require('gulp-jasmine-phantom');
 
 gulp.task("lint", function() {
   return gulp
@@ -23,6 +24,5 @@ gulp.task("minify", function() {
       .pipe(gulp.dest("dist"));
 });
 
-gulp.task("default", ["lint", "minify"], function() {
 
-});
+gulp.task("default", ["lint", "minify"], function() {});

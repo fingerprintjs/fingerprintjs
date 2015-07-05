@@ -1,5 +1,6 @@
 <p align="center">
   <h1>Fingerprintjs2</h1>
+  <a href="https://travis-ci.org/Valve/fingerprintjs2"><img src="http://img.shields.io/travis/Valve/fingerprintjs2/master.svg?style=flat" /></a>
   <a href="https://gitter.im/Valve/fingerprintjs2"><img src="https://badges.gitter.im/Valve/fingerprintjs2.png"/></a>
 </p>
 
@@ -18,7 +19,8 @@ This project will not be backwards compatible with original
 fingerprintjs.
 
 
-### The library is currently under development and only partially usable.
+### The library is currently under development and backwards compatibility is not guaranteed!
+#### However, it follows the semver so you should be able to figure breaking changes from the version.
 
 ### Usage
 
@@ -81,6 +83,7 @@ python -m SimpleHTTPServer
 16. Canvas fingerprinting
 17. WebGL fingerprinting
 18. Plugins (IE included)
+19. Is AdBlock installed or not
 
 
 ### Many more fingerprinting sources will be implemented, such as
@@ -89,7 +92,9 @@ python -m SimpleHTTPServer
 * silverlight integration,
 * Flash linux kernel version,
 * Internal HashTable implementation detection
-* and many more.
+* WebRTC fingerprinting
+* Touch screen implementation fingerprinting
+* Many more
 
 
 #### To recompile the FontList.swf file:
