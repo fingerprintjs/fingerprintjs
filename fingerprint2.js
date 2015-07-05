@@ -676,11 +676,11 @@
       if(typeof oscpu !== "undefined"){
         if(oscpu.toLowerCase().indexOf("win") >= 0 && os !== "Windows" && os !== "Windows Phone"){
           return true;
-        }else if(oscpu.toLowerCase().indexOf("linux") >= 0 && os !== "Linux" && os !== "Android"){
+        } else if(oscpu.toLowerCase().indexOf("linux") >= 0 && os !== "Linux" && os !== "Android"){
           return true;
-        }else if(oscpu.toLowerCase().indexOf("mac") >= 0 && os !== "Mac" && os !== "iOS"){
+        } else if(oscpu.toLowerCase().indexOf("mac") >= 0 && os !== "Mac" && os !== "iOS"){
           return true;
-        }else if(oscpu.toLowerCase().indexOf("win") === 0 && oscpu.toLowerCase().indexOf("linux") === 0 && oscpu.toLowerCase().indexOf("mac") >= 0 && os !== "other"){
+        } else if(oscpu.toLowerCase().indexOf("win") === 0 && oscpu.toLowerCase().indexOf("linux") === 0 && oscpu.toLowerCase().indexOf("mac") >= 0 && os !== "other"){
           return true;
         }
       }
@@ -688,11 +688,11 @@
       //We compare platform with the os extracted from the ua
       if(platform.toLowerCase().indexOf("win") >= 0 && os !== "Windows" && os !== "Windows Phone"){
         return true;
-      }else if((platform.toLowerCase().indexOf("linux") >= 0 || platform.toLowerCase().indexOf("android") >= 0 || platform.toLowerCase().indexOf("pike") >= 0) && os !== "Linux" && os !== "Android"){
+      } else if((platform.toLowerCase().indexOf("linux") >= 0 || platform.toLowerCase().indexOf("android") >= 0 || platform.toLowerCase().indexOf("pike") >= 0) && os !== "Linux" && os !== "Android"){
         return true;
-      }else if((platform.toLowerCase().indexOf("mac") >= 0 || platform.toLowerCase().indexOf("ipad") >= 0 || platform.toLowerCase().indexOf("ipod") >= 0 || platform.toLowerCase().indexOf("iphone") >= 0) && os !== "Mac" && os !== "iOS"){
+      } else if((platform.toLowerCase().indexOf("mac") >= 0 || platform.toLowerCase().indexOf("ipad") >= 0 || platform.toLowerCase().indexOf("ipod") >= 0 || platform.toLowerCase().indexOf("iphone") >= 0) && os !== "Mac" && os !== "iOS"){
         return true;
-      }else if(platform.toLowerCase().indexOf("win") === 0 && platform.toLowerCase().indexOf("linux") === 0 && platform.toLowerCase().indexOf("mac") >= 0 && os !== "other"){
+      } else if(platform.toLowerCase().indexOf("win") === 0 && platform.toLowerCase().indexOf("linux") === 0 && platform.toLowerCase().indexOf("mac") >= 0 && os !== "other"){
         return true;
       }
 
