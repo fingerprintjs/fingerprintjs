@@ -66,6 +66,7 @@
       keys = this.canvasKey(keys);
       keys = this.webglKey(keys);
       keys = this.adBlockKey(keys);
+      keys = this.liedLanguages(keys);
       var that = this;
       this.fontsKey(keys, function(newKeys){
         var murmur = that.x64hash128(newKeys.join("~~~"), 31);
