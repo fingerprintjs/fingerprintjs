@@ -199,13 +199,13 @@
       }
       return keys;
     },
-    hasLiedResolutionKey : function(keys){
+    hasLiedResolutionKey: function(keys){
       if(!this.options.excludeHasLiedResolution){
         keys.push(this.getHasLiedResolution());
       }
       return keys;
     },
-    hasLiedOsKey : function(keys){
+    hasLiedOsKey: function(keys){
       if(!this.options.excludeHasLiedOs){
         keys.push(this.getHasLiedOs());
       }
@@ -610,12 +610,12 @@
       document.body.appendChild(ads);
       return document.getElementById("ads") ? false : true;
     },
-    getHasLiedLanguages : function(){
+    getHasLiedLanguages: function(){
       //We check if navigator.language is equal to the first language of navigator.languages
-      if(navigator.languages != undefined){
+      if(navigator.languages !== undefined){
         try{
-          var firstLanguages = navigator.languages[0].substr(0,2);
-          if(firstLanguages != navigator.language.substr(0,2)){
+          var firstLanguages = navigator.languages[0].substr(0, 2);
+          if(firstLanguages !== navigator.language.substr(0, 2)){
             return true;
           }
         }catch(err){
@@ -625,7 +625,7 @@
 
       return false;
     },
-    getHasLiedResolution : function(){
+    getHasLiedResolution: function(){
       if(screen.width < screen.availWidth){
         return true;
       }
@@ -639,62 +639,62 @@
       var userAgent = navigator.userAgent;
       var oscpu = navigator.oscpu;
       var platform = navigator.platform;
-      
+      var os;
       //We extract the OS from the user agent (respect theorder of the if else if statement)
       if(userAgent.toLowerCase().indexOf("windows phone") >= 0){
-        var os ="Windows Phone";
+        os = "Windows Phone";
       }else if(userAgent.toLowerCase().indexOf("win") >= 0){
-        var os = "Windows";
+        os = "Windows";
       }else if(userAgent.toLowerCase().indexOf("android") >= 0){
-        var os = "Android";
+        os = "Android";
       }else if(userAgent.toLowerCase().indexOf("linux") >= 0){
-        var os ="Linux";
-      }else if(userAgent.toLowerCase().indexOf("iPhone") >= 0 || userAgent.toLowerCase().indexOf("iPad") >=0 ){
-        var os = "iOS";
+        os = "Linux";
+      }else if(userAgent.toLowerCase().indexOf("iPhone") >= 0 || userAgent.toLowerCase().indexOf("iPad") >= 0 ){
+        os = "iOS";
       }else if(userAgent.toLowerCase().indexOf("mac") >= 0){
-        var os ="Mac";
+        os = "Mac";
       }else{
-        var os = "Other";
+        os = "Other";
       }
-      
       //We detect if the person uses a mobile device
-      if (('ontouchstart' in window) ||
+      var mobileDevice;
+      if (("ontouchstart" in window) ||
            (navigator.maxTouchPoints > 0) ||
            (navigator.msMaxTouchPoints > 0)) {
-            var mobileDevice = true;
+            mobileDevice = true;
       }else{
-        var mobileDevice = false;
+        mobileDevice = false;
       }
 
-      if(mobileDevice && os !== "Windows Phone" && os !=="Android" && os !=="iOS" && os !=="Other"){
+      if(mobileDevice && os !== "Windows Phone" && os !== "Android" && os !== "iOS" && os !== "Other"){
         return true;
       }
 
       //We compare oscpu with the os extracted from the ua
-      if(oscpu != undefined){
-        if(oscpu.toLowerCase().indexOf("win") >= 0 && os !=="Windows" && os !=="Windows Phone"){
+      if(oscpu !== undefined){
+        if(oscpu.toLowerCase().indexOf("win") >= 0 && os !== "Windows" && os !== "Windows Phone"){
           return true;
-        }else if(oscpu.toLowerCase().indexOf("linux") >= 0 && os !=="Linux" && os !=="Android"){
+        }else if(oscpu.toLowerCase().indexOf("linux") >= 0 && os !== "Linux" && os !== "Android"){
           return true;
-        }else if(oscpu.toLowerCase().indexOf("mac") >= 0 && os !=="Mac" && os !=="iOS"){
+        }else if(oscpu.toLowerCase().indexOf("mac") >= 0 && os !== "Mac" && os !== "iOS"){
           return true;
-        }else if(oscpu.toLowerCase().indexOf("win") == 0 && oscpu.toLowerCase().indexOf("linux") == 0 && oscpu.toLowerCase().indexOf("mac") >= 0 && os != "other"){
+        }else if(oscpu.toLowerCase().indexOf("win") === 0 && oscpu.toLowerCase().indexOf("linux") === 0 && oscpu.toLowerCase().indexOf("mac") >= 0 && os !== "other"){
           return true;
         }
       }
 
       //We compare platform with the os extracted from the ua
-      if(platform.toLowerCase().indexOf("win") >= 0 && os !=="Windows" && os !=="Windows Phone"){
+      if(platform.toLowerCase().indexOf("win") >= 0 && os !== "Windows" && os !== "Windows Phone"){
         return true;
-      }else if((platform.toLowerCase().indexOf("linux") >= 0 || platform.toLowerCase().indexOf("android") >= 0 || platform.toLowerCase().indexOf("pike") >= 0) && os !=="Linux" && os !=="Android"){
+      }else if((platform.toLowerCase().indexOf("linux") >= 0 || platform.toLowerCase().indexOf("android") >= 0 || platform.toLowerCase().indexOf("pike") >= 0) && os !== "Linux" && os !== "Android"){
         return true;
-      }else if((platform.toLowerCase().indexOf("mac") >= 0 ||  platform.toLowerCase().indexOf("ipad") >= 0 || platform.toLowerCase().indexOf("ipod") >= 0 || platform.toLowerCase().indexOf("iphone") >= 0) && os !=="Mac" && os !=="iOS"){
+      }else if((platform.toLowerCase().indexOf("mac") >= 0 || platform.toLowerCase().indexOf("ipad") >= 0 || platform.toLowerCase().indexOf("ipod") >= 0 || platform.toLowerCase().indexOf("iphone") >= 0) && os !== "Mac" && os !== "iOS"){
         return true;
-      }else if(platform.toLowerCase().indexOf("win") == 0 && platform.toLowerCase().indexOf("linux") == 0 && platform.toLowerCase().indexOf("mac") >= 0 && os != "other"){
+      }else if(platform.toLowerCase().indexOf("win") === 0 && platform.toLowerCase().indexOf("linux") === 0 && platform.toLowerCase().indexOf("mac") >= 0 && os !== "other"){
         return true;
       }
 
-      if(navigator.plugins == undefined && os !=="Windows" && os !=="Windows Phone"){
+      if(navigator.plugins === undefined && os !== "Windows" && os !== "Windows Phone"){
         //We are are in the case where the person uses ie, therefore we can infer that it's windows
         return true;
       }
