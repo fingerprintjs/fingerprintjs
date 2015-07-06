@@ -15,6 +15,36 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+
+if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function(searchElement, fromIndex) {
+      var k;
+      if (this == null) {
+        throw new TypeError("'this' is null or undefined");
+      }
+      var O = Object(this);
+      var len = O.length >>> 0;
+      if (len === 0) {
+        return -1;
+      }
+      var n = +fromIndex || 0;
+      if (Math.abs(n) === Infinity) {
+        n = 0;
+      }
+      if (n >= len) {
+        return -1;
+      }
+      k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+      while (k < len) {
+        if (k in O && O[k] === searchElement) {
+          return k;
+        }
+        k++;
+      }
+      return -1;
+    };
+  }
+
 (function (name, context, definition) {
   "use strict";
   if (typeof module !== "undefined" && module.exports) { module.exports = definition(); }
@@ -65,13 +95,15 @@
       keys = this.canvasKey(keys);
       keys = this.webglKey(keys);
       keys = this.adBlockKey(keys);
+      keys = this.hasLiedLanguagesKey(keys);
+      keys = this.hasLiedResolutionKey(keys);
+      keys = this.hasLiedOsKey(keys);
       var that = this;
       this.fontsKey(keys, function(newKeys){
         var murmur = that.x64hash128(newKeys.join("~~~"), 31);
         return done(murmur);
       });
     },
-
     userAgentKey: function(keys) {
       if(!this.options.excludeUserAgent) {
         keys.push(navigator.userAgent);
@@ -189,6 +221,24 @@
     adBlockKey: function(keys){
       if(!this.options.excludeAdBlock) {
         keys.push(this.getAdBlock());
+      }
+      return keys;
+    },
+    hasLiedLanguagesKey: function(keys){
+      if(!this.options.excludeHasLiedLanguages){
+        keys.push(this.getHasLiedLanguages());
+      }
+      return keys;
+    },
+    hasLiedResolutionKey: function(keys){
+      if(!this.options.excludeHasLiedResolution){
+        keys.push(this.getHasLiedResolution());
+      }
+      return keys;
+    },
+    hasLiedOsKey: function(keys){
+      if(!this.options.excludeHasLiedOs){
+        keys.push(this.getHasLiedOs());
       }
       return keys;
     },
@@ -590,6 +640,97 @@
       ads.setAttribute("id", "ads");
       document.body.appendChild(ads);
       return document.getElementById("ads") ? false : true;
+    },
+    getHasLiedLanguages: function(){
+      //We check if navigator.language is equal to the first language of navigator.languages
+      if(typeof navigator.languages !== "undefined"){
+        try{
+          var firstLanguages = navigator.languages[0].substr(0, 2);
+          if(firstLanguages !== navigator.language.substr(0, 2)){
+            return true;
+          }
+        }catch(err){
+          return true;
+        }
+      }
+
+      return false;
+    },
+    getHasLiedResolution: function(){
+      if(screen.width < screen.availWidth){
+        return true;
+      }
+      if(screen.height < screen.availHeight){
+        return true;
+      }
+
+      return false;
+    },
+    getHasLiedOs: function(){
+      var userAgent = navigator.userAgent;
+      var oscpu = navigator.oscpu;
+      var platform = navigator.platform;
+      var os;
+      //We extract the OS from the user agent (respect theorder of the if else if statement)
+      if(userAgent.toLowerCase().indexOf("windows phone") >= 0){
+        os = "Windows Phone";
+      } else if(userAgent.toLowerCase().indexOf("win") >= 0){
+        os = "Windows";
+      } else if(userAgent.toLowerCase().indexOf("android") >= 0){
+        os = "Android";
+      } else if(userAgent.toLowerCase().indexOf("linux") >= 0){
+        os = "Linux";
+      } else if(userAgent.toLowerCase().indexOf("iPhone") >= 0 || userAgent.toLowerCase().indexOf("iPad") >= 0 ){
+        os = "iOS";
+      } else if(userAgent.toLowerCase().indexOf("mac") >= 0){
+        os = "Mac";
+      } else{
+        os = "Other";
+      }
+      //We detect if the person uses a mobile device
+      var mobileDevice;
+      if (("ontouchstart" in window) ||
+           (navigator.maxTouchPoints > 0) ||
+           (navigator.msMaxTouchPoints > 0)) {
+            mobileDevice = true;
+      } else{
+        mobileDevice = false;
+      }
+
+      if(mobileDevice && os !== "Windows Phone" && os !== "Android" && os !== "iOS" && os !== "Other"){
+        return true;
+      }
+
+      //We compare oscpu with the os extracted from the ua
+      if(typeof oscpu !== "undefined"){
+        if(oscpu.toLowerCase().indexOf("win") >= 0 && os !== "Windows" && os !== "Windows Phone"){
+          return true;
+        } else if(oscpu.toLowerCase().indexOf("linux") >= 0 && os !== "Linux" && os !== "Android"){
+          return true;
+        } else if(oscpu.toLowerCase().indexOf("mac") >= 0 && os !== "Mac" && os !== "iOS"){
+          return true;
+        } else if(oscpu.toLowerCase().indexOf("win") === 0 && oscpu.toLowerCase().indexOf("linux") === 0 && oscpu.toLowerCase().indexOf("mac") >= 0 && os !== "other"){
+          return true;
+        }
+      }
+
+      //We compare platform with the os extracted from the ua
+      if(platform.toLowerCase().indexOf("win") >= 0 && os !== "Windows" && os !== "Windows Phone"){
+        return true;
+      } else if((platform.toLowerCase().indexOf("linux") >= 0 || platform.toLowerCase().indexOf("android") >= 0 || platform.toLowerCase().indexOf("pike") >= 0) && os !== "Linux" && os !== "Android"){
+        return true;
+      } else if((platform.toLowerCase().indexOf("mac") >= 0 || platform.toLowerCase().indexOf("ipad") >= 0 || platform.toLowerCase().indexOf("ipod") >= 0 || platform.toLowerCase().indexOf("iphone") >= 0) && os !== "Mac" && os !== "iOS"){
+        return true;
+      } else if(platform.toLowerCase().indexOf("win") === 0 && platform.toLowerCase().indexOf("linux") === 0 && platform.toLowerCase().indexOf("mac") >= 0 && os !== "other"){
+        return true;
+      }
+
+      if(navigator.plugins === undefined && os !== "Windows" && os !== "Windows Phone"){
+        //We are are in the case where the person uses ie, therefore we can infer that it's windows
+        return true;
+      }
+
+      return false;
     },
     isCanvasSupported: function () {
       var elem = document.createElement("canvas");

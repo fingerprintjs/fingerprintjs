@@ -84,6 +84,9 @@ python -m SimpleHTTPServer
 17. WebGL fingerprinting
 18. Plugins (IE included)
 19. Is AdBlock installed or not
+20. Has the user tampered with its languages 
+21. Has the user tampered with its screen resolution
+22. Has the user tampered with its OS
 
 
 ### Many more fingerprinting sources will be implemented, such as
