@@ -12,7 +12,8 @@
     "no-fallthrough": false,
     "yoda": false,
     "no-shadow": false,
-    "no-new": false
+    "no-new": false,
+    "no-extend-native": false
   },
 
 }

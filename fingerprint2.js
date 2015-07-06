@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 0.1.4 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 0.2.0 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -16,7 +16,17 @@
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-if (!Array.prototype.indexOf) {
+
+(function (name, context, definition) {
+  "use strict";
+  if (typeof module !== "undefined" && module.exports) { module.exports = definition(); }
+  else if (typeof define === "function" && define.amd) { define(definition); }
+  else { context[name] = definition(); }
+})("Fingerprint2", this, function() {
+  "use strict";
+  // This will only be polyfilled for IE8 and older
+  // Taken from Mozilla MDC
+  if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function(searchElement, fromIndex) {
       var k;
       if (this == null) {
@@ -44,14 +54,6 @@ if (!Array.prototype.indexOf) {
       return -1;
     };
   }
-
-(function (name, context, definition) {
-  "use strict";
-  if (typeof module !== "undefined" && module.exports) { module.exports = definition(); }
-  else if (typeof define === "function" && define.amd) { define(definition); }
-  else { context[name] = definition(); }
-})("Fingerprint2", this, function() {
-  "use strict";
   var Fingerprint2 = function(options) {
     var defaultOptions = {
       swfContainerId: "fingerprintjs2",
@@ -644,16 +646,15 @@ if (!Array.prototype.indexOf) {
     getHasLiedLanguages: function(){
       //We check if navigator.language is equal to the first language of navigator.languages
       if(typeof navigator.languages !== "undefined"){
-        try{
+        try {
           var firstLanguages = navigator.languages[0].substr(0, 2);
           if(firstLanguages !== navigator.language.substr(0, 2)){
             return true;
           }
-        }catch(err){
+        } catch(err){
           return true;
         }
       }
-
       return false;
     },
     getHasLiedResolution: function(){
@@ -663,7 +664,6 @@ if (!Array.prototype.indexOf) {
       if(screen.height < screen.availHeight){
         return true;
       }
-
       return false;
     },
     getHasLiedOs: function(){
@@ -671,7 +671,7 @@ if (!Array.prototype.indexOf) {
       var oscpu = navigator.oscpu;
       var platform = navigator.platform;
       var os;
-      //We extract the OS from the user agent (respect theorder of the if else if statement)
+      //We extract the OS from the user agent (respect the order of the if else if statement)
       if(userAgent.toLowerCase().indexOf("windows phone") >= 0){
         os = "Windows Phone";
       } else if(userAgent.toLowerCase().indexOf("win") >= 0){
@@ -687,7 +687,7 @@ if (!Array.prototype.indexOf) {
       } else{
         os = "Other";
       }
-      //We detect if the person uses a mobile device
+      // We detect if the person uses a mobile device
       var mobileDevice;
       if (("ontouchstart" in window) ||
            (navigator.maxTouchPoints > 0) ||
@@ -701,7 +701,7 @@ if (!Array.prototype.indexOf) {
         return true;
       }
 
-      //We compare oscpu with the os extracted from the ua
+      // We compare oscpu with the OS extracted from the UA
       if(typeof oscpu !== "undefined"){
         if(oscpu.toLowerCase().indexOf("win") >= 0 && os !== "Windows" && os !== "Windows Phone"){
           return true;
@@ -714,7 +714,7 @@ if (!Array.prototype.indexOf) {
         }
       }
 
-      //We compare platform with the os extracted from the ua
+      //We compare platform with the OS extracted from the UA
       if(platform.toLowerCase().indexOf("win") >= 0 && os !== "Windows" && os !== "Windows Phone"){
         return true;
       } else if((platform.toLowerCase().indexOf("linux") >= 0 || platform.toLowerCase().indexOf("android") >= 0 || platform.toLowerCase().indexOf("pike") >= 0) && os !== "Linux" && os !== "Android"){
@@ -725,7 +725,7 @@ if (!Array.prototype.indexOf) {
         return true;
       }
 
-      if(navigator.plugins === undefined && os !== "Windows" && os !== "Windows Phone"){
+      if(typeof navigator.plugins === "undefined" && os !== "Windows" && os !== "Windows Phone"){
         //We are are in the case where the person uses ie, therefore we can infer that it's windows
         return true;
       }
