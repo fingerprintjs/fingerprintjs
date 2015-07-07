@@ -249,7 +249,7 @@
       if(!this.options.excludeHasLiedBrowser){
         keys.push(this.getHasLiedBrowser());
       }
-      return keys;    
+      return keys;
     },
     fontsKey: function(keys, done) {
       if (this.options.excludeJsFonts) {
@@ -470,7 +470,6 @@
     },
     getCanvasFp: function() {
       // Very simple now, need to make it more complex (geo shapes etc)
-      var result = [];
       var canvas = document.createElement("canvas");
       canvas.width = 2000;
       canvas.height = 200;
@@ -705,45 +704,20 @@
       if(userAgent.toLowerCase().indexOf("firefox") >= 0){
         browser = "Firefox";
       } else if(userAgent.toLowerCase().indexOf("opera") >= 0 || userAgent.toLowerCase().indexOf("opr") >= 0){
-        browser ="Opera";
+        browser = "Opera";
       } else if(userAgent.toLowerCase().indexOf("chrome") >= 0){
-        browser ="Chrome";
+        browser = "Chrome";
       } else if(userAgent.toLowerCase().indexOf("safari") >= 0){
-        browser ="Safari";
+        browser = "Safari";
       } else if(userAgent.toLowerCase().indexOf("trident") >= 0){
         browser = "Internet Explorer";
       } else{
         browser = "Other";
       }
 
-      if((browser === "Chrome" || browser==="Safari" || browser ==="Opera") && productSub !== "20030107"){
+      if((browser === "Chrome" || browser === "Safari" || browser === "Opera") && productSub !== "20030107"){
         return true;
       }
-
-      //We create an error and measure the size of the picture of error displayed
-      var img = document.createElement("img");
-      img.setAttribute("src","itwillfail.jpg");
-      img.setAttribute("id","imagefail");
-
-      document.addEventListener("DOMContentLoaded", function(event) { 
-        document.body.appendChild(img);
-        setTimeout(function(){
-            var imgFail = document.getElementById("imagefail");
-            var imgFailWidth = imgFail.width;
-            var imgFailHeight = imgFail.height;
-            document.body.removeChild(img);
-
-            if(imgFailWidth === 20 && imgFailHeight === 20 && browser !== "Safari"){
-              return true;
-            } else if(imgFailWidth === 20 && imgFailHeight === 24 && browser !== "Chrome" && browser !== "Opera" && browser !== "Other"){
-              return true;
-            } else if(imgFailWidth === 24 && imgFailHeight === 24 && browser !== "Firefox" && browser !== "Other"){
-              return true;
-            } else if(imgFailWidth === 30 && imgFailHeight === 28 && browser !== "Internet Explorer" && browser !== "Other"){
-              return true;
-            }
-        }, 5);
-      });
 
       var tempRes = eval.toString().length;
       if(tempRes === 37 && browser !== "Safari" && browser !== "Firefox" && browser !== "Other"){
@@ -754,8 +728,23 @@
         return true;
       }
 
+      //We create an error to see how it is handled
+      var errFirefox;
+      try{
+        dsfsdf;
+      }catch(err){
+        try{
+          err.toSource();
+          errFirefox = true;
+        }catch(errOferr){
+          errFirefox = false;
+        }
+      }
+      if(errFirefox && browser !== "Firefox" && browser !== "Other"){
+        return true;
+      }
       return false;
-    }, 
+    },
     isCanvasSupported: function () {
       var elem = document.createElement("canvas");
       return !!(elem.getContext && elem.getContext("2d"));
