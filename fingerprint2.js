@@ -472,6 +472,7 @@
       // detect browser support of canvas blending
       // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
       // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/blending.js
+      // https://securehomes.esat.kuleuven.be/~gacar/persistent/the_web_never_forgets.pdf
       ctx.textBaseline = "alphabetic";
       ctx.fillStyle = "#f60";
       ctx.fillRect(125, 1, 62, 20);
