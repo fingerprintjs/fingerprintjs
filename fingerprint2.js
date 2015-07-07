@@ -100,6 +100,7 @@
       keys = this.hasLiedLanguagesKey(keys);
       keys = this.hasLiedResolutionKey(keys);
       keys = this.hasLiedOsKey(keys);
+      keys = this.hasLiedBrowserKey(keys);
       var that = this;
       this.fontsKey(keys, function(newKeys){
         var murmur = that.x64hash128(newKeys.join("~~~"), 31);
@@ -243,6 +244,12 @@
         keys.push(this.getHasLiedOs());
       }
       return keys;
+    },
+    hasLiedBrowserKey: function(keys){
+      if(!this.options.excludeHasLiedBrowser){
+        keys.push(this.getHasLiedBrowser());
+      }
+      return keys;    
     },
     fontsKey: function(keys, done) {
       if (this.options.excludeJsFonts) {
@@ -689,6 +696,66 @@
 
       return false;
     },
+    getHasLiedBrowser: function () {
+      var userAgent = navigator.userAgent;
+      var productSub = navigator.productSub;
+
+      //we extract the browser from the user agent (respect the order of the tests)
+      var browser;
+      if(userAgent.toLowerCase().indexOf("firefox") >= 0){
+        browser = "Firefox";
+      } else if(userAgent.toLowerCase().indexOf("opera") >= 0 || userAgent.toLowerCase().indexOf("opr") >= 0){
+        browser ="Opera";
+      } else if(userAgent.toLowerCase().indexOf("chrome") >= 0){
+        browser ="Chrome";
+      } else if(userAgent.toLowerCase().indexOf("safari") >= 0){
+        browser ="Safari";
+      } else if(userAgent.toLowerCase().indexOf("trident") >= 0){
+        browser = "Internet Explorer";
+      } else{
+        browser = "Other";
+      }
+
+      if((browser === "Chrome" || browser==="Safari" || browser ==="Opera") && productSub !== "20030107"){
+        return true;
+      }
+
+      //We create an error and measure the size of the picture of error displayed
+      var img = document.createElement("img");
+      img.setAttribute("src","itwillfail.jpg");
+      img.setAttribute("id","imagefail");
+
+      document.addEventListener("DOMContentLoaded", function(event) { 
+        document.body.appendChild(img);
+        setTimeout(function(){
+            var imgFail = document.getElementById("imagefail");
+            var imgFailWidth = imgFail.width;
+            var imgFailHeight = imgFail.height;
+            document.body.removeChild(img);
+
+            if(imgFailWidth === 20 && imgFailHeight === 20 && browser !== "Safari"){
+              return true;
+            } else if(imgFailWidth === 20 && imgFailHeight === 24 && browser !== "Chrome" && browser !== "Opera" && browser !== "Other"){
+              return true;
+            } else if(imgFailWidth === 24 && imgFailHeight === 24 && browser !== "Firefox" && browser !== "Other"){
+              return true;
+            } else if(imgFailWidth === 30 && imgFailHeight === 28 && browser !== "Internet Explorer" && browser !== "Other"){
+              return true;
+            }
+        }, 5);
+      });
+
+      var tempRes = eval.toString().length;
+      if(tempRes === 37 && browser !== "Safari" && browser !== "Firefox" && browser !== "Other"){
+        return true;
+      } else if(tempRes === 39 && browser !== "Internet Explorer" && browser !== "Other"){
+        return true;
+      } else if(tempRes === 33 && browser !== "Chrome" && browser !== "Opera" && browser !== "Other"){
+        return true;
+      }
+
+      return false;
+    }, 
     isCanvasSupported: function () {
       var elem = document.createElement("canvas");
       return !!(elem.getContext && elem.getContext("2d"));
