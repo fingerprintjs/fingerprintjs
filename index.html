@@ -30,6 +30,22 @@
       font-size: 1.2em
     }
 
+    button {
+      border: none;
+      color: #fff;
+      font-size: 1.2em;
+      background: #27e;
+      padding: 0.5em 0.75em 0.6em;
+      border-radius: 3px;
+      box-shadow: 0 3px 0 #05c;
+      outline: none;
+    }
+
+    button:active {
+      transform: translateY(3px);
+      box-shadow: none;
+    }
+
     strong {
       display: block;
       letter-spacing: 1px;
@@ -55,17 +71,23 @@
 
   <p>Your browser fingerprint: <strong id="fp"></strong></p>
   <p><code id="time"/></p>
+
+  <button type="button" id="btn">Set fingerprint</button>
   <script src="fingerprint2.js"></script>
   <script>
-    var d1 = new Date();
-    var fp = new Fingerprint2();
-    fp.get(function(result) {
-      var d2 = new Date();
-      var timeString = "Time took to calculate the fingerprint: " + (d2 - d1) + "ms";
-      console.log(timeString);
-      console.log(result);
-      document.getElementById("fp").innerHTML = result;
-      document.getElementById("time").innerHTML = timeString;
+    var btn = document.getElementById('btn');
+
+    btn.addEventListener('click', function setFingerPrint() {
+      var d1 = new Date();
+      var fp = new Fingerprint2();
+      fp.get(function(result) {
+        var d2 = new Date();
+        var timeString = "Time took to calculate the fingerprint: " + (d2 - d1) + "ms";
+        console.log(timeString);
+        console.log(result);
+        document.getElementById("fp").innerHTML = result;
+        document.getElementById("time").innerHTML = timeString;
+      });
     });
   </script>
 </body>
