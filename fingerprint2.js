@@ -469,6 +469,7 @@
       }
     },
     getCanvasFp: function() {
+      var result = [];
       // Very simple now, need to make it more complex (geo shapes etc)
       var canvas = document.createElement("canvas");
       canvas.width = 2000;
@@ -479,6 +480,14 @@
       // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
       // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/blending.js
       // https://securehomes.esat.kuleuven.be/~gacar/persistent/the_web_never_forgets.pdf
+      try {
+        ctx.globalCompositeOperation = "screen";
+      } catch (e) { /* squelch */ }
+      result.push("canvas blending:" + ((ctx.globalCompositeOperation === "screen") ? "yes" : "no"));
+      ctx.rect(0, 0, 10, 10);
+      ctx.rect(2, 2, 6, 6);
+      result.push("canvas winding:" + ((ctx.isPointInPath(5, 5, "evenodd") === false) ? "yes" : "no"));
+
       ctx.textBaseline = "alphabetic";
       ctx.fillStyle = "#f60";
       ctx.fillRect(125, 1, 62, 20);
@@ -488,7 +497,9 @@
       ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
       ctx.font = "18pt Arial";
       ctx.fillText("Cwm fjordbank glyphs vext quiz, \ud83d\ude03", 4, 45);
-      return canvas.toDataURL();
+
+      result.push("canvas fp:" + canvas.toDataURL());
+      return result.join("~");
     },
 
     getWebglFp: function() {
