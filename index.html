@@ -52,6 +52,10 @@
       word-wrap: break-word;
     }
 
+    .loader {
+      margin: 1em auto;
+    }
+
     @media (min-width: 32em) {
       h1 {
         font-size: 4em;
@@ -66,11 +70,12 @@
 <body>
   <div id="container"></div>
 
-
   <h1>Fingerprintjs2</h1>
 
   <p>Your browser fingerprint: <strong id="fp"></strong></p>
   <p><code id="time"/></p>
+
+  <img src="loader.gif" class="loader" id="loader" style="display: none;" />
 
   <button type="button" id="btn">Get my fingerprint</button>
 
@@ -78,9 +83,15 @@
 
   <script src="fingerprint2.js"></script>
   <script>
-    var btn = document.getElementById('btn');
+    var btn = document.getElementById('btn'),
+        loader = document.getElementById('loader'),
+        fpView = document.getElementById("fp"),
+        time = document.getElementById("time");
 
     btn.addEventListener('click', function getFingerPrint() {
+      loader.style.display = 'block';
+      fpView.innerHTML = '';
+      time.innerHTML = '';
       var d1 = new Date();
       var fp = new Fingerprint2();
       fp.get(function(result) {
@@ -88,8 +99,9 @@
         var timeString = "Time took to calculate the fingerprint: " + (d2 - d1) + "ms";
         console.log(timeString);
         console.log(result);
-        document.getElementById("fp").innerHTML = result;
-        document.getElementById("time").innerHTML = timeString;
+        fpView.innerHTML = result;
+        time.innerHTML = timeString;
+        loader.style.display = 'none';
       });
     });
   </script>
