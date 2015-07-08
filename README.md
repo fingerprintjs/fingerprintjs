@@ -18,9 +18,8 @@ as QQ, Baidu and others.
 This project will not be backwards compatible with original
 fingerprintjs.
 
+This project uses semver.
 
-### The library is currently under development and backwards compatibility is not guaranteed!
-#### However, it follows the semver so you should be able to figure breaking changes from the version.
 
 ### Usage
 
@@ -40,11 +39,35 @@ new Fingerprint2(options).get(function(result){
 });
 ```
 
-Full list of options will be in the wiki. (wip)
+Full list of options will be in the
+(https://github.com/Valve/fingerprintjs2/wiki/List-of-options) wiki
+page.
 
-To use flash font enumeration, make sure you have swfobject available.
-If you don't, the library will skip the flash part entirely.
+Flash font enumeration is disabled by default. JS code is used by
+default to get the list of available fonts.
 
+The reason for this  is that Flash will not work in incognito mode.
+
+However, you can make the library to use Flash when detecting the fonts
+with:
+
+```js
+excludeJsFonts: true
+```
+option.
+
+To use Flash font enumeration, make sure you have swfobject available.
+If you don't, the library will skip the Flash part entirely.
+
+
+##### All fingerprinting sources are enabled by default, i.e. you don't need to explicitly configure the library to include them.
+
+```js
+new Fingerprint2().get(function(result){
+  // this will use all available fingerprinting sources
+  console.log(result);
+});
+```
 
 #### View the fingerprint locally
 
@@ -87,6 +110,7 @@ python -m SimpleHTTPServer
 20. Has the user tampered with its languages 
 21. Has the user tampered with its screen resolution
 22. Has the user tampered with its OS
+
 
 
 ### Many more fingerprinting sources will be implemented, such as
