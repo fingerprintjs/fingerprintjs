@@ -110,6 +110,7 @@ python -m SimpleHTTPServer
 20. Has the user tampered with its languages 
 21. Has the user tampered with its screen resolution
 22. Has the user tampered with its OS
+23. Has the user tampered with its browser
 
 
 

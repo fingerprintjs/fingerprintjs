@@ -100,6 +100,7 @@
       keys = this.hasLiedLanguagesKey(keys);
       keys = this.hasLiedResolutionKey(keys);
       keys = this.hasLiedOsKey(keys);
+      keys = this.hasLiedBrowserKey(keys);
       var that = this;
       this.fontsKey(keys, function(newKeys){
         var murmur = that.x64hash128(newKeys.join("~~~"), 31);
@@ -241,6 +242,12 @@
     hasLiedOsKey: function(keys){
       if(!this.options.excludeHasLiedOs){
         keys.push(this.getHasLiedOs());
+      }
+      return keys;
+    },
+    hasLiedBrowserKey: function(keys){
+      if(!this.options.excludeHasLiedBrowser){
+        keys.push(this.getHasLiedBrowser());
       }
       return keys;
     },
@@ -462,42 +469,35 @@
       }
     },
     getCanvasFp: function() {
-      // Very simple now, need to make it more complex (geo shapes etc)
       var result = [];
+      // Very simple now, need to make it more complex (geo shapes etc)
       var canvas = document.createElement("canvas");
       canvas.width = 2000;
       canvas.height = 200;
+      canvas.style.display = "inline";
       var ctx = canvas.getContext("2d");
       // detect browser support of canvas blending
       // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
       // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/blending.js
+      // https://securehomes.esat.kuleuven.be/~gacar/persistent/the_web_never_forgets.pdf
       try {
         ctx.globalCompositeOperation = "screen";
       } catch (e) { /* squelch */ }
       result.push("canvas blending:" + ((ctx.globalCompositeOperation === "screen") ? "yes" : "no"));
-      // detect browser support of canvas winding
-      // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
-      // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/winding.js
       ctx.rect(0, 0, 10, 10);
       ctx.rect(2, 2, 6, 6);
       result.push("canvas winding:" + ((ctx.isPointInPath(5, 5, "evenodd") === false) ? "yes" : "no"));
-      // https://www.browserleaks.com/canvas#how-does-it-work
-      var txt = "https://github.com/valve for PEACE in Ukraine!";
-      ctx.textBaseline = "top";
-      // ios8 specific font
-      ctx.font = "72px 'DamascusLight'";
+
+      ctx.textBaseline = "alphabetic";
       ctx.fillStyle = "#f60";
-      ctx.fillRect(2, 0, 1000, 70);
+      ctx.fillRect(125, 1, 62, 20);
       ctx.fillStyle = "#069";
-      ctx.fillText(txt, 2, 0);
-      // android specific font
-      ctx.font = "72px 'Roboto Condensed'";
+      ctx.font = "11pt no-real-font-123";
+      ctx.fillText("Cwm fjordbank glyphs vext quiz, \ud83d\ude03", 2, 15);
       ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
-      ctx.fillText(txt, 4, 2);
-      ctx.strokeStyle = "rgba(202, 104, 0, 0.9)";
-      // osx specific font
-      ctx.font = "72px 'Menlo'";
-      ctx.strokeText(txt, 8, 4);
+      ctx.font = "18pt Arial";
+      ctx.fillText("Cwm fjordbank glyphs vext quiz, \ud83d\ude03", 4, 45);
+
       // canvas blending
       // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
       // http://jsfiddle.net/NDYV8/16/
@@ -524,6 +524,7 @@
       ctx.arc(75, 75, 75, 0, Math.PI * 2, true);
       ctx.arc(75, 75, 25, 0, Math.PI * 2, true);
       ctx.fill("evenodd");
+
       result.push("canvas fp:" + canvas.toDataURL());
       return result.join("~");
     },
@@ -730,6 +731,56 @@
         return true;
       }
 
+      return false;
+    },
+    getHasLiedBrowser: function () {
+      var userAgent = navigator.userAgent;
+      var productSub = navigator.productSub;
+
+      //we extract the browser from the user agent (respect the order of the tests)
+      var browser;
+      if(userAgent.toLowerCase().indexOf("firefox") >= 0){
+        browser = "Firefox";
+      } else if(userAgent.toLowerCase().indexOf("opera") >= 0 || userAgent.toLowerCase().indexOf("opr") >= 0){
+        browser = "Opera";
+      } else if(userAgent.toLowerCase().indexOf("chrome") >= 0){
+        browser = "Chrome";
+      } else if(userAgent.toLowerCase().indexOf("safari") >= 0){
+        browser = "Safari";
+      } else if(userAgent.toLowerCase().indexOf("trident") >= 0){
+        browser = "Internet Explorer";
+      } else{
+        browser = "Other";
+      }
+
+      if((browser === "Chrome" || browser === "Safari" || browser === "Opera") && productSub !== "20030107"){
+        return true;
+      }
+
+      var tempRes = eval.toString().length;
+      if(tempRes === 37 && browser !== "Safari" && browser !== "Firefox" && browser !== "Other"){
+        return true;
+      } else if(tempRes === 39 && browser !== "Internet Explorer" && browser !== "Other"){
+        return true;
+      } else if(tempRes === 33 && browser !== "Chrome" && browser !== "Opera" && browser !== "Other"){
+        return true;
+      }
+
+      //We create an error to see how it is handled
+      var errFirefox;
+      try{
+        dsfsdf;
+      }catch(err){
+        try{
+          err.toSource();
+          errFirefox = true;
+        }catch(errOferr){
+          errFirefox = false;
+        }
+      }
+      if(errFirefox && browser !== "Firefox" && browser !== "Other"){
+        return true;
+      }
       return false;
     },
     isCanvasSupported: function () {
