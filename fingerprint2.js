@@ -768,13 +768,13 @@
 
       //We create an error to see how it is handled
       var errFirefox;
-      try{
-        dsfsdf;
-      }catch(err){
+      try {
+        throw "a";
+      } catch(err){
         try{
           err.toSource();
           errFirefox = true;
-        }catch(errOferr){
+        } catch(errOfErr){
           errFirefox = false;
         }
       }
