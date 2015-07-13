@@ -107,11 +107,11 @@ python -m SimpleHTTPServer
 17. WebGL fingerprinting
 18. Plugins (IE included)
 19. Is AdBlock installed or not
-20. Has the user tampered with its languages 
+20. Has the user tampered with its languages
 21. Has the user tampered with its screen resolution
 22. Has the user tampered with its OS
 23. Has the user tampered with its browser
-
+24. Touch screen detection and capabilities
 
 
 ### Many more fingerprinting sources will be implemented, such as
@@ -121,9 +121,7 @@ python -m SimpleHTTPServer
 * Flash linux kernel version,
 * Internal HashTable implementation detection
 * WebRTC fingerprinting
-* Touch screen implementation fingerprinting
 * Many more
-
 
 #### To recompile the FontList.swf file:
 

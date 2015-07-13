@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 0.3.0 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 0.4.0 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -101,6 +101,7 @@
       keys = this.hasLiedResolutionKey(keys);
       keys = this.hasLiedOsKey(keys);
       keys = this.hasLiedBrowserKey(keys);
+      keys = this.touchSupportKey(keys);
       var that = this;
       this.fontsKey(keys, function(newKeys){
         var murmur = that.x64hash128(newKeys.join("~~~"), 31);
@@ -429,6 +430,12 @@
         return "";
       }
     },
+    touchSupportKey: function (keys) {
+      if(!this.options.excludeTouchSupport){
+        keys.push(this.getTouchSupport());
+      }
+      return keys;
+    },
     hasSessionStorage: function () {
       try {
         return !!window.sessionStorage;
@@ -468,6 +475,30 @@
         return "doNotTrack: unknown";
       }
     },
+    // This is a crude and primitive touch screen detection.
+    // It's not possible to currently reliably detect the  availability of a touch screen
+    // with a JS, without actually subscribing to a touch event.
+    // http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
+    // https://github.com/Modernizr/Modernizr/issues/548
+    // method returns an array of 3 values:
+    // maxTouchPoints, the success or failure of creating a TouchEvent,
+    // and the availability of the 'ontouchstart' property
+    getTouchSupport: function () {
+      var maxTouchPoints = 0;
+      var touchEvent = false;
+      if(typeof navigator.maxTouchPoints !== "undefined") {
+        maxTouchPoints = navigator.maxTouchPoints;
+      } else if (typeof navigator.msMaxTouchPoints !== "undefined") {
+        maxTouchPoints = navigator.msMaxTouchPoints;
+      }
+      try {
+        document.createEvent("TouchEvent");
+        touchEvent = true;
+      } catch(_) { /* squelch */ }
+      var touchStart = "ontouchstart" in window;
+      return [maxTouchPoints, touchEvent, touchStart];
+    },
+    // https://www.browserleaks.com/canvas#how-does-it-work
     getCanvasFp: function() {
       var result = [];
       // Very simple now, need to make it more complex (geo shapes etc)
@@ -484,6 +515,10 @@
         ctx.globalCompositeOperation = "screen";
       } catch (e) { /* squelch */ }
       result.push("canvas blending:" + ((ctx.globalCompositeOperation === "screen") ? "yes" : "no"));
+
+      // detect browser support of canvas winding
+      // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
+      // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/winding.js
       ctx.rect(0, 0, 10, 10);
       ctx.rect(2, 2, 6, 6);
       result.push("canvas winding:" + ((ctx.isPointInPath(5, 5, "evenodd") === false) ? "yes" : "no"));
