@@ -217,7 +217,7 @@
       return keys;
     },
     webglKey: function(keys) {
-      if(!this.options.excludeWebGL && this.isCanvasSupported()) {
+      if(!this.options.excludeWebGL && this.isWebGlSupported()) {
         keys.push(this.getWebglFp());
       }
       return keys;
@@ -821,6 +821,16 @@
     isCanvasSupported: function () {
       var elem = document.createElement("canvas");
       return !!(elem.getContext && elem.getContext("2d"));
+    },
+    isWebGlSupported: function() {
+      if (!this.isCanvasSupported() || !!window.WebGLRenderingContext) {
+        return false;
+      }
+
+      var canvas = document.createElement("canvas"),
+          glContext = canvas.getContext && canvas.getContext("webgl");
+
+      return glContext && !!glContext.getShaderPrecisionFormat;
     },
     isIE: function () {
       if(navigator.appName === "Microsoft Internet Explorer") {
