@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 0.5.0 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 0.5.1 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -217,9 +217,19 @@
       return keys;
     },
     webglKey: function(keys) {
-      if (!this.options.excludeWebGL && this.isWebGlSupported()) {
-        keys.push(this.getWebglFp());
+      if(this.options.excludeWebGL) {
+        if(typeof NODEBUG === "undefined"){
+          this.log("Skipping WebGL fingerprinting per excludeWebGL configuration option");
+        }
+        return keys;
       }
+      if(!this.isWebGlSupported()) {
+        if(typeof NODEBUG === "undefined"){
+          this.log("Skipping WebGL fingerprinting because it is not supported in this browser");
+        }
+        return keys;
+      }
+      keys.push(this.getWebglFp());
       return keys;
     },
     adBlockKey: function(keys){
@@ -591,10 +601,10 @@
     getWebglFp: function() {
       var gl;
       var fa2s = function(fa) {
-      gl.clearColor(0.0, 0.0, 0.0, 1.0);
-      gl.enable(gl.DEPTH_TEST);
-      gl.depthFunc(gl.LEQUAL);
-      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.enable(gl.DEPTH_TEST);
+        gl.depthFunc(gl.LEQUAL);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         return "[" + fa[0] + ", " + fa[1] + "]";
       };
       var maxAnisotropy = function(gl) {
@@ -662,7 +672,7 @@
 
       if (!gl.getShaderPrecisionFormat) {
         if (typeof NODEBUG === "undefined") {
-          this.log("Skipping FPing of specific webgl functions (getShaderPrecisionFormat). This browser does not support them.");
+          this.log("WebGL fingerprinting is incomplete, because your browser does not support getShaderPrecisionFormat");
         }
         return result.join("~");
       }
@@ -703,7 +713,6 @@
       result.push("webgl fragment shader low int precision:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).precision);
       result.push("webgl fragment shader low int precision rangeMin:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).rangeMin);
       result.push("webgl fragment shader low int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).rangeMax);
-
       return result.join("~");
     },
     getAdBlock: function(){
@@ -856,10 +865,10 @@
       return !!(elem.getContext && elem.getContext("2d"));
     },
     isWebGlSupported: function() {
+      // code taken from Modernizr
       if (!this.isCanvasSupported()) {
         return false;
       }
-
       var canvas = document.createElement("canvas"),
           glContext = canvas.getContext && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"));
 
