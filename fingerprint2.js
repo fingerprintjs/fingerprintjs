@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 0.4.0 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 0.5.0 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -15,7 +15,6 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-
 
 (function (name, context, definition) {
   "use strict";
@@ -57,7 +56,8 @@
   var Fingerprint2 = function(options) {
     var defaultOptions = {
       swfContainerId: "fingerprintjs2",
-      swfPath: "flash/compiled/FontList.swf"
+      swfPath: "flash/compiled/FontList.swf",
+      sortPluginsFor: [/palemoon/i]
     };
     this.options = this.extend(options, defaultOptions);
     this.nativeForEach = Array.prototype.forEach;
@@ -384,7 +384,20 @@
       return keys;
     },
     getRegularPluginsString: function () {
-      return this.map(navigator.plugins, function (p) {
+      var plugins = [];
+      for(var i = 0, l = navigator.plugins.length; i < l; i++) {
+        plugins.push(navigator.plugins[i]);
+      }
+      // sorting plugins only for those user agents, that we know randomize the plugins
+      // every time we try to enumerate them
+      if(this.pluginsShouldBeSorted()) {
+        plugins = plugins.sort(function(a, b) {
+          if(a.name > b.name){ return 1; }
+          if(a.name < b.name){ return -1; }
+          return 0;
+        });
+      }
+      return this.map(plugins, function (p) {
         var mimeTypes = this.map(p, function(mt){
           return [mt.type, mt.suffixes].join("~");
         }).join(",");
@@ -429,6 +442,17 @@
       } else {
         return "";
       }
+    },
+    pluginsShouldBeSorted: function () {
+      var should = false;
+      for(var i = 0, l = this.options.sortPluginsFor.length; i < l; i++) {
+        var re = this.options.sortPluginsFor[i];
+        if(navigator.userAgent.match(re)) {
+          should = true;
+          break;
+        }
+      }
+      return should;
     },
     touchSupportKey: function (keys) {
       if(!this.options.excludeTouchSupport){
