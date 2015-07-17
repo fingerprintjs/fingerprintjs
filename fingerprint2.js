@@ -217,9 +217,19 @@
       return keys;
     },
     webglKey: function(keys) {
-      if(!this.options.excludeWebGL && this.isWebGlSupported()) {
+      var isWebGlExcluded = !!this.options.excludeWebGL,
+          isWebGlSupported = this.isWebGlSupported();
+
+      if (!isWebGlExcluded && isWebGlSupported) {
+        if (typeof NODEBUG === "undefined") {
+          this.log("Skip webgl fingerprinting, because this browser does not support webgl");
+        }
+      }
+
+      if (!isWebGlExcluded && isWebGlSupported) {
         keys.push(this.getWebglFp());
       }
+
       return keys;
     },
     adBlockKey: function(keys){
@@ -828,9 +838,17 @@
       }
 
       var canvas = document.createElement("canvas"),
-          glContext = canvas.getContext && canvas.getContext("webgl");
+          glContext = canvas.getContext && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"));
 
-      return glContext && !!glContext.getShaderPrecisionFormat;
+      if (glContext && !glContext.getShaderPrecisionFormat) {
+        if (typeof NODEBUG === "undefined") {
+          this.log("This browser supports webgl, but lacks some functionality (getShaderPrecisionFormat not avaialable)");
+        }
+
+        return false;
+      }
+
+      return true;
     },
     isIE: function () {
       if(navigator.appName === "Microsoft Internet Explorer") {
