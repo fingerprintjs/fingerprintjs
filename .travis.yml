@@ -1,1 +1,1 @@
-script: "phantomjs specs/lib/phantom-jasmine/run_jasmine_test.coffee specs/test_runner.html"
+script: "specs/phantomjs.runner.sh specs/spec_runner.html"
