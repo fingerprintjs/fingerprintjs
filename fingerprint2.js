@@ -217,7 +217,7 @@
       return keys;
     },
     webglKey: function(keys) {
-      if(!this.options.excludeWebGL && this.isCanvasSupported()) {
+      if (!this.options.excludeWebGL && this.isWebGlSupported()) {
         keys.push(this.getWebglFp());
       }
       return keys;
@@ -659,6 +659,14 @@
       result.push("webgl stencil bits:" + gl.getParameter(gl.STENCIL_BITS));
       result.push("webgl vendor:" + gl.getParameter(gl.VENDOR));
       result.push("webgl version:" + gl.getParameter(gl.VERSION));
+
+      if (!gl.getShaderPrecisionFormat) {
+        if (typeof NODEBUG === "undefined") {
+          this.log("Skipping FPing of specific webgl functions (getShaderPrecisionFormat). This browser does not support them.");
+        }
+        return result.join("~");
+      }
+
       result.push("webgl vertex shader high float precision:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT ).precision);
       result.push("webgl vertex shader high float precision rangeMin:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT ).rangeMin);
       result.push("webgl vertex shader high float precision rangeMax:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT ).rangeMax);
@@ -695,6 +703,7 @@
       result.push("webgl fragment shader low int precision:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).precision);
       result.push("webgl fragment shader low int precision rangeMin:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).rangeMin);
       result.push("webgl fragment shader low int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).rangeMax);
+
       return result.join("~");
     },
     getAdBlock: function(){
@@ -845,6 +854,16 @@
     isCanvasSupported: function () {
       var elem = document.createElement("canvas");
       return !!(elem.getContext && elem.getContext("2d"));
+    },
+    isWebGlSupported: function() {
+      if (!this.isCanvasSupported()) {
+        return false;
+      }
+
+      var canvas = document.createElement("canvas"),
+          glContext = canvas.getContext && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"));
+
+      return !!window.WebGLRenderingContext && !!glContext;
     },
     isIE: function () {
       if(navigator.appName === "Microsoft Internet Explorer") {

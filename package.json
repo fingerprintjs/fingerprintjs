@@ -10,6 +10,7 @@
     "eslint": "^0.14.1",
     "gulp": "^3.8.11",
     "gulp-eslint": "^0.4.2",
+    "gulp-jasmine-phantom": "^1.2.0",
     "gulp-uglify": "^1.1.0"
   },
   "scripts": {
