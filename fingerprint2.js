@@ -217,19 +217,9 @@
       return keys;
     },
     webglKey: function(keys) {
-      var isWebGlExcluded = !!this.options.excludeWebGL,
-          isWebGlSupported = this.isWebGlSupported();
-
-      if (!isWebGlExcluded && isWebGlSupported) {
-        if (typeof NODEBUG === "undefined") {
-          this.log("Skip webgl fingerprinting, because this browser does not support webgl");
-        }
-      }
-
-      if (!isWebGlExcluded && isWebGlSupported) {
+      if (!this.options.excludeWebGL && this.isWebGlSupported()) {
         keys.push(this.getWebglFp());
       }
-
       return keys;
     },
     adBlockKey: function(keys){
@@ -645,6 +635,14 @@
       result.push("webgl stencil bits:" + gl.getParameter(gl.STENCIL_BITS));
       result.push("webgl vendor:" + gl.getParameter(gl.VENDOR));
       result.push("webgl version:" + gl.getParameter(gl.VERSION));
+
+      if (!gl.getShaderPrecisionFormat) {
+        if (typeof NODEBUG === "undefined") {
+          this.log("Skipping FPing of specific webgl functions (getShaderPrecisionFormat). This browser does not support them.");
+        }
+        return result.join("~");
+      }
+
       result.push("webgl vertex shader high float precision:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT ).precision);
       result.push("webgl vertex shader high float precision rangeMin:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT ).rangeMin);
       result.push("webgl vertex shader high float precision rangeMax:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT ).rangeMax);
@@ -681,6 +679,7 @@
       result.push("webgl fragment shader low int precision:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).precision);
       result.push("webgl fragment shader low int precision rangeMin:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).rangeMin);
       result.push("webgl fragment shader low int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).rangeMax);
+
       return result.join("~");
     },
     getAdBlock: function(){
@@ -833,22 +832,14 @@
       return !!(elem.getContext && elem.getContext("2d"));
     },
     isWebGlSupported: function() {
-      if (!this.isCanvasSupported() || !window.WebGLRenderingContext) {
+      if (!this.isCanvasSupported()) {
         return false;
       }
 
       var canvas = document.createElement("canvas"),
           glContext = canvas.getContext && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"));
 
-      if (glContext && !glContext.getShaderPrecisionFormat) {
-        if (typeof NODEBUG === "undefined") {
-          this.log("This browser supports webgl, but lacks some functionality (getShaderPrecisionFormat not avaialable)");
-        }
-
-        return false;
-      }
-
-      return true;
+      return !!window.WebGLRenderingContext && !!glContext;
     },
     isIE: function () {
       if(navigator.appName === "Microsoft Internet Explorer") {
