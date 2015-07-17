@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 0.3.0 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 0.5.0 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -15,7 +15,6 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-
 
 (function (name, context, definition) {
   "use strict";
@@ -57,7 +56,8 @@
   var Fingerprint2 = function(options) {
     var defaultOptions = {
       swfContainerId: "fingerprintjs2",
-      swfPath: "flash/compiled/FontList.swf"
+      swfPath: "flash/compiled/FontList.swf",
+      sortPluginsFor: [/palemoon/i]
     };
     this.options = this.extend(options, defaultOptions);
     this.nativeForEach = Array.prototype.forEach;
@@ -101,6 +101,7 @@
       keys = this.hasLiedResolutionKey(keys);
       keys = this.hasLiedOsKey(keys);
       keys = this.hasLiedBrowserKey(keys);
+      keys = this.touchSupportKey(keys);
       var that = this;
       this.fontsKey(keys, function(newKeys){
         var murmur = that.x64hash128(newKeys.join("~~~"), 31);
@@ -383,7 +384,20 @@
       return keys;
     },
     getRegularPluginsString: function () {
-      return this.map(navigator.plugins, function (p) {
+      var plugins = [];
+      for(var i = 0, l = navigator.plugins.length; i < l; i++) {
+        plugins.push(navigator.plugins[i]);
+      }
+      // sorting plugins only for those user agents, that we know randomize the plugins
+      // every time we try to enumerate them
+      if(this.pluginsShouldBeSorted()) {
+        plugins = plugins.sort(function(a, b) {
+          if(a.name > b.name){ return 1; }
+          if(a.name < b.name){ return -1; }
+          return 0;
+        });
+      }
+      return this.map(plugins, function (p) {
         var mimeTypes = this.map(p, function(mt){
           return [mt.type, mt.suffixes].join("~");
         }).join(",");
@@ -429,6 +443,23 @@
         return "";
       }
     },
+    pluginsShouldBeSorted: function () {
+      var should = false;
+      for(var i = 0, l = this.options.sortPluginsFor.length; i < l; i++) {
+        var re = this.options.sortPluginsFor[i];
+        if(navigator.userAgent.match(re)) {
+          should = true;
+          break;
+        }
+      }
+      return should;
+    },
+    touchSupportKey: function (keys) {
+      if(!this.options.excludeTouchSupport){
+        keys.push(this.getTouchSupport());
+      }
+      return keys;
+    },
     hasSessionStorage: function () {
       try {
         return !!window.sessionStorage;
@@ -468,6 +499,30 @@
         return "doNotTrack: unknown";
       }
     },
+    // This is a crude and primitive touch screen detection.
+    // It's not possible to currently reliably detect the  availability of a touch screen
+    // with a JS, without actually subscribing to a touch event.
+    // http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
+    // https://github.com/Modernizr/Modernizr/issues/548
+    // method returns an array of 3 values:
+    // maxTouchPoints, the success or failure of creating a TouchEvent,
+    // and the availability of the 'ontouchstart' property
+    getTouchSupport: function () {
+      var maxTouchPoints = 0;
+      var touchEvent = false;
+      if(typeof navigator.maxTouchPoints !== "undefined") {
+        maxTouchPoints = navigator.maxTouchPoints;
+      } else if (typeof navigator.msMaxTouchPoints !== "undefined") {
+        maxTouchPoints = navigator.msMaxTouchPoints;
+      }
+      try {
+        document.createEvent("TouchEvent");
+        touchEvent = true;
+      } catch(_) { /* squelch */ }
+      var touchStart = "ontouchstart" in window;
+      return [maxTouchPoints, touchEvent, touchStart];
+    },
+    // https://www.browserleaks.com/canvas#how-does-it-work
     getCanvasFp: function() {
       var result = [];
       // Very simple now, need to make it more complex (geo shapes etc)
@@ -484,6 +539,10 @@
         ctx.globalCompositeOperation = "screen";
       } catch (e) { /* squelch */ }
       result.push("canvas blending:" + ((ctx.globalCompositeOperation === "screen") ? "yes" : "no"));
+
+      // detect browser support of canvas winding
+      // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
+      // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/winding.js
       ctx.rect(0, 0, 10, 10);
       ctx.rect(2, 2, 6, 6);
       result.push("canvas winding:" + ((ctx.isPointInPath(5, 5, "evenodd") === false) ? "yes" : "no"));
