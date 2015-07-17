@@ -823,7 +823,7 @@
       return !!(elem.getContext && elem.getContext("2d"));
     },
     isWebGlSupported: function() {
-      if (!this.isCanvasSupported() || !!window.WebGLRenderingContext) {
+      if (!this.isCanvasSupported() || !window.WebGLRenderingContext) {
         return false;
       }
 
