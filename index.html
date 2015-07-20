@@ -12,6 +12,7 @@
     ga('create', 'UA-42202458-2', 'auto');
     ga('send', 'pageview');
   </script>
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
   <style>
     body{
       font-family: sans-serif;
@@ -78,18 +79,18 @@
 
   <script src="fingerprint2.js"></script>
   <script>
-    var btn = document.getElementById('btn');
-
-    btn.addEventListener('click', function getFingerPrint() {
+    $("#btn").on("click", function () {
       var d1 = new Date();
       var fp = new Fingerprint2();
       fp.get(function(result) {
         var d2 = new Date();
         var timeString = "Time took to calculate the fingerprint: " + (d2 - d1) + "ms";
-        console.log(timeString);
-        console.log(result);
-        document.getElementById("fp").innerHTML = result;
-        document.getElementById("time").innerHTML = timeString;
+        if(typeof window.console !== "undefined") {
+          console.log(timeString);
+          console.log(result);
+        }
+        $("#fp").text(result);
+        $("#time").text(timeString);
       });
     });
   </script>
