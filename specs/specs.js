@@ -60,5 +60,25 @@ describe("Fingerprint2", function () {
         });
       });
     });
+
+    describe("non-default options", function () {
+      it("does not use userAgent when excluded", function (done) {
+        var fp2 = new Fingerprint2({excludeUserAgent: true});
+        spyOn(fp2, "getUserAgent");
+        fp2.get(function(result) {
+          expect(fp2.getUserAgent).not.toHaveBeenCalled();
+          done();
+        });
+      });
+
+      it("does not use screen resolution when excluded", function (done) {
+        var fp2 = new Fingerprint2({excludeScreenResolution: true});
+        spyOn(fp2, "getScreenResolution");
+        fp2.get(function(result) {
+          expect(fp2.getScreenResolution).not.toHaveBeenCalled();
+          done();
+        });
+      });
+    });
   });
 });

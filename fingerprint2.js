@@ -110,9 +110,13 @@
     },
     userAgentKey: function(keys) {
       if(!this.options.excludeUserAgent) {
-        keys.push(navigator.userAgent);
+        keys.push(this.getUserAgent());
       }
       return keys;
+    },
+    // for tests
+    getUserAgent: function(){
+      return navigator.userAgent;
     },
     languageKey: function(keys) {
       if(!this.options.excludeLanguage) {
