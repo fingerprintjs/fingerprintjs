@@ -115,13 +115,22 @@ python -m SimpleHTTPServer
 
 
 ### Many more fingerprinting sources will be implemented, such as
+(in no particular order)
 
 * Multi-monitor detection,
 * silverlight integration,
 * Flash linux kernel version,
 * Internal HashTable implementation detection
 * WebRTC fingerprinting
-* Many more
+* Math constants
+* Accessibility fingerprinting
+* Camera information
+* DRM support
+* Accelerometer support
+* Virtual keyboards
+* List of supported gestures (for touch-enabled devices)
+* Pixel density
+* Video and audio codecs availability
 
 #### To recompile the FontList.swf file:
 
