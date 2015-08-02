@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 0.5.1 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 0.6.0 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -545,15 +545,6 @@
       canvas.height = 200;
       canvas.style.display = "inline";
       var ctx = canvas.getContext("2d");
-      // detect browser support of canvas blending
-      // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
-      // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/blending.js
-      // https://securehomes.esat.kuleuven.be/~gacar/persistent/the_web_never_forgets.pdf
-      try {
-        ctx.globalCompositeOperation = "screen";
-      } catch (e) { /* squelch */ }
-      result.push("canvas blending:" + ((ctx.globalCompositeOperation === "screen") ? "yes" : "no"));
-
       // detect browser support of canvas winding
       // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
       // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/winding.js
