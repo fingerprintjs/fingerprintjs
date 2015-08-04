@@ -1,8 +1,7 @@
 var gulp = require("gulp"),
     eslint = require("gulp-eslint"),
     rename = require("gulp-rename"),
-    uglify = require("gulp-uglify"),
-    phantom = require('gulp-jasmine-phantom');
+    uglify = require("gulp-uglify");
 
 gulp.task("lint", function() {
   return gulp
