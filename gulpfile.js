@@ -1,5 +1,6 @@
 var gulp = require("gulp"),
     eslint = require("gulp-eslint"),
+    rename = require("gulp-rename"),
     uglify = require("gulp-uglify"),
     phantom = require('gulp-jasmine-phantom');
 
@@ -14,6 +15,7 @@ gulp.task("lint", function() {
 gulp.task("minify", function() {
   return gulp
       .src("fingerprint2.js")
+      .pipe(rename({suffix: ".min"}))
       .pipe(uglify({
           compress: {
             global_defs: {
@@ -21,7 +23,7 @@ gulp.task("minify", function() {
             }
           }
       }))
-      .pipe(gulp.dest("dist"));
+      .pipe(gulp.dest("dist/"));
 });
 
 
