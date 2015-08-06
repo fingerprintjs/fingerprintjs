@@ -20,6 +20,25 @@ fingerprintjs.
 
 This project uses semver.
 
+### Installation
+
+#### CDN:
+```
+//cdn.jsdelivr.net/fingerprintjs2/<VERSION>/fingerprint2.min.js
+```
+
+#### Bower
+
+```
+bower install fingerprintjs2
+```
+
+#### NPM
+
+```
+npm install fingerprintjs2
+```
+
 
 ### Usage
 
