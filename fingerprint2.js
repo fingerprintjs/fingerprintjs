@@ -740,22 +740,22 @@
       return false;
     },
     getHasLiedOs: function(){
-      var userAgent = navigator.userAgent;
+      var userAgent = navigator.userAgent.toLowerCase();
       var oscpu = navigator.oscpu;
-      var platform = navigator.platform;
+      var platform = navigator.platform.toLowerCase();
       var os;
       //We extract the OS from the user agent (respect the order of the if else if statement)
-      if(userAgent.toLowerCase().indexOf("windows phone") >= 0){
+      if(userAgent.indexOf("windows phone") >= 0){
         os = "Windows Phone";
-      } else if(userAgent.toLowerCase().indexOf("win") >= 0){
+      } else if(userAgent.indexOf("win") >= 0){
         os = "Windows";
-      } else if(userAgent.toLowerCase().indexOf("android") >= 0){
+      } else if(userAgent.indexOf("android") >= 0){
         os = "Android";
-      } else if(userAgent.toLowerCase().indexOf("linux") >= 0){
+      } else if(userAgent.indexOf("linux") >= 0){
         os = "Linux";
-      } else if(userAgent.toLowerCase().indexOf("iPhone") >= 0 || userAgent.toLowerCase().indexOf("iPad") >= 0 ){
+      } else if(userAgent.indexOf("iPhone") >= 0 || userAgent.indexOf("iPad") >= 0 ){
         os = "iOS";
-      } else if(userAgent.toLowerCase().indexOf("mac") >= 0){
+      } else if(userAgent.indexOf("mac") >= 0){
         os = "Mac";
       } else{
         os = "Other";
@@ -776,25 +776,26 @@
 
       // We compare oscpu with the OS extracted from the UA
       if(typeof oscpu !== "undefined"){
-        if(oscpu.toLowerCase().indexOf("win") >= 0 && os !== "Windows" && os !== "Windows Phone"){
+        oscpu = oscpu.toLowerCase();
+        if(oscpu.indexOf("win") >= 0 && os !== "Windows" && os !== "Windows Phone"){
           return true;
-        } else if(oscpu.toLowerCase().indexOf("linux") >= 0 && os !== "Linux" && os !== "Android"){
+        } else if(oscpu.indexOf("linux") >= 0 && os !== "Linux" && os !== "Android"){
           return true;
-        } else if(oscpu.toLowerCase().indexOf("mac") >= 0 && os !== "Mac" && os !== "iOS"){
+        } else if(oscpu.indexOf("mac") >= 0 && os !== "Mac" && os !== "iOS"){
           return true;
-        } else if(oscpu.toLowerCase().indexOf("win") === 0 && oscpu.toLowerCase().indexOf("linux") === 0 && oscpu.toLowerCase().indexOf("mac") >= 0 && os !== "other"){
+        } else if(oscpu.indexOf("win") === 0 && oscpu.indexOf("linux") === 0 && oscpu.indexOf("mac") >= 0 && os !== "other"){
           return true;
         }
       }
 
       //We compare platform with the OS extracted from the UA
-      if(platform.toLowerCase().indexOf("win") >= 0 && os !== "Windows" && os !== "Windows Phone"){
+      if(platform.indexOf("win") >= 0 && os !== "Windows" && os !== "Windows Phone"){
         return true;
-      } else if((platform.toLowerCase().indexOf("linux") >= 0 || platform.toLowerCase().indexOf("android") >= 0 || platform.toLowerCase().indexOf("pike") >= 0) && os !== "Linux" && os !== "Android"){
+      } else if((platform.indexOf("linux") >= 0 || platform.indexOf("android") >= 0 || platform.indexOf("pike") >= 0) && os !== "Linux" && os !== "Android"){
         return true;
-      } else if((platform.toLowerCase().indexOf("mac") >= 0 || platform.toLowerCase().indexOf("ipad") >= 0 || platform.toLowerCase().indexOf("ipod") >= 0 || platform.toLowerCase().indexOf("iphone") >= 0) && os !== "Mac" && os !== "iOS"){
+      } else if((platform.indexOf("mac") >= 0 || platform.indexOf("ipad") >= 0 || platform.indexOf("ipod") >= 0 || platform.indexOf("iphone") >= 0) && os !== "Mac" && os !== "iOS"){
         return true;
-      } else if(platform.toLowerCase().indexOf("win") === 0 && platform.toLowerCase().indexOf("linux") === 0 && platform.toLowerCase().indexOf("mac") >= 0 && os !== "other"){
+      } else if(platform.indexOf("win") === 0 && platform.indexOf("linux") === 0 && platform.indexOf("mac") >= 0 && os !== "other"){
         return true;
       }
 
@@ -806,20 +807,20 @@
       return false;
     },
     getHasLiedBrowser: function () {
-      var userAgent = navigator.userAgent;
+      var userAgent = navigator.userAgent.toLowerCase();
       var productSub = navigator.productSub;
 
       //we extract the browser from the user agent (respect the order of the tests)
       var browser;
-      if(userAgent.toLowerCase().indexOf("firefox") >= 0){
+      if(userAgent.indexOf("firefox") >= 0){
         browser = "Firefox";
-      } else if(userAgent.toLowerCase().indexOf("opera") >= 0 || userAgent.toLowerCase().indexOf("opr") >= 0){
+      } else if(userAgent.indexOf("opera") >= 0 || userAgent.indexOf("opr") >= 0){
         browser = "Opera";
-      } else if(userAgent.toLowerCase().indexOf("chrome") >= 0){
+      } else if(userAgent.indexOf("chrome") >= 0){
         browser = "Chrome";
-      } else if(userAgent.toLowerCase().indexOf("safari") >= 0){
+      } else if(userAgent.indexOf("safari") >= 0){
         browser = "Safari";
-      } else if(userAgent.toLowerCase().indexOf("trident") >= 0){
+      } else if(userAgent.indexOf("trident") >= 0){
         browser = "Internet Explorer";
       } else{
         browser = "Other";
