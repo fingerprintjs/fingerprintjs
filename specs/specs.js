@@ -79,6 +79,15 @@ describe("Fingerprint2", function () {
           done();
         });
       });
+
+      it("does not use plugins info when excluded", function (done) {
+        var fp2 = new Fingerprint2({excludePlugins: true});
+        spyOn(fp2, "getRegularPluginsString");
+        fp2.get(function(result) {
+          expect(fp2.getRegularPluginsString).not.toHaveBeenCalled();
+          done();
+        });
+      });
     });
   });
 });
