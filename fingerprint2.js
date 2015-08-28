@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 0.7.3 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 0.7.4 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -558,7 +558,12 @@
       ctx.fillStyle = "#f60";
       ctx.fillRect(125, 1, 62, 20);
       ctx.fillStyle = "#069";
-      ctx.font = "11pt no-real-font-123";
+      // https://github.com/Valve/fingerprintjs2/issues/66
+      if(this.options.dontUseFakeFontInCanvas) {
+        ctx.font = "11pt Arial";
+      } else {
+        ctx.font = "11pt no-real-font-123";
+      }
       ctx.fillText("Cwm fjordbank glyphs vext quiz, \ud83d\ude03", 2, 15);
       ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
       ctx.font = "18pt Arial";
@@ -1145,6 +1150,6 @@
       return ("00000000" + (h1[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h1[1] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[1] >>> 0).toString(16)).slice(-8);
     }
   };
-  Fingerprint2.VERSION = "0.7.3";
+  Fingerprint2.VERSION = "0.7.4";
   return Fingerprint2;
 });
