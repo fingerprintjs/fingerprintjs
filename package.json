@@ -1,12 +1,10 @@
 {
   "name": "fingerprintjs2",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "description": "Modern & flexible browser fingerprinting library",
   "main": "dist/fingerprint2.min.js",
-  "dependencies": {
-    "gulp": "^3.8.11"
-  },
   "devDependencies": {
+    "gulp": "^3.8.11",
     "eslint": "^0.14.1",
     "gulp": "^3.8.11",
     "gulp-eslint": "^0.4.2",
