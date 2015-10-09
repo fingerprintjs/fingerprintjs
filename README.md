@@ -1,6 +1,6 @@
 <p align="center">
   <h1>Fingerprintjs2</h1>
-  <a href="https://travis-ci.org/Valve/fingerprintjs2"><img src="http://img.shields.io/travis/Valve/fingerprintjs2/master.svg?style=flat" /></a>
+  <a href="https://travis-ci.org/Valve/fingerprintjs2"><img src="https://travis-ci.org/Valve/fingerprintjs2.svg?branch=master" /></a>
   <a href="https://gitter.im/Valve/fingerprintjs2"><img src="https://badges.gitter.im/Valve/fingerprintjs2.png"/></a>
 </p>
 
