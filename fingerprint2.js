@@ -760,7 +760,7 @@
         os = "Android";
       } else if(userAgent.indexOf("linux") >= 0){
         os = "Linux";
-      } else if(userAgent.indexOf("iPhone") >= 0 || userAgent.indexOf("iPad") >= 0 ){
+      } else if(userAgent.indexOf("iphone") >= 0 || userAgent.indexOf("ipad") >= 0 ){
         os = "iOS";
       } else if(userAgent.indexOf("mac") >= 0){
         os = "Mac";
