@@ -78,6 +78,11 @@ option.
 To use Flash font enumeration, make sure you have swfobject available.
 If you don't, the library will skip the Flash part entirely.
 
+#### detectScreenOrientation option is `true` by default
+
+To ensure consistent fingerprints when users rotate their mobile
+devices.
+
 
 ##### All fingerprinting sources are enabled by default, i.e. you don't need to explicitly configure the library to include them.
 
