@@ -1,8 +1,6 @@
-<p align="center">
-  <h1>Fingerprintjs2</h1>
-  <a href="https://travis-ci.org/Valve/fingerprintjs2"><img src="https://travis-ci.org/Valve/fingerprintjs2.svg?branch=master" /></a>
-  <a href="https://gitter.im/Valve/fingerprintjs2"><img src="https://badges.gitter.im/Valve/fingerprintjs2.png"/></a>
-</p>
+# Fingerprintjs2
+[![](https://travis-ci.org/Valve/fingerprintjs2.svg?branch=master)](https://travis-ci.org/Valve/fingerprintjs2)
+[![](https://badges.gitter.im/Valve/fingerprintjs2.svg)](https://gitter.im/Valve/fingerprintjs2)
 
 Original fingerprintjs library was developed in 2012, it's now impossible to evolve it
 without breaking backwards compatibilty, so this project will be where
@@ -18,7 +16,7 @@ as QQ, Baidu and others.
 This project will not be backwards compatible with original
 fingerprintjs.
 
-This project uses semver.
+This project uses `semver`.
 
 ### Installation
 
@@ -42,8 +40,7 @@ npm install fingerprintjs2
 
 ### Usage
 
-```javascript
-
+```js
 new Fingerprint2().get(function(result){
   console.log(result);
 });
@@ -51,7 +48,7 @@ new Fingerprint2().get(function(result){
 
 #### You can pass an object with options (all of which are optional):
 
-```javascript
+```js
 var options = {swfPath: '/assets/FontList.swf', excludeUserAgent: true};
 new Fingerprint2(options).get(function(result){
   console.log(result);
@@ -78,7 +75,7 @@ option.
 To use Flash font enumeration, make sure you have swfobject available.
 If you don't, the library will skip the Flash part entirely.
 
-#### detectScreenOrientation option is `true` by default
+#### `detectScreenOrientation` option is `true` by default
 
 To ensure consistent fingerprints when users rotate their mobile
 devices.
@@ -95,15 +92,16 @@ new Fingerprint2().get(function(result){
 
 #### View the fingerprint locally
 
-You can view your browser fingerprint locally by starting a webserver and viewing the index.html page.
-Loading index.html from the filesystem won't work due to Flash's ExternalInterface security restrictions.
+You can view your browser fingerprint locally by starting a webserver and viewing the `index.html` page.
+Loading `index.html` from the filesystem won't work due to Flash's ExternalInterface security restrictions.
 
 To start a web server you can use either Ruby:
 
 ```
 ruby -run -e httpd . -p 8080
 ```
-or Python
+
+or Python:
 
 ```
 # will load on port 8000
@@ -162,10 +160,10 @@ This option can incur even more overhead on mobile Firefox browsers, which is mu
 * Pixel density
 * Video and audio codecs availability
 
-#### To recompile the FontList.swf file:
+#### To recompile the `FontList.swf` file:
 
-* Download Adobe Flex SDK from:  http://www.adobe.com/devnet/flex/flex-sdk-download.html
-* Unzip it, add the bin/ directory to your $PATH  (mxmlc binary should be in path)
-* Run "make"
+* Download [Adobe Flex SDK](http://www.adobe.com/devnet/flex/flex-sdk-download.html)
+* Unzip it, add the `bin/` directory to your `$PATH`  (mxmlc binary should be in path)
+* Run `make`
 
 #### License: MIT or Apache, whichever you prefer.
