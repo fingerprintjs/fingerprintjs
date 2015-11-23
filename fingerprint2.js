@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 1.0.0-rc2 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 0.8.0 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -57,7 +57,6 @@
     var defaultOptions = {
       swfContainerId: "fingerprintjs2",
       swfPath: "flash/compiled/FontList.swf",
-      detectScreenOrientation: true,
       sortPluginsFor: [/palemoon/i]
     };
     this.options = this.extend(options, defaultOptions);
@@ -105,13 +104,17 @@
       keys = this.touchSupportKey(keys);
       var that = this;
       this.fontsKey(keys, function(newKeys){
-        var murmur = that.x64hash128(newKeys.join("~~~"), 31);
-        return done(murmur);
+		var temp_vals = [];
+		newKeys.forEach(function(key) {
+			temp_vals.push(key.value);
+		});
+        var murmur = that.x64hash128(temp_vals.join("~~~"), 31);
+        return done(murmur, newKeys);
       });
     },
     userAgentKey: function(keys) {
       if(!this.options.excludeUserAgent) {
-        keys.push(this.getUserAgent());
+        keys.push({key: "getUserAgent", value: this.getUserAgent()});
       }
       return keys;
     },
@@ -121,13 +124,13 @@
     },
     languageKey: function(keys) {
       if(!this.options.excludeLanguage) {
-        keys.push(navigator.language);
+        keys.push({key: "language", value: navigator.language});
       }
       return keys;
     },
     colorDepthKey: function(keys) {
       if(!this.options.excludeColorDepth) {
-        keys.push(screen.colorDepth);
+        keys.push({key: "colorDepth", value: screen.colorDepth});
       }
       return keys;
     },
@@ -146,7 +149,7 @@
         resolution = [screen.width, screen.height];
       }
       if(typeof resolution !== "undefined") { // headless browsers
-        keys.push(resolution);
+        keys.push({key: "resolution", value: resolution});
       }
       if(screen.availWidth && screen.availHeight) {
         if(this.options.detectScreenOrientation) {
@@ -156,68 +159,68 @@
         }
       }
       if(typeof available !== "undefined") { // headless browsers
-        keys.push(available);
+        keys.push({key: "availableResolution", value: available});
       }
       return keys;
     },
     timezoneOffsetKey: function(keys) {
       if(!this.options.excludeTimezoneOffset) {
-        keys.push(new Date().getTimezoneOffset());
+        keys.push({key: "getTimezoneOffset", value: new Date().getTimezoneOffset()});
       }
       return keys;
     },
     sessionStorageKey: function(keys) {
       if(!this.options.excludeSessionStorage && this.hasSessionStorage()) {
-        keys.push("sessionStorageKey");
+        keys.push({key: "sessionStorageKey", value: 1});
       }
       return keys;
     },
     localStorageKey: function(keys) {
       if(!this.options.excludeSessionStorage && this.hasLocalStorage()) {
-        keys.push("localStorageKey");
+        keys.push({key: "localStorageKey", value: 1});
       }
       return keys;
     },
     indexedDbKey: function(keys) {
       if(!this.options.excludeIndexedDB && this.hasIndexedDB()) {
-        keys.push("indexedDbKey");
+        keys.push({key: "indexedDbKey", value: 1});
       }
       return keys;
     },
     addBehaviorKey: function(keys) {
       //body might not be defined at this point or removed programmatically
       if(document.body && !this.options.excludeAddBehavior && document.body.addBehavior) {
-        keys.push("addBehaviorKey");
+        keys.push({key: "addBehaviorKey", value: 1});
       }
       return keys;
     },
     openDatabaseKey: function(keys) {
       if(!this.options.excludeOpenDatabase && window.openDatabase) {
-        keys.push("openDatabase");
+        keys.push({key: "openDatabase", value: 1});
       }
       return keys;
     },
     cpuClassKey: function(keys) {
       if(!this.options.excludeCpuClass) {
-        keys.push(this.getNavigatorCpuClass());
+        keys.push({key: "getNavigatorCpuClass", value: this.getNavigatorCpuClass()});
       }
       return keys;
     },
     platformKey: function(keys) {
       if(!this.options.excludePlatform) {
-        keys.push(this.getNavigatorPlatform());
+        keys.push({key: "getNavigatorPlatform", value: this.getNavigatorPlatform()});
       }
       return keys;
     },
     doNotTrackKey: function(keys) {
       if(!this.options.excludeDoNotTrack) {
-        keys.push(this.getDoNotTrack());
+        keys.push({key: "getDoNotTrack", value: this.getDoNotTrack()});
       }
       return keys;
     },
     canvasKey: function(keys) {
       if(!this.options.excludeCanvas && this.isCanvasSupported()) {
-        keys.push(this.getCanvasFp());
+        keys.push({key: "getCanvasFp", value: this.getCanvasFp()});
       }
       return keys;
     },
@@ -234,36 +237,36 @@
         }
         return keys;
       }
-      keys.push(this.getWebglFp());
+      keys.push({key: "getWebglFp", value: this.getWebglFp()});
       return keys;
     },
     adBlockKey: function(keys){
       if(!this.options.excludeAdBlock) {
-        keys.push(this.getAdBlock());
+        keys.push({key: "getAdBlock", value: this.getAdBlock()});
       }
       return keys;
     },
     hasLiedLanguagesKey: function(keys){
       if(!this.options.excludeHasLiedLanguages){
-        keys.push(this.getHasLiedLanguages());
+        keys.push({key: "getHasLiedLanguages", value: this.getHasLiedLanguages()});
       }
       return keys;
     },
     hasLiedResolutionKey: function(keys){
       if(!this.options.excludeHasLiedResolution){
-        keys.push(this.getHasLiedResolution());
+        keys.push({key: "getHasLiedResolution", value: this.getHasLiedResolution()});
       }
       return keys;
     },
     hasLiedOsKey: function(keys){
       if(!this.options.excludeHasLiedOs){
-        keys.push(this.getHasLiedOs());
+        keys.push({key: "getHasLiedOs", value: this.getHasLiedOs()});
       }
       return keys;
     },
     hasLiedBrowserKey: function(keys){
       if(!this.options.excludeHasLiedBrowser){
-        keys.push(this.getHasLiedBrowser());
+        keys.push({key: "getHasLiedBrowser", value: this.getHasLiedBrowser()});
       }
       return keys;
     },
@@ -301,13 +304,12 @@
         return done(keys);
       }
       this.loadSwfAndDetectFonts(function(fonts){
-        keys.push(fonts.join(";"));
+        keys.push({key: "swf_fonts", value: fonts.join(";")});
         done(keys);
       });
     },
     // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
     jsFontsKey: function(keys, done) {
-      var that = this;
       // doing js fonts detection in a pseudo-async fashion
       return setTimeout(function(){
 
@@ -350,71 +352,53 @@
             return detected;
         };
         var fontList = [
-          "Andale Mono", "Arial", "Arial Black", "Arial Hebrew", "Arial MT", "Arial Narrow", "Arial Rounded MT Bold", "Arial Unicode MS",
-          "Bitstream Vera Sans Mono", "Book Antiqua", "Bookman Old Style",
-          "Calibri", "Cambria", "Cambria Math", "Century", "Century Gothic", "Century Schoolbook", "Comic Sans", "Comic Sans MS", "Consolas", "Courier", "Courier New",
-          "Garamond", "Geneva", "Georgia",
-          "Helvetica", "Helvetica Neue",
-          "Impact",
-          "Lucida Bright", "Lucida Calligraphy", "Lucida Console", "Lucida Fax", "LUCIDA GRANDE", "Lucida Handwriting", "Lucida Sans", "Lucida Sans Typewriter", "Lucida Sans Unicode",
-          "Microsoft Sans Serif", "Monaco", "Monotype Corsiva", "MS Gothic", "MS Outlook", "MS PGothic", "MS Reference Sans Serif", "MS Sans Serif", "MS Serif", "MYRIAD", "MYRIAD PRO",
-          "Palatino", "Palatino Linotype",
-          "Segoe Print", "Segoe Script", "Segoe UI", "Segoe UI Light", "Segoe UI Semibold", "Segoe UI Symbol",
-          "Tahoma", "Times", "Times New Roman", "Times New Roman PS", "Trebuchet MS",
-          "Verdana", "Wingdings", "Wingdings 2", "Wingdings 3"
-        ];
-        var extendedFontList = [
           "Abadi MT Condensed Light", "Academy Engraved LET", "ADOBE CASLON PRO", "Adobe Garamond", "ADOBE GARAMOND PRO", "Agency FB", "Aharoni", "Albertus Extra Bold", "Albertus Medium", "Algerian", "Amazone BT", "American Typewriter",
-          "American Typewriter Condensed", "AmerType Md BT", "Andalus", "Angsana New", "AngsanaUPC", "Antique Olive", "Aparajita", "Apple Chancery", "Apple Color Emoji", "Apple SD Gothic Neo", "Arabic Typesetting", "ARCHER",
-           "ARNO PRO", "Arrus BT", "Aurora Cn BT", "AvantGarde Bk BT", "AvantGarde Md BT", "AVENIR", "Ayuthaya", "Bandy", "Bangla Sangam MN", "Bank Gothic", "BankGothic Md BT", "Baskerville",
+          "American Typewriter Condensed", "AmerType Md BT", "Andale Mono", "Andalus", "Angsana New", "AngsanaUPC", "Antique Olive", "Aparajita", "Apple Chancery", "Apple Color Emoji", "Apple SD Gothic Neo", "Arabic Typesetting", "ARCHER", "Arial", "Arial Black", "Arial Hebrew",
+          "Arial MT", "Arial Narrow", "Arial Rounded MT Bold", "Arial Unicode MS", "ARNO PRO", "Arrus BT", "Aurora Cn BT", "AvantGarde Bk BT", "AvantGarde Md BT", "AVENIR", "Ayuthaya", "Bandy", "Bangla Sangam MN", "Bank Gothic", "BankGothic Md BT", "Baskerville",
           "Baskerville Old Face", "Batang", "BatangChe", "Bauer Bodoni", "Bauhaus 93", "Bazooka", "Bell MT", "Bembo", "Benguiat Bk BT", "Berlin Sans FB", "Berlin Sans FB Demi", "Bernard MT Condensed", "BernhardFashion BT", "BernhardMod BT", "Big Caslon", "BinnerD",
-          "Blackadder ITC", "BlairMdITC TT", "Bodoni 72", "Bodoni 72 Oldstyle", "Bodoni 72 Smallcaps", "Bodoni MT", "Bodoni MT Black", "Bodoni MT Condensed", "Bodoni MT Poster Compressed",
-          "Bookshelf Symbol 7", "Boulder", "Bradley Hand", "Bradley Hand ITC", "Bremen Bd BT", "Britannic Bold", "Broadway", "Browallia New", "BrowalliaUPC", "Brush Script MT", "Californian FB", "Calisto MT", "Calligrapher", "Candara",
-          "CaslonOpnface BT", "Castellar", "Centaur", "Cezanne", "CG Omega", "CG Times", "Chalkboard", "Chalkboard SE", "Chalkduster", "Charlesworth", "Charter Bd BT", "Charter BT", "Chaucer",
-          "ChelthmITC Bk BT", "Chiller", "Clarendon", "Clarendon Condensed", "CloisterBlack BT", "Cochin", "Colonna MT", "Constantia", "Cooper Black", "Copperplate", "Copperplate Gothic", "Copperplate Gothic Bold",
-          "Copperplate Gothic Light", "CopperplGoth Bd BT", "Corbel", "Cordia New", "CordiaUPC", "Cornerstone", "Coronet", "Cuckoo", "Curlz MT", "DaunPenh", "Dauphin", "David", "DB LCD Temp", "DELICIOUS", "Denmark",
+          "Bitstream Vera Sans Mono", "Blackadder ITC", "BlairMdITC TT", "Bodoni 72", "Bodoni 72 Oldstyle", "Bodoni 72 Smallcaps", "Bodoni MT", "Bodoni MT Black", "Bodoni MT Condensed", "Bodoni MT Poster Compressed", "Book Antiqua", "Bookman Old Style",
+          "Bookshelf Symbol 7", "Boulder", "Bradley Hand", "Bradley Hand ITC", "Bremen Bd BT", "Britannic Bold", "Broadway", "Browallia New", "BrowalliaUPC", "Brush Script MT", "Calibri", "Californian FB", "Calisto MT", "Calligrapher", "Cambria", "Cambria Math", "Candara",
+          "CaslonOpnface BT", "Castellar", "Centaur", "Century", "Century Gothic", "Century Schoolbook", "Cezanne", "CG Omega", "CG Times", "Chalkboard", "Chalkboard SE", "Chalkduster", "Charlesworth", "Charter Bd BT", "Charter BT", "Chaucer",
+          "ChelthmITC Bk BT", "Chiller", "Clarendon", "Clarendon Condensed", "CloisterBlack BT", "Cochin", "Colonna MT", "Comic Sans", "Comic Sans MS", "Consolas", "Constantia", "Cooper Black", "Copperplate", "Copperplate Gothic", "Copperplate Gothic Bold",
+          "Copperplate Gothic Light", "CopperplGoth Bd BT", "Corbel", "Cordia New", "CordiaUPC", "Cornerstone", "Coronet", "Courier", "Courier New", "Cuckoo", "Curlz MT", "DaunPenh", "Dauphin", "David", "DB LCD Temp", "DELICIOUS", "Denmark", "Devanagari Sangam MN",
           "DFKai-SB", "Didot", "DilleniaUPC", "DIN", "DokChampa", "Dotum", "DotumChe", "Ebrima", "Edwardian Script ITC", "Elephant", "English 111 Vivace BT", "Engravers MT", "EngraversGothic BT", "Eras Bold ITC", "Eras Demi ITC", "Eras Light ITC", "Eras Medium ITC",
-          "EucrosiaUPC", "Euphemia", "Euphemia UCAS", "EUROSTILE", "Exotc350 Bd BT", "FangSong", "Felix Titling", "Fixedsys", "FONTIN", "Footlight MT Light", "Forte",
-          "FrankRuehl", "Fransiscan", "Freefrm721 Blk BT", "FreesiaUPC", "Freestyle Script", "French Script MT", "FrnkGothITC Bk BT", "Fruitger", "FRUTIGER",
-          "Futura", "Futura Bk BT", "Futura Lt BT", "Futura Md BT", "Futura ZBlk BT", "FuturaBlack BT", "Gabriola", "Galliard BT", "Gautami", "Geeza Pro", "Geometr231 BT", "Geometr231 Hv BT", "Geometr231 Lt BT", "GeoSlab 703 Lt BT",
+          "Estrangelo Edessa", "EucrosiaUPC", "Euphemia", "Euphemia UCAS", "EUROSTILE", "Exotc350 Bd BT", "FangSong", "Felix Titling", "Fixedsys", "FONTIN", "Footlight MT Light", "Forte", "Franklin Gothic", "Franklin Gothic Book", "Franklin Gothic Demi",
+          "Franklin Gothic Demi Cond", "Franklin Gothic Heavy", "Franklin Gothic Medium", "Franklin Gothic Medium Cond", "FrankRuehl", "Fransiscan", "Freefrm721 Blk BT", "FreesiaUPC", "Freestyle Script", "French Script MT", "FrnkGothITC Bk BT", "Fruitger", "FRUTIGER",
+          "Futura", "Futura Bk BT", "Futura Lt BT", "Futura Md BT", "Futura ZBlk BT", "FuturaBlack BT", "Gabriola", "Galliard BT", "Garamond", "Gautami", "Geeza Pro", "Geneva", "Geometr231 BT", "Geometr231 Hv BT", "Geometr231 Lt BT", "Georgia", "GeoSlab 703 Lt BT",
           "GeoSlab 703 XBd BT", "Gigi", "Gill Sans", "Gill Sans MT", "Gill Sans MT Condensed", "Gill Sans MT Ext Condensed Bold", "Gill Sans Ultra Bold", "Gill Sans Ultra Bold Condensed", "Gisha", "Gloucester MT Extra Condensed", "GOTHAM", "GOTHAM BOLD",
-          "Goudy Old Style", "Goudy Stout", "GoudyHandtooled BT", "GoudyOLSt BT", "Gujarati Sangam MN", "Gulim", "GulimChe", "Gungsuh", "GungsuhChe", "Gurmukhi MN", "Haettenschweiler", "Harlow Solid Italic", "Harrington", "Heather", "Heiti SC", "Heiti TC", "HELV",
-          "Herald", "High Tower Text", "Hiragino Kaku Gothic ProN", "Hiragino Mincho ProN", "Hoefler Text", "Humanst 521 Cn BT", "Humanst521 BT", "Humanst521 Lt BT", "Imprint MT Shadow", "Incised901 Bd BT", "Incised901 BT",
+          "Goudy Old Style", "Goudy Stout", "GoudyHandtooled BT", "GoudyOLSt BT", "Gujarati Sangam MN", "Gulim", "GulimChe", "Gungsuh", "GungsuhChe", "Gurmukhi MN", "Haettenschweiler", "Harlow Solid Italic", "Harrington", "Heather", "Heiti SC", "Heiti TC", "HELV", "Helvetica",
+          "Helvetica Neue", "Herald", "High Tower Text", "Hiragino Kaku Gothic ProN", "Hiragino Mincho ProN", "Hoefler Text", "Humanst 521 Cn BT", "Humanst521 BT", "Humanst521 Lt BT", "Impact", "Imprint MT Shadow", "Incised901 Bd BT", "Incised901 BT",
           "Incised901 Lt BT", "INCONSOLATA", "Informal Roman", "Informal011 BT", "INTERSTATE", "IrisUPC", "Iskoola Pota", "JasmineUPC", "Jazz LET", "Jenson", "Jester", "Jokerman", "Juice ITC", "Kabel Bk BT", "Kabel Ult BT", "Kailasa", "KaiTi", "Kalinga", "Kannada Sangam MN",
           "Kartika", "Kaufmann Bd BT", "Kaufmann BT", "Khmer UI", "KodchiangUPC", "Kokila", "Korinna BT", "Kristen ITC", "Krungthep", "Kunstler Script", "Lao UI", "Latha", "Leelawadee", "Letter Gothic", "Levenim MT", "LilyUPC", "Lithograph", "Lithograph Light", "Long Island",
-          "Lydian BT", "Magneto", "Maiandra GD", "Malayalam Sangam MN", "Malgun Gothic",
-          "Mangal", "Marigold", "Marion", "Marker Felt", "Market", "Marlett", "Matisse ITC", "Matura MT Script Capitals", "Meiryo", "Meiryo UI", "Microsoft Himalaya", "Microsoft JhengHei", "Microsoft New Tai Lue", "Microsoft PhagsPa", "Microsoft Tai Le",
-          "Microsoft Uighur", "Microsoft YaHei", "Microsoft Yi Baiti", "MingLiU", "MingLiU_HKSCS", "MingLiU_HKSCS-ExtB", "MingLiU-ExtB", "Minion", "Minion Pro", "Miriam", "Miriam Fixed", "Mistral", "Modern", "Modern No. 20", "Mona Lisa Solid ITC TT", "Mongolian Baiti",
-          "MONO", "MoolBoran", "Mrs Eaves", "MS LineDraw", "MS Mincho", "MS PMincho", "MS Reference Specialty", "MS UI Gothic", "MT Extra", "MUSEO", "MV Boli",
-          "Nadeem", "Narkisim", "NEVIS", "News Gothic", "News GothicMT", "NewsGoth BT", "Niagara Engraved", "Niagara Solid", "Noteworthy", "NSimSun", "Nyala", "OCR A Extended", "Old Century", "Old English Text MT", "Onyx", "Onyx BT", "OPTIMA", "Oriya Sangam MN",
-          "OSAKA", "OzHandicraft BT", "Palace Script MT", "Papyrus", "Parchment", "Party LET", "Pegasus", "Perpetua", "Perpetua Titling MT", "PetitaBold", "Pickwick", "Plantagenet Cherokee", "Playbill", "PMingLiU", "PMingLiU-ExtB",
+          "Lucida Bright", "Lucida Calligraphy", "Lucida Console", "Lucida Fax", "LUCIDA GRANDE", "Lucida Handwriting", "Lucida Sans", "Lucida Sans Typewriter", "Lucida Sans Unicode", "Lydian BT", "Magneto", "Maiandra GD", "Malayalam Sangam MN", "Malgun Gothic",
+          "Mangal", "Marigold", "Marion", "Marker Felt", "Market", "Marlett", "Matisse ITC", "Matura MT Script Capitals", "Meiryo", "Meiryo UI", "Microsoft Himalaya", "Microsoft JhengHei", "Microsoft New Tai Lue", "Microsoft PhagsPa", "Microsoft Sans Serif", "Microsoft Tai Le",
+          "Microsoft Uighur", "Microsoft YaHei", "Microsoft Yi Baiti", "MingLiU", "MingLiU_HKSCS", "MingLiU_HKSCS-ExtB", "MingLiU-ExtB", "Minion", "Minion Pro", "Miriam", "Miriam Fixed", "Mistral", "Modern", "Modern No. 20", "Mona Lisa Solid ITC TT", "Monaco", "Mongolian Baiti",
+          "MONO", "Monotype Corsiva", "MoolBoran", "Mrs Eaves", "MS Gothic", "MS LineDraw", "MS Mincho", "MS Outlook", "MS PGothic", "MS PMincho", "MS Reference Sans Serif", "MS Reference Specialty", "MS Sans Serif", "MS Serif", "MS UI Gothic", "MT Extra", "MUSEO", "MV Boli", "MYRIAD",
+          "MYRIAD PRO", "Nadeem", "Narkisim", "NEVIS", "News Gothic", "News GothicMT", "NewsGoth BT", "Niagara Engraved", "Niagara Solid", "Noteworthy", "NSimSun", "Nyala", "OCR A Extended", "Old Century", "Old English Text MT", "Onyx", "Onyx BT", "OPTIMA", "Oriya Sangam MN",
+          "OSAKA", "OzHandicraft BT", "Palace Script MT", "Palatino", "Palatino Linotype", "Papyrus", "Parchment", "Party LET", "Pegasus", "Perpetua", "Perpetua Titling MT", "PetitaBold", "Pickwick", "Plantagenet Cherokee", "Playbill", "PMingLiU", "PMingLiU-ExtB",
           "Poor Richard", "Poster", "PosterBodoni BT", "PRINCETOWN LET", "Pristina", "PTBarnum BT", "Pythagoras", "Raavi", "Rage Italic", "Ravie", "Ribbon131 Bd BT", "Rockwell", "Rockwell Condensed", "Rockwell Extra Bold", "Rod", "Roman", "Sakkal Majalla",
-          "Santa Fe LET", "Savoye LET", "Sceptre", "Script", "Script MT Bold", "SCRIPTINA", "Serifa", "Serifa BT", "Serifa Th BT", "ShelleyVolante BT", "Sherwood",
+          "Santa Fe LET", "Savoye LET", "Sceptre", "Script", "Script MT Bold", "SCRIPTINA", "Segoe Print", "Segoe Script", "Segoe UI", "Segoe UI Light", "Segoe UI Semibold", "Segoe UI Symbol", "Serifa", "Serifa BT", "Serifa Th BT", "ShelleyVolante BT", "Sherwood",
           "Shonar Bangla", "Showcard Gothic", "Shruti", "Signboard", "SILKSCREEN", "SimHei", "Simplified Arabic", "Simplified Arabic Fixed", "SimSun", "SimSun-ExtB", "Sinhala Sangam MN", "Sketch Rockwell", "Skia", "Small Fonts", "Snap ITC", "Snell Roundhand", "Socket",
-          "Souvenir Lt BT", "Staccato222 BT", "Steamer", "Stencil", "Storybook", "Styllo", "Subway", "Swis721 BlkEx BT", "Swiss911 XCm BT", "Sylfaen", "Synchro LET", "System", "Tamil Sangam MN", "Technical", "Teletype", "Telugu Sangam MN", "Tempus Sans ITC",
-          "Terminal", "Thonburi", "Traditional Arabic", "Trajan", "TRAJAN PRO", "Tristan", "Tubular", "Tunga", "Tw Cen MT", "Tw Cen MT Condensed", "Tw Cen MT Condensed Extra Bold",
-          "TypoUpright BT", "Unicorn", "Univers", "Univers CE 55 Medium", "Univers Condensed", "Utsaah", "Vagabond", "Vani", "Vijaya", "Viner Hand ITC", "VisualUI", "Vivaldi", "Vladimir Script", "Vrinda", "Westminster", "WHITNEY", "Wide Latin",
-          "ZapfEllipt BT", "ZapfHumnst BT", "ZapfHumnst Dm BT", "Zapfino", "Zurich BlkEx BT", "Zurich Ex BT", "ZWAdobeF"];
-
-        if(that.options.extendedJsFonts) {
-          fontList = fontList.concat(extendedFontList);
-        }
+          "Souvenir Lt BT", "Staccato222 BT", "Steamer", "Stencil", "Storybook", "Styllo", "Subway", "Swis721 BlkEx BT", "Swiss911 XCm BT", "Sylfaen", "Synchro LET", "System", "Tahoma", "Tamil Sangam MN", "Technical", "Teletype", "Telugu Sangam MN", "Tempus Sans ITC",
+          "Terminal", "Thonburi", "Times", "Times New Roman", "Times New Roman PS", "Traditional Arabic", "Trajan", "TRAJAN PRO", "Trebuchet MS", "Tristan", "Tubular", "Tunga", "Tw Cen MT", "Tw Cen MT Condensed", "Tw Cen MT Condensed Extra Bold",
+          "TypoUpright BT", "Unicorn", "Univers", "Univers CE 55 Medium", "Univers Condensed", "Utsaah", "Vagabond", "Vani", "Verdana", "Vijaya", "Viner Hand ITC", "VisualUI", "Vivaldi", "Vladimir Script", "Vrinda", "Westminster", "WHITNEY", "Wide Latin", "Wingdings",
+          "Wingdings 2", "Wingdings 3", "ZapfEllipt BT", "ZapfHumnst BT", "ZapfHumnst Dm BT", "Zapfino", "Zurich BlkEx BT", "Zurich Ex BT", "ZWAdobeF"];
         var available = [];
         for (var i = 0, l = fontList.length; i < l; i++) {
           if(detect(fontList[i])) {
             available.push(fontList[i]);
           }
         }
-        keys.push(available.join(";"));
+        keys.push({key: "fonts", value: available.join(";")});
         done(keys);
       }, 1);
     },
     pluginsKey: function(keys) {
       if(!this.options.excludePlugins){
         if(this.isIE()){
-          keys.push(this.getIEPluginsString());
+          keys.push({key: "getIEPluginsString", value: this.getIEPluginsString()});
         } else {
-          keys.push(this.getRegularPluginsString());
+          keys.push({key: "getRegularPluginsString", value: this.getRegularPluginsString()});
         }
       }
       return keys;
@@ -492,7 +476,7 @@
     },
     touchSupportKey: function (keys) {
       if(!this.options.excludeTouchSupport){
-        keys.push(this.getTouchSupport());
+        keys.push({key: "getTouchSupport", value: this.getTouchSupport()});
       }
       return keys;
     },
@@ -780,7 +764,7 @@
         os = "Android";
       } else if(userAgent.indexOf("linux") >= 0){
         os = "Linux";
-      } else if(userAgent.indexOf("iphone") >= 0 || userAgent.indexOf("ipad") >= 0 ){
+      } else if(userAgent.indexOf("iPhone") >= 0 || userAgent.indexOf("iPad") >= 0 ){
         os = "iOS";
       } else if(userAgent.indexOf("mac") >= 0){
         os = "Mac";
@@ -1170,6 +1154,6 @@
       return ("00000000" + (h1[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h1[1] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[1] >>> 0).toString(16)).slice(-8);
     }
   };
-  Fingerprint2.VERSION = "1.0.0-rc2";
+  Fingerprint2.VERSION = "0.8.0";
   return Fingerprint2;
 });
