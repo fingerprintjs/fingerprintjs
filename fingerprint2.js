@@ -115,7 +115,7 @@
     },
     userAgentKey: function(keys) {
       if(!this.options.excludeUserAgent) {
-        keys.push({key: "getUserAgent", value: this.getUserAgent()});
+        keys.push({key: "user_agent", value: this.getUserAgent()});
       }
       return keys;
     },
@@ -131,7 +131,7 @@
     },
     colorDepthKey: function(keys) {
       if(!this.options.excludeColorDepth) {
-        keys.push({key: "colorDepth", value: screen.colorDepth});
+        keys.push({key: "color_depth", value: screen.colorDepth});
       }
       return keys;
     },
@@ -160,68 +160,68 @@
         }
       }
       if(typeof available !== "undefined") { // headless browsers
-        keys.push({key: "availableResolution", value: available});
+        keys.push({key: "available_resolution", value: available});
       }
       return keys;
     },
     timezoneOffsetKey: function(keys) {
       if(!this.options.excludeTimezoneOffset) {
-        keys.push({key: "getTimezoneOffset", value: new Date().getTimezoneOffset()});
+        keys.push({key: "timezone_offset", value: new Date().getTimezoneOffset()});
       }
       return keys;
     },
     sessionStorageKey: function(keys) {
       if(!this.options.excludeSessionStorage && this.hasSessionStorage()) {
-        keys.push({key: "sessionStorageKey", value: 1});
+        keys.push({key: "session_storage", value: 1});
       }
       return keys;
     },
     localStorageKey: function(keys) {
       if(!this.options.excludeSessionStorage && this.hasLocalStorage()) {
-        keys.push({key: "localStorageKey", value: 1});
+        keys.push({key: "local_storage", value: 1});
       }
       return keys;
     },
     indexedDbKey: function(keys) {
       if(!this.options.excludeIndexedDB && this.hasIndexedDB()) {
-        keys.push({key: "indexedDbKey", value: 1});
+        keys.push({key: "indexed_db", value: 1});
       }
       return keys;
     },
     addBehaviorKey: function(keys) {
       //body might not be defined at this point or removed programmatically
       if(document.body && !this.options.excludeAddBehavior && document.body.addBehavior) {
-        keys.push({key: "addBehaviorKey", value: 1});
+        keys.push({key: "add_behavior", value: 1});
       }
       return keys;
     },
     openDatabaseKey: function(keys) {
       if(!this.options.excludeOpenDatabase && window.openDatabase) {
-        keys.push({key: "openDatabase", value: 1});
+        keys.push({key: "open_database", value: 1});
       }
       return keys;
     },
     cpuClassKey: function(keys) {
       if(!this.options.excludeCpuClass) {
-        keys.push({key: "getNavigatorCpuClass", value: this.getNavigatorCpuClass()});
+        keys.push({key: "cpu_class", value: this.getNavigatorCpuClass()});
       }
       return keys;
     },
     platformKey: function(keys) {
       if(!this.options.excludePlatform) {
-        keys.push({key: "getNavigatorPlatform", value: this.getNavigatorPlatform()});
+        keys.push({key: "navigator_platform", value: this.getNavigatorPlatform()});
       }
       return keys;
     },
     doNotTrackKey: function(keys) {
       if(!this.options.excludeDoNotTrack) {
-        keys.push({key: "getDoNotTrack", value: this.getDoNotTrack()});
+        keys.push({key: "do_not_track", value: this.getDoNotTrack()});
       }
       return keys;
     },
     canvasKey: function(keys) {
       if(!this.options.excludeCanvas && this.isCanvasSupported()) {
-        keys.push({key: "getCanvasFp", value: this.getCanvasFp()});
+        keys.push({key: "canvas", value: this.getCanvasFp()});
       }
       return keys;
     },
@@ -238,36 +238,36 @@
         }
         return keys;
       }
-      keys.push({key: "getWebglFp", value: this.getWebglFp()});
+      keys.push({key: "webgl", value: this.getWebglFp()});
       return keys;
     },
     adBlockKey: function(keys){
       if(!this.options.excludeAdBlock) {
-        keys.push({key: "getAdBlock", value: this.getAdBlock()});
+        keys.push({key: "adblock", value: this.getAdBlock()});
       }
       return keys;
     },
     hasLiedLanguagesKey: function(keys){
       if(!this.options.excludeHasLiedLanguages){
-        keys.push({key: "getHasLiedLanguages", value: this.getHasLiedLanguages()});
+        keys.push({key: "has_lied_languages", value: this.getHasLiedLanguages()});
       }
       return keys;
     },
     hasLiedResolutionKey: function(keys){
       if(!this.options.excludeHasLiedResolution){
-        keys.push({key: "getHasLiedResolution", value: this.getHasLiedResolution()});
+        keys.push({key: "has_lied_resolution", value: this.getHasLiedResolution()});
       }
       return keys;
     },
     hasLiedOsKey: function(keys){
       if(!this.options.excludeHasLiedOs){
-        keys.push({key: "getHasLiedOs", value: this.getHasLiedOs()});
+        keys.push({key: "has_lied_os", value: this.getHasLiedOs()});
       }
       return keys;
     },
     hasLiedBrowserKey: function(keys){
       if(!this.options.excludeHasLiedBrowser){
-        keys.push({key: "getHasLiedBrowser", value: this.getHasLiedBrowser()});
+        keys.push({key: "has_lied_browser", value: this.getHasLiedBrowser()});
       }
       return keys;
     },
@@ -409,16 +409,16 @@
             available.push(fontList[i]);
           }
         }
-        keys.push({key: "fonts", value: available.join(";")});
+        keys.push({key: "js_fonts", value: available.join(";")});
         done(keys);
       }, 1);
     },
     pluginsKey: function(keys) {
       if(!this.options.excludePlugins){
         if(this.isIE()){
-          keys.push({key: "getIEPluginsString", value: this.getIEPluginsString()});
+          keys.push({key: "ie_plugins", value: this.getIEPluginsString()});
         } else {
-          keys.push({key: "getRegularPluginsString", value: this.getRegularPluginsString()});
+          keys.push({key: "regular_plugins", value: this.getRegularPluginsString()});
         }
       }
       return keys;
@@ -496,7 +496,7 @@
     },
     touchSupportKey: function (keys) {
       if(!this.options.excludeTouchSupport){
-        keys.push({key: "getTouchSupport", value: this.getTouchSupport()});
+        keys.push({key: "touch_support", value: this.getTouchSupport()});
       }
       return keys;
     },
@@ -784,7 +784,7 @@
         os = "Android";
       } else if(userAgent.indexOf("linux") >= 0){
         os = "Linux";
-      } else if(userAgent.indexOf("iPhone") >= 0 || userAgent.indexOf("iPad") >= 0 ){
+      } else if(userAgent.indexOf("iphone") >= 0 || userAgent.indexOf("ipad") >= 0 ){
         os = "iOS";
       } else if(userAgent.indexOf("mac") >= 0){
         os = "Mac";
