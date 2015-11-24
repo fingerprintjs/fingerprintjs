@@ -90,8 +90,8 @@ describe("Fingerprint2", function () {
       });
     });
     
-    describe("returns components as a second argument to callback", function () {
-      it("does it return components", function (done) {
+    describe("returns components", function () {
+      it("does it return components as a second argument to callback", function (done) {
         var fp2 = new Fingerprint2();
         fp2.get(function(result, components) {
           expect(components).not.toBeNull();
@@ -99,7 +99,7 @@ describe("Fingerprint2", function () {
         });
       });
       
-      it("check if returned components is array", function (done) {
+      it("checks if returned components is array", function (done) {
         var fp2 = new Fingerprint2();
         fp2.get(function(result, components) {
           expect(components).toBeArrayOfObjects();
@@ -107,12 +107,11 @@ describe("Fingerprint2", function () {
         });
       });
       
-      it("check if js_fonts component is array", function (done) {
+      it("checks if js_fonts component is array", function (done) {
         var fp2 = new Fingerprint2();
         fp2.get(function(result, components) {
           for(var x = 0; x < components.length; x++) {
-            if(components[x].key == "js_fonts")
-            {
+            if(components[x].key == "js_fonts") {
                 expect(components[x].value).toBeArray();
             }
           }
