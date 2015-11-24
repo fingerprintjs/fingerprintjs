@@ -105,13 +105,17 @@
       keys = this.touchSupportKey(keys);
       var that = this;
       this.fontsKey(keys, function(newKeys){
-        var murmur = that.x64hash128(newKeys.join("~~~"), 31);
-        return done(murmur);
+		var temp_vals = [];
+		newKeys.forEach(function(key) {
+			temp_vals.push(key.value);
+		});
+        var murmur = that.x64hash128(temp_vals.join("~~~"), 31);
+        return done(murmur, newKeys);
       });
     },
     userAgentKey: function(keys) {
       if(!this.options.excludeUserAgent) {
-        keys.push(this.getUserAgent());
+        keys.push({key: "user_agent", value: this.getUserAgent()});
       }
       return keys;
     },
@@ -121,13 +125,13 @@
     },
     languageKey: function(keys) {
       if(!this.options.excludeLanguage) {
-        keys.push(navigator.language);
+        keys.push({key: "language", value: navigator.language});
       }
       return keys;
     },
     colorDepthKey: function(keys) {
       if(!this.options.excludeColorDepth) {
-        keys.push(screen.colorDepth);
+        keys.push({key: "color_depth", value: screen.colorDepth});
       }
       return keys;
     },
@@ -146,7 +150,7 @@
         resolution = [screen.width, screen.height];
       }
       if(typeof resolution !== "undefined") { // headless browsers
-        keys.push(resolution);
+        keys.push({key: "resolution", value: resolution});
       }
       if(screen.availWidth && screen.availHeight) {
         if(this.options.detectScreenOrientation) {
@@ -156,68 +160,68 @@
         }
       }
       if(typeof available !== "undefined") { // headless browsers
-        keys.push(available);
+        keys.push({key: "available_resolution", value: available});
       }
       return keys;
     },
     timezoneOffsetKey: function(keys) {
       if(!this.options.excludeTimezoneOffset) {
-        keys.push(new Date().getTimezoneOffset());
+        keys.push({key: "timezone_offset", value: new Date().getTimezoneOffset()});
       }
       return keys;
     },
     sessionStorageKey: function(keys) {
       if(!this.options.excludeSessionStorage && this.hasSessionStorage()) {
-        keys.push("sessionStorageKey");
+        keys.push({key: "session_storage", value: 1});
       }
       return keys;
     },
     localStorageKey: function(keys) {
       if(!this.options.excludeSessionStorage && this.hasLocalStorage()) {
-        keys.push("localStorageKey");
+        keys.push({key: "local_storage", value: 1});
       }
       return keys;
     },
     indexedDbKey: function(keys) {
       if(!this.options.excludeIndexedDB && this.hasIndexedDB()) {
-        keys.push("indexedDbKey");
+        keys.push({key: "indexed_db", value: 1});
       }
       return keys;
     },
     addBehaviorKey: function(keys) {
       //body might not be defined at this point or removed programmatically
       if(document.body && !this.options.excludeAddBehavior && document.body.addBehavior) {
-        keys.push("addBehaviorKey");
+        keys.push({key: "add_behavior", value: 1});
       }
       return keys;
     },
     openDatabaseKey: function(keys) {
       if(!this.options.excludeOpenDatabase && window.openDatabase) {
-        keys.push("openDatabase");
+        keys.push({key: "open_database", value: 1});
       }
       return keys;
     },
     cpuClassKey: function(keys) {
       if(!this.options.excludeCpuClass) {
-        keys.push(this.getNavigatorCpuClass());
+        keys.push({key: "cpu_class", value: this.getNavigatorCpuClass()});
       }
       return keys;
     },
     platformKey: function(keys) {
       if(!this.options.excludePlatform) {
-        keys.push(this.getNavigatorPlatform());
+        keys.push({key: "navigator_platform", value: this.getNavigatorPlatform()});
       }
       return keys;
     },
     doNotTrackKey: function(keys) {
       if(!this.options.excludeDoNotTrack) {
-        keys.push(this.getDoNotTrack());
+        keys.push({key: "do_not_track", value: this.getDoNotTrack()});
       }
       return keys;
     },
     canvasKey: function(keys) {
       if(!this.options.excludeCanvas && this.isCanvasSupported()) {
-        keys.push(this.getCanvasFp());
+        keys.push({key: "canvas", value: this.getCanvasFp()});
       }
       return keys;
     },
@@ -234,36 +238,36 @@
         }
         return keys;
       }
-      keys.push(this.getWebglFp());
+      keys.push({key: "webgl", value: this.getWebglFp()});
       return keys;
     },
     adBlockKey: function(keys){
       if(!this.options.excludeAdBlock) {
-        keys.push(this.getAdBlock());
+        keys.push({key: "adblock", value: this.getAdBlock()});
       }
       return keys;
     },
     hasLiedLanguagesKey: function(keys){
       if(!this.options.excludeHasLiedLanguages){
-        keys.push(this.getHasLiedLanguages());
+        keys.push({key: "has_lied_languages", value: this.getHasLiedLanguages()});
       }
       return keys;
     },
     hasLiedResolutionKey: function(keys){
       if(!this.options.excludeHasLiedResolution){
-        keys.push(this.getHasLiedResolution());
+        keys.push({key: "has_lied_resolution", value: this.getHasLiedResolution()});
       }
       return keys;
     },
     hasLiedOsKey: function(keys){
       if(!this.options.excludeHasLiedOs){
-        keys.push(this.getHasLiedOs());
+        keys.push({key: "has_lied_os", value: this.getHasLiedOs()});
       }
       return keys;
     },
     hasLiedBrowserKey: function(keys){
       if(!this.options.excludeHasLiedBrowser){
-        keys.push(this.getHasLiedBrowser());
+        keys.push({key: "has_lied_browser", value: this.getHasLiedBrowser()});
       }
       return keys;
     },
@@ -301,7 +305,7 @@
         return done(keys);
       }
       this.loadSwfAndDetectFonts(function(fonts){
-        keys.push(fonts.join(";"));
+        keys.push({key: "swf_fonts", value: fonts.join(";")});
         done(keys);
       });
     },
@@ -405,16 +409,16 @@
             available.push(fontList[i]);
           }
         }
-        keys.push(available.join(";"));
+        keys.push({key: "js_fonts", value: available.join(";")});
         done(keys);
       }, 1);
     },
     pluginsKey: function(keys) {
       if(!this.options.excludePlugins){
         if(this.isIE()){
-          keys.push(this.getIEPluginsString());
+          keys.push({key: "ie_plugins", value: this.getIEPluginsString()});
         } else {
-          keys.push(this.getRegularPluginsString());
+          keys.push({key: "regular_plugins", value: this.getRegularPluginsString()});
         }
       }
       return keys;
@@ -492,7 +496,7 @@
     },
     touchSupportKey: function (keys) {
       if(!this.options.excludeTouchSupport){
-        keys.push(this.getTouchSupport());
+        keys.push({key: "touch_support", value: this.getTouchSupport()});
       }
       return keys;
     },
