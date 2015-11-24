@@ -82,9 +82,9 @@ describe("Fingerprint2", function () {
 
       it("does not use plugins info when excluded", function (done) {
         var fp2 = new Fingerprint2({excludePlugins: true});
-        spyOn(fp2, "getRegularPluginsString");
+        spyOn(fp2, "getRegularPlugins");
         fp2.get(function(result) {
-          expect(fp2.getRegularPluginsString).not.toHaveBeenCalled();
+          expect(fp2.getRegularPlugins).not.toHaveBeenCalled();
           done();
         });
       });
