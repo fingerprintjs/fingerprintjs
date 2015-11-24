@@ -41,8 +41,9 @@ npm install fingerprintjs2
 ### Usage
 
 ```js
-new Fingerprint2().get(function(result){
-  console.log(result);
+new Fingerprint2().get(function(result, components){
+  console.log(result); //a hash, representing your device fingerprint
+  console.log(components); // an array of FP components
 });
 ```
 
@@ -84,9 +85,11 @@ devices.
 ##### All fingerprinting sources are enabled by default, i.e. you don't need to explicitly configure the library to include them.
 
 ```js
-new Fingerprint2().get(function(result){
+new Fingerprint2().get(function(result, components){
   // this will use all available fingerprinting sources
   console.log(result);
+  // components is an array of all fingerprinting components used
+  console.log(components);
 });
 ```
 
