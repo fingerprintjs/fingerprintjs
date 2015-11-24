@@ -89,7 +89,7 @@ describe("Fingerprint2", function () {
         });
       });
     });
-	
+    
     describe("returns components as a second argument to callback", function () {
       it("does it return components", function (done) {
         var fp2 = new Fingerprint2();
@@ -98,7 +98,7 @@ describe("Fingerprint2", function () {
           done();
         });
       });
-	  
+      
       it("check if returned components is array", function (done) {
         var fp2 = new Fingerprint2();
         fp2.get(function(result, components) {
@@ -106,20 +106,20 @@ describe("Fingerprint2", function () {
           done();
         });
       });
-	  
+      
       it("check if js_fonts component is array", function (done) {
         var fp2 = new Fingerprint2();
         fp2.get(function(result, components) {
-		  for(var x = 0; x < components.length; x++) {
-			if(components[x].key == "js_fonts")
-			{
-				expect(components[x].value).toBeArray();
-			}
-		  }
+          for(var x = 0; x < components.length; x++) {
+            if(components[x].key == "js_fonts")
+            {
+                expect(components[x].value).toBeArray();
+            }
+          }
           done();
         });
       });
-	  
+      
       it("returns user_agent as the first element", function (done) {
         var fp2 = new Fingerprint2();
         fp2.get(function(result, components) {
@@ -127,7 +127,7 @@ describe("Fingerprint2", function () {
           done();
         });
       });
-	});
-	
+    });
+    
   });
 });
