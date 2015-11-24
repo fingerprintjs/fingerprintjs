@@ -84,9 +84,11 @@ devices.
 ##### All fingerprinting sources are enabled by default, i.e. you don't need to explicitly configure the library to include them.
 
 ```js
-new Fingerprint2().get(function(result){
+new Fingerprint2().get(function(result, components){
   // this will use all available fingerprinting sources
   console.log(result);
+  // components is an array of all fingerprinting components used
+  console.log(components);
 });
 ```
 

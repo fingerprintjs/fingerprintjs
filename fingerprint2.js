@@ -107,7 +107,11 @@
       this.fontsKey(keys, function(newKeys){
         var values = [];
         newKeys.forEach(function(pair) {
-          values.push(pair.value);
+          var value = pair.value;
+          if (typeof pair.value.join !== "undefined") {
+            value = pair.value.join(";");
+          }
+          values.push(value);
         });
         var murmur = that.x64hash128(values.join("~~~"), 31);
         return done(murmur, newKeys);
@@ -409,21 +413,21 @@
             available.push(fontList[i]);
           }
         }
-        keys.push({key: "js_fonts", value: available.join(";")});
+        keys.push({key: "js_fonts", value: available});
         done(keys);
       }, 1);
     },
     pluginsKey: function(keys) {
       if(!this.options.excludePlugins){
         if(this.isIE()){
-          keys.push({key: "ie_plugins", value: this.getIEPluginsString()});
+          keys.push({key: "ie_plugins", value: this.getIEPlugins()});
         } else {
-          keys.push({key: "regular_plugins", value: this.getRegularPluginsString()});
+          keys.push({key: "regular_plugins", value: this.getRegularPlugins()});
         }
       }
       return keys;
     },
-    getRegularPluginsString: function () {
+    getRegularPlugins: function () {
       var plugins = [];
       for(var i = 0, l = navigator.plugins.length; i < l; i++) {
         plugins.push(navigator.plugins[i]);
@@ -442,9 +446,9 @@
           return [mt.type, mt.suffixes].join("~");
         }).join(",");
         return [p.name, p.description, mimeTypes].join("::");
-      }, this).join(";");
+      }, this);
     },
-    getIEPluginsString: function () {
+    getIEPlugins: function () {
       if(window.ActiveXObject){
         var names = [
           "AcroPDF.PDF", // Adobe PDF reader 7+
@@ -478,9 +482,9 @@
           } catch(e){
             return null;
           }
-        }).join(";");
+        });
       } else {
-        return "";
+        return [];
       }
     },
     pluginsShouldBeSorted: function () {
@@ -520,23 +524,23 @@
     },
     getNavigatorCpuClass: function () {
       if(navigator.cpuClass){
-        return "navigatorCpuClass: " + navigator.cpuClass;
+        return navigator.cpuClass;
       } else {
-        return "navigatorCpuClass: unknown";
+        return "unknown";
       }
     },
     getNavigatorPlatform: function () {
       if(navigator.platform) {
-        return "navigatorPlatform: " + navigator.platform;
+        return navigator.platform;
       } else {
-        return "navigatorPlatform: unknown";
+        return "unknown";
       }
     },
     getDoNotTrack: function () {
       if(navigator.doNotTrack) {
-        return "doNotTrack: " + navigator.doNotTrack;
+        return navigator.doNotTrack;
       } else {
-        return "doNotTrack: unknown";
+        return "unknown";
       }
     },
     // This is a crude and primitive touch screen detection.
