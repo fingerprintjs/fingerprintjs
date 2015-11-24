@@ -89,5 +89,32 @@ describe("Fingerprint2", function () {
         });
       });
     });
+	
+	describe("return components", function () {
+      it("does it return components", function (done) {
+        var fp2 = new Fingerprint2();
+        fp2.get(function(result, components) {
+          expect(components).not.toBeNull();
+          done();
+        });
+      });
+	  
+      it("is first element user_agent", function (done) {
+        var fp2 = new Fingerprint2();
+        fp2.get(function(result, components) {
+          expect(components[0].key).toEqual("user_agent");
+          done();
+        });
+      });
+	  
+      it("user_agent is PhantomJS", function (done) {
+        var fp2 = new Fingerprint2();
+        fp2.get(function(result, components) {
+          expect(components[0].value).toMatch(/PhantomJS/i);
+          done();
+        });
+      });
+	});
+	
   });
 });
