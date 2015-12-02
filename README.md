@@ -98,18 +98,24 @@ new Fingerprint2().get(function(result, components){
 You can view your browser fingerprint locally by starting a webserver and viewing the `index.html` page.
 Loading `index.html` from the filesystem won't work due to Flash's ExternalInterface security restrictions.
 
-To start a web server you can use either Ruby:
+To start a web server you can try using one of the following:
 
-```
-ruby -run -e httpd . -p 8080
-```
+* Ruby 1.9.2+
 
-or Python:
+    `ruby -run -e httpd . -p 8080`
 
-```
-# will load on port 8000
-python -m SimpleHTTPServer
-```
+* Python 2.x
+
+	`python -m SimpleHTTPServer 8080`
+
+* Python 3.x
+
+	`python -m http.server 8080`
+
+* PHP 5.4+
+
+	`php -S 0.0.0.0:8080`
+
 
 ### List of fingerprinting sources
 
