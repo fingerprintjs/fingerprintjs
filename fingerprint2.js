@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 1.0.0 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 2.0.0-dev - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -55,8 +55,6 @@
   }
   var Fingerprint2 = function(options) {
     var defaultOptions = {
-      swfContainerId: "fingerprintjs2",
-      swfPath: "flash/compiled/FontList.swf",
       detectScreenOrientation: true,
       sortPluginsFor: [/palemoon/i]
     };
@@ -97,14 +95,13 @@
       keys = this.pluginsKey(keys);
       keys = this.canvasKey(keys);
       keys = this.webglKey(keys);
-      keys = this.adBlockKey(keys);
       keys = this.hasLiedLanguagesKey(keys);
       keys = this.hasLiedResolutionKey(keys);
       keys = this.hasLiedOsKey(keys);
       keys = this.hasLiedBrowserKey(keys);
       keys = this.touchSupportKey(keys);
       var that = this;
-      this.fontsKey(keys, function(newKeys){
+      this.jsFontsKey(keys, function(newKeys){
         var values = [];
         newKeys.forEach(function(pair) {
           var value = pair.value;
@@ -245,12 +242,6 @@
       keys.push({key: "webgl", value: this.getWebglFp()});
       return keys;
     },
-    adBlockKey: function(keys){
-      if(!this.options.excludeAdBlock) {
-        keys.push({key: "adblock", value: this.getAdBlock()});
-      }
-      return keys;
-    },
     hasLiedLanguagesKey: function(keys){
       if(!this.options.excludeHasLiedLanguages){
         keys.push({key: "has_lied_languages", value: this.getHasLiedLanguages()});
@@ -275,63 +266,23 @@
       }
       return keys;
     },
-    fontsKey: function(keys, done) {
-      if (this.options.excludeJsFonts) {
-        return this.flashFontsKey(keys, done);
-      }
-      return this.jsFontsKey(keys, done);
-    },
-    // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
-    flashFontsKey: function(keys, done) {
-      if(this.options.excludeFlashFonts) {
-        if(typeof NODEBUG === "undefined"){
-          this.log("Skipping flash fonts detection per excludeFlashFonts configuration option");
-        }
-        return done(keys);
-      }
-      // we do flash if swfobject is loaded
-      if(!this.hasSwfObjectLoaded()){
-        if(typeof NODEBUG === "undefined"){
-          this.log("Swfobject is not detected, Flash fonts enumeration is skipped");
-        }
-        return done(keys);
-      }
-      if(!this.hasMinFlashInstalled()){
-        if(typeof NODEBUG === "undefined"){
-          this.log("Flash is not installed, skipping Flash fonts enumeration");
-        }
-        return done(keys);
-      }
-      if(typeof this.options.swfPath === "undefined"){
-        if(typeof NODEBUG === "undefined"){
-          this.log("To use Flash fonts detection, you must pass a valid swfPath option, skipping Flash fonts enumeration");
-        }
-        return done(keys);
-      }
-      this.loadSwfAndDetectFonts(function(fonts){
-        keys.push({key: "swf_fonts", value: fonts.join(";")});
-        done(keys);
-      });
-    },
     // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
     jsFontsKey: function(keys, done) {
+      if (this.options.excludeJsFonts) {
+        return done(keys);
+      }
       var that = this;
       // doing js fonts detection in a pseudo-async fashion
       return setTimeout(function(){
-
         // a font will be compared against all the three default fonts.
         // and if it doesn't match all 3 then that font is not available.
         var baseFonts = ["monospace", "sans-serif", "serif"];
-
         //we use m or w because these two characters take up the maximum width.
         // And we use a LLi so that the same matching fonts can get separated
         var testString = "mmmmmmmmmmlli";
-
         //we test using 72px font size, we may use any size. I guess larger the better.
         var testSize = "72px";
-
         var h = document.getElementsByTagName("body")[0];
-
         // create a SPAN in the document to get the width of the text we use to test
         var s = document.createElement("span");
         s.style.fontSize = testSize;
@@ -745,12 +696,6 @@
       result.push("webgl fragment shader low int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).rangeMax);
       return result.join("~");
     },
-    getAdBlock: function(){
-      var ads = document.createElement("div");
-      ads.setAttribute("id", "ads");
-      document.body.appendChild(ads);
-      return document.getElementById("ads") ? false : true;
-    },
     getHasLiedLanguages: function(){
       //We check if navigator.language is equal to the first language of navigator.languages
       if(typeof navigator.languages !== "undefined"){
@@ -919,28 +864,6 @@
         return true;
       }
       return false;
-    },
-    hasSwfObjectLoaded: function(){
-      return typeof window.swfobject !== "undefined";
-    },
-    hasMinFlashInstalled: function () {
-      return swfobject.hasFlashPlayerVersion("9.0.0");
-    },
-    addFlashDivNode: function() {
-      var node = document.createElement("div");
-      node.setAttribute("id", this.options.swfContainerId);
-      document.body.appendChild(node);
-    },
-    loadSwfAndDetectFonts: function(done) {
-      var hiddenCallback = "___fp_swf_loaded";
-      window[hiddenCallback] = function(fonts) {
-        done(fonts);
-      };
-      var id = this.options.swfContainerId;
-      this.addFlashDivNode();
-      var flashvars = { onReady: hiddenCallback};
-      var flashparams = { allowScriptAccess: "always", menu: "false" };
-      swfobject.embedSWF(this.options.swfPath, id, "1", "1", "9.0.0", false, flashvars, flashparams, {});
     },
     getWebglCanvas: function() {
       var canvas = document.createElement("canvas");
@@ -1178,6 +1101,6 @@
       return ("00000000" + (h1[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h1[1] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[1] >>> 0).toString(16)).slice(-8);
     }
   };
-  Fingerprint2.VERSION = "1.0.0";
+  Fingerprint2.VERSION = "2.0.0-dev";
   return Fingerprint2;
 });

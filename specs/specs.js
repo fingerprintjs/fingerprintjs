@@ -11,20 +11,19 @@ describe("Fingerprint2", function () {
 
     it("uses default options", function () {
       var fp2 = new Fingerprint2();
-      expect(fp2.options.swfContainerId).toEqual("fingerprintjs2");
-      expect(fp2.options.swfPath).toEqual("flash/compiled/FontList.swf");
+      expect(fp2.options.detectScreenOrientation).toEqual(true);
+      expect(fp2.options.sortPluginsFor).toEqual([/palemoon/i]);
     });
 
     it("allows to override default options", function () {
-      var fp2 = new Fingerprint2({swfPath: "newpath"});
-      expect(fp2.options.swfContainerId).toEqual("fingerprintjs2");
-      expect(fp2.options.swfPath).toEqual("newpath");
+      var fp2 = new Fingerprint2({detectScreenOrientation: false});
+      expect(fp2.options.detectScreenOrientation).toEqual(false);
     });
 
     it("allows to add new options", function () {
       var fp2 = new Fingerprint2({excludeUserAgent: true});
-      expect(fp2.options.swfContainerId).toEqual("fingerprintjs2");
-      expect(fp2.options.swfPath).toEqual("flash/compiled/FontList.swf");
+      expect(fp2.options.detectScreenOrientation).toEqual(true);
+      expect(fp2.options.sortPluginsFor).toEqual([/palemoon/i]);
       expect(fp2.options.excludeUserAgent).toBe(true);
     });
 
@@ -47,15 +46,6 @@ describe("Fingerprint2", function () {
         var fp2 = new Fingerprint2();
         fp2.get(function(result){
           expect(result).toMatch(/^[0-9a-f]{32}$/i);
-          done();
-        });
-      });
-
-      it("does not try calling flash font detection", function (done) {
-        var fp2 = new Fingerprint2();
-        spyOn(fp2, "flashFontsKey");
-        fp2.get(function(result) {
-          expect(fp2.flashFontsKey).not.toHaveBeenCalled();
           done();
         });
       });
@@ -89,7 +79,7 @@ describe("Fingerprint2", function () {
         });
       });
     });
-    
+
     describe("returns components", function () {
       it("does it return components as a second argument to callback", function (done) {
         var fp2 = new Fingerprint2();
@@ -98,7 +88,7 @@ describe("Fingerprint2", function () {
           done();
         });
       });
-      
+
       it("checks if returned components is array", function (done) {
         var fp2 = new Fingerprint2();
         fp2.get(function(result, components) {
@@ -106,7 +96,7 @@ describe("Fingerprint2", function () {
           done();
         });
       });
-      
+
       it("checks if js_fonts component is array", function (done) {
         var fp2 = new Fingerprint2();
         fp2.get(function(result, components) {
@@ -118,7 +108,7 @@ describe("Fingerprint2", function () {
           done();
         });
       });
-      
+
       it("returns user_agent as the first element", function (done) {
         var fp2 = new Fingerprint2();
         fp2.get(function(result, components) {
@@ -127,6 +117,6 @@ describe("Fingerprint2", function () {
         });
       });
     });
-    
+
   });
 });

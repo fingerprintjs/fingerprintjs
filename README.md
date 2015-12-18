@@ -73,9 +73,6 @@ excludeJsFonts: true
 ```
 option.
 
-To use Flash font enumeration, make sure you have swfobject available.
-If you don't, the library will skip the Flash part entirely.
-
 #### `detectScreenOrientation` option is `true` by default
 
 To ensure consistent fingerprints when users rotate their mobile
@@ -95,7 +92,7 @@ new Fingerprint2().get(function(result, components){
 
 #### View the fingerprint locally
 
-You can view your browser fingerprint locally by starting a webserver and viewing the `index.html` page.
+You can view your browser fingerprint locally by starting a web server and viewing the `index.html` page.
 Loading `index.html` from the filesystem won't work due to Flash's ExternalInterface security restrictions.
 
 To start a web server you can try using one of the following:
@@ -132,12 +129,10 @@ To start a web server you can try using one of the following:
 11. CPU class
 12. Platform
 13. DoNotTrack or not
-14. Full list of installed fonts (maintaining their order, which increases the entropy), implemented with Flash.
 15. A list of installed fonts, detected with JS/CSS (side-channel technique) - can detect up to 500 installed fonts without flash
 16. Canvas fingerprinting
 17. WebGL fingerprinting
 18. Plugins (IE included)
-19. Is AdBlock installed or not
 20. Has the user tampered with its languages <sup>[1](https://github.com/Valve/fingerprintjs2/wiki/Browser-tampering)</sup>
 21. Has the user tampered with its screen resolution <sup>[1](https://github.com/Valve/fingerprintjs2/wiki/Browser-tampering)</sup>
 22. Has the user tampered with its OS <sup>[1](https://github.com/Valve/fingerprintjs2/wiki/Browser-tampering)</sup>
@@ -155,8 +150,6 @@ This option can incur even more overhead on mobile Firefox browsers, which is mu
 (in no particular order)
 
 * Multi-monitor detection,
-* silverlight integration,
-* Flash linux kernel version,
 * Internal HashTable implementation detection
 * WebRTC fingerprinting
 * Math constants
@@ -168,11 +161,6 @@ This option can incur even more overhead on mobile Firefox browsers, which is mu
 * List of supported gestures (for touch-enabled devices)
 * Pixel density
 * Video and audio codecs availability
-
-#### To recompile the `FontList.swf` file:
-
-* Download [Adobe Flex SDK](http://www.adobe.com/devnet/flex/flex-sdk-download.html)
-* Unzip it, add the `bin/` directory to your `$PATH`  (mxmlc binary should be in path)
-* Run `make`
+* Redpill code execution
 
 #### License: MIT or Apache, whichever you prefer.
