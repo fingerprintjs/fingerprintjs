@@ -578,7 +578,6 @@
       result.push("canvas fp:" + canvas.toDataURL());
       return result.join("~");
     },
-
     getWebglFp: function() {
       var gl;
       var fa2s = function(fa) {
@@ -892,7 +891,6 @@
         }
       }
     },
-
     map: function(obj, iterator, context) {
       var results = [];
       // Not using strict equality so that this acts as a
@@ -906,7 +904,6 @@
     },
 
     /// MurmurHash3 related functions
-
     //
     // Given two 64bit ints (as an array of two 32bit ints) returns the two
     // added together as a 64bit int (as an array of two 32bit ints).
@@ -928,7 +925,6 @@
       o[0] &= 0xffff;
       return [(o[0] << 16) | o[1], (o[2] << 16) | o[3]];
     },
-
     //
     // Given two 64bit ints (as an array of two 32bit ints) returns the two
     // multiplied together as a 64bit int (as an array of two 32bit ints).
@@ -1014,7 +1010,6 @@
       h = this.x64Xor(h, [0, h[0] >>> 1]);
       return h;
     },
-
     //
     // Given a string and an optional seed as an int, returns a 128 bit
     // hash using the x64 flavor of MurmurHash3, as an unsigned hex.
