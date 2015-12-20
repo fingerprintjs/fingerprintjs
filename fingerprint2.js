@@ -137,33 +137,41 @@
       return keys;
     },
     screenResolutionKey: function(keys) {
-      if(!this.options.excludeScreenResolution) {
-        return this.getScreenResolution(keys);
+      if(this.options.excludeScreenResolution) { return keys; }
+      if(screen && screen.width && screen.height) {
+        keys.push({ key: "resolution", value: this.getResolution(screen.width, screen.height) });
+      }
+      if(screen && screen.availWidth && screen.availHeight) {
+        keys.push({ key: "available_resolution", value: this.getResolution(screen.availWidth, screen.availHeight) });
       }
       return keys;
     },
-    getScreenResolution: function(keys) {
-      var resolution;
-      var available;
-      if(this.options.detectScreenOrientation) {
-        resolution = (screen.height > screen.width) ? [screen.height, screen.width] : [screen.width, screen.height];
+    getResolution: function(w, h) {
+      if(this.options.detectScreenOrientation && h > w) {
+        return this.scaleResolution(h, w);
       } else {
-        resolution = [screen.width, screen.height];
+        return this.scaleResolution(w, h);
       }
-      if(typeof resolution !== "undefined") { // headless browsers
-        keys.push({key: "resolution", value: resolution});
-      }
-      if(screen.availWidth && screen.availHeight) {
-        if(this.options.detectScreenOrientation) {
-          available = (screen.availHeight > screen.availWidth) ? [screen.availHeight, screen.availWidth] : [screen.availWidth, screen.availHeight];
-        } else {
-          available = [screen.availHeight, screen.availWidth];
+    },
+    // to get resolution, independent on page zoom
+    scaleResolution: function(w, h) {
+      var round5 = function (x) { return Math.round(x / 5) * 5; };
+      var round10 = function (x) { return Math.round(x / 10) * 10; };
+      if (w && h) {
+        var zoom = 1.0;
+        if (this.isIE()) {
+          zoom = screen.deviceXDPI / screen.systemXDPI;
+          zoom = round5(zoom * 100) / 100;
+        }
+        else if (this.isFF()) {
+          zoom = window.devicePixelRatio;
+        }
+        if (zoom !== 1.0) {
+          h = round10(h * zoom);
+          w = round10(w * zoom);
         }
       }
-      if(typeof available !== "undefined") { // headless browsers
-        keys.push({key: "available_resolution", value: available});
-      }
-      return keys;
+      return [w, h];
     },
     timezoneOffsetKey: function(keys) {
       if(!this.options.excludeTimezoneOffset) {
@@ -863,6 +871,9 @@
         return true;
       }
       return false;
+    },
+    isFF: function () {
+      return !!navigator.userAgent.match(/firefox/i);
     },
     getWebglCanvas: function() {
       var canvas = document.createElement("canvas");

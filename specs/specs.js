@@ -63,9 +63,9 @@ describe("Fingerprint2", function () {
 
       it("does not use screen resolution when excluded", function (done) {
         var fp2 = new Fingerprint2({excludeScreenResolution: true});
-        spyOn(fp2, "getScreenResolution");
+        spyOn(fp2, "getResolution");
         fp2.get(function(result) {
-          expect(fp2.getScreenResolution).not.toHaveBeenCalled();
+          expect(fp2.getResolution).not.toHaveBeenCalled();
           done();
         });
       });
