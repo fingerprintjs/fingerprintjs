@@ -141,7 +141,8 @@
       if(screen && screen.width && screen.height) {
         keys.push({ key: "resolution", value: this.getResolution(screen.width, screen.height) });
       }
-      if(screen && screen.availWidth && screen.availHeight) {
+      // we do not do available resolution for FF && IE and non-default zoom level, because it's not stable
+      if(screen && screen.availWidth && screen.availHeight && !this.isIE() && !this.isFF() && this.getZoom() === 1.0) {
         keys.push({ key: "available_resolution", value: this.getResolution(screen.availWidth, screen.availHeight) });
       }
       return keys;
@@ -158,20 +159,24 @@
       var round5 = function (x) { return Math.round(x / 5) * 5; };
       var round10 = function (x) { return Math.round(x / 10) * 10; };
       if (w && h) {
-        var zoom = 1.0;
-        if (this.isIE()) {
-          zoom = screen.deviceXDPI / screen.systemXDPI;
-          zoom = round5(zoom * 100) / 100;
-        }
-        else if (this.isFF()) {
-          zoom = window.devicePixelRatio;
-        }
+        var zoom = this.getZoom();
         if (zoom !== 1.0) {
           h = round10(h * zoom);
           w = round10(w * zoom);
         }
       }
       return [w, h];
+    },
+    getZoom: function() {
+      var zoom = 1.0;
+      if (this.isIE()) {
+        zoom = screen.deviceXDPI / screen.systemXDPI;
+        zoom = round5(zoom * 100) / 100;
+      }
+      else if (this.isFF()) {
+        zoom = window.devicePixelRatio;
+      }
+      return zoom;
     },
     timezoneOffsetKey: function(keys) {
       if(!this.options.excludeTimezoneOffset) {
