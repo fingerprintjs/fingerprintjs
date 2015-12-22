@@ -79,6 +79,7 @@
 
   <script src="fingerprint2.js"></script>
   <script>
+    $("h1").append("&nbsp<small>" + Fingerprint2.VERSION + "</small>");
     $("#btn").on("click", function () {
       var d1 = new Date();
       var fp = new Fingerprint2();
