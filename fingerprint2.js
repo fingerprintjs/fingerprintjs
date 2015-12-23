@@ -106,7 +106,7 @@
       var that = this;
       this.fontsKey(keys, function(newKeys){
         var values = [];
-        newKeys.forEach(function(pair) {
+        that.each(newKeys, function(pair) {
           var value = pair.value;
           if (typeof pair.value.join !== "undefined") {
             value = pair.value.join(";");
