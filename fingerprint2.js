@@ -141,8 +141,8 @@
       if(screen && screen.width && screen.height) {
         keys.push({ key: "resolution", value: this.getResolution(screen.width, screen.height) });
       }
-      // we do not do available resolution for FF && IE and non-default zoom level, because it's not stable
-      if(screen && screen.availWidth && screen.availHeight && !this.isIE() && !this.isFF() && this.getZoom() === 1.0) {
+      // we do not do available resolution for FF && IE and fractional zoom level, because it's not stable
+      if(screen && screen.availWidth && screen.availHeight && !this.isIE() && !this.isFF() && Math.floor(this.getZoom()) === this.getZoom()) {
         keys.push({ key: "available_resolution", value: this.getResolution(screen.availWidth, screen.availHeight) });
       }
       return keys;

@@ -72,7 +72,7 @@
   <h1>Fingerprintjs2</h1>
 
   <p>Your browser fingerprint: <strong id="fp"></strong></p>
-  <p><code id="time"/></p>
+  <p><code id="details"/></p>
 
   <button type="button" id="btn">Get my fingerprint</button>
 
@@ -80,19 +80,44 @@
 
   <script src="fingerprint2.js"></script>
   <script>
+    var ifConsole = function(prop) {
+      var consoleItself = (typeof window.console !== "undefined");
+      if(prop) {
+        var consoleProp = (typeof window.console !== "undefined") && (typeof window.console[prop] !== "undefined");
+        return consoleItself && consoleProp;
+      } else {
+        return consoleItself;
+      }
+    }
+    var timerName = "Time took to calculate the fingerprint";
+
     $("h1").append("&nbsp<small>" + Fingerprint2.VERSION + "</small>");
     $("#btn").on("click", function () {
-      var d1 = new Date();
+      if(ifConsole("clear")) { console.clear(); }
       var fp = new Fingerprint2();
-      fp.get(function(result) {
-        var d2 = new Date();
-        var timeString = "Time took to calculate the fingerprint: " + (d2 - d1) + "ms";
-        if(typeof window.console !== "undefined") {
-          console.log(timeString);
+      if(ifConsole("time")){ console.time(timerName) }
+      fp.get(function(result, components) {
+        if(ifConsole("time")){ console.timeEnd(timerName) }
+        if(ifConsole()) {
           console.log(result);
+          if(ifConsole("table")) {
+            var table = [];
+            for(var i = 0; i < components.length; i++) {
+              var obj = components[i];
+              var name = obj.key;
+              var value = null;
+              if(jQuery.isArray(obj.value)) {
+                value = obj.value.join("; ");
+              } else {
+                value = obj.value;
+              }
+              table.push([name, value]);
+            }
+            console.table(table);
+          }
         }
         $("#fp").text(result);
-        $("#time").text(timeString);
+        $("#details").text("For details, look into console");
       });
     });
   </script>
