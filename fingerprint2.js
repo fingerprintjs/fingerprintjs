@@ -151,7 +151,6 @@
     },
     getScreenResolution: function(keys) {
       var resolution;
-      var available;
       if(this.options.detectScreenOrientation) {
         resolution = (screen.height > screen.width) ? [screen.height, screen.width] : [screen.width, screen.height];
       } else {
@@ -163,6 +162,7 @@
       return keys;
     },
     getAvailableScreenResolution: function(keys) {
+      var available;
       if(screen.availWidth && screen.availHeight) {
         if(this.options.detectScreenOrientation) {
           available = (screen.availHeight > screen.availWidth) ? [screen.availHeight, screen.availWidth] : [screen.availWidth, screen.availHeight];
