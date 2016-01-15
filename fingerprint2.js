@@ -144,7 +144,7 @@
       if(!this.options.excludeScreenResolution) {
         return this.getScreenResolution(keys);
       }
-      if (!this.options.excludeAvailableResolution) {
+      if (!this.options.excludeAvailableScreenResolution) {
         return this.getAvailableScreenResolution(keys);
       }
       return keys;
