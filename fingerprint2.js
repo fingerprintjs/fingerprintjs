@@ -144,6 +144,9 @@
       if(!this.options.excludeScreenResolution) {
         return this.getScreenResolution(keys);
       }
+      if (!this.options.excludeAvailableResolution) {
+        return this.getAvailableScreenResolution(keys);
+      }
       return keys;
     },
     getScreenResolution: function(keys) {
@@ -157,6 +160,9 @@
       if(typeof resolution !== "undefined") { // headless browsers
         keys.push({key: "resolution", value: resolution});
       }
+      return keys;
+    },
+    getAvailableScreenResolution: function(keys) {
       if(screen.availWidth && screen.availHeight) {
         if(this.options.detectScreenOrientation) {
           available = (screen.availHeight > screen.availWidth) ? [screen.availHeight, screen.availWidth] : [screen.availWidth, screen.availHeight];
