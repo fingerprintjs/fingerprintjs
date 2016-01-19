@@ -85,6 +85,7 @@
       keys = this.languageKey(keys);
       keys = this.colorDepthKey(keys);
       keys = this.screenResolutionKey(keys);
+      keys = this.availableScreenResolutionKey(keys);
       keys = this.timezoneOffsetKey(keys);
       keys = this.sessionStorageKey(keys);
       keys = this.localStorageKey(keys);
@@ -144,9 +145,6 @@
       if(!this.options.excludeScreenResolution) {
         return this.getScreenResolution(keys);
       }
-      if (!this.options.excludeAvailableScreenResolution) {
-        return this.getAvailableScreenResolution(keys);
-      }
       return keys;
     },
     getScreenResolution: function(keys) {
@@ -158,6 +156,12 @@
       }
       if(typeof resolution !== "undefined") { // headless browsers
         keys.push({key: "resolution", value: resolution});
+      }
+      return keys;
+    },
+    availableScreenResolutionKey: function(keys) {
+      if (!this.options.excludeAvailableScreenResolution) {
+        return this.getAvailableScreenResolution(keys);
       }
       return keys;
     },
