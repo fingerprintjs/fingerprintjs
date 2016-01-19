@@ -80,6 +80,15 @@ describe("Fingerprint2", function () {
         });
       });
 
+      it("does not use available screen resolution when excluded", function (done) {
+        var fp2 = new Fingerprint2({excludeAvailableScreenResolution: true});
+        spyOn(fp2, "getAvailableScreenResolution");
+        fp2.get(function(result) {
+          expect(fp2.getAvailableScreenResolution).not.toHaveBeenCalled();
+          done();
+        });
+      });
+
       it("does not use plugins info when excluded", function (done) {
         var fp2 = new Fingerprint2({excludePlugins: true});
         spyOn(fp2, "getRegularPlugins");
@@ -89,7 +98,7 @@ describe("Fingerprint2", function () {
         });
       });
     });
-    
+
     describe("returns components", function () {
       it("does it return components as a second argument to callback", function (done) {
         var fp2 = new Fingerprint2();
@@ -98,7 +107,7 @@ describe("Fingerprint2", function () {
           done();
         });
       });
-      
+
       it("checks if returned components is array", function (done) {
         var fp2 = new Fingerprint2();
         fp2.get(function(result, components) {
@@ -106,7 +115,7 @@ describe("Fingerprint2", function () {
           done();
         });
       });
-      
+
       it("checks if js_fonts component is array", function (done) {
         var fp2 = new Fingerprint2();
         fp2.get(function(result, components) {
@@ -118,7 +127,7 @@ describe("Fingerprint2", function () {
           done();
         });
       });
-      
+
       it("returns user_agent as the first element", function (done) {
         var fp2 = new Fingerprint2();
         fp2.get(function(result, components) {
@@ -127,6 +136,6 @@ describe("Fingerprint2", function () {
         });
       });
     });
-    
+
   });
 });
