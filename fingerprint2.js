@@ -460,7 +460,8 @@
       }, this);
     },
     getIEPlugins: function () {
-      if(window.ActiveXObject){
+      if((Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(window, "ActiveXObject")) ||
+          ("ActiveXObject" in window)){
         var names = [
           "AcroPDF.PDF", // Adobe PDF reader 7+
           "Adodb.Stream",
