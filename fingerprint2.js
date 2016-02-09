@@ -460,6 +460,7 @@
       }, this);
     },
     getIEPlugins: function () {
+      var result = [];
       if((Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(window, "ActiveXObject")) ||
           ("ActiveXObject" in window)){
         var names = [
@@ -487,7 +488,7 @@
           "rmocx.RealPlayer G2 Control.1"
         ];
         // starting to detect plugins in IE
-        return this.map(names, function(name){
+        result = this.map(names, function(name){
           try{
             new ActiveXObject(name); // eslint-disable-no-new
             return name;
@@ -495,9 +496,11 @@
             return null;
           }
         });
-      } else {
-        return [];
       }
+      if(navigator.plugins){
+        result = result.concat(this.getRegularPlugins());
+      }
+      return result;
     },
     pluginsShouldBeSorted: function () {
       var should = false;
