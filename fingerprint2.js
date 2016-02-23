@@ -359,13 +359,13 @@
         }
         var detect = function (font) {
             var detected = false;
-            for (var index in baseFonts) {
+            baseFonts.forEach(function() {
                 s.style.fontFamily = font + "," + baseFonts[index]; // name of the font along with the base font for fallback.
                 h.appendChild(s);
                 var matched = (s.offsetWidth !== defaultWidth[baseFonts[index]] || s.offsetHeight !== defaultHeight[baseFonts[index]]);
                 h.removeChild(s);
                 detected = detected || matched;
-            }
+            });
             return detected;
         };
         var fontList = [
