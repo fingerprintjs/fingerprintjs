@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 1.1.0 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 1.1.1 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -349,7 +349,7 @@
         s.innerHTML = testString;
         var defaultWidth = {};
         var defaultHeight = {};
-        for (var index in baseFonts) {
+        for (var index = 0, l = baseFonts.length; index < l; index++) {
             //get the default width for the three base fonts
             s.style.fontFamily = baseFonts[index];
             h.appendChild(s);
@@ -359,7 +359,7 @@
         }
         var detect = function (font) {
             var detected = false;
-            for (var index = 0; index < baseFonts.length; index++) {
+            for (var index = 0, l = baseFonts.length; index < l; index++) {
                 s.style.fontFamily = font + "," + baseFonts[index]; // name of the font along with the base font for fallback.
                 h.appendChild(s);
                 var matched = (s.offsetWidth !== defaultWidth[baseFonts[index]] || s.offsetHeight !== defaultHeight[baseFonts[index]]);
@@ -1194,6 +1194,6 @@
       return ("00000000" + (h1[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h1[1] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[1] >>> 0).toString(16)).slice(-8);
     }
   };
-  Fingerprint2.VERSION = "1.1.0";
+  Fingerprint2.VERSION = "1.1.1";
   return Fingerprint2;
 });
