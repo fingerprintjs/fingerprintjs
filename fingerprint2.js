@@ -349,7 +349,7 @@
         s.innerHTML = testString;
         var defaultWidth = {};
         var defaultHeight = {};
-        for (var index = 0, l = baseFonts.length; index < l; index++) {
+        for (var index = 0, length = baseFonts.length; index < length; index++) {
             //get the default width for the three base fonts
             s.style.fontFamily = baseFonts[index];
             h.appendChild(s);
@@ -461,8 +461,7 @@
     },
     getIEPlugins: function () {
       var result = [];
-      if((Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(window, "ActiveXObject")) ||
-          ("ActiveXObject" in window)){
+      if((Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(window, "ActiveXObject")) || ("ActiveXObject" in window)) {
         var names = [
           "AcroPDF.PDF", // Adobe PDF reader 7+
           "Adodb.Stream",
@@ -488,16 +487,16 @@
           "rmocx.RealPlayer G2 Control.1"
         ];
         // starting to detect plugins in IE
-        result = this.map(names, function(name){
-          try{
+        result = this.map(names, function(name) {
+          try {
             new ActiveXObject(name); // eslint-disable-no-new
             return name;
-          } catch(e){
+          } catch(e) {
             return null;
           }
         });
       }
-      if(navigator.plugins){
+      if(navigator.plugins) {
         result = result.concat(this.getRegularPlugins());
       }
       return result;
