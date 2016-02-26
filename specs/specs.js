@@ -137,5 +137,34 @@ describe("Fingerprint2", function () {
       });
     });
 
+    describe("baseFontArray iteration", function () {
+      it("only iterates specified items", function (done) {
+        var baseFonts = ["monospace", "sans-serif", "serif"];
+        var ctr = 0;
+        for (var x in baseFonts) {
+          ctr++;
+        }
+
+        expect(baseFonts.length).toEqual(3);
+        expect(ctr).toEqual(baseFonts.length);
+
+        // Somewhere deep in your JavaScript library...
+        Array.prototype.foo = 1;
+        Array.prototype.bar = 2;
+        ctr = 0;
+        for (var x in baseFonts) {
+          console.log(x);
+          ctr++;
+          // Now foo & bar is a part of EVERY array and
+          // will show up here as a value of 'x'.
+        }
+
+        expect(baseFonts.length).toEqual(3);
+        // sadface
+        expect(ctr).not.toEqual(baseFonts.length);
+        expect(ctr).toEqual(5);
+        done();
+      });
+    });
   });
 });
