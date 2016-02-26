@@ -460,7 +460,9 @@
       }, this);
     },
     getIEPlugins: function () {
-      if(window.ActiveXObject){
+      var result = [];
+      if((Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(window, "ActiveXObject")) ||
+          ("ActiveXObject" in window)){
         var names = [
           "AcroPDF.PDF", // Adobe PDF reader 7+
           "Adodb.Stream",
@@ -486,7 +488,7 @@
           "rmocx.RealPlayer G2 Control.1"
         ];
         // starting to detect plugins in IE
-        return this.map(names, function(name){
+        result = this.map(names, function(name){
           try{
             new ActiveXObject(name); // eslint-disable-no-new
             return name;
@@ -494,9 +496,11 @@
             return null;
           }
         });
-      } else {
-        return [];
       }
+      if(navigator.plugins){
+        result = result.concat(this.getRegularPlugins());
+      }
+      return result;
     },
     pluginsShouldBeSorted: function () {
       var should = false;
