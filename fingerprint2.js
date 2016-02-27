@@ -156,18 +156,72 @@
     },
     // to get resolution, independent on page zoom
     scaleResolution: function(w, h) {
-      var round5 = function (x) { return Math.round(x / 5) * 5; };
-      var round10 = function (x) { return Math.round(x / 10) * 10; };
       if (w && h) {
         var zoom = this.getZoom();
         if (zoom !== 1.0) {
-          h = round10(h * zoom);
-          w = round10(w * zoom);
+          // Copyright © 2016 Wikipedia
+          // Creative Commons Attribution-ShareAlike License
+          // https://en.wikipedia.org/wiki/Wikipedia:Text_of_Creative_Commons_Attribution-ShareAlike_3.0_Unported_License
+          // 
+          // https://en.wikipedia.org/wiki/List_of_common_resolutions
+          var commonWidths = [16, 42, 32, 40, 42, 48, 60, 64, 72, 128, 75, 84, 150, 96, 96, 128, 96, 96, 102, 240, 160, 128, 160, 160, 144, 160, 160, 140, 160, 224, 208, 240, 220, 160, 208, 256, 280, 432, 240, 320, 320, 256, 320, 320, 320, 320, 272, 400, 320, 432, 560, 400, 384, 480, 480, 400, 376, 312, 640, 480, 512, 416, 640, 480, 640, 512, 800, 512, 640, 640, 640, 480, 720, 720, 640, 720, 800, 600, 640, 640, 768, 800, 848, 854, 800, 960, 832, 960, 1024, 1024, 960, 1024, 960, 1136, 1024, 1024, 1152, 1152, 1280, 1120, 1280, 1152, 1334, 1280, 1152, 1024, 1366, 1280, 1600, 1280, 1440, 1280, 1440, 1600, 1400, 1440, 1440, 1600, 1600, 1680, 1600, 1920, 1920, 1920, 2048, 1792, 1856, 2880, 1800, 2048, 1920, 2538, 2560, 1920, 2160, 2048, 2304, 2560, 2304, 2560, 2560, 2560, 2560, 3440, 2736, 2880, 2560, 2732, 2800, 3200, 3000, 3200, 3200, 3840, 3840, 4096, 5120, 4096, 5120, 5120, 5120, 6400, 6400, 7680, 7680, 8192, 8192];
+          var commonHeights = [16, 11, 32, 30, 32, 32, 40, 64, 64, 36, 64, 48, 40, 64, 64, 48, 65, 96, 64, 64, 102, 128, 120, 144, 168, 152, 160, 192, 200, 144, 176, 160, 176, 256, 208, 192, 192, 128, 240, 192, 200, 256, 208, 224, 240, 256, 340, 240, 320, 240, 192, 270, 288, 234, 250, 300, 240, 390, 200, 272, 256, 352, 240, 320, 256, 342, 240, 384, 320, 350, 360, 500, 348, 350, 400, 364, 352, 480, 480, 512, 480, 480, 480, 480, 600, 540, 624, 544, 576, 600, 640, 640, 720, 640, 768, 800, 720, 768, 720, 832, 768, 864, 750, 800, 900, 1024, 768, 854, 768, 960, 900, 1024, 960, 900, 1050, 1024, 1080, 1024, 1280, 1050, 1200, 1080, 1200, 1280, 1152, 1344, 1392, 900, 1440, 1280, 1400, 1080, 1080, 1440, 1440, 1536, 1440, 1440, 1728, 1600, 1700, 1800, 1920, 1440, 1824, 1800, 2048, 2048, 2100, 1800, 2000, 2048, 2400, 2160, 2400, 2304, 2160, 3072, 2880, 3200, 4096, 4096, 4800, 4320, 4800, 4608, 8192];
+          var getMatchingResolutions = function(virtual, commonResolutions, zoom) {
+            var lower = Math.round((virtual-0.5)*zoom);
+            var upper = Math.round((virtual+0.5)*zoom);
+            var matching = [];
+            for(var i = 0; i < commonResolutions.length; ++i) {
+              var currentRes = commonResolutions[i];
+              if(lower <= currentRes && currentRes <= upper) {
+                matching.push(i);
+              }
+            }
+            return matching;
+          };
+
+          var matchingWidths = getMatchingResolutions(w, commonWidths, zoom);
+          var matchingHeights = getMatchingResolutions(h, commonHeights, zoom);
+          var matching = [];
+          for(var i = 0; i < matchingWidths.length; ++i) {
+            var index = matchingWidths[i];
+            if(matchingHeights.indexOf(index) !== -1){
+              matching.push(index);
+            }
+          }
+
+          switch(matching.length) {
+            case 0:
+              var round10 = function (x) { return Math.round(x / 10) * 10; };
+              h = round10(h * zoom);
+              w = round10(w * zoom);
+            break;
+            case 1:
+              w = commonWidths[matching[0]];
+              h = commonHeights[matching[0]];
+            break;
+            default:
+              var targetAR = w/h;
+              var leastDiff = Number.MAX_VALUE;
+              var bestIndex;
+              for(var i = 0; i < matching.length; ++i) {
+                var index = matchingHeights[i];
+                var ar = commonWidths[index] / commonHeights[index];
+                newLeastDiff = Math.abs(targetAR - ar);
+                if(newLeastDiff < leastDiff) {
+                  leastDiff = newLeastDiff;
+                  bestIndex = index;
+                }
+              }
+              w = commonWidths[bestIndex];
+              h = commonHeights[bestIndex];
+            break;
+          }
         }
       }
       return [w, h];
     },
     getZoom: function() {
+      var round5 = function (x) { return Math.round(x / 5) * 5; };
       var zoom = 1.0;
       if (this.isIE()) {
         zoom = screen.deviceXDPI / screen.systemXDPI;
@@ -552,13 +606,13 @@
       ctx.fillStyle = "#069";
       // https://github.com/Valve/fingerprintjs2/issues/66
       if(this.options.dontUseFakeFontInCanvas) {
-        ctx.font = "11pt Arial";
+        ctx.font = "11" + this.isFF() ? "px" : "pt" + " Arial";
       } else {
-        ctx.font = "11pt no-real-font-123";
+        ctx.font = "11" + this.isFF() ? "px" : "pt" + " no-real-font-123";
       }
       ctx.fillText("Cwm fjordbank glyphs vext quiz, \ud83d\ude03", 2, 15);
       ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
-      ctx.font = "18pt Arial";
+      ctx.font = "18" + this.isFF() ? "px" : "pt" + " Arial";
       ctx.fillText("Cwm fjordbank glyphs vext quiz, \ud83d\ude03", 4, 45);
 
       // canvas blending
