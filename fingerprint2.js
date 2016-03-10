@@ -58,6 +58,7 @@
       swfContainerId: "fingerprintjs2",
       swfPath: "flash/compiled/FontList.swf",
       detectScreenOrientation: true,
+      excludeMediaDevices: false,
       sortPluginsFor: [/palemoon/i]
     };
     this.options = this.extend(options, defaultOptions);
@@ -81,6 +82,8 @@
     },
     get: function(done){
       var keys = [];
+
+      //Synchronous keys
       keys = this.userAgentKey(keys);
       keys = this.languageKey(keys);
       keys = this.colorDepthKey(keys);
@@ -104,19 +107,48 @@
       keys = this.hasLiedOsKey(keys);
       keys = this.hasLiedBrowserKey(keys);
       keys = this.touchSupportKey(keys);
-      var that = this;
-      this.fontsKey(keys, function(newKeys){
-        var values = [];
-        that.each(newKeys, function(pair) {
-          var value = pair.value;
-          if (typeof pair.value.join !== "undefined") {
-            value = pair.value.join(";");
-          }
-          values.push(value);
-        });
-        var murmur = that.x64hash128(values.join("~~~"), 31);
-        return done(murmur, newKeys);
-      });
+
+      //Asynchronous keys, must be the case sensitive name of the asynchronous function
+      //(this is done to protect context integrity)
+
+      var asyncKeyFunctions = ["fontsKey", "mediaDevicesKey"];
+      this.addAsynchronousKeys(keys, asyncKeyFunctions, done);
+    },
+    addAsynchronousKeys: function(currentKeys, asyncFunctions, done) {
+        //Each async function must have a parameter specified for the current keys,
+        //and a parameter specified for the callback function,
+        //where the updated keys will be passed.
+
+        var iterator = -1;
+        var that = this;
+        function updateKeys(newKeys) {
+            iterator++;
+
+            //Updating the keys each time new keys are passed into this function
+            currentKeys = newKeys;
+
+            //Calling the next async function
+            if(iterator < asyncFunctions.length) {
+                //When the async function is finished, the updateKeys function will be called again.
+                that[asyncFunctions[iterator]](currentKeys, updateKeys);
+            } else {
+                //We have called all of the asynchronous functions
+                var values = [];
+                that.each(currentKeys, function(pair) {
+                    var value = pair.value;
+                    if (typeof pair.value.join !== "undefined") {
+                        value = pair.value.join(";");
+                    }
+                    values.push(value);
+                });
+
+                var murmur = that.x64hash128(values.join("~~~"), 31);
+                done(murmur, currentKeys);
+            }
+        }
+
+        //Starting the "async calling loop"
+        updateKeys(currentKeys);
     },
     userAgentKey: function(keys) {
       if(!this.options.excludeUserAgent) {
@@ -427,6 +459,23 @@
         keys.push({key: "js_fonts", value: available});
         done(keys);
       }, 1);
+    },
+    mediaDevicesKey: function(keys, done) {
+        //Adds the device key for each media device to the devicesArr
+        if(navigator.mediaDevices && !this.options.excludeMediaDevices){
+            var devicesArr = [];
+            var that = this;
+            navigator.mediaDevices.enumerateDevices().then(function(devices){
+                that.each(devices, function(device){
+                    devicesArr.push(device.deviceId);
+                });
+
+                keys.push({ key: "media_devices", value: devicesArr });
+                return done(keys);
+            })
+        } else {
+            return done(keys);
+        }
     },
     pluginsKey: function(keys) {
       if(!this.options.excludePlugins){
