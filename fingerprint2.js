@@ -107,27 +107,29 @@
       keys = this.hasLiedBrowserKey(keys);
       keys = this.touchSupportKey(keys);
 
-      //Asynchronous keys
-      var asyncFuncs = [this.fontsKey, this.mediaDevicesKey];
-      this.addAsynchronousKeys(keys, asyncFuncs, done);
+      //Asynchronous keys, must be the case sensitive name of the asynchronous function
+      //(this is done to protect context integrity)
+
+      var asyncKeyFunctions = ["fontsKey", "mediaDevicesKey"];
+      this.addAsynchronousKeys(keys, asyncKeyFunctions, done);
     },
     addAsynchronousKeys: function(currentKeys, asyncFunctions, done) {
         //Each async function must have a parameter specified for the current keys,
         //and a parameter specified for the callback function,
         //where the updated keys will be passed.
 
-        var iterator = 0;
-
+        var iterator = -1;
         var that = this;
         function updateKeys(newKeys) {
+            iterator++;
+
             //Updating the keys each time new keys are passed into this function
             currentKeys = newKeys;
 
             //Calling the next async function
-            if(iterator !== asyncFunctions.length) {
+            if(iterator < asyncFunctions.length) {
                 //When the async function is finished, the updateKeys function will be called again.
-                asyncFunctions[iterator](currentKeys, updateKeys);
-                iterator++;
+                that[asyncFunctions[iterator]](currentKeys, updateKeys);
             } else {
                 //We have called all of the asynchronous functions
                 var values = [];
@@ -459,7 +461,7 @@
     },
     mediaDevicesKey: function(keys, done) {
         //Adds the device key for each media device to the devicesArr
-        if(navigator.mediaDevices){
+        if(navigator.mediaDevices && !this.options.excludeMediaDevices){
             var devicesArr = [];
             var that = this;
             navigator.mediaDevices.enumerateDevices().then(function(devices){
@@ -468,8 +470,10 @@
                 });
 
                 keys.push({ key: "media_devices", value: devicesArr });
-                done(keys);
+                return done(keys);
             })
+        } else {
+            return done(keys);
         }
     },
     pluginsKey: function(keys) {
