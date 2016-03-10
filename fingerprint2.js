@@ -58,6 +58,7 @@
       swfContainerId: "fingerprintjs2",
       swfPath: "flash/compiled/FontList.swf",
       detectScreenOrientation: true,
+      excludeMediaDevices: false,
       sortPluginsFor: [/palemoon/i]
     };
     this.options = this.extend(options, defaultOptions);
