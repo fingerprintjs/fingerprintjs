@@ -345,6 +345,13 @@
 
         // create a SPAN in the document to get the width of the text we use to test
         var s = document.createElement("span");
+        /*
+         * We need this css as in some weird browser this
+         * span elements shows up for a microSec which creates a
+         * bad user experience
+         */
+        s.style.position = "absolute";
+        s.style.left = "-9999px";
         s.style.fontSize = testSize;
         s.innerHTML = testString;
         var defaultWidth = {};
