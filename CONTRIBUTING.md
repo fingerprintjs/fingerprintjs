@@ -12,7 +12,7 @@ Include in the issue:
 * Include steps to reproduce
 * Include library call code (I need all options you used when calling the library function)
 
-## Want to add contribute?
+## Want to add a feature / contribute?
 
 * Fork the project and make the required changes in it (don't forget to add specs)
 * PRs w/out specs will not be accepted
