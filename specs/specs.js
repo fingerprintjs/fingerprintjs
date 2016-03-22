@@ -43,6 +43,17 @@ describe("Fingerprint2", function () {
 
   describe("get", function () {
     describe("default options", function () {
+        
+      it("calculates fingerprint asynchronously", function (done) {
+        var fingerprint = null;
+        new Fingerprint2().get(function(result) {
+            fingerprint = result;
+        });
+        expect(fingerprint).toBeNull();
+        expect(fingerprint).not.toMatch(/^[0-9a-f]{32}$/i);
+        done();
+      });
+
       it("calculates fingerprint", function (done) {
         var fp2 = new Fingerprint2();
         fp2.get(function(result){
@@ -62,6 +73,16 @@ describe("Fingerprint2", function () {
     });
 
     describe("non-default options", function () {
+      it("calculates fingerprint synchronously", function (done) {
+        var fingerprint = null;
+        new Fingerprint2({async: false}).get(function(result) {
+            fingerprint = result;
+        });
+        expect(fingerprint).not.toBeNull();
+        expect(fingerprint).toMatch(/^[0-9a-f]{32}$/i);
+        done();
+      });
+
       it("does not use userAgent when excluded", function (done) {
         var fp2 = new Fingerprint2({excludeUserAgent: true});
         spyOn(fp2, "getUserAgent");

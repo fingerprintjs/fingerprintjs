@@ -58,7 +58,8 @@
       swfContainerId: "fingerprintjs2",
       swfPath: "flash/compiled/FontList.swf",
       detectScreenOrientation: true,
-      sortPluginsFor: [/palemoon/i]
+      sortPluginsFor: [/palemoon/i],
+      async: true
     };
     this.options = this.extend(options, defaultOptions);
     this.nativeForEach = Array.prototype.forEach;
@@ -327,8 +328,7 @@
     // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
     jsFontsKey: function(keys, done) {
       var that = this;
-      // doing js fonts detection in a pseudo-async fashion
-      return setTimeout(function(){
+      var jsFontsDetect = function(){
 
         // a font will be compared against all the three default fonts.
         // and if it doesn't match all 3 then that font is not available.
@@ -433,7 +433,12 @@
         }
         keys.push({key: "js_fonts", value: available});
         done(keys);
-      }, 1);
+      };
+      if(this.options.async) {
+          return setTimeout(jsFontsDetect, 1);
+      } else {
+          jsFontsDetect();
+      }
     },
     pluginsKey: function(keys) {
       if(!this.options.excludePlugins){
