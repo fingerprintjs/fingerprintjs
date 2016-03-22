@@ -14,11 +14,13 @@ Include in the issue:
 
 ## Want to add contribute?
 
-1. Fork the project and make the required changes in it.
-2. Run `gulp` to catch stylistic errors and produce the minified
-   version.
-3. Run specs by opening the `specs/spec_runner.html` or typing `npm test` (requires phantomjs for console running).
-4. Make a PR.
+* Fork the project and make the required changes in it (don't forget to add specs)
+* PRs w/out specs will not be accepted
+* Run `gulp` to catch stylistic errors and produce the minified version.
+* Run specs by opening the `specs/spec_runner.html` or typing `npm test` (requires phantomjs for console running).
+* Make a PR.
+* Make sure you only make one commit per feature you want to add
+* Make sure your commit message is descriptive and tells what you changed (`Updated the library` - that's a bad commit message)
 
 If your code changes the list of fingerprinting sources, please update
 the README.
@@ -27,7 +29,7 @@ If you're unsure about the feature you want to add, submit an issue with
 a `question` tag.
 
 ## Want to ask?
-Please read FAQ first
-If you have not found the answer you were looking for - use gitter.im to as your question (link is in the readme)
+* Please read FAQ first
+* If you have not found the answer you were looking for - use gitter.im to ask your question (link is in the readme)
 
 Happy Coding!
