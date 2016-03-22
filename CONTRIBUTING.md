@@ -7,7 +7,7 @@ Please submit an issue.
 Include in the issue:
 
 * List of components you received in the `get` call (make sure values are not truncated)
-* If FP is different for you, include 2 versions of components
+* If FP is different every time you call the library, include 2 versions of components
 * Include your OS version
 * Include steps to reproduce
 * Include library call code (I need all options you used when calling the library function)
