@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 1.1.4 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 1.2.0 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -833,12 +833,12 @@
     },
     getAdBlock: function(){
       var ads = document.createElement("div");
-      ads.innerHTML = '&nbsp;';
-      ads.className = 'adsbox';
+      ads.innerHTML = "&nbsp;";
+      ads.className = "adsbox";
       try {
         // body may not exist, that's why we need try/catch
         document.body.appendChild(ads);
-        return document.getElementsByClassName('adsbox')[0].offsetHeight === 0;
+        return document.getElementsByClassName("adsbox")[0].offsetHeight === 0;
       } catch (e) {
         return false;
       }
@@ -851,7 +851,7 @@
           if(firstLanguages !== navigator.language.substr(0, 2)){
             return true;
           }
-        } catch(err){
+        } catch(err) {
           return true;
         }
       }
@@ -1270,6 +1270,6 @@
       return ("00000000" + (h1[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h1[1] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[1] >>> 0).toString(16)).slice(-8);
     }
   };
-  Fingerprint2.VERSION = "1.1.4";
+  Fingerprint2.VERSION = "1.2.0";
   return Fingerprint2;
 });
