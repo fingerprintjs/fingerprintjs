@@ -24,6 +24,11 @@ This project uses `semver`.
 ```
 //cdn.jsdelivr.net/fingerprintjs2/<VERSION>/fingerprint2.min.js
 ```
+or
+
+```
+https://cdnjs.com/libraries/fingerprintjs2
+```
 
 #### Bower
 
