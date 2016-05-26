@@ -421,7 +421,7 @@
         // creates a span and load the font to detect and a base font for fallback
         var createSpanWithFonts = function(fontToDetect, baseFont) {
             var s = createSpan();
-            s.style.fontFamily = fontToDetect + "," + baseFont;
+            s.style.fontFamily = "'" + fontToDetect + "'," + baseFont;
             return s;
         };
 
