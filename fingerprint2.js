@@ -679,7 +679,7 @@
         ctx.font = "11pt no-real-font-123";
       }
       ctx.fillText("Cwm fjordbank glyphs vext quiz, \ud83d\ude03", 2, 15);
-      ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
+      ctx.fillStyle = "rgba(102, 204, 0, 0.2)";
       ctx.font = "18pt Arial";
       ctx.fillText("Cwm fjordbank glyphs vext quiz, \ud83d\ude03", 4, 45);
 
