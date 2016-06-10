@@ -169,6 +169,7 @@ This option can incur even more overhead on mobile Firefox browsers, which is mu
 * Accelerometer support
 * Virtual keyboards
 * List of supported gestures (for touch-enabled devices)
+* Pixel density
 * Video and audio codecs availability
 * Audio stack fingerprinting
 
