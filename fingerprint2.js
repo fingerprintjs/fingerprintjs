@@ -84,6 +84,7 @@
       keys = this.userAgentKey(keys);
       keys = this.languageKey(keys);
       keys = this.colorDepthKey(keys);
+      keys = this.pixelRatioKey(keys);
       keys = this.screenResolutionKey(keys);
       keys = this.availableScreenResolutionKey(keys);
       keys = this.timezoneOffsetKey(keys);
@@ -140,6 +141,15 @@
         keys.push({key: "color_depth", value: screen.colorDepth});
       }
       return keys;
+    },
+    pixelRatioKey: function(keys) {
+      if(!this.options.excludePixelRatio) {
+        keys.push({key: "pixel_ratio", value: this.getPixelRatio()});
+      }
+      return keys;
+    },
+    getPixelRatio: function() {
+      return window.devicePixelRatio || "";
     },
     screenResolutionKey: function(keys) {
       if(!this.options.excludeScreenResolution) {
