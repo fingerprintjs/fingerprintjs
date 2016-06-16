@@ -58,7 +58,8 @@
       swfContainerId: "fingerprintjs2",
       swfPath: "flash/compiled/FontList.swf",
       detectScreenOrientation: true,
-      sortPluginsFor: [/palemoon/i]
+      sortPluginsFor: [/palemoon/i],
+      userDefinedFonts: []
     };
     this.options = this.extend(options, defaultOptions);
     this.nativeForEach = Array.prototype.forEach;
@@ -394,6 +395,8 @@
         if(that.options.extendedJsFonts) {
             fontList = fontList.concat(extendedFontList);
         }
+
+        fontList = fontList.concat(that.options.userDefinedFonts);
 
         //we use m or w because these two characters take up the maximum width.
         // And we use a LLi so that the same matching fonts can get separated
