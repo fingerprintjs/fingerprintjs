@@ -98,6 +98,18 @@ new Fingerprint2().get(function(result, components){
 });
 ```
 
+#### `userDefinedFonts` option
+
+If you would like to include additional fonts as part of the font detection component, use the `userDefinedFonts` option to specify an array of font names.
+
+```
+new Fingerprint2({
+  userDefinedFonts: ["Nimbus Mono", "Junicode", "Presto"]
+}).get(function(result, components){}
+  console.log(result);
+);
+```
+
 #### View the fingerprint locally
 
 You can view your browser fingerprint locally by starting a webserver and viewing the `index.html` page.
