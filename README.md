@@ -100,7 +100,7 @@ new Fingerprint2().get(function(result, components){
 
 #### `userDefinedFonts` option
 
-If you would like to include additional fonts as part of the font detection component, use the `userDefinedFonts` option to specify an array of font names.
+While hundreds of the most popular fonts are included in the extended font list, you may wish to increase the entropy of the font fingerprint specifying the `userDefinedFonts` option as an array of font names.
 
 ```
 new Fingerprint2({
