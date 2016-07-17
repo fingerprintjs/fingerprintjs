@@ -98,6 +98,18 @@ new Fingerprint2().get(function(result, components){
 });
 ```
 
+#### `userDefinedFonts` option
+
+While hundreds of the most popular fonts are included in the extended font list, you may wish to increase the entropy of the font fingerprint by specifying the `userDefinedFonts` option as an array of font names.
+
+```
+new Fingerprint2({
+  userDefinedFonts: ["Nimbus Mono", "Junicode", "Presto"]
+}).get(function(result, components){}
+  console.log(result);
+);
+```
+
 #### View the fingerprint locally
 
 You can view your browser fingerprint locally by starting a webserver and viewing the `index.html` page.
