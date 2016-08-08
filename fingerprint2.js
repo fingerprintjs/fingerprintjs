@@ -1,7 +1,7 @@
 /*
-* Fingerprintjs2 1.4.1 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 2.0.0-dev - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
-* Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
+* Copyright (c) 2016 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
 *
 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
@@ -55,8 +55,6 @@
   }
   var Fingerprint2 = function(options) {
     var defaultOptions = {
-      swfContainerId: "fingerprintjs2",
-      swfPath: "flash/compiled/FontList.swf",
       detectScreenOrientation: true,
       sortPluginsFor: [/palemoon/i],
       userDefinedFonts: []
@@ -298,42 +296,9 @@
       return keys;
     },
     fontsKey: function(keys, done) {
-      if (this.options.excludeJsFonts) {
-        return this.flashFontsKey(keys, done);
+      if (!this.options.excludeJsFonts) {
+        return this.jsFontsKey(keys, done);
       }
-      return this.jsFontsKey(keys, done);
-    },
-    // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
-    flashFontsKey: function(keys, done) {
-      if(this.options.excludeFlashFonts) {
-        if(typeof NODEBUG === "undefined"){
-          this.log("Skipping flash fonts detection per excludeFlashFonts configuration option");
-        }
-        return done(keys);
-      }
-      // we do flash if swfobject is loaded
-      if(!this.hasSwfObjectLoaded()){
-        if(typeof NODEBUG === "undefined"){
-          this.log("Swfobject is not detected, Flash fonts enumeration is skipped");
-        }
-        return done(keys);
-      }
-      if(!this.hasMinFlashInstalled()){
-        if(typeof NODEBUG === "undefined"){
-          this.log("Flash is not installed, skipping Flash fonts enumeration");
-        }
-        return done(keys);
-      }
-      if(typeof this.options.swfPath === "undefined"){
-        if(typeof NODEBUG === "undefined"){
-          this.log("To use Flash fonts detection, you must pass a valid swfPath option, skipping Flash fonts enumeration");
-        }
-        return done(keys);
-      }
-      this.loadSwfAndDetectFonts(function(fonts){
-        keys.push({key: "swf_fonts", value: fonts.join(";")});
-        done(keys);
-      });
     },
     // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
     jsFontsKey: function(keys, done) {
@@ -1028,28 +993,6 @@
       }
       return false;
     },
-    hasSwfObjectLoaded: function(){
-      return typeof window.swfobject !== "undefined";
-    },
-    hasMinFlashInstalled: function () {
-      return swfobject.hasFlashPlayerVersion("9.0.0");
-    },
-    addFlashDivNode: function() {
-      var node = document.createElement("div");
-      node.setAttribute("id", this.options.swfContainerId);
-      document.body.appendChild(node);
-    },
-    loadSwfAndDetectFonts: function(done) {
-      var hiddenCallback = "___fp_swf_loaded";
-      window[hiddenCallback] = function(fonts) {
-        done(fonts);
-      };
-      var id = this.options.swfContainerId;
-      this.addFlashDivNode();
-      var flashvars = { onReady: hiddenCallback};
-      var flashparams = { allowScriptAccess: "always", menu: "false" };
-      swfobject.embedSWF(this.options.swfPath, id, "1", "1", "9.0.0", false, flashvars, flashparams, {});
-    },
     getWebglCanvas: function() {
       var canvas = document.createElement("canvas");
       var gl = null;
@@ -1286,6 +1229,6 @@
       return ("00000000" + (h1[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h1[1] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[1] >>> 0).toString(16)).slice(-8);
     }
   };
-  Fingerprint2.VERSION = "1.4.1";
+  Fingerprint2.VERSION = "2.0.0-dev";
   return Fingerprint2;
 });

@@ -55,7 +55,7 @@ new Fingerprint2().get(function(result, components){
 #### You can pass an object with options (all of which are optional):
 
 ```js
-var options = {swfPath: '/assets/FontList.swf', excludeUserAgent: true};
+var options = {excludeUserAgent: true};
 new Fingerprint2(options).get(function(result){
   console.log(result);
 });
@@ -64,22 +64,6 @@ new Fingerprint2(options).get(function(result){
 Full list of options will be in the
 (https://github.com/Valve/fingerprintjs2/wiki/List-of-options) wiki
 page.
-
-Flash font enumeration is disabled by default. JS code is used by
-default to get the list of available fonts.
-
-The reason for this  is that Flash will not work in incognito mode.
-
-However, you can make the library to use Flash when detecting the fonts
-with:
-
-```js
-excludeJsFonts: true
-```
-option.
-
-To use Flash font enumeration, make sure you have swfobject available.
-If you don't, the library will skip the Flash part entirely.
 
 #### `detectScreenOrientation` option is `true` by default
 
@@ -111,9 +95,6 @@ new Fingerprint2({
 ```
 
 #### View the fingerprint locally
-
-You can view your browser fingerprint locally by starting a webserver and viewing the `index.html` page.
-Loading `index.html` from the filesystem won't work due to Flash's ExternalInterface security restrictions.
 
 To start a web server you can try using one of the following:
 
@@ -149,7 +130,6 @@ To start a web server you can try using one of the following:
 11. CPU class
 12. Platform
 13. DoNotTrack or not
-14. Full list of installed fonts (maintaining their order, which increases the entropy), implemented with Flash.
 15. A list of installed fonts, detected with JS/CSS (side-channel technique) - can detect up to 500 installed fonts without flash
 16. Canvas fingerprinting
 17. WebGL fingerprinting
@@ -184,12 +164,6 @@ This option can incur even more overhead on mobile Firefox browsers, which is mu
 * List of supported gestures (for touch-enabled devices)
 * Pixel density
 * Video and audio codecs availability
-* Audio stack fingerprinting
-
-#### To recompile the `FontList.swf` file:
-
-* Download [Adobe Flex SDK](http://www.adobe.com/devnet/flex/flex-sdk-download.html)
-* Unzip it, add the `bin/` directory to your `$PATH`  (mxmlc binary should be in path)
-* Run `make`
+* Audio stack fingerprinting (sampling)
 
 #### License: MIT or Apache, whichever you prefer.
