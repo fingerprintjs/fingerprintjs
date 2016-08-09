@@ -1,8 +1,11 @@
 Contributing to FingerprintJS2
 ==============================
 
-# IF YOU WANT TO ASK A QUESTION - USE GITTER.IM!!!!!!!!!!!!!!!!
-ISSUES WITH QUESTIONS IN THEM WILL BE CLOSED W/OUT EXPLANATION!!!!!!!!!!!!
+# IF YOU WANT TO ASK A QUESTION - USE GITTER.IM OR STACKOVERFLOW.COM with fingerprintjs2 tag
+
+PLEASE :)
+
+ISSUES WITH QUESTIONS IN THEM WILL BE CLOSED W/OUT EXPLANATION!
 
 ## Found a bug?
 
