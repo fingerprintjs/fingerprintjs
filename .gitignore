@@ -1,2 +1,4 @@
-node_modules
+node_modules/
+.idea/
 fingerprintjs2.iml
+*.log
