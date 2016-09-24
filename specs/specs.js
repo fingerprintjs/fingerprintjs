@@ -158,6 +158,32 @@ describe("Fingerprint2", function () {
       });
     });
 
+    describe("skip browser version", function () {
+      it("uses browser version by default", function (done) {
+        var fp2 = new Fingerprint2();
+        fp2.get(function(result, components) {
+          for(var x = 0; x < components.length; x++) {
+            if(components[x].key == "user_agent") {
+                expect(components[x].value).toEqual(navigator.userAgent);
+            }
+          }
+          done();
+        });
+      });
+
+      it("skips broswer version with excludeBrowserVersion", function (done) {
+        var fp2 = new Fingerprint2({excludeBrowserVersion: true});
+        fp2.get(function(result, components) {
+          for(var x = 0; x < components.length; x++) {
+            if(components[x].key == "user_agent") {
+                expect(components[x].value).not.toEqual(navigator.userAgent);
+            }
+          }
+          done();
+        });
+      });
+    });
+
     describe("baseFontArray iteration", function () {
       it("only iterates specified items", function (done) {
         var baseFonts = ["monospace", "sans-serif", "serif"];
