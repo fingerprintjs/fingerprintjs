@@ -5,12 +5,13 @@
   "main": "dist/fingerprint2.min.js",
   "devDependencies": {
     "eslint": "^3.7.0",
+    "rimraf": "^2.5.4",
     "uglify-js": "^2.7.3"
   },
   "scripts": {
     "test": "specs/phantomjs.runner.sh specs/spec_runner.html",
     "lint": "eslint fingerprint2.js",
-    "minify": "rm -rf dist && mkdir dist && cd dist && uglifyjs ../fingerprint2.js -c global_defs={NODEBUG:true} -m -o fingerprint2.min.js",
+    "minify": "rimraf dist && mkdir dist && cd dist && uglifyjs ../fingerprint2.js -c global_defs={NODEBUG:true} -m -o fingerprint2.min.js",
     "build": "npm run lint && npm run minify"
   },
   "repository": {
