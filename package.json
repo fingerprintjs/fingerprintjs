@@ -4,14 +4,14 @@
   "description": "Modern & flexible browser fingerprinting library",
   "main": "dist/fingerprint2.min.js",
   "devDependencies": {
-    "gulp": "^3.8.11",
-    "eslint": "^0.14.1",
-    "gulp-eslint": "^0.4.2",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^1.1.0"
+    "eslint": "^3.7.0",
+    "uglify-js": "^2.7.3"
   },
   "scripts": {
-    "test": "specs/phantomjs.runner.sh specs/spec_runner.html"
+    "test": "specs/phantomjs.runner.sh specs/spec_runner.html",
+    "lint": "eslint fingerprint2.js",
+    "minify": "rm -rf dist && mkdir dist && cd dist && uglifyjs ../fingerprint2.js -c global_defs={NODEBUG:true} -m -o fingerprint2.min.js",
+    "build": "npm run lint && npm run minify"
   },
   "repository": {
     "type": "git",

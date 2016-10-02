@@ -22,7 +22,7 @@ Include in the issue:
 * Make sure the issue/suggestion does not exist by searching existing issues
 * Fork the project and make the required changes in it (don't forget to add specs)
 * PRs w/out specs will not be accepted
-* Run `gulp` to catch stylistic errors and produce the minified version.
+* Run `npm run build` to catch stylistic errors and produce the minified version.
 * Run specs by opening the `specs/spec_runner.html` or typing `npm test` (requires phantomjs for console running).
 * Make a PR.
 * Make sure you only make one commit per feature you want to add
