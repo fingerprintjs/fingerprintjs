@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 1.4.1 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 1.4.2 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -55,7 +55,9 @@
   }
   var Fingerprint2 = function(options) {
 
-    if (!(this instanceof Fingerprint2)) return new Fingerprint2(options)
+    if (!(this instanceof Fingerprint2)) {
+      return new Fingerprint2(options);
+    }
 
     var defaultOptions = {
       swfContainerId: "fingerprintjs2",
@@ -1289,6 +1291,6 @@
       return ("00000000" + (h1[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h1[1] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[1] >>> 0).toString(16)).slice(-8);
     }
   };
-  Fingerprint2.VERSION = "1.4.1";
+  Fingerprint2.VERSION = "1.4.2";
   return Fingerprint2;
 });
