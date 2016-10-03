@@ -43,6 +43,12 @@ describe("Fingerprint2", function () {
     });
   });
 
+  describe("without new keyword", function () {
+    it("creates a new instance of FP2", function () {
+      expect(Fingerprint2()).not.toBeNull();
+    });
+  })
+
   describe("get", function () {
     describe("default options", function () {
       it("calculates fingerprint", function (done) {

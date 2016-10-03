@@ -54,6 +54,9 @@
     };
   }
   var Fingerprint2 = function(options) {
+
+    if (!(this instanceof Fingerprint2)) return new Fingerprint2(options)
+
     var defaultOptions = {
       swfContainerId: "fingerprintjs2",
       swfPath: "flash/compiled/FontList.swf",
