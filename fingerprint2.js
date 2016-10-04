@@ -432,6 +432,7 @@
             s.style.position = "absolute";
             s.style.left = "-9999px";
             s.style.fontSize = testSize;
+            s.style.lineHeight = "normal";
             s.innerHTML = testString;
             return s;
         };
