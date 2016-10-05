@@ -15,5 +15,8 @@
     "no-new": false,
     "no-extend-native": false
   },
-
+  "ignore": [
+    "gulpfile.js",
+    "specs/*"
+  ]
 }

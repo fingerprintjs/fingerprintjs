@@ -11,22 +11,16 @@ describe("Fingerprint2", function () {
 
     it("uses default options", function () {
       var fp2 = new Fingerprint2();
-      expect(fp2.options.swfContainerId).toEqual("fingerprintjs2");
-      expect(fp2.options.swfPath).toEqual("flash/compiled/FontList.swf");
       expect(fp2.options.userDefinedFonts).toEqual([]);
     });
 
     it("allows to override default options", function () {
       var fp2 = new Fingerprint2({swfPath: "newpath", userDefinedFonts: ["Ethos", "Quenda"]});
-      expect(fp2.options.swfContainerId).toEqual("fingerprintjs2");
-      expect(fp2.options.swfPath).toEqual("newpath");
       expect(fp2.options.userDefinedFonts).toEqual(["Ethos", "Quenda"]);
     });
 
     it("allows to add new options", function () {
       var fp2 = new Fingerprint2({excludeUserAgent: true});
-      expect(fp2.options.swfContainerId).toEqual("fingerprintjs2");
-      expect(fp2.options.swfPath).toEqual("flash/compiled/FontList.swf");
       expect(fp2.options.excludeUserAgent).toBe(true);
     });
 
@@ -49,15 +43,6 @@ describe("Fingerprint2", function () {
         var fp2 = new Fingerprint2();
         fp2.get(function(result){
           expect(result).toMatch(/^[0-9a-f]{32}$/i);
-          done();
-        });
-      });
-
-      it("does not try calling flash font detection", function (done) {
-        var fp2 = new Fingerprint2();
-        spyOn(fp2, "flashFontsKey");
-        fp2.get(function(result) {
-          expect(fp2.flashFontsKey).not.toHaveBeenCalled();
           done();
         });
       });
