@@ -20,6 +20,9 @@ gulp.task("minify", function() {
             global_defs: {
               NODEBUG: true
             }
+          },
+          output: {
+              ascii_only: true
           }
       }))
       .pipe(gulp.dest("dist/"));
