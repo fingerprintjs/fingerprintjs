@@ -296,7 +296,21 @@
         console.log(msg);
       }
     },
-    get: function(done){
+    get: function(doneCallback){
+      if(typeof doneCallback !== "function"){
+        return this.getInternal()[0];
+      }
+      this.getInternal(doneCallback);
+    },
+    getWithComponents: function(){
+      return this.getInternal();
+    },
+    /**
+     * @private
+     * @param {function(string,Array):void} [doneCallback]
+     * @returns {?Array}
+     */
+    getInternal: function(doneCallback){
       var keys = [];
       keys = this.userAgentKey(keys);
       keys = this.languageKey(keys);
@@ -322,19 +336,23 @@
       keys = this.hasLiedOsKey(keys);
       keys = this.hasLiedBrowserKey(keys);
       keys = this.touchSupportKey(keys);
-      var that = this;
-      this.fontsKey(keys, function(newKeys){
-        var values = [];
-        that.each(newKeys, function(pair) {
-          var value = pair.value;
-          if (typeof pair.value.join !== "undefined") {
-            value = pair.value.join(";");
-          }
-          values.push(value);
-        });
-        var murmur = murmur3x64hash128(values.join("~~~"), 31);
-        return done(murmur, newKeys);
+      keys = this.fontsKey(keys);
+
+      var values = [];
+      this.each(keys, function(pair) {
+        var value = pair.value;
+        if (typeof pair.value.join !== "undefined") {
+          value = pair.value.join(";");
+        }
+        values.push(value);
       });
+      var digest = murmur3x64hash128(values.join("~~~"), 31);
+
+      if(typeof doneCallback !== "function"){
+        return [digest, keys];
+      }
+
+      doneCallback(digest, keys);
     },
     userAgentKey: function(keys) {
       if(!this.options.excludeUserAgent) {
@@ -513,17 +531,14 @@
       }
       return keys;
     },
-    fontsKey: function(keys, done) {
+    fontsKey: function(keys) {
       if (!this.options.excludeJsFonts) {
-        return this.jsFontsKey(keys, done);
+        return this.jsFontsKey(keys);
       }
+      return keys;
     },
     // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
-    jsFontsKey: function(keys, done) {
-      var that = this;
-      // doing js fonts detection in a pseudo-async fashion
-      return setTimeout(function(){
-
+    jsFontsKey: function(keys) {
         // a font will be compared against all the three default fonts.
         // and if it doesn't match all 3 then that font is not available.
         var baseFonts = ["monospace", "sans-serif", "serif"];
@@ -575,11 +590,11 @@
                         "TypoUpright BT", "Unicorn", "Univers", "Univers CE 55 Medium", "Univers Condensed", "Utsaah", "Vagabond", "Vani", "Vijaya", "Viner Hand ITC", "VisualUI", "Vivaldi", "Vladimir Script", "Vrinda", "Westminster", "WHITNEY", "Wide Latin",
                         "ZapfEllipt BT", "ZapfHumnst BT", "ZapfHumnst Dm BT", "Zapfino", "Zurich BlkEx BT", "Zurich Ex BT", "ZWAdobeF"];
 
-        if(that.options.extendedJsFonts) {
+        if(this.options.extendedJsFonts) {
             fontList = fontList.concat(extendedFontList);
         }
 
-        fontList = fontList.concat(that.options.userDefinedFonts);
+        fontList = fontList.concat(this.options.userDefinedFonts);
 
         //we use m or w because these two characters take up the maximum width.
         // And we use a LLi so that the same matching fonts can get separated
@@ -691,8 +706,7 @@
         h.removeChild(baseFontsDiv);
 
         keys.push({key: "js_fonts", value: available});
-        done(keys);
-      }, 1);
+        return keys;
     },
     pluginsKey: function(keys) {
       if(!this.options.excludePlugins){

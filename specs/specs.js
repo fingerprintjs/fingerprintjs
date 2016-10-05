@@ -41,6 +41,15 @@ describe("Fingerprint2", function () {
     describe("default options", function () {
       it("calculates fingerprint", function (done) {
         var fp2 = new Fingerprint2();
+        var result = fp2.get();
+        expect(result).toMatch(/^[0-9a-f]{32}$/i);
+
+        fp2 = new Fingerprint2();
+        var resultTuple = fp2.getWithComponents();
+        var result = resultTuple[0];
+        expect(result).toMatch(/^[0-9a-f]{32}$/i);
+
+        fp2 = new Fingerprint2();
         fp2.get(function(result){
           expect(result).toMatch(/^[0-9a-f]{32}$/i);
           done();
@@ -108,6 +117,11 @@ describe("Fingerprint2", function () {
     describe("returns components", function () {
       it("does it return components as a second argument to callback", function (done) {
         var fp2 = new Fingerprint2();
+        var resultTuple = fp2.getWithComponents();
+        var components = resultTuple[1];
+        expect(components).not.toBeNull();
+
+        fp2 = new Fingerprint2();
         fp2.get(function(result, components) {
           expect(components).not.toBeNull();
           done();
@@ -116,6 +130,11 @@ describe("Fingerprint2", function () {
 
       it("checks if returned components is array", function (done) {
         var fp2 = new Fingerprint2();
+        var resultTuple = fp2.getWithComponents();
+        var components = resultTuple[1];
+        expect(components).toBeArrayOfObjects();
+
+        fp2 = new Fingerprint2();
         fp2.get(function(result, components) {
           expect(components).toBeArrayOfObjects();
           done();

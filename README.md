@@ -46,10 +46,21 @@ npm install fingerprintjs2
 ### Usage
 
 ```js
+
+// functional programming style
 new Fingerprint2().get(function(result, components){
   console.log(result); //a hash, representing your device fingerprint
   console.log(components); // an array of FP components
 });
+```
+
+// imperative programming style
+var result = new Fingerprint2().get(); //a hash, representing your device fingerprint
+
+// imperative programming style with components
+var fpTuple = new Fingerprint2().getWithComponents();
+console.log(fpTuple[0]); //a hash, representing your device fingerprint
+console.log(fpTuple[1]); // an array of FP components
 ```
 
 #### You can pass an object with options (all of which are optional):
