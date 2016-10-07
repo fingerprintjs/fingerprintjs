@@ -66,36 +66,36 @@ describe("Fingerprint2", function () {
     describe("non-default options", function () {
       it("does not use userAgent when excluded", function (done) {
         var fp2 = new Fingerprint2({excludeUserAgent: true});
-        spyOn(fp2, "getUserAgent");
+        spyOn(fp2, "userAgentKey");
         fp2.get(function(result) {
-          expect(fp2.getUserAgent).not.toHaveBeenCalled();
+          expect(fp2.userAgentKey).not.toHaveBeenCalled();
           done();
         });
       });
 
       it("does not use pixelRatio when excluded", function (done) {
         var fp2 = new Fingerprint2({excludePixelRatio: true});
-        spyOn(fp2, "getPixelRatio");
+        spyOn(fp2, "pixelRatioKey");
         fp2.get(function(result) {
-          expect(fp2.getPixelRatio).not.toHaveBeenCalled();
+          expect(fp2.pixelRatioKey).not.toHaveBeenCalled();
           done();
         });
       });
 
       it("does not use screen resolution when excluded", function (done) {
         var fp2 = new Fingerprint2({excludeScreenResolution: true});
-        spyOn(fp2, "getScreenResolution");
+        spyOn(fp2, "screenResolutionKey");
         fp2.get(function(result) {
-          expect(fp2.getScreenResolution).not.toHaveBeenCalled();
+          expect(fp2.screenResolutionKey).not.toHaveBeenCalled();
           done();
         });
       });
 
       it("does not use available screen resolution when excluded", function (done) {
         var fp2 = new Fingerprint2({excludeAvailableScreenResolution: true});
-        spyOn(fp2, "getAvailableScreenResolution");
+        spyOn(fp2, "availableScreenResolutionKey");
         fp2.get(function(result) {
-          expect(fp2.getAvailableScreenResolution).not.toHaveBeenCalled();
+          expect(fp2.availableScreenResolutionKey).not.toHaveBeenCalled();
           done();
         });
       });

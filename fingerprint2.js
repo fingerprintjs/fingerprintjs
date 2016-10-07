@@ -318,31 +318,110 @@ var NODEBUG = true;
      */
     getInternal: function(doneCallback){
       var keys = [];
-      keys = this.userAgentKey(keys);
-      keys = this.languageKey(keys);
-      keys = this.colorDepthKey(keys);
-      keys = this.pixelRatioKey(keys);
-      keys = this.screenResolutionKey(keys);
-      keys = this.availableScreenResolutionKey(keys);
-      keys = this.timezoneOffsetKey(keys);
-      keys = this.sessionStorageKey(keys);
-      keys = this.localStorageKey(keys);
-      keys = this.indexedDbKey(keys);
-      keys = this.addBehaviorKey(keys);
-      keys = this.openDatabaseKey(keys);
-      keys = this.cpuClassKey(keys);
-      keys = this.platformKey(keys);
-      keys = this.doNotTrackKey(keys);
-      keys = this.pluginsKey(keys);
-      keys = this.canvasKey(keys);
-      keys = this.webglKey(keys);
-      keys = this.adBlockKey(keys);
-      keys = this.hasLiedLanguagesKey(keys);
-      keys = this.hasLiedResolutionKey(keys);
-      keys = this.hasLiedOsKey(keys);
-      keys = this.hasLiedBrowserKey(keys);
-      keys = this.touchSupportKey(keys);
-      keys = this.fontsKey(keys);
+
+      if(!this.options.excludeUserAgent) {
+        keys = this.userAgentKey(keys);
+      }
+
+      if(!this.options.excludeLanguage) {
+        keys = this.languageKey(keys);
+      }
+
+      if(!this.options.excludeColorDepth) {
+        keys = this.colorDepthKey(keys);
+      }
+
+      if(!this.options.excludePixelRatio) {
+        keys = this.pixelRatioKey(keys);
+      }
+
+      if(!this.options.excludeScreenResolution) {
+        keys = this.screenResolutionKey(keys);
+      }
+
+      if (!this.options.excludeAvailableScreenResolution) {
+        keys = this.availableScreenResolutionKey(keys);
+      }
+
+      if(!this.options.excludeTimezoneOffset) {
+        keys = this.timezoneOffsetKey(keys);
+      }
+
+      if(!this.options.excludeSessionStorage && this.hasSessionStorage()) {
+        keys = this.sessionStorageKey(keys);
+      }
+
+      if(!this.options.excludeSessionStorage && this.hasLocalStorage()) {
+        keys = this.localStorageKey(keys);
+      }
+
+      if (!this.options.excludeIndexedDB && !!window.indexedDB) {
+        keys = this.indexedDbKey(keys);
+      }
+
+      if(!this.options.excludeAddBehavior ){
+        keys = this.addBehaviorKey(keys);
+      }
+
+      if (!this.options.excludeOpenDatabase) {
+        keys = this.openDatabaseKey(keys);
+      }
+
+      if(!this.options.excludeCpuClass) {
+        keys = this.cpuClassKey(keys);
+      }
+
+      if(!this.options.excludePlatform) {
+        keys = this.platformKey(keys);
+      }
+
+      if(!this.options.excludeDoNotTrack) {
+        keys = this.doNotTrackKey(keys);
+      }
+
+      if(!this.options.excludePlugins){
+        keys = this.pluginsKey(keys);
+      }
+
+      if (!this.options.excludeCanvas) {
+        keys = this.canvasKey(keys);
+      }
+
+      if(!this.options.excludeWebGL) {
+        keys = this.webglKey(keys);
+      }else{
+        if(typeof NODEBUG === "undefined"){
+          this.log("Skipping WebGL fingerprinting per excludeWebGL configuration option");
+        }
+      }
+
+      if(!this.options.excludeAdBlock) {
+        keys = this.adBlockKey(keys);
+      }
+
+      if(!this.options.excludeHasLiedLanguages){
+        keys = this.hasLiedLanguagesKey(keys);
+      }
+
+      if(!this.options.excludeHasLiedResolution){
+        keys = this.hasLiedResolutionKey(keys);
+      }
+
+      if(!this.options.excludeHasLiedOs){
+        keys = this.hasLiedOsKey(keys);
+      }
+
+      if(!this.options.excludeHasLiedBrowser){
+        keys = this.hasLiedBrowserKey(keys);
+      }
+
+      if(!this.options.excludeTouchSupport){
+        keys = this.touchSupportKey(keys);
+      }
+
+      if (!this.options.excludeJsFonts) {
+        keys = this.fontsKey(keys);
+      }
 
       var values = [];
       this.each(keys, function(pair) {
@@ -361,44 +440,23 @@ var NODEBUG = true;
       doneCallback(digest, keys);
     },
     userAgentKey: function(keys) {
-      if(!this.options.excludeUserAgent) {
-        keys.push({key: "user_agent", value: this.getUserAgent()});
-      }
+      keys.push({key: "user_agent", value: navigator.userAgent});
       return keys;
     },
-    // for tests
-    getUserAgent: function(){
-      return navigator.userAgent;
-    },
     languageKey: function(keys) {
-      if(!this.options.excludeLanguage) {
-        // IE 9,10 on Windows 10 does not have the `navigator.language` property any longer
-        keys.push({ key: "language", value: navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || "" });
-      }
+      // IE 9,10 on Windows 10 does not have the `navigator.language` property any longer
+      keys.push({ key: "language", value: navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || "" });
       return keys;
     },
     colorDepthKey: function(keys) {
-      if(!this.options.excludeColorDepth) {
-        keys.push({key: "color_depth", value: screen.colorDepth || -1});
-      }
+      keys.push({key: "color_depth", value: screen.colorDepth || -1});
       return keys;
     },
     pixelRatioKey: function(keys) {
-      if(!this.options.excludePixelRatio) {
-        keys.push({key: "pixel_ratio", value: this.getPixelRatio()});
-      }
+      keys.push({key: "pixel_ratio", value: window.devicePixelRatio || ""});
       return keys;
-    },
-    getPixelRatio: function() {
-      return window.devicePixelRatio || "";
     },
     screenResolutionKey: function(keys) {
-      if(!this.options.excludeScreenResolution) {
-        return this.getScreenResolution(keys);
-      }
-      return keys;
-    },
-    getScreenResolution: function(keys) {
       var resolution;
       if(this.options.detectScreenOrientation) {
         resolution = (screen.height > screen.width) ? [screen.height, screen.width] : [screen.width, screen.height];
@@ -411,12 +469,6 @@ var NODEBUG = true;
       return keys;
     },
     availableScreenResolutionKey: function(keys) {
-      if (!this.options.excludeAvailableScreenResolution) {
-        return this.getAvailableScreenResolution(keys);
-      }
-      return keys;
-    },
-    getAvailableScreenResolution: function(keys) {
       var available;
       if(screen.availWidth && screen.availHeight) {
         if(this.options.detectScreenOrientation) {
@@ -431,73 +483,53 @@ var NODEBUG = true;
       return keys;
     },
     timezoneOffsetKey: function(keys) {
-      if(!this.options.excludeTimezoneOffset) {
-        keys.push({key: "timezone_offset", value: new Date().getTimezoneOffset()});
-      }
+      keys.push({key: "timezone_offset", value: new Date().getTimezoneOffset()});
       return keys;
     },
     sessionStorageKey: function(keys) {
-      if(!this.options.excludeSessionStorage && this.hasSessionStorage()) {
-        keys.push({key: "session_storage", value: 1});
-      }
+      keys.push({key: "session_storage", value: 1});
       return keys;
     },
     localStorageKey: function(keys) {
-      if(!this.options.excludeSessionStorage && this.hasLocalStorage()) {
-        keys.push({key: "local_storage", value: 1});
-      }
+      keys.push({key: "local_storage", value: 1});
       return keys;
     },
     indexedDbKey: function(keys) {
-      if(!this.options.excludeIndexedDB && this.hasIndexedDB()) {
-        keys.push({key: "indexed_db", value: 1});
-      }
+      keys.push({key: "indexed_db", value: 1});
       return keys;
     },
     addBehaviorKey: function(keys) {
       //body might not be defined at this point or removed programmatically
-      if(document.body && !this.options.excludeAddBehavior && document.body.addBehavior) {
+      if(document.body && document.body.addBehavior) {
         keys.push({key: "add_behavior", value: 1});
       }
       return keys;
     },
     openDatabaseKey: function(keys) {
-      if(!this.options.excludeOpenDatabase && window.openDatabase) {
+      if(window.openDatabase) {
         keys.push({key: "open_database", value: 1});
       }
       return keys;
     },
     cpuClassKey: function(keys) {
-      if(!this.options.excludeCpuClass) {
-        keys.push({key: "cpu_class", value: this.getNavigatorCpuClass()});
-      }
+      keys.push({key: "cpu_class", value: navigator.cpuClass || "unknown"});
       return keys;
     },
     platformKey: function(keys) {
-      if(!this.options.excludePlatform) {
-        keys.push({key: "navigator_platform", value: this.getNavigatorPlatform()});
-      }
+      keys.push({key: "navigator_platform", value: navigator.platform || "unknown"});
       return keys;
     },
     doNotTrackKey: function(keys) {
-      if(!this.options.excludeDoNotTrack) {
-        keys.push({key: "do_not_track", value: this.getDoNotTrack()});
-      }
+      keys.push({key: "do_not_track", value: navigator.doNotTrack || navigator.msDoNotTrack || window.doNotTrack || "unknown"});
       return keys;
     },
     canvasKey: function(keys) {
-      if(!this.options.excludeCanvas && this.isCanvasSupported()) {
+      if (this.isCanvasSupported()) {
         keys.push({key: "canvas", value: this.getCanvasFp()});
       }
       return keys;
     },
     webglKey: function(keys) {
-      if(this.options.excludeWebGL) {
-        if(typeof NODEBUG === "undefined"){
-          this.log("Skipping WebGL fingerprinting per excludeWebGL configuration option");
-        }
-        return keys;
-      }
       if(!this.isWebGlSupported()) {
         if(typeof NODEBUG === "undefined"){
           this.log("Skipping WebGL fingerprinting because it is not supported in this browser");
@@ -508,222 +540,207 @@ var NODEBUG = true;
       return keys;
     },
     adBlockKey: function(keys){
-      if(!this.options.excludeAdBlock) {
-        keys.push({key: "adblock", value: this.getAdBlock()});
-      }
+      keys.push({key: "adblock", value: this.getAdBlock()});
       return keys;
     },
     hasLiedLanguagesKey: function(keys){
-      if(!this.options.excludeHasLiedLanguages){
-        keys.push({key: "has_lied_languages", value: this.getHasLiedLanguages()});
-      }
+      keys.push({key: "has_lied_languages", value: this.getHasLiedLanguages()});
       return keys;
     },
     hasLiedResolutionKey: function(keys){
-      if(!this.options.excludeHasLiedResolution){
-        keys.push({key: "has_lied_resolution", value: this.getHasLiedResolution()});
-      }
+      keys.push({ key: "has_lied_resolution", value: !!(screen.width < screen.availWidth || screen.height < screen.availHeight)});
       return keys;
     },
     hasLiedOsKey: function(keys){
-      if(!this.options.excludeHasLiedOs){
-        keys.push({key: "has_lied_os", value: this.getHasLiedOs()});
-      }
+      keys.push({key: "has_lied_os", value: this.getHasLiedOs()});
       return keys;
     },
     hasLiedBrowserKey: function(keys){
-      if(!this.options.excludeHasLiedBrowser){
-        keys.push({key: "has_lied_browser", value: this.getHasLiedBrowser()});
-      }
+      keys.push({key: "has_lied_browser", value: this.getHasLiedBrowser()});
       return keys;
     },
     fontsKey: function(keys) {
-      if (!this.options.excludeJsFonts) {
-        return this.jsFontsKey(keys);
-      }
+      keys.push({key: "js_fonts", value: this.getFonts()});
       return keys;
     },
     // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
-    jsFontsKey: function(keys) {
-        // a font will be compared against all the three default fonts.
-        // and if it doesn't match all 3 then that font is not available.
-        var baseFonts = ["monospace", "sans-serif", "serif"];
+    getFonts: function () {
+      // a font will be compared against all the three default fonts.
+      // and if it doesn't match all 3 then that font is not available.
+      var baseFonts = ["monospace", "sans-serif", "serif"];
 
-        var fontList = [
-                        "Andale Mono", "Arial", "Arial Black", "Arial Hebrew", "Arial MT", "Arial Narrow", "Arial Rounded MT Bold", "Arial Unicode MS",
-                        "Bitstream Vera Sans Mono", "Book Antiqua", "Bookman Old Style",
-                        "Calibri", "Cambria", "Cambria Math", "Century", "Century Gothic", "Century Schoolbook", "Comic Sans", "Comic Sans MS", "Consolas", "Courier", "Courier New",
-                        "Garamond", "Geneva", "Georgia",
-                        "Helvetica", "Helvetica Neue",
-                        "Impact",
-                        "Lucida Bright", "Lucida Calligraphy", "Lucida Console", "Lucida Fax", "LUCIDA GRANDE", "Lucida Handwriting", "Lucida Sans", "Lucida Sans Typewriter", "Lucida Sans Unicode",
-                        "Microsoft Sans Serif", "Monaco", "Monotype Corsiva", "MS Gothic", "MS Outlook", "MS PGothic", "MS Reference Sans Serif", "MS Sans Serif", "MS Serif", "MYRIAD", "MYRIAD PRO",
-                        "Palatino", "Palatino Linotype",
-                        "Segoe Print", "Segoe Script", "Segoe UI", "Segoe UI Light", "Segoe UI Semibold", "Segoe UI Symbol",
-                        "Tahoma", "Times", "Times New Roman", "Times New Roman PS", "Trebuchet MS",
-                        "Verdana", "Wingdings", "Wingdings 2", "Wingdings 3"
-                      ];
-        var extendedFontList = [
-                        "Abadi MT Condensed Light", "Academy Engraved LET", "ADOBE CASLON PRO", "Adobe Garamond", "ADOBE GARAMOND PRO", "Agency FB", "Aharoni", "Albertus Extra Bold", "Albertus Medium", "Algerian", "Amazone BT", "American Typewriter",
-                        "American Typewriter Condensed", "AmerType Md BT", "Andalus", "Angsana New", "AngsanaUPC", "Antique Olive", "Aparajita", "Apple Chancery", "Apple Color Emoji", "Apple SD Gothic Neo", "Arabic Typesetting", "ARCHER",
-                         "ARNO PRO", "Arrus BT", "Aurora Cn BT", "AvantGarde Bk BT", "AvantGarde Md BT", "AVENIR", "Ayuthaya", "Bandy", "Bangla Sangam MN", "Bank Gothic", "BankGothic Md BT", "Baskerville",
-                        "Baskerville Old Face", "Batang", "BatangChe", "Bauer Bodoni", "Bauhaus 93", "Bazooka", "Bell MT", "Bembo", "Benguiat Bk BT", "Berlin Sans FB", "Berlin Sans FB Demi", "Bernard MT Condensed", "BernhardFashion BT", "BernhardMod BT", "Big Caslon", "BinnerD",
-                        "Blackadder ITC", "BlairMdITC TT", "Bodoni 72", "Bodoni 72 Oldstyle", "Bodoni 72 Smallcaps", "Bodoni MT", "Bodoni MT Black", "Bodoni MT Condensed", "Bodoni MT Poster Compressed",
-                        "Bookshelf Symbol 7", "Boulder", "Bradley Hand", "Bradley Hand ITC", "Bremen Bd BT", "Britannic Bold", "Broadway", "Browallia New", "BrowalliaUPC", "Brush Script MT", "Californian FB", "Calisto MT", "Calligrapher", "Candara",
-                        "CaslonOpnface BT", "Castellar", "Centaur", "Cezanne", "CG Omega", "CG Times", "Chalkboard", "Chalkboard SE", "Chalkduster", "Charlesworth", "Charter Bd BT", "Charter BT", "Chaucer",
-                        "ChelthmITC Bk BT", "Chiller", "Clarendon", "Clarendon Condensed", "CloisterBlack BT", "Cochin", "Colonna MT", "Constantia", "Cooper Black", "Copperplate", "Copperplate Gothic", "Copperplate Gothic Bold",
-                        "Copperplate Gothic Light", "CopperplGoth Bd BT", "Corbel", "Cordia New", "CordiaUPC", "Cornerstone", "Coronet", "Cuckoo", "Curlz MT", "DaunPenh", "Dauphin", "David", "DB LCD Temp", "DELICIOUS", "Denmark",
-                        "DFKai-SB", "Didot", "DilleniaUPC", "DIN", "DokChampa", "Dotum", "DotumChe", "Ebrima", "Edwardian Script ITC", "Elephant", "English 111 Vivace BT", "Engravers MT", "EngraversGothic BT", "Eras Bold ITC", "Eras Demi ITC", "Eras Light ITC", "Eras Medium ITC",
-                        "EucrosiaUPC", "Euphemia", "Euphemia UCAS", "EUROSTILE", "Exotc350 Bd BT", "FangSong", "Felix Titling", "Fixedsys", "FONTIN", "Footlight MT Light", "Forte",
-                        "FrankRuehl", "Fransiscan", "Freefrm721 Blk BT", "FreesiaUPC", "Freestyle Script", "French Script MT", "FrnkGothITC Bk BT", "Fruitger", "FRUTIGER",
-                        "Futura", "Futura Bk BT", "Futura Lt BT", "Futura Md BT", "Futura ZBlk BT", "FuturaBlack BT", "Gabriola", "Galliard BT", "Gautami", "Geeza Pro", "Geometr231 BT", "Geometr231 Hv BT", "Geometr231 Lt BT", "GeoSlab 703 Lt BT",
-                        "GeoSlab 703 XBd BT", "Gigi", "Gill Sans", "Gill Sans MT", "Gill Sans MT Condensed", "Gill Sans MT Ext Condensed Bold", "Gill Sans Ultra Bold", "Gill Sans Ultra Bold Condensed", "Gisha", "Gloucester MT Extra Condensed", "GOTHAM", "GOTHAM BOLD",
-                        "Goudy Old Style", "Goudy Stout", "GoudyHandtooled BT", "GoudyOLSt BT", "Gujarati Sangam MN", "Gulim", "GulimChe", "Gungsuh", "GungsuhChe", "Gurmukhi MN", "Haettenschweiler", "Harlow Solid Italic", "Harrington", "Heather", "Heiti SC", "Heiti TC", "HELV",
-                        "Herald", "High Tower Text", "Hiragino Kaku Gothic ProN", "Hiragino Mincho ProN", "Hoefler Text", "Humanst 521 Cn BT", "Humanst521 BT", "Humanst521 Lt BT", "Imprint MT Shadow", "Incised901 Bd BT", "Incised901 BT",
-                        "Incised901 Lt BT", "INCONSOLATA", "Informal Roman", "Informal011 BT", "INTERSTATE", "IrisUPC", "Iskoola Pota", "JasmineUPC", "Jazz LET", "Jenson", "Jester", "Jokerman", "Juice ITC", "Kabel Bk BT", "Kabel Ult BT", "Kailasa", "KaiTi", "Kalinga", "Kannada Sangam MN",
-                        "Kartika", "Kaufmann Bd BT", "Kaufmann BT", "Khmer UI", "KodchiangUPC", "Kokila", "Korinna BT", "Kristen ITC", "Krungthep", "Kunstler Script", "Lao UI", "Latha", "Leelawadee", "Letter Gothic", "Levenim MT", "LilyUPC", "Lithograph", "Lithograph Light", "Long Island",
-                        "Lydian BT", "Magneto", "Maiandra GD", "Malayalam Sangam MN", "Malgun Gothic",
-                        "Mangal", "Marigold", "Marion", "Marker Felt", "Market", "Marlett", "Matisse ITC", "Matura MT Script Capitals", "Meiryo", "Meiryo UI", "Microsoft Himalaya", "Microsoft JhengHei", "Microsoft New Tai Lue", "Microsoft PhagsPa", "Microsoft Tai Le",
-                        "Microsoft Uighur", "Microsoft YaHei", "Microsoft Yi Baiti", "MingLiU", "MingLiU_HKSCS", "MingLiU_HKSCS-ExtB", "MingLiU-ExtB", "Minion", "Minion Pro", "Miriam", "Miriam Fixed", "Mistral", "Modern", "Modern No. 20", "Mona Lisa Solid ITC TT", "Mongolian Baiti",
-                        "MONO", "MoolBoran", "Mrs Eaves", "MS LineDraw", "MS Mincho", "MS PMincho", "MS Reference Specialty", "MS UI Gothic", "MT Extra", "MUSEO", "MV Boli",
-                        "Nadeem", "Narkisim", "NEVIS", "News Gothic", "News GothicMT", "NewsGoth BT", "Niagara Engraved", "Niagara Solid", "Noteworthy", "NSimSun", "Nyala", "OCR A Extended", "Old Century", "Old English Text MT", "Onyx", "Onyx BT", "OPTIMA", "Oriya Sangam MN",
-                        "OSAKA", "OzHandicraft BT", "Palace Script MT", "Papyrus", "Parchment", "Party LET", "Pegasus", "Perpetua", "Perpetua Titling MT", "PetitaBold", "Pickwick", "Plantagenet Cherokee", "Playbill", "PMingLiU", "PMingLiU-ExtB",
-                        "Poor Richard", "Poster", "PosterBodoni BT", "PRINCETOWN LET", "Pristina", "PTBarnum BT", "Pythagoras", "Raavi", "Rage Italic", "Ravie", "Ribbon131 Bd BT", "Rockwell", "Rockwell Condensed", "Rockwell Extra Bold", "Rod", "Roman", "Sakkal Majalla",
-                        "Santa Fe LET", "Savoye LET", "Sceptre", "Script", "Script MT Bold", "SCRIPTINA", "Serifa", "Serifa BT", "Serifa Th BT", "ShelleyVolante BT", "Sherwood",
-                        "Shonar Bangla", "Showcard Gothic", "Shruti", "Signboard", "SILKSCREEN", "SimHei", "Simplified Arabic", "Simplified Arabic Fixed", "SimSun", "SimSun-ExtB", "Sinhala Sangam MN", "Sketch Rockwell", "Skia", "Small Fonts", "Snap ITC", "Snell Roundhand", "Socket",
-                        "Souvenir Lt BT", "Staccato222 BT", "Steamer", "Stencil", "Storybook", "Styllo", "Subway", "Swis721 BlkEx BT", "Swiss911 XCm BT", "Sylfaen", "Synchro LET", "System", "Tamil Sangam MN", "Technical", "Teletype", "Telugu Sangam MN", "Tempus Sans ITC",
-                        "Terminal", "Thonburi", "Traditional Arabic", "Trajan", "TRAJAN PRO", "Tristan", "Tubular", "Tunga", "Tw Cen MT", "Tw Cen MT Condensed", "Tw Cen MT Condensed Extra Bold",
-                        "TypoUpright BT", "Unicorn", "Univers", "Univers CE 55 Medium", "Univers Condensed", "Utsaah", "Vagabond", "Vani", "Vijaya", "Viner Hand ITC", "VisualUI", "Vivaldi", "Vladimir Script", "Vrinda", "Westminster", "WHITNEY", "Wide Latin",
-                        "ZapfEllipt BT", "ZapfHumnst BT", "ZapfHumnst Dm BT", "Zapfino", "Zurich BlkEx BT", "Zurich Ex BT", "ZWAdobeF"];
+      var fontList = [
+        "Andale Mono", "Arial", "Arial Black", "Arial Hebrew", "Arial MT", "Arial Narrow", "Arial Rounded MT Bold", "Arial Unicode MS",
+        "Bitstream Vera Sans Mono", "Book Antiqua", "Bookman Old Style",
+        "Calibri", "Cambria", "Cambria Math", "Century", "Century Gothic", "Century Schoolbook", "Comic Sans", "Comic Sans MS", "Consolas", "Courier", "Courier New",
+        "Garamond", "Geneva", "Georgia",
+        "Helvetica", "Helvetica Neue",
+        "Impact",
+        "Lucida Bright", "Lucida Calligraphy", "Lucida Console", "Lucida Fax", "LUCIDA GRANDE", "Lucida Handwriting", "Lucida Sans", "Lucida Sans Typewriter", "Lucida Sans Unicode",
+        "Microsoft Sans Serif", "Monaco", "Monotype Corsiva", "MS Gothic", "MS Outlook", "MS PGothic", "MS Reference Sans Serif", "MS Sans Serif", "MS Serif", "MYRIAD", "MYRIAD PRO",
+        "Palatino", "Palatino Linotype",
+        "Segoe Print", "Segoe Script", "Segoe UI", "Segoe UI Light", "Segoe UI Semibold", "Segoe UI Symbol",
+        "Tahoma", "Times", "Times New Roman", "Times New Roman PS", "Trebuchet MS",
+        "Verdana", "Wingdings", "Wingdings 2", "Wingdings 3"
+      ];
+      var extendedFontList = [
+        "Abadi MT Condensed Light", "Academy Engraved LET", "ADOBE CASLON PRO", "Adobe Garamond", "ADOBE GARAMOND PRO", "Agency FB", "Aharoni", "Albertus Extra Bold", "Albertus Medium", "Algerian", "Amazone BT", "American Typewriter",
+        "American Typewriter Condensed", "AmerType Md BT", "Andalus", "Angsana New", "AngsanaUPC", "Antique Olive", "Aparajita", "Apple Chancery", "Apple Color Emoji", "Apple SD Gothic Neo", "Arabic Typesetting", "ARCHER",
+        "ARNO PRO", "Arrus BT", "Aurora Cn BT", "AvantGarde Bk BT", "AvantGarde Md BT", "AVENIR", "Ayuthaya", "Bandy", "Bangla Sangam MN", "Bank Gothic", "BankGothic Md BT", "Baskerville",
+        "Baskerville Old Face", "Batang", "BatangChe", "Bauer Bodoni", "Bauhaus 93", "Bazooka", "Bell MT", "Bembo", "Benguiat Bk BT", "Berlin Sans FB", "Berlin Sans FB Demi", "Bernard MT Condensed", "BernhardFashion BT", "BernhardMod BT", "Big Caslon", "BinnerD",
+        "Blackadder ITC", "BlairMdITC TT", "Bodoni 72", "Bodoni 72 Oldstyle", "Bodoni 72 Smallcaps", "Bodoni MT", "Bodoni MT Black", "Bodoni MT Condensed", "Bodoni MT Poster Compressed",
+        "Bookshelf Symbol 7", "Boulder", "Bradley Hand", "Bradley Hand ITC", "Bremen Bd BT", "Britannic Bold", "Broadway", "Browallia New", "BrowalliaUPC", "Brush Script MT", "Californian FB", "Calisto MT", "Calligrapher", "Candara",
+        "CaslonOpnface BT", "Castellar", "Centaur", "Cezanne", "CG Omega", "CG Times", "Chalkboard", "Chalkboard SE", "Chalkduster", "Charlesworth", "Charter Bd BT", "Charter BT", "Chaucer",
+        "ChelthmITC Bk BT", "Chiller", "Clarendon", "Clarendon Condensed", "CloisterBlack BT", "Cochin", "Colonna MT", "Constantia", "Cooper Black", "Copperplate", "Copperplate Gothic", "Copperplate Gothic Bold",
+        "Copperplate Gothic Light", "CopperplGoth Bd BT", "Corbel", "Cordia New", "CordiaUPC", "Cornerstone", "Coronet", "Cuckoo", "Curlz MT", "DaunPenh", "Dauphin", "David", "DB LCD Temp", "DELICIOUS", "Denmark",
+        "DFKai-SB", "Didot", "DilleniaUPC", "DIN", "DokChampa", "Dotum", "DotumChe", "Ebrima", "Edwardian Script ITC", "Elephant", "English 111 Vivace BT", "Engravers MT", "EngraversGothic BT", "Eras Bold ITC", "Eras Demi ITC", "Eras Light ITC", "Eras Medium ITC",
+        "EucrosiaUPC", "Euphemia", "Euphemia UCAS", "EUROSTILE", "Exotc350 Bd BT", "FangSong", "Felix Titling", "Fixedsys", "FONTIN", "Footlight MT Light", "Forte",
+        "FrankRuehl", "Fransiscan", "Freefrm721 Blk BT", "FreesiaUPC", "Freestyle Script", "French Script MT", "FrnkGothITC Bk BT", "Fruitger", "FRUTIGER",
+        "Futura", "Futura Bk BT", "Futura Lt BT", "Futura Md BT", "Futura ZBlk BT", "FuturaBlack BT", "Gabriola", "Galliard BT", "Gautami", "Geeza Pro", "Geometr231 BT", "Geometr231 Hv BT", "Geometr231 Lt BT", "GeoSlab 703 Lt BT",
+        "GeoSlab 703 XBd BT", "Gigi", "Gill Sans", "Gill Sans MT", "Gill Sans MT Condensed", "Gill Sans MT Ext Condensed Bold", "Gill Sans Ultra Bold", "Gill Sans Ultra Bold Condensed", "Gisha", "Gloucester MT Extra Condensed", "GOTHAM", "GOTHAM BOLD",
+        "Goudy Old Style", "Goudy Stout", "GoudyHandtooled BT", "GoudyOLSt BT", "Gujarati Sangam MN", "Gulim", "GulimChe", "Gungsuh", "GungsuhChe", "Gurmukhi MN", "Haettenschweiler", "Harlow Solid Italic", "Harrington", "Heather", "Heiti SC", "Heiti TC", "HELV",
+        "Herald", "High Tower Text", "Hiragino Kaku Gothic ProN", "Hiragino Mincho ProN", "Hoefler Text", "Humanst 521 Cn BT", "Humanst521 BT", "Humanst521 Lt BT", "Imprint MT Shadow", "Incised901 Bd BT", "Incised901 BT",
+        "Incised901 Lt BT", "INCONSOLATA", "Informal Roman", "Informal011 BT", "INTERSTATE", "IrisUPC", "Iskoola Pota", "JasmineUPC", "Jazz LET", "Jenson", "Jester", "Jokerman", "Juice ITC", "Kabel Bk BT", "Kabel Ult BT", "Kailasa", "KaiTi", "Kalinga", "Kannada Sangam MN",
+        "Kartika", "Kaufmann Bd BT", "Kaufmann BT", "Khmer UI", "KodchiangUPC", "Kokila", "Korinna BT", "Kristen ITC", "Krungthep", "Kunstler Script", "Lao UI", "Latha", "Leelawadee", "Letter Gothic", "Levenim MT", "LilyUPC", "Lithograph", "Lithograph Light", "Long Island",
+        "Lydian BT", "Magneto", "Maiandra GD", "Malayalam Sangam MN", "Malgun Gothic",
+        "Mangal", "Marigold", "Marion", "Marker Felt", "Market", "Marlett", "Matisse ITC", "Matura MT Script Capitals", "Meiryo", "Meiryo UI", "Microsoft Himalaya", "Microsoft JhengHei", "Microsoft New Tai Lue", "Microsoft PhagsPa", "Microsoft Tai Le",
+        "Microsoft Uighur", "Microsoft YaHei", "Microsoft Yi Baiti", "MingLiU", "MingLiU_HKSCS", "MingLiU_HKSCS-ExtB", "MingLiU-ExtB", "Minion", "Minion Pro", "Miriam", "Miriam Fixed", "Mistral", "Modern", "Modern No. 20", "Mona Lisa Solid ITC TT", "Mongolian Baiti",
+        "MONO", "MoolBoran", "Mrs Eaves", "MS LineDraw", "MS Mincho", "MS PMincho", "MS Reference Specialty", "MS UI Gothic", "MT Extra", "MUSEO", "MV Boli",
+        "Nadeem", "Narkisim", "NEVIS", "News Gothic", "News GothicMT", "NewsGoth BT", "Niagara Engraved", "Niagara Solid", "Noteworthy", "NSimSun", "Nyala", "OCR A Extended", "Old Century", "Old English Text MT", "Onyx", "Onyx BT", "OPTIMA", "Oriya Sangam MN",
+        "OSAKA", "OzHandicraft BT", "Palace Script MT", "Papyrus", "Parchment", "Party LET", "Pegasus", "Perpetua", "Perpetua Titling MT", "PetitaBold", "Pickwick", "Plantagenet Cherokee", "Playbill", "PMingLiU", "PMingLiU-ExtB",
+        "Poor Richard", "Poster", "PosterBodoni BT", "PRINCETOWN LET", "Pristina", "PTBarnum BT", "Pythagoras", "Raavi", "Rage Italic", "Ravie", "Ribbon131 Bd BT", "Rockwell", "Rockwell Condensed", "Rockwell Extra Bold", "Rod", "Roman", "Sakkal Majalla",
+        "Santa Fe LET", "Savoye LET", "Sceptre", "Script", "Script MT Bold", "SCRIPTINA", "Serifa", "Serifa BT", "Serifa Th BT", "ShelleyVolante BT", "Sherwood",
+        "Shonar Bangla", "Showcard Gothic", "Shruti", "Signboard", "SILKSCREEN", "SimHei", "Simplified Arabic", "Simplified Arabic Fixed", "SimSun", "SimSun-ExtB", "Sinhala Sangam MN", "Sketch Rockwell", "Skia", "Small Fonts", "Snap ITC", "Snell Roundhand", "Socket",
+        "Souvenir Lt BT", "Staccato222 BT", "Steamer", "Stencil", "Storybook", "Styllo", "Subway", "Swis721 BlkEx BT", "Swiss911 XCm BT", "Sylfaen", "Synchro LET", "System", "Tamil Sangam MN", "Technical", "Teletype", "Telugu Sangam MN", "Tempus Sans ITC",
+        "Terminal", "Thonburi", "Traditional Arabic", "Trajan", "TRAJAN PRO", "Tristan", "Tubular", "Tunga", "Tw Cen MT", "Tw Cen MT Condensed", "Tw Cen MT Condensed Extra Bold",
+        "TypoUpright BT", "Unicorn", "Univers", "Univers CE 55 Medium", "Univers Condensed", "Utsaah", "Vagabond", "Vani", "Vijaya", "Viner Hand ITC", "VisualUI", "Vivaldi", "Vladimir Script", "Vrinda", "Westminster", "WHITNEY", "Wide Latin",
+        "ZapfEllipt BT", "ZapfHumnst BT", "ZapfHumnst Dm BT", "Zapfino", "Zurich BlkEx BT", "Zurich Ex BT", "ZWAdobeF"];
 
-        if(this.options.extendedJsFonts) {
-            fontList = fontList.concat(extendedFontList);
-        }
+      if (this.options.extendedJsFonts) {
+        fontList = fontList.concat(extendedFontList);
+      }
 
-        fontList = fontList.concat(this.options.userDefinedFonts);
+      fontList = fontList.concat(this.options.userDefinedFonts);
 
-        //we use m or w because these two characters take up the maximum width.
-        // And we use a LLi so that the same matching fonts can get separated
-        var testString = "mmmmmmmmmmlli";
+      //we use m or w because these two characters take up the maximum width.
+      // And we use a LLi so that the same matching fonts can get separated
+      var testString = "mmmmmmmmmmlli";
 
-        //we test using 72px font size, we may use any size. I guess larger the better.
-        var testSize = "72px";
+      //we test using 72px font size, we may use any size. I guess larger the better.
+      var testSize = "72px";
 
-        var h = document.getElementsByTagName("body")[0];
+      var h = document.getElementsByTagName("body")[0];
 
-        // div to load spans for the base fonts
-        var baseFontsDiv = document.createElement("div");
+      // div to load spans for the base fonts
+      var baseFontsDiv = document.createElement("div");
 
-        // div to load spans for the fonts to detect
-        var fontsDiv = document.createElement("div");
+      // div to load spans for the fonts to detect
+      var fontsDiv = document.createElement("div");
 
-        var defaultWidth = {};
-        var defaultHeight = {};
+      var defaultWidth = {};
+      var defaultHeight = {};
 
-        // creates a span where the fonts will be loaded
-        var createSpan = function() {
-            var s = document.createElement("span");
-            /*
-             * We need this css as in some weird browser this
-             * span elements shows up for a microSec which creates a
-             * bad user experience
-             */
-            s.style.position = "absolute";
-            s.style.left = "-9999px";
-            s.style.fontSize = testSize;
-            s.style.lineHeight = "normal";
-            s.innerHTML = testString;
-            return s;
-        };
+      // creates a span where the fonts will be loaded
+      var createSpan = function () {
+        var s = document.createElement("span");
+        /*
+         * We need this css as in some weird browser this
+         * span elements shows up for a microSec which creates a
+         * bad user experience
+         */
+        s.
+          style.position = "absolute";
+        s.style.left = "-9999px";
+        s.style.fontSize = testSize;
+        s.style.lineHeight = "normal";
+        s.innerHTML = testString;
+        return s;
+      };
 
-        // creates a span and load the font to detect and a base font for fallback
-        var createSpanWithFonts = function(fontToDetect, baseFont) {
-            var s = createSpan();
-            s.style.fontFamily = "'" + fontToDetect + "'," + baseFont;
-            return s;
-        };
+      // creates a span and load the font to detect and a base font for fallback
+      var createSpanWithFonts = function (fontToDetect, baseFont) {
+        var s = createSpan();
+        s.style.fontFamily = "'" + fontToDetect + "'," + baseFont;
+        return s;
+      };
 
-        // creates spans for the base fonts and adds them to baseFontsDiv
-        var initializeBaseFontsSpans = function() {
-            var spans = [];
-            for (var index = 0, length = baseFonts.length; index < length; index++) {
-                var s = createSpan();
-                s.style.fontFamily = baseFonts[index];
-                baseFontsDiv.appendChild(s);
-                spans.push(s);
-            }
-            return spans;
-        };
-
-        // creates spans for the fonts to detect and adds them to fontsDiv
-        var initializeFontsSpans = function() {
-            var spans = {};
-            for(var i = 0, l = fontList.length; i < l; i++) {
-                var fontSpans = [];
-                for(var j = 0, numDefaultFonts = baseFonts.length; j < numDefaultFonts; j++) {
-                    var s = createSpanWithFonts(fontList[i], baseFonts[j]);
-                    fontsDiv.appendChild(s);
-                    fontSpans.push(s);
-                }
-                spans[fontList[i]] = fontSpans; // Stores {fontName : [spans for that font]}
-            }
-            return spans;
-        };
-
-        // checks if a font is available
-        var isFontAvailable = function(fontSpans) {
-            var detected = false;
-            for(var i = 0; i < baseFonts.length; i++) {
-                detected = (fontSpans[i].offsetWidth !== defaultWidth[baseFonts[i]] || fontSpans[i].offsetHeight !== defaultHeight[baseFonts[i]]);
-                if(detected) {
-                    return detected;
-                }
-            }
-            return detected;
-        };
-
-        // create spans for base fonts
-        var baseFontsSpans = initializeBaseFontsSpans();
-
-        // add the spans to the DOM
-        h.appendChild(baseFontsDiv);
-
-        // get the default width for the three base fonts
+      // creates spans for the base fonts and adds them to baseFontsDiv
+      var initializeBaseFontsSpans = function () {
+        var spans = [];
         for (var index = 0, length = baseFonts.length; index < length; index++) {
-            defaultWidth[baseFonts[index]] = baseFontsSpans[index].offsetWidth; // width for the default font
-            defaultHeight[baseFonts[index]] = baseFontsSpans[index].offsetHeight; // height for the default font
+          var s = createSpan();
+          s.style.fontFamily = baseFonts[index];
+          baseFontsDiv.appendChild(s);
+          spans.push(s);
         }
+        return spans;
+      };
 
-        // create spans for fonts to detect
-        var fontsSpans = initializeFontsSpans();
-
-        // add all the spans to the DOM
-        h.appendChild(fontsDiv);
-
-        // check available fonts
-        var available = [];
+      // creates spans for the fonts to detect and adds them to fontsDiv
+      var initializeFontsSpans = function () {
+        var spans = {};
         for(var i = 0, l = fontList.length; i < l; i++) {
-            if(isFontAvailable(fontsSpans[fontList[i]])) {
-                available.push(fontList[i]);
-            }
+          var fontSpans = [];
+          for(var j = 0, numDefaultFonts = baseFonts.length; j < numDefaultFonts; j++) {
+            var s = createSpanWithFonts(fontList[i], baseFonts[j]);
+            fontsDiv.appendChild(s);
+            fontSpans.push(s);
+          }
+          spans[fontList[i]] = fontSpans; // Stores {fontName : [spans for that font]}
         }
+        return spans;
+      };
 
-        // remove spans from DOM
-        h.removeChild(fontsDiv);
-        h.removeChild(baseFontsDiv);
+      // checks if a font is available
+      var isFontAvailable = function (fontSpans) {
+        var detected = false;
+        for(var i = 0; i < baseFonts.length; i++) {
+          detected = (fontSpans[i].offsetWidth !== defaultWidth[baseFonts[i]] || fontSpans[i].offsetHeight !== defaultHeight[baseFonts[i]]);
+          if(detected) {
+            return detected;
+          }
+        }
+        return detected;
+      };
 
-        keys.push({key: "js_fonts", value: available});
-        return keys;
+      // create spans for base fonts
+      var baseFontsSpans = initializeBaseFontsSpans();
+
+      // add the spans to the DOM
+      h.appendChild(baseFontsDiv);
+
+      // get the default width for the three base fonts
+      for (var index = 0, length = baseFonts.length; index < length; index++) {
+        defaultWidth[baseFonts[index]] = baseFontsSpans[index].offsetWidth; // width for the default font
+        defaultHeight[baseFonts[index]] = baseFontsSpans[index].offsetHeight; // height for the default font
+      }
+
+      // create spans for fonts to detect
+      var fontsSpans = initializeFontsSpans();
+
+      // add all the spans to the DOM
+      h.appendChild(fontsDiv);
+
+      // check available fonts
+      var available = [];
+      for (var i = 0, l = fontList.length; i < l; i++) {
+        if(isFontAvailable(fontsSpans[fontList[i]])) {
+          available.push(fontList[i]);
+        }
+      }
+
+      // remove spans from DOM
+      h.removeChild(fontsDiv);
+      h.removeChild(baseFontsDiv);
+      return available;
     },
     pluginsKey: function(keys) {
-      if(!this.options.excludePlugins){
-        if(this.isIE()){
-          if(!this.options.excludeIEPlugins) {
-            keys.push({key: "ie_plugins", value: this.getIEPlugins()});
-          }
-        } else {
-          keys.push({key: "regular_plugins", value: this.getRegularPlugins()});
+      if(this.isIE()){
+        if(!this.options.excludeIEPlugins) {
+          keys.push({key: "ie_plugins", value: this.getIEPlugins()});
         }
+      } else {
+        keys.push({key: "regular_plugins", value: this.getRegularPlugins()});
       }
       return keys;
     },
@@ -802,9 +819,7 @@ var NODEBUG = true;
       return should;
     },
     touchSupportKey: function (keys) {
-      if(!this.options.excludeTouchSupport){
-        keys.push({key: "touch_support", value: this.getTouchSupport()});
-      }
+      keys.push({key: "touch_support", value: this.getTouchSupport()});
       return keys;
     },
     hasSessionStorage: function () {
@@ -820,34 +835,6 @@ var NODEBUG = true;
         return !!window.localStorage;
       } catch(e) {
         return true; // SecurityError when referencing it means it exists
-      }
-    },
-    hasIndexedDB: function (){
-      return !!window.indexedDB;
-    },
-    getNavigatorCpuClass: function () {
-      if(navigator.cpuClass){
-        return navigator.cpuClass;
-      } else {
-        return "unknown";
-      }
-    },
-    getNavigatorPlatform: function () {
-      if(navigator.platform) {
-        return navigator.platform;
-      } else {
-        return "unknown";
-      }
-    },
-    getDoNotTrack: function () {
-      if(navigator.doNotTrack) {
-        return navigator.doNotTrack;
-      } else if (navigator.msDoNotTrack) {
-        return navigator.msDoNotTrack;
-      } else if (window.doNotTrack) {
-        return window.doNotTrack;
-      } else {
-        return "unknown";
       }
     },
     // This is a crude and primitive touch screen detection.
@@ -934,7 +921,6 @@ var NODEBUG = true;
       result.push("canvas fp:" + canvas.toDataURL());
       return result.join("~");
     },
-
     getWebglFp: function() {
       var gl;
       var fa2s = function(fa) {
@@ -1078,15 +1064,6 @@ var NODEBUG = true;
         } catch(err) {
           return true;
         }
-      }
-      return false;
-    },
-    getHasLiedResolution: function(){
-      if(screen.width < screen.availWidth){
-        return true;
-      }
-      if(screen.height < screen.availHeight){
-        return true;
       }
       return false;
     },
@@ -1276,6 +1253,7 @@ var NODEBUG = true;
       return results;
     }
   };
+
   Fingerprint2.VERSION = "2.0.0-dev";
   window.Fingerprint2 = Fingerprint2;
 })();
