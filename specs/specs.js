@@ -3,7 +3,25 @@ describe("Fingerprint2", function () {
   
   describe("default hash function", function () {
     it("to return a consistent output", function () {
-      expect((new Fingerprint2).hash("Fingerprint2")).toEqual("c09c5304bf7cc01d90f66d1be8fa516c");
+      var fp = (new Fingerprint2);
+      expect(fp.hash("Fingerprint2")).toEqual("e21f41d6b7647f96669464911ca315a2");
+      expect(fp.hash("0")).toEqual("f982a041f3a826073bb481082fd56879");
+      expect(fp.hash("1")).toEqual("47bc2f23bb3f7690a0c98e87c61414f5");
+      expect(fp.hash("12")).toEqual("31af169c87804504a942c81c5cef0e35");
+      expect(fp.hash("123")).toEqual("1af2ed2b456a1a4cbcb55df6df43e656");
+      expect(fp.hash("1234")).toEqual("9d9f872c68c88451e9ad37c16e54b819");
+      expect(fp.hash("12345")).toEqual("f2bd2fce3e12a85676ae834d0db69514");
+      expect(fp.hash("123456")).toEqual("6547add326df62b27b66592696cb0502");
+      expect(fp.hash("1234567")).toEqual("cb16e0247cea6b0bf433b3bc0cdf8152");
+      expect(fp.hash("12345678")).toEqual("2706bf3219ba51c122c1dbdfe1ea3abf");
+      expect(fp.hash("123456789")).toEqual("41ab5d0479145278beb599f9cb4e62b1");
+      expect(fp.hash("1234567890")).toEqual("1fd36595dd963bcd1fbec2a8924f6089");
+      expect(fp.hash("12345678901")).toEqual("9cb7c5bfcd0274ba0d7bbcf17bf6ee1c");
+      expect(fp.hash("123456789012")).toEqual("581f6d701a6b2afb07a96ef14844e692");
+      expect(fp.hash("1234567890123")).toEqual("898020b89dedc7b57403a905fe58dc60");
+      expect(fp.hash("12345678901234")).toEqual("0a9d9312458225765f4a68429a95c08c");
+      expect(fp.hash("123456789012345")).toEqual("313ba32ccfcbcce86af69e963c5bbb4e");
+      expect(fp.hash("1234567890123456")).toEqual("b8655b10eba486e0a9f941b171e7b0bc");
     });
   });
   

@@ -228,57 +228,42 @@ var DEBUG_MODE = false;
     switch (remainder) {
       case 15:
         k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 14)], 48));
-        break;
       case 14:
         k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 13)], 40));
-        break;
       case 13:
         k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 12)], 32));
-        break;
       case 12:
         k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 11)], 24));
-        break;
       case 11:
         k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 10)], 16));
-        break;
       case 10:
         k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 9)], 8));
-        break;
       case 9:
         k2 = murmur3x64Xor(k2, [0, key.charCodeAt(i + 8)]);
         k2 = murmur3x64Multiply(k2, c2);
         k2 = murmur3x64Rotl(k2, 33);
         k2 = murmur3x64Multiply(k2, c1);
         h2 = murmur3x64Xor(h2, k2);
-        break;
       case 8:
         k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 7)], 56));
-        break;
       case 7:
         k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 6)], 48));
-        break;
       case 6:
         k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 5)], 40));
-        break;
       case 5:
         k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 4)], 32));
-        break;
       case 4:
         k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 3)], 24));
-        break;
       case 3:
         k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 2)], 16));
-        break;
       case 2:
         k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 1)], 8));
-        break;
       case 1:
         k1 = murmur3x64Xor(k1, [0, key.charCodeAt(i)]);
         k1 = murmur3x64Multiply(k1, c1);
         k1 = murmur3x64Rotl(k1, 31);
         k1 = murmur3x64Multiply(k1, c2);
         h1 = murmur3x64Xor(h1, k1);
-        break;
     }
 
     h1 = murmur3x64Xor(h1, [0, key.length]);
