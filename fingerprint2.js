@@ -16,12 +16,13 @@
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-(function (name, context, definition) {
-  "use strict";
-  if (typeof module !== "undefined" && module.exports) { module.exports = definition(); }
-  else if (typeof define === "function" && define.amd) { define(definition); }
-  else { context[name] = definition(); }
-})("Fingerprint2", this, function() {
+/**
+ *
+ * @define {boolean}
+ */
+var NODEBUG = true;
+
+(function() {
   "use strict";
 
   /**
@@ -1266,5 +1267,5 @@
     }
   };
   Fingerprint2.VERSION = "2.0.0-dev";
-  return Fingerprint2;
-});
+  window.Fingerprint2 = Fingerprint2;
+})();

@@ -8,7 +8,7 @@
     "eslint": "^0.14.1",
     "gulp-eslint": "^0.4.2",
     "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^1.1.0"
+    "google-closure-compiler": "~20160911.0.0"
   },
   "scripts": {
     "test": "specs/phantomjs.runner.sh specs/spec_runner.html"
