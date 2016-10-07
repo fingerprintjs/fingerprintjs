@@ -32,8 +32,8 @@ var DEBUG_MODE = false;
    * Given a string and an optional seed as an int, returns a 128 bit
    * hash using the x64 flavor of MurmurHash3, as an unsigned hex.
    *
-   * @param {?String} key
-   * @param {?Number} seed
+   * @param {string} [key]
+   * @param {number} [seed]
    * @returns {string}
    */
   var murmur3x64hash128 = function (key, seed) {
@@ -44,10 +44,10 @@ var DEBUG_MODE = false;
      * Given two 64bit ints (as an array of two 32bit ints) returns the two
      * added together as a 64bit int (as an array of two 32bit ints).
      *
-     * @param {number[]} m
-     * @param {number[]} n
+     * @param {!Array<number>} m
+     * @param {!Array<number>} n
      *
-     * @returns {number[]}
+     * @returns {!Array<number>}
      */
     var murmur3x64Add = function (m, n) {
       m = [m[0] >>> 16, m[0] & 0xffff, m[1] >>> 16, m[1] & 0xffff];
@@ -73,10 +73,10 @@ var DEBUG_MODE = false;
      * Given two 64bit ints (as an array of two 32bit ints) returns the two
      * multiplied together as a 64bit int (as an array of two 32bit ints).
      *
-     * @param {number[]} m
-     * @param {number[]} n
+     * @param {!Array<number>} m
+     * @param {!Array<number>} n
      *
-     * @returns {number[]}
+     * @returns {!Array<number>}
      */
     var murmur3x64Multiply = function (m, n) {
       m = [m[0] >>> 16, m[0] & 0xffff, m[1] >>> 16, m[1] & 0xffff];
@@ -112,10 +112,10 @@ var DEBUG_MODE = false;
      * representing a number of bit positions, returns the 64bit int (as an
      * array of two 32bit ints) rotated left by that number of positions.
      *
-     * @param {number[]} m
+     * @param {!Array<number>} m
      * @param {number} n
      *
-     * @returns {number[]}
+     * @returns {!Array<number>}
      */
     var murmur3x64Rotl = function (m, n) {
       n %= 64;
@@ -138,10 +138,10 @@ var DEBUG_MODE = false;
      * representing a number of bit positions, returns the 64bit int (as an
      * array of two 32bit ints) shifted left by that number of positions.
      *
-     * @param {number[]} m
+     * @param {!Array<number>} m
      * @param {number} n
      *
-     * @returns {number[]}
+     * @returns {!Array<number>}
      */
     var murmur3x64LeftShift = function (m, n) {
       n %= 64;
@@ -162,10 +162,10 @@ var DEBUG_MODE = false;
      * Given two 64bit ints (as an array of two 32bit ints) returns the two
      * xored together as a 64bit int (as an array of two 32bit ints).
      *
-     * @param {number[]} m
-     * @param {number[]} n
+     * @param {!Array<number>} m
+     * @param {!Array<number>} n
      *
-     * @returns {number[]}
+     * @returns {!Array<number>}
      */
     var murmur3x64Xor = function (m, n) {
       return [m[0] ^ n[0], m[1] ^ n[1]];
@@ -178,9 +178,9 @@ var DEBUG_MODE = false;
      * (`[0, h[0] >>> 1]` is a 33 bit unsigned right shift. This is the
      * only place where we need to right shift 64bit ints.)
      *
-     * @param {number[]} h
+     * @param {!Array<number>} h
      *
-     * @returns {number[]}
+     * @returns {!Array<number>}
      */
     var murmur3x64Fmix = function (h) {
       h = murmur3x64Xor(h, [0, h[0] >>> 1]);
@@ -193,6 +193,7 @@ var DEBUG_MODE = false;
 
     key = key || "";
     seed = seed || 0;
+
     var remainder = key.length % 16;
     var bytes = key.length - remainder;
     var h1 = [0, seed];
@@ -201,6 +202,7 @@ var DEBUG_MODE = false;
     var k2 = [0, 0];
     var c1 = [0x87c37b91, 0x114253d5];
     var c2 = [0x4cf5ad43, 0x2745937f];
+
     for (var i = 0; i < bytes; i = i + 16) {
       k1 = [((key.charCodeAt(i + 4) & 0xff)) | ((key.charCodeAt(i + 5) & 0xff) << 8) | ((key.charCodeAt(i + 6) & 0xff) << 16) | ((key.charCodeAt(i + 7) & 0xff) << 24), ((key.charCodeAt(i) & 0xff)) | ((key.charCodeAt(i + 1) & 0xff) << 8) | ((key.charCodeAt(i + 2) & 0xff) << 16) | ((key.charCodeAt(i + 3) & 0xff) << 24)];
       k2 = [((key.charCodeAt(i + 12) & 0xff)) | ((key.charCodeAt(i + 13) & 0xff) << 8) | ((key.charCodeAt(i + 14) & 0xff) << 16) | ((key.charCodeAt(i + 15) & 0xff) << 24), ((key.charCodeAt(i + 8) & 0xff)) | ((key.charCodeAt(i + 9) & 0xff) << 8) | ((key.charCodeAt(i + 10) & 0xff) << 16) | ((key.charCodeAt(i + 11) & 0xff) << 24)];
@@ -219,48 +221,66 @@ var DEBUG_MODE = false;
       h2 = murmur3x64Add(h2, h1);
       h2 = murmur3x64Add(murmur3x64Multiply(h2, [0, 5]), [0, 0x38495ab5]);
     }
+
     k1 = [0, 0];
     k2 = [0, 0];
+
     switch (remainder) {
       case 15:
         k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 14)], 48));
+        break;
       case 14:
         k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 13)], 40));
+        break;
       case 13:
         k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 12)], 32));
+        break;
       case 12:
         k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 11)], 24));
+        break;
       case 11:
         k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 10)], 16));
+        break;
       case 10:
         k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 9)], 8));
+        break;
       case 9:
         k2 = murmur3x64Xor(k2, [0, key.charCodeAt(i + 8)]);
         k2 = murmur3x64Multiply(k2, c2);
         k2 = murmur3x64Rotl(k2, 33);
         k2 = murmur3x64Multiply(k2, c1);
         h2 = murmur3x64Xor(h2, k2);
+        break;
       case 8:
         k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 7)], 56));
+        break;
       case 7:
         k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 6)], 48));
+        break;
       case 6:
         k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 5)], 40));
+        break;
       case 5:
         k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 4)], 32));
+        break;
       case 4:
         k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 3)], 24));
+        break;
       case 3:
         k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 2)], 16));
+        break;
       case 2:
         k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 1)], 8));
+        break;
       case 1:
         k1 = murmur3x64Xor(k1, [0, key.charCodeAt(i)]);
         k1 = murmur3x64Multiply(k1, c1);
         k1 = murmur3x64Rotl(k1, 31);
         k1 = murmur3x64Multiply(k1, c2);
         h1 = murmur3x64Xor(h1, k1);
+        break;
     }
+
     h1 = murmur3x64Xor(h1, [0, key.length]);
     h2 = murmur3x64Xor(h2, [0, key.length]);
     h1 = murmur3x64Add(h1, h2);
@@ -269,6 +289,7 @@ var DEBUG_MODE = false;
     h2 = murmur3x64Fmix(h2);
     h1 = murmur3x64Add(h1, h2);
     h2 = murmur3x64Add(h2, h1);
+
     return ("00000000" + (h1[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h1[1] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[1] >>> 0).toString(16)).slice(-8);
   };
 
@@ -304,6 +325,12 @@ var DEBUG_MODE = false;
     }
   };
 
+  /**
+   *
+   * @param {Object} options
+   * @returns {Fingerprint2}
+   * @constructor
+   */
   var Fingerprint2 = function(options) {
 
     if (!(this instanceof Fingerprint2)) {
@@ -319,6 +346,7 @@ var DEBUG_MODE = false;
     this.nativeForEach = Array.prototype.forEach;
     this.nativeMap = Array.prototype.map;
   };
+
   Fingerprint2.prototype = {
     get: function(doneCallback){
       if(typeof doneCallback !== "function"){
@@ -332,7 +360,7 @@ var DEBUG_MODE = false;
     /**
      * @private
      * @param {function(string,Array):void} [doneCallback]
-     * @returns {?Array}
+     * @returns {Array}
      */
     getInternal: function(doneCallback){
       var keys = [];
@@ -447,6 +475,7 @@ var DEBUG_MODE = false;
         }
         values.push(value);
       });
+
       var digest = murmur3x64hash128(values.join("~~~"), 31);
 
       if(typeof doneCallback !== "function"){
@@ -454,6 +483,7 @@ var DEBUG_MODE = false;
       }
 
       doneCallback(digest, keys);
+      return null;
     },
     userAgentKey: function(keys) {
       keys.push({key: "user_agent", value: navigator.userAgent});
@@ -662,8 +692,7 @@ var DEBUG_MODE = false;
          * span elements shows up for a microSec which creates a
          * bad user experience
          */
-        s.
-          style.position = "absolute";
+        s.style.position = "absolute";
         s.style.left = "-9999px";
         s.style.fontSize = testSize;
         s.style.lineHeight = "normal";
@@ -1234,6 +1263,12 @@ var DEBUG_MODE = false;
       if (!gl) { gl = null; }
       return gl;
     },
+    /**
+     *
+     * @param obj
+     * @param iterator
+     * @param {Object} [context]
+     */
     each: function (obj, iterator, context) {
       if (obj === null) {
         return;
@@ -1252,7 +1287,13 @@ var DEBUG_MODE = false;
         }
       }
     },
-
+    /**
+     *
+     * @param obj
+     * @param iterator
+     * @param {Object} [context]
+     * @returns {!Array}
+     */
     map: function(obj, iterator, context) {
       var results = [];
       // Not using strict equality so that this acts as a
