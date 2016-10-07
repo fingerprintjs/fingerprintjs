@@ -273,6 +273,11 @@ var NODEBUG = true;
   };
 
   var Fingerprint2 = function(options) {
+
+    if (!(this instanceof Fingerprint2)) {
+      return new Fingerprint2(options);
+    }
+
     var defaultOptions = {
       detectScreenOrientation: true,
       sortPluginsFor: [/palemoon/i],
@@ -374,7 +379,7 @@ var NODEBUG = true;
     },
     colorDepthKey: function(keys) {
       if(!this.options.excludeColorDepth) {
-        keys.push({key: "color_depth", value: screen.colorDepth});
+        keys.push({key: "color_depth", value: screen.colorDepth || -1});
       }
       return keys;
     },
@@ -626,6 +631,7 @@ var NODEBUG = true;
             s.style.position = "absolute";
             s.style.left = "-9999px";
             s.style.fontSize = testSize;
+            s.style.lineHeight = "normal";
             s.innerHTML = testString;
             return s;
         };
@@ -836,6 +842,10 @@ var NODEBUG = true;
     getDoNotTrack: function () {
       if(navigator.doNotTrack) {
         return navigator.doNotTrack;
+      } else if (navigator.msDoNotTrack) {
+        return navigator.msDoNotTrack;
+      } else if (window.doNotTrack) {
+        return window.doNotTrack;
       } else {
         return "unknown";
       }

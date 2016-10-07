@@ -16,3 +16,6 @@
 
 #### How can I build a complete identification solution?
 ##### You should either use commercial services, such as https://augur.io, or develop such service yourself. If you don't know how to do it, please use StackOverflow.
+
+#### The fingerprint is changing frequently for me, is library broken?
+##### Well, most likely not. You may have different user agents (because of the browser ugprades), or different screen resolutions. You can disable corresponding options (please see README and Wiki for details). V2 will have a callback/extension system which will allow to use UserAgent parsers and cut off the frequently changing parts of user agents (such as verion numbers). If you're sure it is a bug, please submit an issue and don't forget to attach the relevant info about which component, participating in fingerprint building, changes for your from call to call. This will greatly help me fix the issue
