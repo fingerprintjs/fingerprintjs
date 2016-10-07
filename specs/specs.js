@@ -1,5 +1,12 @@
 "use strict";
 describe("Fingerprint2", function () {
+  
+  describe("default hash function", function () {
+    it("to return a consistent output", function () {
+      expect((new Fingerprint2).hash("Fingerprint2")).toEqual("c09c5304bf7cc01d90f66d1be8fa516c");
+    });
+  });
+  
   describe("new", function () {
     it("creates a new instance of FP2", function () {
       expect(new Fingerprint2()).not.toBeNull();

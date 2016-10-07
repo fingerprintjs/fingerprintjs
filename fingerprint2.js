@@ -348,6 +348,14 @@ var DEBUG_MODE = false;
   };
 
   Fingerprint2.prototype = {
+    /**
+     * 
+     * @param {string} input
+     * @returns {string}
+     */
+    hash: function (input) {
+      return murmur3x64hash128(input, 31);
+    },
     get: function(doneCallback){
       if(typeof doneCallback !== "function"){
         return this.getInternal()[0];
@@ -476,13 +484,13 @@ var DEBUG_MODE = false;
         values.push(value);
       });
 
-      var digest = murmur3x64hash128(values.join("~~~"), 31);
+      var hashDigest = this.hash(values.join("~~~"));
 
       if(typeof doneCallback !== "function"){
-        return [digest, keys];
+        return [hashDigest, keys];
       }
 
-      doneCallback(digest, keys);
+      doneCallback(hashDigest, keys);
       return null;
     },
     userAgentKey: function(keys) {
