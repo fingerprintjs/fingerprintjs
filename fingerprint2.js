@@ -225,45 +225,28 @@ var DEBUG_MODE = false;
     k1 = [0, 0];
     k2 = [0, 0];
 
-    switch (remainder) {
-      case 15:
-        k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 14)], 48));
-      case 14:
-        k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 13)], 40));
-      case 13:
-        k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 12)], 32));
-      case 12:
-        k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 11)], 24));
-      case 11:
-        k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 10)], 16));
-      case 10:
-        k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 9)], 8));
-      case 9:
-        k2 = murmur3x64Xor(k2, [0, key.charCodeAt(i + 8)]);
-        k2 = murmur3x64Multiply(k2, c2);
-        k2 = murmur3x64Rotl(k2, 33);
-        k2 = murmur3x64Multiply(k2, c1);
-        h2 = murmur3x64Xor(h2, k2);
-      case 8:
-        k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 7)], 56));
-      case 7:
-        k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 6)], 48));
-      case 6:
-        k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 5)], 40));
-      case 5:
-        k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 4)], 32));
-      case 4:
-        k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 3)], 24));
-      case 3:
-        k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 2)], 16));
-      case 2:
-        k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 1)], 8));
-      case 1:
-        k1 = murmur3x64Xor(k1, [0, key.charCodeAt(i)]);
-        k1 = murmur3x64Multiply(k1, c1);
-        k1 = murmur3x64Rotl(k1, 31);
-        k1 = murmur3x64Multiply(k1, c2);
-        h1 = murmur3x64Xor(h1, k1);
+    //@formatter:off
+    var fallthrough = [
+      function () { k1 = murmur3x64Xor(k1, [0, key.charCodeAt(i)]); k1 = murmur3x64Multiply(k1, c1); k1 = murmur3x64Rotl(k1, 31); k1 = murmur3x64Multiply(k1, c2); h1 = murmur3x64Xor(h1, k1);},
+      function () { k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 1)], 8)); },
+      function () { k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 2)], 16)); },
+      function () { k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 3)], 24)); },
+      function () { k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 4)], 32)); },
+      function () { k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 5)], 40)); },
+      function () { k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 6)], 48)); },
+      function () { k1 = murmur3x64Xor(k1, murmur3x64LeftShift([0, key.charCodeAt(i + 7)], 56)); },
+      function () { k2 = murmur3x64Xor(k2, [0, key.charCodeAt(i + 8)]); k2 = murmur3x64Multiply(k2, c2); k2 = murmur3x64Rotl(k2, 33); k2 = murmur3x64Multiply(k2, c1); h2 = murmur3x64Xor(h2, k2);},
+      function () { k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 9)], 8)); },
+      function () { k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 10)], 16)); },
+      function () { k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 11)], 24)); },
+      function () { k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 12)], 32)); },
+      function () { k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 13)], 40)); },
+      function () { k2 = murmur3x64Xor(k2, murmur3x64LeftShift([0, key.charCodeAt(i + 14)], 48)); }
+    ];
+    //@formatter:on
+
+    while(remainder-- > 0){
+      fallthrough[remainder]();
     }
 
     h1 = murmur3x64Xor(h1, [0, key.length]);
@@ -275,7 +258,11 @@ var DEBUG_MODE = false;
     h1 = murmur3x64Add(h1, h2);
     h2 = murmur3x64Add(h2, h1);
 
-    return ("00000000" + (h1[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h1[1] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[1] >>> 0).toString(16)).slice(-8);
+    // join 4 * 32bit numbers to a single zero-filled 128bit hex string
+    return ("00000000" + (h1[0] >>> 0).toString(16)).slice(-8) +
+           ("00000000" + (h1[1] >>> 0).toString(16)).slice(-8) +
+           ("00000000" + (h2[0] >>> 0).toString(16)).slice(-8) +
+           ("00000000" + (h2[1] >>> 0).toString(16)).slice(-8);
   };
 
   /**
@@ -334,7 +321,7 @@ var DEBUG_MODE = false;
 
   Fingerprint2.prototype = {
     /**
-     * 
+     *
      * @param {string} input
      * @returns {string}
      */
