@@ -1263,5 +1263,5 @@ var DEBUG_MODE = false;
   };
 
   Fingerprint2.VERSION = "2.0.0-dev";
-  window.Fingerprint2 = Fingerprint2;
+  window["Fingerprint2"] = Fingerprint2;
 })();
