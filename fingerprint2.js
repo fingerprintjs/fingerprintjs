@@ -20,7 +20,7 @@
  *
  * @define {boolean}
  */
-var NODEBUG = true;
+var DEBUG_MODE = false;
 
 (function() {
   "use strict";
@@ -272,6 +272,38 @@ var NODEBUG = true;
     return ("00000000" + (h1[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h1[1] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[1] >>> 0).toString(16)).slice(-8);
   };
 
+  /**
+   * @private
+   * @static
+   *
+   * @param {?Object} source
+   * @param {!Object} target
+   *
+   * @returns {!Object}
+   */
+  var extend = function(source, target) {
+    if (source == null) { return target; }
+    for (var k in source) {
+      if(source[k] != null && target[k] !== source[k]) {
+        target[k] = source[k];
+      }
+    }
+    return target;
+  };
+  /**
+   * @private
+   * @static
+   *
+   * @param {*} msg
+   */
+  var log = function(msg){
+    if(DEBUG_MODE){
+      if(window.console){
+        console.log(msg);
+      }
+    }
+  };
+
   var Fingerprint2 = function(options) {
 
     if (!(this instanceof Fingerprint2)) {
@@ -283,25 +315,11 @@ var NODEBUG = true;
       sortPluginsFor: [/palemoon/i],
       userDefinedFonts: []
     };
-    this.options = this.extend(options, defaultOptions);
+    this.options = extend(options, defaultOptions);
     this.nativeForEach = Array.prototype.forEach;
     this.nativeMap = Array.prototype.map;
   };
   Fingerprint2.prototype = {
-    extend: function(source, target) {
-      if (source == null) { return target; }
-      for (var k in source) {
-        if(source[k] != null && target[k] !== source[k]) {
-          target[k] = source[k];
-        }
-      }
-      return target;
-    },
-    log: function(msg){
-      if(window.console){
-        console.log(msg);
-      }
-    },
     get: function(doneCallback){
       if(typeof doneCallback !== "function"){
         return this.getInternal()[0];
@@ -390,9 +408,7 @@ var NODEBUG = true;
       if(!this.options.excludeWebGL) {
         keys = this.webglKey(keys);
       }else{
-        if(typeof NODEBUG === "undefined"){
-          this.log("Skipping WebGL fingerprinting per excludeWebGL configuration option");
-        }
+        log("Skipping WebGL fingerprinting per excludeWebGL configuration option");
       }
 
       if(!this.options.excludeAdBlock) {
@@ -531,9 +547,7 @@ var NODEBUG = true;
     },
     webglKey: function(keys) {
       if(!this.isWebGlSupported()) {
-        if(typeof NODEBUG === "undefined"){
-          this.log("Skipping WebGL fingerprinting because it is not supported in this browser");
-        }
+        log("Skipping WebGL fingerprinting because it is not supported in this browser");
         return keys;
       }
       keys.push({key: "webgl", value: this.getWebglFp()});
@@ -994,9 +1008,7 @@ var NODEBUG = true;
       result.push("webgl version:" + gl.getParameter(gl.VERSION));
 
       if (!gl.getShaderPrecisionFormat) {
-        if (typeof NODEBUG === "undefined") {
-          this.log("WebGL fingerprinting is incomplete, because your browser does not support getShaderPrecisionFormat");
-        }
+        log("WebGL fingerprinting is incomplete, because your browser does not support getShaderPrecisionFormat");
         return result.join("~");
       }
 

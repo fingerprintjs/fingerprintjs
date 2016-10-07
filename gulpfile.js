@@ -19,7 +19,10 @@ gulp.task("minify", function() {
         language_out : "ECMASCRIPT3",
         compilation_level: 'ADVANCED_OPTIMIZATIONS',
         warning_level: 'VERBOSE',
-        js_output_file: 'fingerprint2.min.js'
+        js_output_file: 'fingerprint2.min.js',
+        define: [
+          "DEBUG_MODE=false",
+        ],
       }))
       .pipe(gulp.dest("dist/"));
 });
