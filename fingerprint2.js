@@ -1,20 +1,20 @@
 /*
-* Fingerprintjs2 2.0.0-dev - Modern & flexible browser fingerprint library v2
-* https://github.com/Valve/fingerprintjs2
-* Copyright (c) 2016 Valentin Vasilyev (valentin.vasilyev@outlook.com)
-* Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-* ARE DISCLAIMED. IN NO EVENT SHALL VALENTIN VASILYEV BE LIABLE FOR ANY
-* DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-* THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Fingerprintjs2 2.0.0-dev - Modern & flexible browser fingerprint library v2
+ * https://github.com/Valve/fingerprintjs2
+ * Copyright (c) 2016 Valentin Vasilyev (valentin.vasilyev@outlook.com)
+ * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL VALENTIN VASILYEV BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
 /**
  *
@@ -346,105 +346,105 @@ var DEBUG_MODE = false;
       var keys = [];
 
       if(!this.options.excludeUserAgent) {
-        keys = this.userAgentKey(keys);
+        this.userAgentKey(keys);
       }
 
       if(!this.options.excludeLanguage) {
-        keys = this.languageKey(keys);
+        this.languageKey(keys);
       }
 
       if(!this.options.excludeColorDepth) {
-        keys = this.colorDepthKey(keys);
+        this.colorDepthKey(keys);
       }
 
       if(!this.options.excludePixelRatio) {
-        keys = this.pixelRatioKey(keys);
+        this.pixelRatioKey(keys);
       }
 
       if(!this.options.excludeScreenResolution) {
-        keys = this.screenResolutionKey(keys);
+        this.screenResolutionKey(keys);
       }
 
       if (!this.options.excludeAvailableScreenResolution) {
-        keys = this.availableScreenResolutionKey(keys);
+        this.availableScreenResolutionKey(keys);
       }
 
       if(!this.options.excludeTimezoneOffset) {
-        keys = this.timezoneOffsetKey(keys);
+        this.timezoneOffsetKey(keys);
       }
 
       if(!this.options.excludeSessionStorage && this.hasSessionStorage()) {
-        keys = this.sessionStorageKey(keys);
+        this.sessionStorageKey(keys);
       }
 
       if(!this.options.excludeSessionStorage && this.hasLocalStorage()) {
-        keys = this.localStorageKey(keys);
+        this.localStorageKey(keys);
       }
 
       if (!this.options.excludeIndexedDB && !!window.indexedDB) {
-        keys = this.indexedDbKey(keys);
+        this.indexedDbKey(keys);
       }
 
       if(!this.options.excludeAddBehavior ){
-        keys = this.addBehaviorKey(keys);
+        this.addBehaviorKey(keys);
       }
 
       if (!this.options.excludeOpenDatabase) {
-        keys = this.openDatabaseKey(keys);
+        this.openDatabaseKey(keys);
       }
 
       if(!this.options.excludeCpuClass) {
-        keys = this.cpuClassKey(keys);
+        this.cpuClassKey(keys);
       }
 
       if(!this.options.excludePlatform) {
-        keys = this.platformKey(keys);
+        this.platformKey(keys);
       }
 
       if(!this.options.excludeDoNotTrack) {
-        keys = this.doNotTrackKey(keys);
+        this.doNotTrackKey(keys);
       }
 
       if(!this.options.excludePlugins){
-        keys = this.pluginsKey(keys);
+        this.pluginsKey(keys);
       }
 
       if (!this.options.excludeCanvas) {
-        keys = this.canvasKey(keys);
+        this.canvasKey(keys);
       }
 
       if(!this.options.excludeWebGL) {
-        keys = this.webglKey(keys);
+        this.webglKey(keys);
       }else{
         log("Skipping WebGL fingerprinting per excludeWebGL configuration option");
       }
 
       if(!this.options.excludeAdBlock) {
-        keys = this.adBlockKey(keys);
+        this.adBlockKey(keys);
       }
 
       if(!this.options.excludeHasLiedLanguages){
-        keys = this.hasLiedLanguagesKey(keys);
+        this.hasLiedLanguagesKey(keys);
       }
 
       if(!this.options.excludeHasLiedResolution){
-        keys = this.hasLiedResolutionKey(keys);
+        this.hasLiedResolutionKey(keys);
       }
 
       if(!this.options.excludeHasLiedOs){
-        keys = this.hasLiedOsKey(keys);
+        this.hasLiedOsKey(keys);
       }
 
       if(!this.options.excludeHasLiedBrowser){
-        keys = this.hasLiedBrowserKey(keys);
+        this.hasLiedBrowserKey(keys);
       }
 
       if(!this.options.excludeTouchSupport){
-        keys = this.touchSupportKey(keys);
+        this.touchSupportKey(keys);
       }
 
       if (!this.options.excludeJsFonts) {
-        keys = this.fontsKey(keys);
+        this.fontsKey(keys);
       }
 
       var values = [];
@@ -467,20 +467,16 @@ var DEBUG_MODE = false;
     },
     userAgentKey: function(keys) {
       keys.push({key: "user_agent", value: navigator.userAgent});
-      return keys;
     },
     languageKey: function(keys) {
       // IE 9,10 on Windows 10 does not have the `navigator.language` property any longer
       keys.push({ key: "language", value: navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || "" });
-      return keys;
     },
     colorDepthKey: function(keys) {
       keys.push({key: "color_depth", value: screen.colorDepth || -1});
-      return keys;
     },
     pixelRatioKey: function(keys) {
       keys.push({key: "pixel_ratio", value: window.devicePixelRatio || ""});
-      return keys;
     },
     screenResolutionKey: function(keys) {
       var resolution;
@@ -492,7 +488,6 @@ var DEBUG_MODE = false;
       if(typeof resolution !== "undefined") { // headless browsers
         keys.push({key: "resolution", value: resolution});
       }
-      return keys;
     },
     availableScreenResolutionKey: function(keys) {
       var available;
@@ -506,86 +501,68 @@ var DEBUG_MODE = false;
       if(typeof available !== "undefined") { // headless browsers
         keys.push({key: "available_resolution", value: available});
       }
-      return keys;
     },
     timezoneOffsetKey: function(keys) {
       keys.push({key: "timezone_offset", value: new Date().getTimezoneOffset()});
-      return keys;
     },
     sessionStorageKey: function(keys) {
       keys.push({key: "session_storage", value: 1});
-      return keys;
     },
     localStorageKey: function(keys) {
       keys.push({key: "local_storage", value: 1});
-      return keys;
     },
     indexedDbKey: function(keys) {
       keys.push({key: "indexed_db", value: 1});
-      return keys;
     },
     addBehaviorKey: function(keys) {
       //body might not be defined at this point or removed programmatically
       if(document.body && document.body.addBehavior) {
         keys.push({key: "add_behavior", value: 1});
       }
-      return keys;
     },
     openDatabaseKey: function(keys) {
       if(window.openDatabase) {
         keys.push({key: "open_database", value: 1});
       }
-      return keys;
     },
     cpuClassKey: function(keys) {
       keys.push({key: "cpu_class", value: navigator.cpuClass || "unknown"});
-      return keys;
     },
     platformKey: function(keys) {
       keys.push({key: "navigator_platform", value: navigator.platform || "unknown"});
-      return keys;
     },
     doNotTrackKey: function(keys) {
       keys.push({key: "do_not_track", value: navigator.doNotTrack || navigator.msDoNotTrack || window.doNotTrack || "unknown"});
-      return keys;
     },
     canvasKey: function(keys) {
       if (this.isCanvasSupported()) {
         keys.push({key: "canvas", value: this.getCanvasFp()});
       }
-      return keys;
     },
     webglKey: function(keys) {
       if(!this.isWebGlSupported()) {
         log("Skipping WebGL fingerprinting because it is not supported in this browser");
-        return keys;
+        return;
       }
       keys.push({key: "webgl", value: this.getWebglFp()});
-      return keys;
     },
     adBlockKey: function(keys){
       keys.push({key: "adblock", value: this.getAdBlock()});
-      return keys;
     },
     hasLiedLanguagesKey: function(keys){
       keys.push({key: "has_lied_languages", value: this.getHasLiedLanguages()});
-      return keys;
     },
     hasLiedResolutionKey: function(keys){
       keys.push({ key: "has_lied_resolution", value: !!(screen.width < screen.availWidth || screen.height < screen.availHeight)});
-      return keys;
     },
     hasLiedOsKey: function(keys){
       keys.push({key: "has_lied_os", value: this.getHasLiedOs()});
-      return keys;
     },
     hasLiedBrowserKey: function(keys){
       keys.push({key: "has_lied_browser", value: this.getHasLiedBrowser()});
-      return keys;
     },
     fontsKey: function(keys) {
       keys.push({key: "js_fonts", value: this.getFonts()});
-      return keys;
     },
     // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
     getFonts: function () {
@@ -765,7 +742,6 @@ var DEBUG_MODE = false;
       } else {
         keys.push({key: "regular_plugins", value: this.getRegularPlugins()});
       }
-      return keys;
     },
     getRegularPlugins: function () {
       var plugins = [];
@@ -843,7 +819,6 @@ var DEBUG_MODE = false;
     },
     touchSupportKey: function (keys) {
       keys.push({key: "touch_support", value: this.getTouchSupport()});
-      return keys;
     },
     hasSessionStorage: function () {
       try {
