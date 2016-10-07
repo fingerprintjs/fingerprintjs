@@ -144,7 +144,7 @@
     },
     colorDepthKey: function(keys) {
       if(!this.options.excludeColorDepth) {
-        keys.push({key: "color_depth", value: screen.colorDepth});
+        keys.push({key: "color_depth", value: screen.colorDepth || -1});
       }
       return keys;
     },
