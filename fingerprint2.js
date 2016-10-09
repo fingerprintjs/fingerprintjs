@@ -297,190 +297,169 @@ var DEBUG_MODE = false;
     }
   };
 
-  /**
-   *
-   * @param {Object} options
-   * @returns {Fingerprint2}
-   * @constructor
-   */
-  var Fingerprint2 = function(options) {
-
-    if (!(this instanceof Fingerprint2)) {
-      return new Fingerprint2(options);
-    }
-
-    var defaultOptions = {
-      detectScreenOrientation: true,
-      sortPluginsFor: [/palemoon/i],
-      userDefinedFonts: []
-    };
-    this.options = extend(options, defaultOptions);
-    this.nativeForEach = Array.prototype.forEach;
-    this.nativeMap = Array.prototype.map;
-  };
-
-  Fingerprint2.prototype = {
+  var Features = {
     /**
+     * @static
      *
-     * @param {string} input
-     * @returns {string}
-     */
-    hash: function (input) {
-      return murmur3x64hash128(input, 31);
-    },
-    get: function(doneCallback){
-      if(typeof doneCallback !== "function"){
-        return this.getInternal()[0];
-      }
-      this.getInternal(doneCallback);
-    },
-    getWithComponents: function(){
-      return this.getInternal();
-    },
-    /**
-     * @private
-     * @param {function(string,Array):void} [doneCallback]
+     * @param {!Fingerprint2} fp
      * @returns {Array}
      */
-    getInternal: function(doneCallback){
+    runDetections: function (fp) {
       var keys = [];
 
-      if(!this.options.excludeUserAgent) {
-        this.userAgentKey(keys);
+      // NOTICE: option keys are strings for exporting purpose (Closure-Compiler convention).
+      var options = fp.options;
+
+      if (!options["excludeUserAgent"]) {
+        this.userAgentKey(keys, fp);
       }
 
-      if(!this.options.excludeLanguage) {
-        this.languageKey(keys);
+      if (!options["excludeLanguage"]) {
+        this.languageKey(keys, fp);
       }
 
-      if(!this.options.excludeColorDepth) {
-        this.colorDepthKey(keys);
+      if (!options["excludeColorDepth"]) {
+        this.colorDepthKey(keys, fp);
       }
 
-      if(!this.options.excludePixelRatio) {
-        this.pixelRatioKey(keys);
+      if (!options["excludePixelRatio"]) {
+        this.pixelRatioKey(keys, fp);
       }
 
-      if(!this.options.excludeScreenResolution) {
-        this.screenResolutionKey(keys);
+      if (!options["excludeScreenResolution"]) {
+        this.screenResolutionKey(keys, fp);
       }
 
-      if (!this.options.excludeAvailableScreenResolution) {
-        this.availableScreenResolutionKey(keys);
+      if (!options["excludeAvailableScreenResolution"]) {
+        this.availableScreenResolutionKey(keys, fp);
       }
 
-      if(!this.options.excludeTimezoneOffset) {
-        this.timezoneOffsetKey(keys);
+      if (!options["excludeTimezoneOffset"]) {
+        this.timezoneOffsetKey(keys, fp);
       }
 
-      if(!this.options.excludeSessionStorage && this.hasSessionStorage()) {
-        this.sessionStorageKey(keys);
+      if (!options["excludeSessionStorage"]) {
+        this.sessionStorageKey(keys, fp);
       }
 
-      if(!this.options.excludeSessionStorage && this.hasLocalStorage()) {
-        this.localStorageKey(keys);
+      if (!options["excludeSessionStorage"]) {
+        this.localStorageKey(keys, fp);
       }
 
-      if (!this.options.excludeIndexedDB && !!window.indexedDB) {
-        this.indexedDbKey(keys);
+      if (!options["excludeIndexedDB"]) {
+        this.indexedDbKey(keys, fp);
       }
 
-      if(!this.options.excludeAddBehavior ){
-        this.addBehaviorKey(keys);
+      if (!options["excludeAddBehavior"]) {
+        this.addBehaviorKey(keys, fp);
       }
 
-      if (!this.options.excludeOpenDatabase) {
-        this.openDatabaseKey(keys);
+      if (!options["excludeOpenDatabase"]) {
+        this.openDatabaseKey(keys, fp);
       }
 
-      if(!this.options.excludeCpuClass) {
-        this.cpuClassKey(keys);
+      if (!options["excludeCpuClass"]) {
+        this.cpuClassKey(keys, fp);
       }
 
-      if(!this.options.excludePlatform) {
-        this.platformKey(keys);
+      if (!options["excludePlatform"]) {
+        this.platformKey(keys, fp);
       }
 
-      if(!this.options.excludeDoNotTrack) {
-        this.doNotTrackKey(keys);
+      if (!options["excludeDoNotTrack"]) {
+        this.doNotTrackKey(keys, fp);
       }
 
-      if(!this.options.excludePlugins){
-        this.pluginsKey(keys);
+      if (!options["excludePlugins"]) {
+        this.pluginsKey(keys, fp);
       }
 
-      if (!this.options.excludeCanvas) {
-        this.canvasKey(keys);
+      if (!options["excludeCanvas"]) {
+        this.canvasKey(keys, fp);
       }
 
-      if(!this.options.excludeWebGL) {
-        this.webglKey(keys);
-      }else{
+      if (!options["excludeWebGL"]) {
+        this.webglKey(keys, fp);
+      } else {
         log("Skipping WebGL fingerprinting per excludeWebGL configuration option");
       }
 
-      if(!this.options.excludeAdBlock) {
-        this.adBlockKey(keys);
+      if (!options["excludeAdBlock"]) {
+        this.adBlockKey(keys, fp);
       }
 
-      if(!this.options.excludeHasLiedLanguages){
-        this.hasLiedLanguagesKey(keys);
+      if (!options["excludeHasLiedLanguages"]) {
+        this.hasLiedLanguagesKey(keys, fp);
       }
 
-      if(!this.options.excludeHasLiedResolution){
-        this.hasLiedResolutionKey(keys);
+      if (!options["excludeHasLiedResolution"]) {
+        this.hasLiedResolutionKey(keys, fp);
       }
 
-      if(!this.options.excludeHasLiedOs){
-        this.hasLiedOsKey(keys);
+      if (!options["excludeHasLiedOs"]) {
+        this.hasLiedOsKey(keys, fp);
       }
 
-      if(!this.options.excludeHasLiedBrowser){
-        this.hasLiedBrowserKey(keys);
+      if (!options["excludeHasLiedBrowser"]) {
+        this.hasLiedBrowserKey(keys, fp);
       }
 
-      if(!this.options.excludeTouchSupport){
-        this.touchSupportKey(keys);
+      if (!options["excludeTouchSupport"]) {
+        this.touchSupportKey(keys, fp);
       }
 
-      if (!this.options.excludeJsFonts) {
-        this.fontsKey(keys);
+      if (!options["excludeJsFonts"]) {
+        this.fontsKey(keys, fp);
       }
 
-      var values = [];
-      this.each(keys, function(pair) {
-        var value = pair.value;
-        if (typeof pair.value.join !== "undefined") {
-          value = pair.value.join(";");
-        }
-        values.push(value);
-      });
-
-      var hashDigest = this.hash(values.join("~~~"));
-
-      if(typeof doneCallback !== "function"){
-        return [hashDigest, keys];
-      }
-
-      doneCallback(hashDigest, keys);
-      return null;
+      return keys;
     },
-    userAgentKey: function(keys) {
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    userAgentKey: function(keys, fp) {
       keys.push({key: "user_agent", value: navigator.userAgent});
     },
-    languageKey: function(keys) {
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    languageKey: function(keys, fp) {
       // IE 9,10 on Windows 10 does not have the `navigator.language` property any longer
       keys.push({ key: "language", value: navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || "" });
     },
-    colorDepthKey: function(keys) {
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    colorDepthKey: function(keys, fp) {
       keys.push({key: "color_depth", value: screen.colorDepth || -1});
     },
-    pixelRatioKey: function(keys) {
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    pixelRatioKey: function(keys, fp) {
       keys.push({key: "pixel_ratio", value: window.devicePixelRatio || ""});
     },
-    screenResolutionKey: function(keys) {
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    screenResolutionKey: function(keys, fp) {
       var resolution;
-      if(this.options.detectScreenOrientation) {
+      if(fp.options["detectScreenOrientation"]) {
         resolution = (screen.height > screen.width) ? [screen.height, screen.width] : [screen.width, screen.height];
       } else {
         resolution = [screen.width, screen.height];
@@ -489,10 +468,16 @@ var DEBUG_MODE = false;
         keys.push({key: "resolution", value: resolution});
       }
     },
-    availableScreenResolutionKey: function(keys) {
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    availableScreenResolutionKey: function(keys, fp) {
       var available;
       if(screen.availWidth && screen.availHeight) {
-        if(this.options.detectScreenOrientation) {
+        if(fp.options["detectScreenOrientation"]) {
           available = (screen.availHeight > screen.availWidth) ? [screen.availHeight, screen.availWidth] : [screen.availWidth, screen.availHeight];
         } else {
           available = [screen.availHeight, screen.availWidth];
@@ -502,70 +487,215 @@ var DEBUG_MODE = false;
         keys.push({key: "available_resolution", value: available});
       }
     },
-    timezoneOffsetKey: function(keys) {
-      keys.push({key: "timezone_offset", value: new Date().getTimezoneOffset()});
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    timezoneOffsetKey: function(keys, fp) {
+      keys.push({key: "timezone_offset", value: (new Date).getTimezoneOffset()});
     },
-    sessionStorageKey: function(keys) {
-      keys.push({key: "session_storage", value: 1});
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    sessionStorageKey: function(keys, fp) {
+      if(Extractors.hasSessionStorage()){
+        keys.push({key: "session_storage", value: 1});
+      }
     },
-    localStorageKey: function(keys) {
-      keys.push({key: "local_storage", value: 1});
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    localStorageKey: function(keys, fp) {
+      if(Extractors.hasLocalStorage()){
+        keys.push({key: "local_storage", value: 1});
+      }
     },
-    indexedDbKey: function(keys) {
-      keys.push({key: "indexed_db", value: 1});
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    indexedDbKey: function(keys, fp) {
+      if(!!window.indexedDB){
+        keys.push({key: "indexed_db", value: 1});
+      }
     },
-    addBehaviorKey: function(keys) {
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    addBehaviorKey: function(keys, fp) {
       //body might not be defined at this point or removed programmatically
       if(document.body && document.body.addBehavior) {
         keys.push({key: "add_behavior", value: 1});
       }
     },
-    openDatabaseKey: function(keys) {
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    openDatabaseKey: function(keys, fp) {
       if(window.openDatabase) {
         keys.push({key: "open_database", value: 1});
       }
     },
-    cpuClassKey: function(keys) {
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    cpuClassKey: function(keys, fp) {
       keys.push({key: "cpu_class", value: navigator.cpuClass || "unknown"});
     },
-    platformKey: function(keys) {
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    platformKey: function(keys, fp) {
       keys.push({key: "navigator_platform", value: navigator.platform || "unknown"});
     },
-    doNotTrackKey: function(keys) {
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    doNotTrackKey: function(keys, fp) {
       keys.push({key: "do_not_track", value: navigator.doNotTrack || navigator.msDoNotTrack || window.doNotTrack || "unknown"});
     },
-    canvasKey: function(keys) {
-      if (this.isCanvasSupported()) {
-        keys.push({key: "canvas", value: this.getCanvasFp()});
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    canvasKey: function(keys, fp) {
+      if (Extractors.isCanvasSupported()) {
+        keys.push({key: "canvas", value: Extractors.getCanvasFp(fp)});
       }
     },
-    webglKey: function(keys) {
-      if(!this.isWebGlSupported()) {
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    webglKey: function(keys, fp) {
+      if(!Extractors.isWebGlSupported()) {
         log("Skipping WebGL fingerprinting because it is not supported in this browser");
         return;
       }
-      keys.push({key: "webgl", value: this.getWebglFp()});
+      keys.push({key: "webgl", value: Extractors.getWebglFp()});
     },
-    adBlockKey: function(keys){
-      keys.push({key: "adblock", value: this.getAdBlock()});
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    adBlockKey: function(keys, fp){
+      keys.push({key: "adblock", value: Extractors.getAdBlock()});
     },
-    hasLiedLanguagesKey: function(keys){
-      keys.push({key: "has_lied_languages", value: this.getHasLiedLanguages()});
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    hasLiedLanguagesKey: function(keys, fp){
+      keys.push({key: "has_lied_languages", value: Extractors.getHasLiedLanguages()});
     },
-    hasLiedResolutionKey: function(keys){
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    hasLiedResolutionKey: function(keys, fp){
       keys.push({ key: "has_lied_resolution", value: !!(screen.width < screen.availWidth || screen.height < screen.availHeight)});
     },
-    hasLiedOsKey: function(keys){
-      keys.push({key: "has_lied_os", value: this.getHasLiedOs()});
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    hasLiedOsKey: function(keys, fp){
+      keys.push({key: "has_lied_os", value: Extractors.getHasLiedOs()});
     },
-    hasLiedBrowserKey: function(keys){
-      keys.push({key: "has_lied_browser", value: this.getHasLiedBrowser()});
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    hasLiedBrowserKey: function(keys, fp){
+      keys.push({key: "has_lied_browser", value: Extractors.getHasLiedBrowser()});
     },
-    fontsKey: function(keys) {
-      keys.push({key: "js_fonts", value: this.getFonts()});
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    touchSupportKey: function (keys, fp) {
+      keys.push({key: "touch_support", value: Extractors.getTouchSupport()});
     },
-    // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
-    getFonts: function () {
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    fontsKey: function(keys, fp) {
+      keys.push({key: "js_fonts", value: Extractors.getFonts(fp)});
+    },
+    /**
+     * @static
+     *
+     * @param {!Array} keys
+     * @param {!Fingerprint2} fp
+     */
+    pluginsKey: function(keys, fp) {
+      if(Extractors.isIE()){
+        if(!fp.options["excludeIEPlugins"]) {
+          keys.push({key: "ie_plugins", value: Extractors.getIEPlugins(fp)});
+        }
+      } else {
+        keys.push({key: "regular_plugins", value: Extractors.getRegularPlugins(fp)});
+      }
+    }
+  };
+
+  /**
+   *
+   */
+  var Extractors = {
+    /**
+     * @static
+     *
+     * @param {!Fingerprint2} fp
+     * @returns {Array}
+     */
+    getFonts: function (fp) {
+      // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
+      
       // a font will be compared against all the three default fonts.
       // and if it doesn't match all 3 then that font is not available.
       var baseFonts = ["monospace", "sans-serif", "serif"];
@@ -617,11 +747,11 @@ var DEBUG_MODE = false;
         "TypoUpright BT", "Unicorn", "Univers", "Univers CE 55 Medium", "Univers Condensed", "Utsaah", "Vagabond", "Vani", "Vijaya", "Viner Hand ITC", "VisualUI", "Vivaldi", "Vladimir Script", "Vrinda", "Westminster", "WHITNEY", "Wide Latin",
         "ZapfEllipt BT", "ZapfHumnst BT", "ZapfHumnst Dm BT", "Zapfino", "Zurich BlkEx BT", "Zurich Ex BT", "ZWAdobeF"];
 
-      if (this.options.extendedJsFonts) {
+      if (fp.options.extendedJsFonts) {
         fontList = fontList.concat(extendedFontList);
       }
 
-      fontList = fontList.concat(this.options.userDefinedFonts);
+      fontList = fontList.concat(fp.options.userDefinedFonts);
 
       //we use m or w because these two characters take up the maximum width.
       // And we use a LLi so that the same matching fonts can get separated
@@ -734,37 +864,40 @@ var DEBUG_MODE = false;
       h.removeChild(baseFontsDiv);
       return available;
     },
-    pluginsKey: function(keys) {
-      if(this.isIE()){
-        if(!this.options.excludeIEPlugins) {
-          keys.push({key: "ie_plugins", value: this.getIEPlugins()});
-        }
-      } else {
-        keys.push({key: "regular_plugins", value: this.getRegularPlugins()});
-      }
-    },
-    getRegularPlugins: function () {
+    /**
+     * @static
+     *
+     * @param {!Fingerprint2} fp
+     * @returns {!Array}
+     */
+    getRegularPlugins: function (fp) {
       var plugins = [];
       for(var i = 0, l = navigator.plugins.length; i < l; i++) {
         plugins.push(navigator.plugins[i]);
       }
       // sorting plugins only for those user agents, that we know randomize the plugins
       // every time we try to enumerate them
-      if(this.pluginsShouldBeSorted()) {
+      if(this.pluginsShouldBeSorted(fp)) {
         plugins = plugins.sort(function(a, b) {
           if(a.name > b.name){ return 1; }
           if(a.name < b.name){ return -1; }
           return 0;
         });
       }
-      return this.map(plugins, function (p) {
-        var mimeTypes = this.map(p, function(mt){
+      return fp.map(plugins, function (p) {
+        var mimeTypes = fp.map(p, function(mt){
           return [mt.type, mt.suffixes].join("~");
         }).join(",");
         return [p.name, p.description, mimeTypes].join("::");
       }, this);
     },
-    getIEPlugins: function () {
+    /**
+     * @static
+     *
+     * @param {!Fingerprint2} fp
+     * @returns {Array|null}
+     */
+    getIEPlugins: function (fp) {
       var result = [];
       if((Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(window, "ActiveXObject")) || ("ActiveXObject" in window)) {
         var names = [
@@ -792,7 +925,7 @@ var DEBUG_MODE = false;
           "rmocx.RealPlayer G2 Control.1"
         ];
         // starting to detect plugins in IE
-        result = this.map(names, function(name) {
+        result = fp.map(names, function(name) {
           try {
             new ActiveXObject(name); // eslint-disable-no-new
             return name;
@@ -806,10 +939,16 @@ var DEBUG_MODE = false;
       }
       return result;
     },
-    pluginsShouldBeSorted: function () {
+    /**
+     * @static
+     * @param {!Fingerprint2} fp
+     * @returns {boolean}
+     */
+    pluginsShouldBeSorted: function (fp) {
       var should = false;
-      for(var i = 0, l = this.options.sortPluginsFor.length; i < l; i++) {
-        var re = this.options.sortPluginsFor[i];
+      var sortPluginForOption = fp.options["sortPluginsFor"];
+      for(var i = 0, l = sortPluginForOption.length; i < l; i++) {
+        var re = sortPluginForOption[i];
         if(navigator.userAgent.match(re)) {
           should = true;
           break;
@@ -817,9 +956,11 @@ var DEBUG_MODE = false;
       }
       return should;
     },
-    touchSupportKey: function (keys) {
-      keys.push({key: "touch_support", value: this.getTouchSupport()});
-    },
+    /**
+     * @static
+     *
+     * @returns {boolean}
+     */
     hasSessionStorage: function () {
       try {
         return !!window.sessionStorage;
@@ -827,23 +968,33 @@ var DEBUG_MODE = false;
         return true; // SecurityError when referencing it means it exists
       }
     },
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=781447
+    /**
+     * @static
+     *
+     * @returns {boolean}
+     */
     hasLocalStorage: function () {
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=781447
       try {
         return !!window.localStorage;
       } catch(e) {
         return true; // SecurityError when referencing it means it exists
       }
     },
-    // This is a crude and primitive touch screen detection.
-    // It's not possible to currently reliably detect the  availability of a touch screen
-    // with a JS, without actually subscribing to a touch event.
-    // http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
-    // https://github.com/Modernizr/Modernizr/issues/548
-    // method returns an array of 3 values:
-    // maxTouchPoints, the success or failure of creating a TouchEvent,
-    // and the availability of the 'ontouchstart' property
+    /**
+     * @static
+     *
+     * @returns {Array<*>}
+     */
     getTouchSupport: function () {
+      // This is a crude and primitive touch screen detection.
+      // It's not possible to currently reliably detect the  availability of a touch screen
+      // with a JS, without actually subscribing to a touch event.
+      // http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
+      // https://github.com/Modernizr/Modernizr/issues/548
+      // method returns an array of 3 values:
+      // maxTouchPoints, the success or failure of creating a TouchEvent,
+      // and the availability of the 'ontouchstart' property
       var maxTouchPoints = 0;
       var touchEvent = false;
       if(typeof navigator.maxTouchPoints !== "undefined") {
@@ -858,8 +1009,14 @@ var DEBUG_MODE = false;
       var touchStart = "ontouchstart" in window;
       return [maxTouchPoints, touchEvent, touchStart];
     },
-    // https://www.browserleaks.com/canvas#how-does-it-work
-    getCanvasFp: function() {
+    /**
+     * @static
+     *
+     * @param {!Fingerprint2} fp
+     * @returns {string}
+     */
+    getCanvasFp: function(fp) {
+      // https://www.browserleaks.com/canvas#how-does-it-work
       var result = [];
       // Very simple now, need to make it more complex (geo shapes etc)
       var canvas = document.createElement("canvas");
@@ -879,7 +1036,7 @@ var DEBUG_MODE = false;
       ctx.fillRect(125, 1, 62, 20);
       ctx.fillStyle = "#069";
       // https://github.com/Valve/fingerprintjs2/issues/66
-      if(this.options.dontUseFakeFontInCanvas) {
+      if(fp.options.dontUseFakeFontInCanvas) {
         ctx.font = "11pt Arial";
       } else {
         ctx.font = "11pt no-real-font-123";
@@ -919,6 +1076,11 @@ var DEBUG_MODE = false;
       result.push("canvas fp:" + canvas.toDataURL());
       return result.join("~");
     },
+    /**
+     * @static
+     *
+     * @returns {string|null}
+     */
     getWebglFp: function() {
       var gl;
       var fa2s = function(fa) {
@@ -1034,6 +1196,11 @@ var DEBUG_MODE = false;
       result.push("webgl fragment shader low int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).rangeMax);
       return result.join("~");
     },
+    /**
+     * @static
+     *
+     * @returns {boolean}
+     */
     getAdBlock: function(){
       var ads = document.createElement("div");
       ads.innerHTML = "&nbsp;";
@@ -1049,6 +1216,11 @@ var DEBUG_MODE = false;
       }
       return result;
     },
+    /**
+     * @static
+     *
+     * @returns {boolean}
+     */
     getHasLiedLanguages: function(){
       //We check if navigator.language is equal to the first language of navigator.languages
       if(typeof navigator.languages !== "undefined"){
@@ -1063,6 +1235,11 @@ var DEBUG_MODE = false;
       }
       return false;
     },
+    /**
+     * @static
+     *
+     * @returns {boolean}
+     */
     getHasLiedOs: function(){
       var userAgent = navigator.userAgent.toLowerCase();
       var oscpu = navigator.oscpu;
@@ -1130,6 +1307,11 @@ var DEBUG_MODE = false;
 
       return false;
     },
+    /**
+     * @static
+     *
+     * @returns {boolean}
+     */
     getHasLiedBrowser: function () {
       var userAgent = navigator.userAgent.toLowerCase();
       var productSub = navigator.productSub;
@@ -1180,10 +1362,20 @@ var DEBUG_MODE = false;
       }
       return false;
     },
+    /**
+     * @static
+     *
+     * @returns {boolean}
+     */
     isCanvasSupported: function () {
       var elem = document.createElement("canvas");
       return !!(elem.getContext && elem.getContext("2d"));
     },
+    /**
+     * @static
+     *
+     * @returns {boolean}
+     */
     isWebGlSupported: function() {
       // code taken from Modernizr
       if (!this.isCanvasSupported()) {
@@ -1201,6 +1393,11 @@ var DEBUG_MODE = false;
 
       return !!window.WebGLRenderingContext && !!glContext;
     },
+    /**
+     * @static
+     *
+     * @returns {boolean}
+     */
     isIE: function () {
       if(navigator.appName === "Microsoft Internet Explorer") {
         return true;
@@ -1209,6 +1406,11 @@ var DEBUG_MODE = false;
       }
       return false;
     },
+    /**
+     * @static
+     *
+     * @returns {?WebGLRenderingContext}
+     */
     getWebglCanvas: function() {
       var canvas = document.createElement("canvas");
       var gl = null;
@@ -1217,6 +1419,76 @@ var DEBUG_MODE = false;
       } catch(e) { /* squelch */ }
       if (!gl) { gl = null; }
       return gl;
+    }
+  };
+
+  
+  /**
+   *
+   * @param {Object} options
+   * @constructor
+   */
+  var Fingerprint2 = function(options) {
+
+    if (!(this instanceof Fingerprint2)) {
+      return new Fingerprint2(options);
+    }
+
+    var defaultOptions = {
+      "detectScreenOrientation": true,
+      "sortPluginsFor": [/palemoon/i],
+      "userDefinedFonts": []
+    };
+
+    this.options = extend(options, defaultOptions);
+    this.nativeForEach = Array.prototype.forEach;
+    this.nativeMap = Array.prototype.map;
+  };
+
+  Fingerprint2.prototype = {
+    /**
+     *
+     * @param {string} input
+     * @returns {string}
+     */
+    hash: function (input) {
+      return murmur3x64hash128(input, 31);
+    },
+    get: function(doneCallback){
+      if(typeof doneCallback !== "function"){
+        return this.getInternal()[0];
+      }
+      this.getInternal(doneCallback);
+    },
+    getWithComponents: function(){
+      return this.getInternal();
+    }, 
+    /**
+     * @private
+     * @param {function(string,Array):void} [doneCallback]
+     * @returns {Array}
+     */
+    getInternal: function(doneCallback){
+      
+      var keys = Features.runDetections(this);
+
+      var values = [];
+      this.each(keys, function(pair) {
+        var value = pair.value;
+        if (typeof pair.value.join !== "undefined") {
+          value = pair.value.join(";");
+        }
+        values.push(value);
+      });
+
+      var hashDigest = this.hash(values.join("~~~"));
+
+      if(typeof doneCallback !== "function"){
+        return [hashDigest, keys];
+      }
+
+      doneCallback(hashDigest, keys);
+      return null;
     },
     /**
      *
@@ -1262,6 +1534,9 @@ var DEBUG_MODE = false;
     }
   };
 
-  Fingerprint2.VERSION = "2.0.0-dev";
+  Fingerprint2["VERSION"] = "2.0.0-dev";
+  Fingerprint2["Features"] = Features;
+  Fingerprint2["Extractors"] = Extractors;
+  
   window["Fingerprint2"] = Fingerprint2;
 })();

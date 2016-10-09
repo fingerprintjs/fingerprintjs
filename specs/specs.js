@@ -91,54 +91,54 @@ describe("Fingerprint2", function () {
     describe("non-default options", function () {
       it("does not use userAgent when excluded", function (done) {
         var fp2 = new Fingerprint2({excludeUserAgent: true});
-        spyOn(fp2, "userAgentKey");
+        spyOn(Fingerprint2.Features, "userAgentKey");
         fp2.get(function(result) {
-          expect(fp2.userAgentKey).not.toHaveBeenCalled();
+          expect(Fingerprint2.Features.userAgentKey).not.toHaveBeenCalled();
           done();
         });
       });
 
       it("does not use pixelRatio when excluded", function (done) {
         var fp2 = new Fingerprint2({excludePixelRatio: true});
-        spyOn(fp2, "pixelRatioKey");
+        spyOn(Fingerprint2.Features, "pixelRatioKey");
         fp2.get(function(result) {
-          expect(fp2.pixelRatioKey).not.toHaveBeenCalled();
+          expect(Fingerprint2.Features.pixelRatioKey).not.toHaveBeenCalled();
           done();
         });
       });
 
       it("does not use screen resolution when excluded", function (done) {
         var fp2 = new Fingerprint2({excludeScreenResolution: true});
-        spyOn(fp2, "screenResolutionKey");
+        spyOn(Fingerprint2.Features, "screenResolutionKey");
         fp2.get(function(result) {
-          expect(fp2.screenResolutionKey).not.toHaveBeenCalled();
+          expect(Fingerprint2.Features.screenResolutionKey).not.toHaveBeenCalled();
           done();
         });
       });
 
       it("does not use available screen resolution when excluded", function (done) {
         var fp2 = new Fingerprint2({excludeAvailableScreenResolution: true});
-        spyOn(fp2, "availableScreenResolutionKey");
+        spyOn(Fingerprint2.Features, "availableScreenResolutionKey");
         fp2.get(function(result) {
-          expect(fp2.availableScreenResolutionKey).not.toHaveBeenCalled();
+          expect(Fingerprint2.Features.availableScreenResolutionKey).not.toHaveBeenCalled();
           done();
         });
       });
 
       it("does not use plugins info when excluded", function (done) {
         var fp2 = new Fingerprint2({excludePlugins: true});
-        spyOn(fp2, "getRegularPlugins");
+        spyOn(Fingerprint2.Extractors, "getRegularPlugins");
         fp2.get(function(result) {
-          expect(fp2.getRegularPlugins).not.toHaveBeenCalled();
+          expect(Fingerprint2.Extractors.getRegularPlugins).not.toHaveBeenCalled();
           done();
         });
       });
 
       it("does not use IE plugins info when excluded", function (done) {
         var fp2 = new Fingerprint2({excludeIEPlugins: true});
-        spyOn(fp2, "getIEPlugins");
+        spyOn(Fingerprint2.Extractors, "getIEPlugins");
         fp2.get(function(result) {
-          expect(fp2.getIEPlugins).not.toHaveBeenCalled();
+          expect(Fingerprint2.Extractors.getIEPlugins).not.toHaveBeenCalled();
           done();
         });
       });
