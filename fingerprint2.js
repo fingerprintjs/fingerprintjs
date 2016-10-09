@@ -1082,12 +1082,15 @@ var DEBUG_MODE = false;
      * @returns {string|null}
      */
     getWebglFp: function() {
+      /**
+       * @type {WebGLRenderingContext}
+       */
       var gl;
       var fa2s = function(fa) {
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.enable(gl.DEPTH_TEST);
-        gl.depthFunc(gl.LEQUAL);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.enable(WebGLRenderingContext.DEPTH_TEST);
+        gl.depthFunc(WebGLRenderingContext.LEQUAL);
+        gl.clear(WebGLRenderingContext.COLOR_BUFFER_BIT | WebGLRenderingContext.DEPTH_BUFFER_BIT);
         return "[" + fa[0] + ", " + fa[1] + "]";
       };
       var maxAnisotropy = function(gl) {
@@ -1104,15 +1107,15 @@ var DEBUG_MODE = false;
       var vShaderTemplate = "attribute vec2 attrVertex;varying vec2 varyinTexCoordinate;uniform vec2 uniformOffset;void main(){varyinTexCoordinate=attrVertex+uniformOffset;gl_Position=vec4(attrVertex,0,1);}";
       var fShaderTemplate = "precision mediump float;varying vec2 varyinTexCoordinate;void main() {gl_FragColor=vec4(varyinTexCoordinate,0,1);}";
       var vertexPosBuffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer);
+      gl.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, vertexPosBuffer);
       var vertices = new Float32Array([-.2, -.9, 0, .4, -.26, 0, 0, .732134444, 0]);
-      gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+      gl.bufferData(WebGLRenderingContext.ARRAY_BUFFER, vertices, WebGLRenderingContext.STATIC_DRAW);
       vertexPosBuffer.itemSize = 3;
       vertexPosBuffer.numItems = 3;
-      var program = gl.createProgram(), vshader = gl.createShader(gl.VERTEX_SHADER);
+      var program = gl.createProgram(), vshader = gl.createShader(WebGLRenderingContext.VERTEX_SHADER);
       gl.shaderSource(vshader, vShaderTemplate);
       gl.compileShader(vshader);
-      var fshader = gl.createShader(gl.FRAGMENT_SHADER);
+      var fshader = gl.createShader(WebGLRenderingContext.FRAGMENT_SHADER);
       gl.shaderSource(fshader, fShaderTemplate);
       gl.compileShader(fshader);
       gl.attachShader(program, vshader);
@@ -1122,78 +1125,85 @@ var DEBUG_MODE = false;
       program.vertexPosAttrib = gl.getAttribLocation(program, "attrVertex");
       program.offsetUniform = gl.getUniformLocation(program, "uniformOffset");
       gl.enableVertexAttribArray(program.vertexPosArray);
-      gl.vertexAttribPointer(program.vertexPosAttrib, vertexPosBuffer.itemSize, gl.FLOAT, !1, 0, 0);
+      gl.vertexAttribPointer(program.vertexPosAttrib, vertexPosBuffer.itemSize, WebGLRenderingContext.FLOAT, !1, 0, 0);
       gl.uniform2f(program.offsetUniform, 1, 1);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexPosBuffer.numItems);
+      gl.drawArrays(WebGLRenderingContext.TRIANGLE_STRIP, 0, vertexPosBuffer.numItems);
       if (gl.canvas != null) { result.push(gl.canvas.toDataURL()); }
       result.push("extensions:" + gl.getSupportedExtensions().join(";"));
-      result.push("webgl aliased line width range:" + fa2s(gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE)));
-      result.push("webgl aliased point size range:" + fa2s(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)));
-      result.push("webgl alpha bits:" + gl.getParameter(gl.ALPHA_BITS));
+      result.push("webgl aliased line width range:" + fa2s(gl.getParameter(WebGLRenderingContext.ALIASED_LINE_WIDTH_RANGE)));
+      result.push("webgl aliased point size range:" + fa2s(gl.getParameter(WebGLRenderingContext.ALIASED_POINT_SIZE_RANGE)));
+      result.push("webgl alpha bits:" + gl.getParameter(WebGLRenderingContext.ALPHA_BITS));
       result.push("webgl antialiasing:" + (gl.getContextAttributes().antialias ? "yes" : "no"));
-      result.push("webgl blue bits:" + gl.getParameter(gl.BLUE_BITS));
-      result.push("webgl depth bits:" + gl.getParameter(gl.DEPTH_BITS));
-      result.push("webgl green bits:" + gl.getParameter(gl.GREEN_BITS));
+      result.push("webgl blue bits:" + gl.getParameter(WebGLRenderingContext.BLUE_BITS));
+      result.push("webgl depth bits:" + gl.getParameter(WebGLRenderingContext.DEPTH_BITS));
+      result.push("webgl green bits:" + gl.getParameter(WebGLRenderingContext.GREEN_BITS));
       result.push("webgl max anisotropy:" + maxAnisotropy(gl));
-      result.push("webgl max combined texture image units:" + gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS));
-      result.push("webgl max cube map texture size:" + gl.getParameter(gl.MAX_CUBE_MAP_TEXTURE_SIZE));
-      result.push("webgl max fragment uniform vectors:" + gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS));
-      result.push("webgl max render buffer size:" + gl.getParameter(gl.MAX_RENDERBUFFER_SIZE));
-      result.push("webgl max texture image units:" + gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS));
-      result.push("webgl max texture size:" + gl.getParameter(gl.MAX_TEXTURE_SIZE));
-      result.push("webgl max varying vectors:" + gl.getParameter(gl.MAX_VARYING_VECTORS));
-      result.push("webgl max vertex attribs:" + gl.getParameter(gl.MAX_VERTEX_ATTRIBS));
-      result.push("webgl max vertex texture image units:" + gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS));
-      result.push("webgl max vertex uniform vectors:" + gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS));
-      result.push("webgl max viewport dims:" + fa2s(gl.getParameter(gl.MAX_VIEWPORT_DIMS)));
-      result.push("webgl red bits:" + gl.getParameter(gl.RED_BITS));
-      result.push("webgl renderer:" + gl.getParameter(gl.RENDERER));
-      result.push("webgl shading language version:" + gl.getParameter(gl.SHADING_LANGUAGE_VERSION));
-      result.push("webgl stencil bits:" + gl.getParameter(gl.STENCIL_BITS));
-      result.push("webgl vendor:" + gl.getParameter(gl.VENDOR));
-      result.push("webgl version:" + gl.getParameter(gl.VERSION));
+      result.push("webgl max combined texture image units:" + gl.getParameter(WebGLRenderingContext.MAX_COMBINED_TEXTURE_IMAGE_UNITS));
+      result.push("webgl max cube map texture size:" + gl.getParameter(WebGLRenderingContext.MAX_CUBE_MAP_TEXTURE_SIZE));
+      result.push("webgl max fragment uniform vectors:" + gl.getParameter(WebGLRenderingContext.MAX_FRAGMENT_UNIFORM_VECTORS));
+      result.push("webgl max render buffer size:" + gl.getParameter(WebGLRenderingContext.MAX_RENDERBUFFER_SIZE));
+      result.push("webgl max texture image units:" + gl.getParameter(WebGLRenderingContext.MAX_TEXTURE_IMAGE_UNITS));
+      result.push("webgl max texture size:" + gl.getParameter(WebGLRenderingContext.MAX_TEXTURE_SIZE));
+      result.push("webgl max varying vectors:" + gl.getParameter(WebGLRenderingContext.MAX_VARYING_VECTORS));
+      result.push("webgl max vertex attribs:" + gl.getParameter(WebGLRenderingContext.MAX_VERTEX_ATTRIBS));
+      result.push("webgl max vertex texture image units:" + gl.getParameter(WebGLRenderingContext.MAX_VERTEX_TEXTURE_IMAGE_UNITS));
+      result.push("webgl max vertex uniform vectors:" + gl.getParameter(WebGLRenderingContext.MAX_VERTEX_UNIFORM_VECTORS));
+      result.push("webgl max viewport dims:" + fa2s(gl.getParameter(WebGLRenderingContext.MAX_VIEWPORT_DIMS)));
+      result.push("webgl red bits:" + gl.getParameter(WebGLRenderingContext.RED_BITS));
+      result.push("webgl renderer:" + gl.getParameter(WebGLRenderingContext.RENDERER));
+      result.push("webgl shading language version:" + gl.getParameter(WebGLRenderingContext.SHADING_LANGUAGE_VERSION));
+      result.push("webgl stencil bits:" + gl.getParameter(WebGLRenderingContext.STENCIL_BITS));
+      result.push("webgl vendor:" + gl.getParameter(WebGLRenderingContext.VENDOR));
+      result.push("webgl version:" + gl.getParameter(WebGLRenderingContext.VERSION));
 
+      /**
+       * @link https://developer.mozilla.org/en-US/docs/Web/API/WebGLShaderPrecisionFormat
+       * @typedef {{rangeMin:number, rangeMax:number, precision:number}} WebGLShaderPrecisionFormat
+       */
+      /**
+       * @link https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/getShaderPrecisionFormat
+       * @typedef {function(number,number):?WebGLShaderPrecisionFormat} WebGLRenderingContext.getShaderPrecisionFormat
+       */
       if (!gl.getShaderPrecisionFormat) {
         log("WebGL fingerprinting is incomplete, because your browser does not support getShaderPrecisionFormat");
-        return result.join("~");
+      }else{
+        result.push("webgl vertex shader high float precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_FLOAT).precision);
+        result.push("webgl vertex shader high float precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_FLOAT).rangeMin);
+        result.push("webgl vertex shader high float precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_FLOAT).rangeMax);
+        result.push("webgl vertex shader medium float precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).precision);
+        result.push("webgl vertex shader medium float precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).rangeMin);
+        result.push("webgl vertex shader medium float precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).rangeMax);
+        result.push("webgl vertex shader low float precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_FLOAT).precision);
+        result.push("webgl vertex shader low float precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_FLOAT).rangeMin);
+        result.push("webgl vertex shader low float precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_FLOAT).rangeMax);
+        result.push("webgl fragment shader high float precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_FLOAT).precision);
+        result.push("webgl fragment shader high float precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_FLOAT).rangeMin);
+        result.push("webgl fragment shader high float precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_FLOAT).rangeMax);
+        result.push("webgl fragment shader medium float precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).precision);
+        result.push("webgl fragment shader medium float precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).rangeMin);
+        result.push("webgl fragment shader medium float precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).rangeMax);
+        result.push("webgl fragment shader low float precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_FLOAT).precision);
+        result.push("webgl fragment shader low float precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_FLOAT).rangeMin);
+        result.push("webgl fragment shader low float precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_FLOAT).rangeMax);
+        result.push("webgl vertex shader high int precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_INT).precision);
+        result.push("webgl vertex shader high int precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_INT).rangeMin);
+        result.push("webgl vertex shader high int precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_INT).rangeMax);
+        result.push("webgl vertex shader medium int precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_INT).precision);
+        result.push("webgl vertex shader medium int precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_INT).rangeMin);
+        result.push("webgl vertex shader medium int precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_INT).rangeMax);
+        result.push("webgl vertex shader low int precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_INT).precision);
+        result.push("webgl vertex shader low int precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_INT).rangeMin);
+        result.push("webgl vertex shader low int precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_INT).rangeMax);
+        result.push("webgl fragment shader high int precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_INT).precision);
+        result.push("webgl fragment shader high int precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_INT).rangeMin);
+        result.push("webgl fragment shader high int precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_INT).rangeMax);
+        result.push("webgl fragment shader medium int precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_INT).precision);
+        result.push("webgl fragment shader medium int precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_INT).rangeMin);
+        result.push("webgl fragment shader medium int precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_INT).rangeMax);
+        result.push("webgl fragment shader low int precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_INT).precision);
+        result.push("webgl fragment shader low int precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_INT).rangeMin);
+        result.push("webgl fragment shader low int precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_INT).rangeMax);
       }
-
-      result.push("webgl vertex shader high float precision:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT ).precision);
-      result.push("webgl vertex shader high float precision rangeMin:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT ).rangeMin);
-      result.push("webgl vertex shader high float precision rangeMax:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_FLOAT ).rangeMax);
-      result.push("webgl vertex shader medium float precision:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_FLOAT ).precision);
-      result.push("webgl vertex shader medium float precision rangeMin:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_FLOAT ).rangeMin);
-      result.push("webgl vertex shader medium float precision rangeMax:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_FLOAT ).rangeMax);
-      result.push("webgl vertex shader low float precision:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.LOW_FLOAT ).precision);
-      result.push("webgl vertex shader low float precision rangeMin:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.LOW_FLOAT ).rangeMin);
-      result.push("webgl vertex shader low float precision rangeMax:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.LOW_FLOAT ).rangeMax);
-      result.push("webgl fragment shader high float precision:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT ).precision);
-      result.push("webgl fragment shader high float precision rangeMin:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT ).rangeMin);
-      result.push("webgl fragment shader high float precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT ).rangeMax);
-      result.push("webgl fragment shader medium float precision:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT ).precision);
-      result.push("webgl fragment shader medium float precision rangeMin:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT ).rangeMin);
-      result.push("webgl fragment shader medium float precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT ).rangeMax);
-      result.push("webgl fragment shader low float precision:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_FLOAT ).precision);
-      result.push("webgl fragment shader low float precision rangeMin:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_FLOAT ).rangeMin);
-      result.push("webgl fragment shader low float precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_FLOAT ).rangeMax);
-      result.push("webgl vertex shader high int precision:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_INT ).precision);
-      result.push("webgl vertex shader high int precision rangeMin:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_INT ).rangeMin);
-      result.push("webgl vertex shader high int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.HIGH_INT ).rangeMax);
-      result.push("webgl vertex shader medium int precision:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_INT ).precision);
-      result.push("webgl vertex shader medium int precision rangeMin:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_INT ).rangeMin);
-      result.push("webgl vertex shader medium int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.MEDIUM_INT ).rangeMax);
-      result.push("webgl vertex shader low int precision:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.LOW_INT ).precision);
-      result.push("webgl vertex shader low int precision rangeMin:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.LOW_INT ).rangeMin);
-      result.push("webgl vertex shader low int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.VERTEX_SHADER, gl.LOW_INT ).rangeMax);
-      result.push("webgl fragment shader high int precision:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_INT ).precision);
-      result.push("webgl fragment shader high int precision rangeMin:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_INT ).rangeMin);
-      result.push("webgl fragment shader high int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_INT ).rangeMax);
-      result.push("webgl fragment shader medium int precision:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_INT ).precision);
-      result.push("webgl fragment shader medium int precision rangeMin:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_INT ).rangeMin);
-      result.push("webgl fragment shader medium int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.MEDIUM_INT ).rangeMax);
-      result.push("webgl fragment shader low int precision:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).precision);
-      result.push("webgl fragment shader low int precision rangeMin:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).rangeMin);
-      result.push("webgl fragment shader low int precision rangeMax:" + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT ).rangeMax);
       return result.join("~");
     },
     /**
