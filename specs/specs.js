@@ -30,8 +30,10 @@ describe("Fingerprint2", function () {
       expect(new Fingerprint2()).not.toBeNull();
     });
 
-    it("accepts an empty options object", function () {
-      expect(new Fingerprint2({})).not.toBeNull();
+    it("accepts a new options object", function () {
+      var options = new FP2Options;
+      var fingerprint2 = new Fingerprint2(options);
+      expect(fingerprint2.options).not.toBeNull();
     });
 
     it("uses default options", function () {
@@ -40,13 +42,17 @@ describe("Fingerprint2", function () {
     });
 
     it("allows to override default options", function () {
-      var fp2 = new Fingerprint2({swfPath: "newpath", userDefinedFonts: ["Ethos", "Quenda"]});
+      var options = new FP2Options;
+      options.userDefinedFonts = ["Ethos", "Quenda"];
+      var fp2 = new Fingerprint2(options);
       expect(fp2.options.userDefinedFonts).toEqual(["Ethos", "Quenda"]);
     });
 
     it("allows to add new options", function () {
-      var fp2 = new Fingerprint2({excludeUserAgent: true});
-      expect(fp2.options.excludeUserAgent).toBe(true);
+      var options = new FP2Options;
+      options.exclude.UserAgent = true;
+      var fp2 = new Fingerprint2(options);
+      expect(fp2.options.exclude.UserAgent).toBe(true);
     });
 
     describe("sortPluginsFor", function () {
@@ -56,15 +62,17 @@ describe("Fingerprint2", function () {
       });
 
       it("allows to set new array of regexes", function () {
-        var fp2 = new Fingerprint2({sortPluginsFor: [/firefox/i, /chrome/i]});
+        var options = new FP2Options;
+        options.sortPluginsFor = [/firefox/i, /chrome/i];
+        var fp2 = new Fingerprint2(options);
         expect(fp2.options.sortPluginsFor).toEqual([/firefox/i, /chrome/i]);
       });
     });
   });
 
-  describe("without new keyword", function () {
+  describe("without create keyword", function () {
     it("creates a new instance of FP2", function () {
-      expect(Fingerprint2()).not.toBeNull();
+      expect(Fingerprint2.create()).not.toBeNull();
     });
   })
 
@@ -90,7 +98,9 @@ describe("Fingerprint2", function () {
 
     describe("non-default options", function () {
       it("does not use userAgent when excluded", function (done) {
-        var fp2 = new Fingerprint2({excludeUserAgent: true});
+
+        var fp2 = new Fingerprint2();
+        fp2.options.exclude.UserAgent = true;
         spyOn(Fingerprint2.Features, "userAgentKey");
         fp2.get(function(result) {
           expect(Fingerprint2.Features.userAgentKey).not.toHaveBeenCalled();
@@ -99,7 +109,8 @@ describe("Fingerprint2", function () {
       });
 
       it("does not use pixelRatio when excluded", function (done) {
-        var fp2 = new Fingerprint2({excludePixelRatio: true});
+        var fp2 = new Fingerprint2();
+        fp2.options.exclude.PixelRatio = true;
         spyOn(Fingerprint2.Features, "pixelRatioKey");
         fp2.get(function(result) {
           expect(Fingerprint2.Features.pixelRatioKey).not.toHaveBeenCalled();
@@ -108,7 +119,8 @@ describe("Fingerprint2", function () {
       });
 
       it("does not use screen resolution when excluded", function (done) {
-        var fp2 = new Fingerprint2({excludeScreenResolution: true});
+        var fp2 = new Fingerprint2();
+        fp2.options.exclude.ScreenResolution = true;
         spyOn(Fingerprint2.Features, "screenResolutionKey");
         fp2.get(function(result) {
           expect(Fingerprint2.Features.screenResolutionKey).not.toHaveBeenCalled();
@@ -117,7 +129,8 @@ describe("Fingerprint2", function () {
       });
 
       it("does not use available screen resolution when excluded", function (done) {
-        var fp2 = new Fingerprint2({excludeAvailableScreenResolution: true});
+        var fp2 = new Fingerprint2();
+        fp2.options.exclude.AvailableScreenResolution = true;
         spyOn(Fingerprint2.Features, "availableScreenResolutionKey");
         fp2.get(function(result) {
           expect(Fingerprint2.Features.availableScreenResolutionKey).not.toHaveBeenCalled();
@@ -126,7 +139,8 @@ describe("Fingerprint2", function () {
       });
 
       it("does not use plugins info when excluded", function (done) {
-        var fp2 = new Fingerprint2({excludePlugins: true});
+        var fp2 = new Fingerprint2();
+        fp2.options.exclude.Plugins = true;
         spyOn(Fingerprint2.Extractors, "getRegularPlugins");
         fp2.get(function(result) {
           expect(Fingerprint2.Extractors.getRegularPlugins).not.toHaveBeenCalled();
@@ -135,7 +149,8 @@ describe("Fingerprint2", function () {
       });
 
       it("does not use IE plugins info when excluded", function (done) {
-        var fp2 = new Fingerprint2({excludeIEPlugins: true});
+        var fp2 = new Fingerprint2();
+        fp2.options.exclude.IEPlugins = true;
         spyOn(Fingerprint2.Extractors, "getIEPlugins");
         fp2.get(function(result) {
           expect(Fingerprint2.Extractors.getIEPlugins).not.toHaveBeenCalled();

@@ -15,15 +15,17 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
+"use strict";
 /**
  *
  * @define {boolean}
  */
 var DEBUG_MODE = false;
-
-(function() {
-  "use strict";
+/**
+ *
+ * @define {boolean}
+ */
+var EXPORT_MODE = true;
 
   /**
    * @private
@@ -264,25 +266,6 @@ var DEBUG_MODE = false;
            ("00000000" + (h2[0] >>> 0).toString(16)).slice(-8) +
            ("00000000" + (h2[1] >>> 0).toString(16)).slice(-8);
   };
-
-  /**
-   * @private
-   * @static
-   *
-   * @param {?Object} source
-   * @param {!Object} target
-   *
-   * @returns {!Object}
-   */
-  var extend = function(source, target) {
-    if (source == null) { return target; }
-    for (var k in source) {
-      if(source[k] != null && target[k] !== source[k]) {
-        target[k] = source[k];
-      }
-    }
-    return target;
-  };
   /**
    * @private
    * @static
@@ -297,6 +280,90 @@ var DEBUG_MODE = false;
     }
   };
 
+  /**
+   * @dict
+   * @constructor
+   */
+  var FP2Options = function(){
+    /**
+     *
+     * @type {boolean}
+     */
+    this["detectScreenOrientation"] = true;
+    /**
+     *
+     * @type {Array<RegExp>}
+     */
+    this["sortPluginsFor"] = [/palemoon/i];
+    /**
+     *
+     * @type {Array<string>}
+     */
+    this["userDefinedFonts"] = [];
+    /**
+     *
+     * @type {boolean}
+     */
+    this["extendedJsFonts"] = false;
+    /**
+     *
+     * @type {boolean}
+     */
+    this["dontUseFakeFontInCanvas"] = false;
+    /**
+     *
+     * @type {Object<string,boolean>}
+     */
+    this["exclude"]  = {
+      UserAgent: false,
+      Language: false,
+      ColorDepth: false,
+      PixelRatio: false,
+      ScreenResolution: false,
+      AvailableScreenResolution: false,
+      TimezoneOffset: false,
+      SessionStorage: false,
+      LocalStorage: false,
+      IndexedDB: false,
+      AddBehavior: false,
+      OpenDatabase: false,
+      CpuClass: false,
+      Platform: false,
+      DoNotTrack: false,
+      Plugins: false,
+      IEPlugins: false,
+      Canvas: false,
+      WebGL: false,
+      AdBlock: false,
+      HasLiedLanguages: false,
+      HasLiedResolution: false,
+      HasLiedOs: false,
+      HasLiedBrowser: false,
+      TouchSupport: false,
+      JsFonts: false
+    };
+  };
+
+  /**
+   * @param {FP2Options} [options]
+   * @constructor
+   */
+  var Fingerprint2 = function(options) {
+    this.options = options || new FP2Options();
+    this.nativeForEach = Array.prototype.forEach;
+    this.nativeMap = Array.prototype.map;
+  };
+  
+  /**
+   *
+   * @param {FP2Options} [options]
+   * @returns {Fingerprint2}
+   */
+  Fingerprint2.create = function (options) {
+    return new Fingerprint2(options);
+  };
+  
+
   var Features = {
     /**
      * @static
@@ -308,108 +375,108 @@ var DEBUG_MODE = false;
       var keys = [];
 
       // NOTICE: option keys are strings for exporting purpose (Closure-Compiler convention).
-      var options = fp.options;
+      var exclude = fp.options["exclude"];
 
-      if (!options["excludeUserAgent"]) {
-        this.userAgentKey(keys, fp);
+      if (!exclude["UserAgent"]) {
+        Features.userAgentKey(keys, fp);
       }
 
-      if (!options["excludeLanguage"]) {
-        this.languageKey(keys, fp);
+      if (!exclude["Language"]) {
+        Features.languageKey(keys, fp);
       }
 
-      if (!options["excludeColorDepth"]) {
-        this.colorDepthKey(keys, fp);
+      if (!exclude["ColorDepth"]) {
+        Features.colorDepthKey(keys, fp);
       }
 
-      if (!options["excludePixelRatio"]) {
-        this.pixelRatioKey(keys, fp);
+      if (!exclude["PixelRatio"]) {
+        Features.pixelRatioKey(keys, fp);
       }
 
-      if (!options["excludeScreenResolution"]) {
-        this.screenResolutionKey(keys, fp);
+      if (!exclude["ScreenResolution"]) {
+        Features.screenResolutionKey(keys, fp);
       }
 
-      if (!options["excludeAvailableScreenResolution"]) {
-        this.availableScreenResolutionKey(keys, fp);
+      if (!exclude["AvailableScreenResolution"]) {
+        Features.availableScreenResolutionKey(keys, fp);
       }
 
-      if (!options["excludeTimezoneOffset"]) {
-        this.timezoneOffsetKey(keys, fp);
+      if (!exclude["TimezoneOffset"]) {
+        Features.timezoneOffsetKey(keys, fp);
       }
 
-      if (!options["excludeSessionStorage"]) {
-        this.sessionStorageKey(keys, fp);
+      if (!exclude["SessionStorage"]) {
+        Features.sessionStorageKey(keys, fp);
       }
 
-      if (!options["excludeSessionStorage"]) {
-        this.localStorageKey(keys, fp);
+      if (!exclude["SessionStorage"]) {
+        Features.localStorageKey(keys, fp);
       }
 
-      if (!options["excludeIndexedDB"]) {
-        this.indexedDbKey(keys, fp);
+      if (!exclude["IndexedDB"]) {
+        Features.indexedDbKey(keys, fp);
       }
 
-      if (!options["excludeAddBehavior"]) {
-        this.addBehaviorKey(keys, fp);
+      if (!exclude["AddBehavior"]) {
+        Features.addBehaviorKey(keys, fp);
       }
 
-      if (!options["excludeOpenDatabase"]) {
-        this.openDatabaseKey(keys, fp);
+      if (!exclude["OpenDatabase"]) {
+        Features.openDatabaseKey(keys, fp);
       }
 
-      if (!options["excludeCpuClass"]) {
-        this.cpuClassKey(keys, fp);
+      if (!exclude["CpuClass"]) {
+        Features.cpuClassKey(keys, fp);
       }
 
-      if (!options["excludePlatform"]) {
-        this.platformKey(keys, fp);
+      if (!exclude["Platform"]) {
+        Features.platformKey(keys, fp);
       }
 
-      if (!options["excludeDoNotTrack"]) {
-        this.doNotTrackKey(keys, fp);
+      if (!exclude["DoNotTrack"]) {
+        Features.doNotTrackKey(keys, fp);
       }
 
-      if (!options["excludePlugins"]) {
-        this.pluginsKey(keys, fp);
+      if (!exclude["Plugins"]) {
+        Features.pluginsKey(keys, fp);
       }
 
-      if (!options["excludeCanvas"]) {
-        this.canvasKey(keys, fp);
+      if (!exclude["Canvas"]) {
+        Features.canvasKey(keys, fp);
       }
 
-      if (!options["excludeWebGL"]) {
-        this.webglKey(keys, fp);
+      if (!exclude["WebGL"]) {
+        Features.webglKey(keys, fp);
       } else {
         log("Skipping WebGL fingerprinting per excludeWebGL configuration option");
       }
 
-      if (!options["excludeAdBlock"]) {
-        this.adBlockKey(keys, fp);
+      if (!exclude["AdBlock"]) {
+        Features.adBlockKey(keys, fp);
       }
 
-      if (!options["excludeHasLiedLanguages"]) {
-        this.hasLiedLanguagesKey(keys, fp);
+      if (!exclude["HasLiedLanguages"]) {
+        Features.hasLiedLanguagesKey(keys, fp);
       }
 
-      if (!options["excludeHasLiedResolution"]) {
-        this.hasLiedResolutionKey(keys, fp);
+      if (!exclude["HasLiedResolution"]) {
+        Features.hasLiedResolutionKey(keys, fp);
       }
 
-      if (!options["excludeHasLiedOs"]) {
-        this.hasLiedOsKey(keys, fp);
+      if (!exclude["HasLiedOs"]) {
+        Features.hasLiedOsKey(keys, fp);
       }
 
-      if (!options["excludeHasLiedBrowser"]) {
-        this.hasLiedBrowserKey(keys, fp);
+      if (!exclude["HasLiedBrowser"]) {
+        Features.hasLiedBrowserKey(keys, fp);
       }
 
-      if (!options["excludeTouchSupport"]) {
-        this.touchSupportKey(keys, fp);
+      if (!exclude["TouchSupport"]) {
+        Features.touchSupportKey(keys, fp);
       }
 
-      if (!options["excludeJsFonts"]) {
-        this.fontsKey(keys, fp);
+      if (!exclude["JsFonts"]) {
+        Features.fontsKey(keys, fp);
       }
 
       return keys;
@@ -674,7 +741,7 @@ var DEBUG_MODE = false;
      */
     pluginsKey: function(keys, fp) {
       if(Extractors.isIE()){
-        if(!fp.options["excludeIEPlugins"]) {
+        if(!fp.options["exclude"]["IEPlugins"]) {
           keys.push({key: "ie_plugins", value: Extractors.getIEPlugins(fp)});
         }
       } else {
@@ -683,9 +750,6 @@ var DEBUG_MODE = false;
     }
   };
 
-  /**
-   *
-   */
   var Extractors = {
     /**
      * @static
@@ -747,11 +811,11 @@ var DEBUG_MODE = false;
         "TypoUpright BT", "Unicorn", "Univers", "Univers CE 55 Medium", "Univers Condensed", "Utsaah", "Vagabond", "Vani", "Vijaya", "Viner Hand ITC", "VisualUI", "Vivaldi", "Vladimir Script", "Vrinda", "Westminster", "WHITNEY", "Wide Latin",
         "ZapfEllipt BT", "ZapfHumnst BT", "ZapfHumnst Dm BT", "Zapfino", "Zurich BlkEx BT", "Zurich Ex BT", "ZWAdobeF"];
 
-      if (fp.options.extendedJsFonts) {
+      if (fp.options["extendedJsFonts"]) {
         fontList = fontList.concat(extendedFontList);
       }
 
-      fontList = fontList.concat(fp.options.userDefinedFonts);
+      fontList = fontList.concat(fp.options["userDefinedFonts"]);
 
       //we use m or w because these two characters take up the maximum width.
       // And we use a LLi so that the same matching fonts can get separated
@@ -877,7 +941,7 @@ var DEBUG_MODE = false;
       }
       // sorting plugins only for those user agents, that we know randomize the plugins
       // every time we try to enumerate them
-      if(this.pluginsShouldBeSorted(fp)) {
+      if(Extractors.pluginsShouldBeSorted(fp)) {
         plugins = plugins.sort(function(a, b) {
           if(a.name > b.name){ return 1; }
           if(a.name < b.name){ return -1; }
@@ -889,7 +953,7 @@ var DEBUG_MODE = false;
           return [mt.type, mt.suffixes].join("~");
         }).join(",");
         return [p.name, p.description, mimeTypes].join("::");
-      }, this);
+      });
     },
     /**
      * @static
@@ -935,7 +999,7 @@ var DEBUG_MODE = false;
         });
       }
       if(navigator.plugins) {
-        result = result.concat(this.getRegularPlugins());
+        result = result.concat(Extractors.getRegularPlugins(fp));
       }
       return result;
     },
@@ -1036,7 +1100,7 @@ var DEBUG_MODE = false;
       ctx.fillRect(125, 1, 62, 20);
       ctx.fillStyle = "#069";
       // https://github.com/Valve/fingerprintjs2/issues/66
-      if(fp.options.dontUseFakeFontInCanvas) {
+      if(fp.options["dontUseFakeFontInCanvas"]) {
         ctx.font = "11pt Arial";
       } else {
         ctx.font = "11pt no-real-font-123";
@@ -1097,7 +1161,7 @@ var DEBUG_MODE = false;
         var anisotropy, ext = gl.getExtension("EXT_texture_filter_anisotropic") || gl.getExtension("WEBKIT_EXT_texture_filter_anisotropic") || gl.getExtension("MOZ_EXT_texture_filter_anisotropic");
         return ext ? (anisotropy = gl.getParameter(ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT), 0 === anisotropy && (anisotropy = 2), anisotropy) : null;
       };
-      gl = this.getWebglCanvas();
+      gl = Extractors.getWebglCanvas();
       if(!gl) { return null; }
       // WebGL fingerprinting is a combination of techniques, found in MaxMind antifraud script & Augur fingerprinting.
       // First it draws a gradient object with shaders and convers the image to the Base64 string.
@@ -1124,6 +1188,7 @@ var DEBUG_MODE = false;
       gl.useProgram(program);
       program.vertexPosAttrib = gl.getAttribLocation(program, "attrVertex");
       program.offsetUniform = gl.getUniformLocation(program, "uniformOffset");
+      //FIXME(?): program.vertexPosArray -> undefined
       gl.enableVertexAttribArray(program.vertexPosArray);
       gl.vertexAttribPointer(program.vertexPosAttrib, vertexPosBuffer.itemSize, WebGLRenderingContext.FLOAT, !1, 0, 0);
       gl.uniform2f(program.offsetUniform, 1, 1);
@@ -1388,7 +1453,7 @@ var DEBUG_MODE = false;
      */
     isWebGlSupported: function() {
       // code taken from Modernizr
-      if (!this.isCanvasSupported()) {
+      if (!Extractors.isCanvasSupported()) {
         return false;
       }
 
@@ -1432,29 +1497,6 @@ var DEBUG_MODE = false;
     }
   };
 
-  
-  /**
-   *
-   * @param {Object} options
-   * @constructor
-   */
-  var Fingerprint2 = function(options) {
-
-    if (!(this instanceof Fingerprint2)) {
-      return new Fingerprint2(options);
-    }
-
-    var defaultOptions = {
-      "detectScreenOrientation": true,
-      "sortPluginsFor": [/palemoon/i],
-      "userDefinedFonts": []
-    };
-
-    this.options = extend(options, defaultOptions);
-    this.nativeForEach = Array.prototype.forEach;
-    this.nativeMap = Array.prototype.map;
-  };
-
   Fingerprint2.prototype = {
     /**
      *
@@ -1464,6 +1506,10 @@ var DEBUG_MODE = false;
     hash: function (input) {
       return murmur3x64hash128(input, 31);
     },
+    /**
+     * 
+     * @param {function(string,Array):void} [doneCallback]
+     */
     get: function(doneCallback){
       if(typeof doneCallback !== "function"){
         return this.getInternal()[0];
@@ -1544,9 +1590,16 @@ var DEBUG_MODE = false;
     }
   };
 
-  Fingerprint2["VERSION"] = "2.0.0-dev";
-  Fingerprint2["Features"] = Features;
-  Fingerprint2["Extractors"] = Extractors;
-  
-  window["Fingerprint2"] = Fingerprint2;
-})();
+  if(EXPORT_MODE){
+    Fingerprint2["VERSION"] = "2.0.0-dev";
+    Fingerprint2["Features"] = Features;
+    Fingerprint2["Extractors"] = Extractors;
+    Fingerprint2["Options"] = FP2Options;
+    Fingerprint2["create"] = Fingerprint2.create;
+    window["Fingerprint2"] = Fingerprint2;
+  }else{
+    
+    var options2 = new FP2Options;
+//    options2.extendedJsFonts = true;
+    console.log(new Fingerprint2(options2).get())
+  }  

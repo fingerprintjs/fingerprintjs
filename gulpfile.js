@@ -19,7 +19,11 @@ gulp.task("minify", function() {
         language_out : "ECMASCRIPT3",
         compilation_level: 'ADVANCED_OPTIMIZATIONS',
         warning_level: 'VERBOSE',
+        jscomp_warning : "typeInvalidation",
+        jscomp_warning : "missingProperties",
+        jscomp_warning : "accessControls",
         jscomp_warning : "checkTypes",
+        jscomp_error : "checkDebuggerStatement",
         jscomp_error : "constantProperty",
         jscomp_error : "const",
         jscomp_error : "deprecated",
@@ -28,9 +32,11 @@ gulp.task("minify", function() {
         jscomp_error : "unknownDefines",
         jscomp_error : "visibility",
         js_output_file: 'fingerprint2.min.js',
+        use_types_for_optimization : true,
         define: [
           "DEBUG_MODE=false",
-        ],
+          "EXPORT_MODE=true",
+        ]
       }))
       .pipe(gulp.dest("dist/"));
 });
