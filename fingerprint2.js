@@ -384,372 +384,6 @@ var fillKeys = function (keys, key, value) {
   }
 };
 
-var Features = {
-  /**
-   * @static
-   *
-   * @param {!Fingerprint2} fp
-   * @returns {Array}
-   */
-  runDetections: function (fp) {
-    var keys = [];
-
-    // NOTICE: option keys are strings for exporting purpose (Closure-Compiler convention).
-    var exclude = fp.options["exclude"];
-
-    if (!exclude["UserAgent"]) {
-      Features.userAgentKey(keys);
-    }
-
-    if (!exclude["Language"]) {
-      Features.languageKey(keys);
-    }
-
-    if (!exclude["ColorDepth"]) {
-      Features.colorDepthKey(keys);
-    }
-
-    if (!exclude["PixelRatio"]) {
-      Features.pixelRatioKey(keys);
-    }
-
-    if (!exclude["ScreenResolution"]) {
-      Features.screenResolutionKey(keys, fp);
-    }
-
-    if (!exclude["AvailableScreenResolution"]) {
-      Features.availableScreenResolutionKey(keys, fp);
-    }
-
-    if (!exclude["TimezoneOffset"]) {
-      Features.timezoneOffsetKey(keys);
-    }
-
-    if (!exclude["SessionStorage"]) {
-      Features.sessionStorageKey(keys);
-    }
-
-    if (!exclude["SessionStorage"]) {
-      Features.localStorageKey(keys);
-    }
-
-    if (!exclude["IndexedDB"]) {
-      Features.indexedDbKey(keys);
-    }
-
-    if (!exclude["AddBehavior"]) {
-      Features.addBehaviorKey(keys);
-    }
-
-    if (!exclude["OpenDatabase"]) {
-      Features.openDatabaseKey(keys);
-    }
-
-    if (!exclude["CpuClass"]) {
-      Features.cpuClassKey(keys);
-    }
-
-    if (!exclude["Platform"]) {
-      Features.platformKey(keys);
-    }
-
-    if (!exclude["DoNotTrack"]) {
-      Features.doNotTrackKey(keys);
-    }
-
-    if (!exclude["Plugins"]) {
-      Features.pluginsKey(keys, fp);
-    }
-
-    if (!exclude["Canvas"]) {
-      Features.canvasKey(keys, fp);
-    }
-
-    if (!exclude["WebGL"]) {
-      Features.webglKey(keys);
-    } else {
-      log("Skipping WebGL fingerprinting per excludeWebGL configuration option");
-    }
-
-    if (!exclude["AdBlock"]) {
-      Features.adBlockKey(keys);
-    }
-
-    if (!exclude["HasLiedLanguages"]) {
-      Features.hasLiedLanguagesKey(keys);
-    }
-
-    if (!exclude["HasLiedResolution"]) {
-      Features.hasLiedResolutionKey(keys);
-    }
-
-    if (!exclude["HasLiedOs"]) {
-      Features.hasLiedOsKey(keys);
-    }
-
-    if (!exclude["HasLiedBrowser"]) {
-      Features.hasLiedBrowserKey(keys);
-    }
-
-    if (!exclude["TouchSupport"]) {
-      Features.touchSupportKey(keys);
-    }
-
-    if (!exclude["JsFonts"]) {
-      Features.fontsKey(keys, fp);
-    }
-
-    return keys;
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  userAgentKey: function(keys) {
-    fillKeys(keys, "user_agent", navigator.userAgent);
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  languageKey: function(keys) {
-    // IE 9,10 on Windows 10 does not have the `navigator.language` property any longer
-    fillKeys(keys, "language", navigator["language"] || navigator["userLanguage"] || navigator["browserLanguage"] || navigator["systemLanguage"] || "");
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  colorDepthKey: function(keys) {
-    fillKeys(keys, "color_depth", screen["colorDepth"] || -1);
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  pixelRatioKey: function(keys) {
-    fillKeys(keys, "pixel_ratio", window["devicePixelRatio"] || "");
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   * @param {!Fingerprint2} fp
-   */
-  screenResolutionKey: function(keys, fp) {
-    var resolution;
-    if(fp.options["detectScreenOrientation"]) {
-      resolution = (screen.height > screen.width) ? [screen.height, screen.width] : [screen.width, screen.height];
-    } else {
-      resolution = [screen.width, screen.height];
-    }
-    if(typeof resolution !== "undefined") { // headless browsers
-      fillKeys(keys, "resolution", resolution);
-    }
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   * @param {!Fingerprint2} fp
-   */
-  availableScreenResolutionKey: function(keys, fp) {
-    var available;
-    if(screen.availWidth && screen.availHeight) {
-      if(fp.options["detectScreenOrientation"]) {
-        available = (screen.availHeight > screen.availWidth) ? [screen.availHeight, screen.availWidth] : [screen.availWidth, screen.availHeight];
-      } else {
-        available = [screen.availHeight, screen.availWidth];
-      }
-    }
-    if(typeof available !== "undefined") { // headless browsers
-      fillKeys(keys, "available_resolution", available);
-    }
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  timezoneOffsetKey: function(keys) {
-    fillKeys(keys, "timezone_offset", (new Date).getTimezoneOffset());
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  sessionStorageKey: function(keys) {
-    if(Extractors.hasSessionStorage()){
-      fillKeys(keys, "session_storage", 1);
-    }
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  localStorageKey: function(keys) {
-    if(Extractors.hasLocalStorage()){
-      fillKeys(keys, "local_storage", 1);
-    }
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  indexedDbKey: function(keys) {
-    if(!!window.indexedDB){
-      fillKeys(keys, "indexed_db", 1);
-    }
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  addBehaviorKey: function(keys) {
-    //body might not be defined at this point or removed programmatically
-    if(document.body && document.body.addBehavior) {
-      fillKeys(keys, "add_behavior", 1);
-    }
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  openDatabaseKey: function(keys) {
-    if(window.openDatabase) {
-      fillKeys(keys, "open_database", 1);
-    }
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  cpuClassKey: function(keys) {
-    fillKeys(keys, "cpu_class", navigator.cpuClass || "unknown");
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  platformKey: function(keys) {
-    fillKeys(keys, "navigator_platform", navigator.platform || "unknown");
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  doNotTrackKey: function(keys) {
-    fillKeys(keys, "do_not_track", navigator.doNotTrack || navigator.msDoNotTrack || window.doNotTrack || "unknown");
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   * @param {!Fingerprint2} fp
-   */
-  canvasKey: function(keys, fp) {
-    if (Extractors.isCanvasSupported()) {
-      fillKeys(keys, "canvas", Extractors.getCanvasFp(fp));
-    }
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  webglKey: function(keys) {
-    if(!Extractors.isWebGlSupported()) {
-      log("Skipping WebGL fingerprinting because it is not supported in this browser");
-      return;
-    }
-    fillKeys(keys, "webgl", Extractors.getWebglFp());
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  adBlockKey: function(keys){
-    fillKeys(keys, "adblock", Extractors.getAdBlock());
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  hasLiedLanguagesKey: function(keys){
-    fillKeys(keys, "has_lied_languages", Extractors.getHasLiedLanguages());
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  hasLiedResolutionKey: function(keys){
-    fillKeys(keys, "has_lied_resolution", !!(screen.width < screen.availWidth || screen.height < screen.availHeight));
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  hasLiedOsKey: function(keys){
-    fillKeys(keys, "has_lied_os", Extractors.getHasLiedOs());
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  hasLiedBrowserKey: function(keys){
-    fillKeys(keys, "has_lied_browser", Extractors.getHasLiedBrowser());
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   */
-  touchSupportKey: function (keys) {
-    fillKeys(keys, "touch_support", Extractors.getTouchSupport());
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   * @param {!Fingerprint2} fp
-   */
-  fontsKey: function(keys, fp) {
-    fillKeys(keys, "js_fonts", Extractors.getFonts(fp));
-  },
-  /**
-   * @static
-   *
-   * @param {!Array} keys
-   * @param {!Fingerprint2} fp
-   */
-  pluginsKey: function(keys, fp) {
-    if(Extractors.isIE()){
-      if(!fp.options["exclude"]["IEPlugins"]) {
-        fillKeys(keys, "ie_plugins", Extractors.getIEPlugins(fp));
-      }
-    } else {
-      fillKeys(keys, "regular_plugins", Extractors.getRegularPlugins(fp));
-    }
-  }
-};
-
 var Extractors = {
   /**
    * @static
@@ -1516,6 +1150,372 @@ var Extractors = {
     } catch(e) { /* squelch */ }
     if (!gl) { gl = null; }
     return gl;
+  }
+};
+
+var Features = {
+  /**
+   * @static
+   *
+   * @param {!Fingerprint2} fp
+   * @returns {Array}
+   */
+  runDetections: function (fp) {
+    var keys = [];
+
+    // NOTICE: option keys are strings for exporting purpose (Closure-Compiler convention).
+    var exclude = fp.options["exclude"];
+
+    if (!exclude["UserAgent"]) {
+      Features.userAgentKey(keys);
+    }
+
+    if (!exclude["Language"]) {
+      Features.languageKey(keys);
+    }
+
+    if (!exclude["ColorDepth"]) {
+      Features.colorDepthKey(keys);
+    }
+
+    if (!exclude["PixelRatio"]) {
+      Features.pixelRatioKey(keys);
+    }
+
+    if (!exclude["ScreenResolution"]) {
+      Features.screenResolutionKey(keys, fp);
+    }
+
+    if (!exclude["AvailableScreenResolution"]) {
+      Features.availableScreenResolutionKey(keys, fp);
+    }
+
+    if (!exclude["TimezoneOffset"]) {
+      Features.timezoneOffsetKey(keys);
+    }
+
+    if (!exclude["SessionStorage"]) {
+      Features.sessionStorageKey(keys);
+    }
+
+    if (!exclude["SessionStorage"]) {
+      Features.localStorageKey(keys);
+    }
+
+    if (!exclude["IndexedDB"]) {
+      Features.indexedDbKey(keys);
+    }
+
+    if (!exclude["AddBehavior"]) {
+      Features.addBehaviorKey(keys);
+    }
+
+    if (!exclude["OpenDatabase"]) {
+      Features.openDatabaseKey(keys);
+    }
+
+    if (!exclude["CpuClass"]) {
+      Features.cpuClassKey(keys);
+    }
+
+    if (!exclude["Platform"]) {
+      Features.platformKey(keys);
+    }
+
+    if (!exclude["DoNotTrack"]) {
+      Features.doNotTrackKey(keys);
+    }
+
+    if (!exclude["Plugins"]) {
+      Features.pluginsKey(keys, fp);
+    }
+
+    if (!exclude["Canvas"]) {
+      Features.canvasKey(keys, fp);
+    }
+
+    if (!exclude["WebGL"]) {
+      Features.webglKey(keys);
+    } else {
+      log("Skipping WebGL fingerprinting per excludeWebGL configuration option");
+    }
+
+    if (!exclude["AdBlock"]) {
+      Features.adBlockKey(keys);
+    }
+
+    if (!exclude["HasLiedLanguages"]) {
+      Features.hasLiedLanguagesKey(keys);
+    }
+
+    if (!exclude["HasLiedResolution"]) {
+      Features.hasLiedResolutionKey(keys);
+    }
+
+    if (!exclude["HasLiedOs"]) {
+      Features.hasLiedOsKey(keys);
+    }
+
+    if (!exclude["HasLiedBrowser"]) {
+      Features.hasLiedBrowserKey(keys);
+    }
+
+    if (!exclude["TouchSupport"]) {
+      Features.touchSupportKey(keys);
+    }
+
+    if (!exclude["JsFonts"]) {
+      Features.fontsKey(keys, fp);
+    }
+
+    return keys;
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  userAgentKey: function(keys) {
+    fillKeys(keys, "user_agent", navigator.userAgent);
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  languageKey: function(keys) {
+    // IE 9,10 on Windows 10 does not have the `navigator.language` property any longer
+    fillKeys(keys, "language", navigator["language"] || navigator["userLanguage"] || navigator["browserLanguage"] || navigator["systemLanguage"] || "");
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  colorDepthKey: function(keys) {
+    fillKeys(keys, "color_depth", screen["colorDepth"] || -1);
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  pixelRatioKey: function(keys) {
+    fillKeys(keys, "pixel_ratio", window["devicePixelRatio"] || "");
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   * @param {!Fingerprint2} fp
+   */
+  screenResolutionKey: function(keys, fp) {
+    var resolution;
+    if(fp.options["detectScreenOrientation"]) {
+      resolution = (screen.height > screen.width) ? [screen.height, screen.width] : [screen.width, screen.height];
+    } else {
+      resolution = [screen.width, screen.height];
+    }
+    if(typeof resolution !== "undefined") { // headless browsers
+      fillKeys(keys, "resolution", resolution);
+    }
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   * @param {!Fingerprint2} fp
+   */
+  availableScreenResolutionKey: function(keys, fp) {
+    var available;
+    if(screen.availWidth && screen.availHeight) {
+      if(fp.options["detectScreenOrientation"]) {
+        available = (screen.availHeight > screen.availWidth) ? [screen.availHeight, screen.availWidth] : [screen.availWidth, screen.availHeight];
+      } else {
+        available = [screen.availHeight, screen.availWidth];
+      }
+    }
+    if(typeof available !== "undefined") { // headless browsers
+      fillKeys(keys, "available_resolution", available);
+    }
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  timezoneOffsetKey: function(keys) {
+    fillKeys(keys, "timezone_offset", (new Date).getTimezoneOffset());
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  sessionStorageKey: function(keys) {
+    if(Extractors.hasSessionStorage()){
+      fillKeys(keys, "session_storage", 1);
+    }
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  localStorageKey: function(keys) {
+    if(Extractors.hasLocalStorage()){
+      fillKeys(keys, "local_storage", 1);
+    }
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  indexedDbKey: function(keys) {
+    if(!!window.indexedDB){
+      fillKeys(keys, "indexed_db", 1);
+    }
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  addBehaviorKey: function(keys) {
+    //body might not be defined at this point or removed programmatically
+    if(document.body && document.body.addBehavior) {
+      fillKeys(keys, "add_behavior", 1);
+    }
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  openDatabaseKey: function(keys) {
+    if(window.openDatabase) {
+      fillKeys(keys, "open_database", 1);
+    }
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  cpuClassKey: function(keys) {
+    fillKeys(keys, "cpu_class", navigator.cpuClass || "unknown");
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  platformKey: function(keys) {
+    fillKeys(keys, "navigator_platform", navigator.platform || "unknown");
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  doNotTrackKey: function(keys) {
+    fillKeys(keys, "do_not_track", navigator.doNotTrack || navigator.msDoNotTrack || window.doNotTrack || "unknown");
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   * @param {!Fingerprint2} fp
+   */
+  canvasKey: function(keys, fp) {
+    if (Extractors.isCanvasSupported()) {
+      fillKeys(keys, "canvas", Extractors.getCanvasFp(fp));
+    }
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  webglKey: function(keys) {
+    if(!Extractors.isWebGlSupported()) {
+      log("Skipping WebGL fingerprinting because it is not supported in this browser");
+      return;
+    }
+    fillKeys(keys, "webgl", Extractors.getWebglFp());
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  adBlockKey: function(keys){
+    fillKeys(keys, "adblock", Extractors.getAdBlock());
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  hasLiedLanguagesKey: function(keys){
+    fillKeys(keys, "has_lied_languages", Extractors.getHasLiedLanguages());
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  hasLiedResolutionKey: function(keys){
+    fillKeys(keys, "has_lied_resolution", !!(screen.width < screen.availWidth || screen.height < screen.availHeight));
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  hasLiedOsKey: function(keys){
+    fillKeys(keys, "has_lied_os", Extractors.getHasLiedOs());
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  hasLiedBrowserKey: function(keys){
+    fillKeys(keys, "has_lied_browser", Extractors.getHasLiedBrowser());
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   */
+  touchSupportKey: function (keys) {
+    fillKeys(keys, "touch_support", Extractors.getTouchSupport());
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   * @param {!Fingerprint2} fp
+   */
+  fontsKey: function(keys, fp) {
+    fillKeys(keys, "js_fonts", Extractors.getFonts(fp));
+  },
+  /**
+   * @static
+   *
+   * @param {!Array} keys
+   * @param {!Fingerprint2} fp
+   */
+  pluginsKey: function(keys, fp) {
+    if(Extractors.isIE()){
+      if(!fp.options["exclude"]["IEPlugins"]) {
+        fillKeys(keys, "ie_plugins", Extractors.getIEPlugins(fp));
+      }
+    } else {
+      fillKeys(keys, "regular_plugins", Extractors.getRegularPlugins(fp));
+    }
   }
 };
 
