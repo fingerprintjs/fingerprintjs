@@ -518,7 +518,7 @@ var Features = {
    */
   languageKey: function(keys, fp) {
     // IE 9,10 on Windows 10 does not have the `navigator.language` property any longer
-    fillKeys(keys, "language", navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || "");
+    fillKeys(keys, "language", navigator["language"] || navigator["userLanguage"] || navigator["browserLanguage"] || navigator["systemLanguage"] || "");
   },
   /**
    * @static
@@ -527,7 +527,7 @@ var Features = {
    * @param {!Fingerprint2} fp
    */
   colorDepthKey: function(keys, fp) {
-    fillKeys(keys, "color_depth", screen.colorDepth || -1);
+    fillKeys(keys, "color_depth", screen["colorDepth"] || -1);
   },
   /**
    * @static
@@ -536,7 +536,7 @@ var Features = {
    * @param {!Fingerprint2} fp
    */
   pixelRatioKey: function(keys, fp) {
-    fillKeys(keys, "pixel_ratio", window.devicePixelRatio || "");
+    fillKeys(keys, "pixel_ratio", window["devicePixelRatio"] || "");
   },
   /**
    * @static
@@ -970,9 +970,9 @@ var Extractors = {
     }
     return fp.map(plugins, function (p) {
       var mimeTypes = fp.map(p, function(mt){
-        return [mt.type, mt.suffixes].join("~");
+        return [mt["type"], mt["suffixes"]].join("~");
       }).join(",");
-      return [p.name, p.description, mimeTypes].join("::");
+      return [p["name"], p["description"], mimeTypes].join("::");
     });
   },
   /**
@@ -1081,10 +1081,10 @@ var Extractors = {
     // and the availability of the 'ontouchstart' property
     var maxTouchPoints = 0;
     var touchEvent = false;
-    if(typeof navigator.maxTouchPoints !== "undefined") {
-      maxTouchPoints = navigator.maxTouchPoints;
-    } else if (typeof navigator.msMaxTouchPoints !== "undefined") {
-      maxTouchPoints = navigator.msMaxTouchPoints;
+    if(typeof navigator["maxTouchPoints"] !== "undefined") {
+      maxTouchPoints = navigator["maxTouchPoints"];
+    } else if (typeof navigator["msMaxTouchPoints"] !== "undefined") {
+      maxTouchPoints = navigator["msMaxTouchPoints"];
     }
     try {
       document.createEvent("TouchEvent");
@@ -1225,8 +1225,7 @@ var Extractors = {
     gl.useProgram(program);
     program.vertexPosAttrib = gl.getAttribLocation(program, "attrVertex");
     program.offsetUniform = gl.getUniformLocation(program, "uniformOffset");
-    //FIXME(?): program.vertexPosArray -> undefined
-    gl.enableVertexAttribArray(program.vertexPosArray);
+    gl.enableVertexAttribArray(program["vertexPosArray"]);
     gl.vertexAttribPointer(program.vertexPosAttrib, vertexPosBuffer.itemSize, WebGLRenderingContext.FLOAT, !1, 0, 0);
     gl.uniform2f(program.offsetUniform, 1, 1);
     gl.drawArrays(WebGLRenderingContext.TRIANGLE_STRIP, 0, vertexPosBuffer.numItems);
@@ -1348,10 +1347,10 @@ var Extractors = {
    */
   getHasLiedLanguages: function(){
     //We check if navigator.language is equal to the first language of navigator.languages
-    if(typeof navigator.languages !== "undefined"){
+    if(typeof navigator["languages"] !== "undefined"){
       try {
-        var firstLanguages = navigator.languages[0].substr(0, 2);
-        if(firstLanguages !== navigator.language.substr(0, 2)){
+        var firstLanguages = navigator["languages"][0].substr(0, 2);
+        if(firstLanguages !== navigator["language"].substr(0, 2)){
           return true;
         }
       } catch(err) {
@@ -1367,7 +1366,7 @@ var Extractors = {
    */
   getHasLiedOs: function(){
     var userAgent = navigator.userAgent.toLowerCase();
-    var oscpu = navigator.oscpu;
+    var oscpu = navigator["oscpu"];
     var platform = navigator.platform.toLowerCase();
     var os;
     //We extract the OS from the user agent (respect the order of the if else if statement)
@@ -1386,16 +1385,9 @@ var Extractors = {
     } else{
       os = "Other";
     }
-    // We detect if the person uses a mobile device
-    var mobileDevice;
-    if (("ontouchstart" in window) ||
-      (navigator.maxTouchPoints > 0) ||
-      (navigator.msMaxTouchPoints > 0)) {
-      mobileDevice = true;
-    } else{
-      mobileDevice = false;
-    }
 
+    // We detect if the person uses a mobile device
+    var mobileDevice = !!(("ontouchstart" in window) || navigator["maxTouchPoints"] > 0 || navigator["msMaxTouchPoints"] > 0);
     if(mobileDevice && os !== "Windows Phone" && os !== "Android" && os !== "iOS" && os !== "Other"){
       return true;
     }
@@ -1439,7 +1431,7 @@ var Extractors = {
    */
   getHasLiedBrowser: function () {
     var userAgent = navigator.userAgent.toLowerCase();
-    var productSub = navigator.productSub;
+    var productSub = navigator["productSub"];
 
     //we extract the browser from the user agent (respect the order of the tests)
     var browser;
