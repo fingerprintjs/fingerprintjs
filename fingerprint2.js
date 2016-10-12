@@ -979,9 +979,9 @@ var Extractors = {
    * @returns {boolean}
    */
   getHasLiedOs: function(){
-    var userAgent = navigator.userAgent.toLowerCase();
+    var lcUserAgent = navigator.userAgent.toLowerCase();
     var oscpu = navigator["oscpu"];
-    var platform = navigator.platform.toLowerCase();
+    var lcPlatform = navigator.platform.toLowerCase();
 
     /**
      *
@@ -1003,17 +1003,17 @@ var Extractors = {
     var os;
 
     //We extract the OS from the user agent (respect the order of the if else if statement)
-    if (userAgent.indexOf("windows phone") >= 0) {
+    if (lcUserAgent.indexOf("windows phone") >= 0) {
       os = OsEnum.WINDOWS_PHONE;
-    } else if (userAgent.indexOf("win") >= 0) {
+    } else if (lcUserAgent.indexOf("win") >= 0) {
       os = OsEnum.WINDOWS;
-    } else if (userAgent.indexOf("android") >= 0) {
+    } else if (lcUserAgent.indexOf("android") >= 0) {
       os = OsEnum.ANDROID;
-    } else if (userAgent.indexOf("linux") >= 0) {
+    } else if (lcUserAgent.indexOf("linux") >= 0) {
       os = OsEnum.LINUX;
-    } else if (userAgent.indexOf("iphone") >= 0 || userAgent.indexOf("ipad") >= 0) {
+    } else if (lcUserAgent.indexOf("iphone") >= 0 || lcUserAgent.indexOf("ipad") >= 0) {
       os = OsEnum.IOS;
-    } else if (userAgent.indexOf("mac") >= 0) {
+    } else if (lcUserAgent.indexOf("mac") >= 0) {
       os = OsEnum.MAC;
     } else{
       os = OsEnum.OTHER;
@@ -1040,13 +1040,13 @@ var Extractors = {
     }
 
     //We compare platform with the OS extracted from the UA
-    if (os !== OsEnum.WINDOWS_PHONE && os !== OsEnum.WINDOWS && platform.indexOf("win") >= 0) {
+    if (os !== OsEnum.WINDOWS_PHONE && os !== OsEnum.WINDOWS && lcPlatform.indexOf("win") >= 0) {
       return true;
-    } else if (os !== OsEnum.ANDROID && os !== OsEnum.LINUX && (platform.indexOf("linux") >= 0 || platform.indexOf("android") >= 0 || platform.indexOf("pike") >= 0)) {
+    } else if (os !== OsEnum.ANDROID && os !== OsEnum.LINUX && (lcPlatform.indexOf("linux") >= 0 || lcPlatform.indexOf("android") >= 0 || lcPlatform.indexOf("pike") >= 0)) {
       return true;
-    } else if (os !== OsEnum.IOS && os !== OsEnum.MAC && (platform.indexOf("mac") >= 0 || platform.indexOf("ipad") >= 0 || platform.indexOf("ipod") >= 0 || platform.indexOf("iphone") >= 0)) {
+    } else if (os !== OsEnum.IOS && os !== OsEnum.MAC && (lcPlatform.indexOf("mac") >= 0 || lcPlatform.indexOf("ipad") >= 0 || lcPlatform.indexOf("ipod") >= 0 || lcPlatform.indexOf("iphone") >= 0)) {
       return true;
-    } else if (os !== OsEnum.OTHER && platform.indexOf("mac") >= 0 && platform.indexOf("linux") === 0 && platform.indexOf("win") === 0) {
+    } else if (os !== OsEnum.OTHER && lcPlatform.indexOf("mac") >= 0 && lcPlatform.indexOf("linux") === 0 && lcPlatform.indexOf("win") === 0) {
       return true;
     }
 
@@ -1112,22 +1112,20 @@ var Extractors = {
       return true;
     }
 
-    //We create an error to see how it is handled
-    var errFirefox;
-    try {
-      throw "a";
-    } catch(err){
-      try{
-        err.toSource();
-        errFirefox = true;
-      } catch(errOfErr){
-        errFirefox = false;
+    if (browser !== BrowserEnum.OTHER && browser !== BrowserEnum.FIREFOX) {
+      //We create an error to see how it is handled
+      try {
+        throw "a";
+      } catch(err){
+        try{
+          err.toSource();
+        } catch(errOfErr){
+          return false;
+        }
       }
-    }
-
-    if(errFirefox && browser !== BrowserEnum.FIREFOX && browser !== BrowserEnum.OTHER){
       return true;
     }
+
     return false;
   },
   /**
