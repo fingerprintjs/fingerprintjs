@@ -36,6 +36,7 @@ gulp.task("minify", function() {
         define: [
           "DEBUG_MODE=false",
           "EXPORT_MODE=true",
+          "VERBOSE_MODE=false",
         ]
       }))
       .pipe(gulp.dest("dist/"));

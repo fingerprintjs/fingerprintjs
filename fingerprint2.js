@@ -26,6 +26,11 @@ var DEBUG_MODE = false;
  * @define {boolean}
  */
 var EXPORT_MODE = true;
+/**
+ *
+ * @define {boolean}
+ */
+var VERBOSE_MODE = true;
 
 /**
  * @private
@@ -262,9 +267,9 @@ var murmur3x64hash128 = function (key, seed) {
 
   // join 4 * 32bit numbers to a single zero-filled 128bit hex string
   return ("00000000" + (h1[0] >>> 0).toString(16)).slice(-8) +
-         ("00000000" + (h1[1] >>> 0).toString(16)).slice(-8) +
-         ("00000000" + (h2[0] >>> 0).toString(16)).slice(-8) +
-         ("00000000" + (h2[1] >>> 0).toString(16)).slice(-8);
+    ("00000000" + (h1[1] >>> 0).toString(16)).slice(-8) +
+    ("00000000" + (h2[0] >>> 0).toString(16)).slice(-8) +
+    ("00000000" + (h2[1] >>> 0).toString(16)).slice(-8);
 };
 /**
  * @private
@@ -363,6 +368,21 @@ Fingerprint2.create = function (options) {
   return new Fingerprint2(options);
 };
 
+/**
+ * @private
+ * @static
+ *
+ * @param {!Array} keys
+ * @param {!string|!Array|!boolean|!number} value
+ * @param {string} key
+ */
+var fillKeys = function (keys, key, value) {
+  if (VERBOSE_MODE) {
+    keys.push({key: key, value: value});
+  } else {
+    keys.push(value);
+  }
+};
 
 var Features = {
   /**
@@ -488,7 +508,7 @@ var Features = {
    * @param {!Fingerprint2} fp
    */
   userAgentKey: function(keys, fp) {
-    keys.push({key: "user_agent", value: navigator.userAgent});
+    fillKeys(keys, "user_agent", navigator.userAgent);
   },
   /**
    * @static
@@ -498,7 +518,7 @@ var Features = {
    */
   languageKey: function(keys, fp) {
     // IE 9,10 on Windows 10 does not have the `navigator.language` property any longer
-    keys.push({ key: "language", value: navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || "" });
+    fillKeys(keys, "language", navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || "");
   },
   /**
    * @static
@@ -507,7 +527,7 @@ var Features = {
    * @param {!Fingerprint2} fp
    */
   colorDepthKey: function(keys, fp) {
-    keys.push({key: "color_depth", value: screen.colorDepth || -1});
+    fillKeys(keys, "color_depth", screen.colorDepth || -1);
   },
   /**
    * @static
@@ -516,7 +536,7 @@ var Features = {
    * @param {!Fingerprint2} fp
    */
   pixelRatioKey: function(keys, fp) {
-    keys.push({key: "pixel_ratio", value: window.devicePixelRatio || ""});
+    fillKeys(keys, "pixel_ratio", window.devicePixelRatio || "");
   },
   /**
    * @static
@@ -532,7 +552,7 @@ var Features = {
       resolution = [screen.width, screen.height];
     }
     if(typeof resolution !== "undefined") { // headless browsers
-      keys.push({key: "resolution", value: resolution});
+      fillKeys(keys, "resolution", resolution);
     }
   },
   /**
@@ -551,7 +571,7 @@ var Features = {
       }
     }
     if(typeof available !== "undefined") { // headless browsers
-      keys.push({key: "available_resolution", value: available});
+      fillKeys(keys, "available_resolution", available);
     }
   },
   /**
@@ -561,7 +581,7 @@ var Features = {
    * @param {!Fingerprint2} fp
    */
   timezoneOffsetKey: function(keys, fp) {
-    keys.push({key: "timezone_offset", value: (new Date).getTimezoneOffset()});
+    fillKeys(keys, "timezone_offset", (new Date).getTimezoneOffset());
   },
   /**
    * @static
@@ -571,7 +591,7 @@ var Features = {
    */
   sessionStorageKey: function(keys, fp) {
     if(Extractors.hasSessionStorage()){
-      keys.push({key: "session_storage", value: 1});
+      fillKeys(keys, "session_storage", 1);
     }
   },
   /**
@@ -582,7 +602,7 @@ var Features = {
    */
   localStorageKey: function(keys, fp) {
     if(Extractors.hasLocalStorage()){
-      keys.push({key: "local_storage", value: 1});
+      fillKeys(keys, "local_storage", 1);
     }
   },
   /**
@@ -593,7 +613,7 @@ var Features = {
    */
   indexedDbKey: function(keys, fp) {
     if(!!window.indexedDB){
-      keys.push({key: "indexed_db", value: 1});
+      fillKeys(keys, "indexed_db", 1);
     }
   },
   /**
@@ -605,7 +625,7 @@ var Features = {
   addBehaviorKey: function(keys, fp) {
     //body might not be defined at this point or removed programmatically
     if(document.body && document.body.addBehavior) {
-      keys.push({key: "add_behavior", value: 1});
+      fillKeys(keys, "add_behavior", 1);
     }
   },
   /**
@@ -616,7 +636,7 @@ var Features = {
    */
   openDatabaseKey: function(keys, fp) {
     if(window.openDatabase) {
-      keys.push({key: "open_database", value: 1});
+      fillKeys(keys, "open_database", 1);
     }
   },
   /**
@@ -626,7 +646,7 @@ var Features = {
    * @param {!Fingerprint2} fp
    */
   cpuClassKey: function(keys, fp) {
-    keys.push({key: "cpu_class", value: navigator.cpuClass || "unknown"});
+    fillKeys(keys, "cpu_class", navigator.cpuClass || "unknown");
   },
   /**
    * @static
@@ -635,7 +655,7 @@ var Features = {
    * @param {!Fingerprint2} fp
    */
   platformKey: function(keys, fp) {
-    keys.push({key: "navigator_platform", value: navigator.platform || "unknown"});
+    fillKeys(keys, "navigator_platform", navigator.platform || "unknown");
   },
   /**
    * @static
@@ -644,7 +664,7 @@ var Features = {
    * @param {!Fingerprint2} fp
    */
   doNotTrackKey: function(keys, fp) {
-    keys.push({key: "do_not_track", value: navigator.doNotTrack || navigator.msDoNotTrack || window.doNotTrack || "unknown"});
+    fillKeys(keys, "do_not_track", navigator.doNotTrack || navigator.msDoNotTrack || window.doNotTrack || "unknown");
   },
   /**
    * @static
@@ -654,7 +674,7 @@ var Features = {
    */
   canvasKey: function(keys, fp) {
     if (Extractors.isCanvasSupported()) {
-      keys.push({key: "canvas", value: Extractors.getCanvasFp(fp)});
+      fillKeys(keys, "canvas", Extractors.getCanvasFp(fp));
     }
   },
   /**
@@ -668,7 +688,7 @@ var Features = {
       log("Skipping WebGL fingerprinting because it is not supported in this browser");
       return;
     }
-    keys.push({key: "webgl", value: Extractors.getWebglFp()});
+    fillKeys(keys, "webgl", Extractors.getWebglFp());
   },
   /**
    * @static
@@ -677,7 +697,7 @@ var Features = {
    * @param {!Fingerprint2} fp
    */
   adBlockKey: function(keys, fp){
-    keys.push({key: "adblock", value: Extractors.getAdBlock()});
+    fillKeys(keys, "adblock", Extractors.getAdBlock());
   },
   /**
    * @static
@@ -686,7 +706,7 @@ var Features = {
    * @param {!Fingerprint2} fp
    */
   hasLiedLanguagesKey: function(keys, fp){
-    keys.push({key: "has_lied_languages", value: Extractors.getHasLiedLanguages()});
+    fillKeys(keys, "has_lied_languages", Extractors.getHasLiedLanguages());
   },
   /**
    * @static
@@ -695,7 +715,7 @@ var Features = {
    * @param {!Fingerprint2} fp
    */
   hasLiedResolutionKey: function(keys, fp){
-    keys.push({ key: "has_lied_resolution", value: !!(screen.width < screen.availWidth || screen.height < screen.availHeight)});
+    fillKeys(keys, "has_lied_resolution", !!(screen.width < screen.availWidth || screen.height < screen.availHeight));
   },
   /**
    * @static
@@ -704,7 +724,7 @@ var Features = {
    * @param {!Fingerprint2} fp
    */
   hasLiedOsKey: function(keys, fp){
-    keys.push({key: "has_lied_os", value: Extractors.getHasLiedOs()});
+    fillKeys(keys, "has_lied_os", Extractors.getHasLiedOs());
   },
   /**
    * @static
@@ -713,7 +733,7 @@ var Features = {
    * @param {!Fingerprint2} fp
    */
   hasLiedBrowserKey: function(keys, fp){
-    keys.push({key: "has_lied_browser", value: Extractors.getHasLiedBrowser()});
+    fillKeys(keys, "has_lied_browser", Extractors.getHasLiedBrowser());
   },
   /**
    * @static
@@ -722,7 +742,7 @@ var Features = {
    * @param {!Fingerprint2} fp
    */
   touchSupportKey: function (keys, fp) {
-    keys.push({key: "touch_support", value: Extractors.getTouchSupport()});
+    fillKeys(keys, "touch_support", Extractors.getTouchSupport());
   },
   /**
    * @static
@@ -731,7 +751,7 @@ var Features = {
    * @param {!Fingerprint2} fp
    */
   fontsKey: function(keys, fp) {
-    keys.push({key: "js_fonts", value: Extractors.getFonts(fp)});
+    fillKeys(keys, "js_fonts", Extractors.getFonts(fp));
   },
   /**
    * @static
@@ -742,10 +762,10 @@ var Features = {
   pluginsKey: function(keys, fp) {
     if(Extractors.isIE()){
       if(!fp.options["exclude"]["IEPlugins"]) {
-        keys.push({key: "ie_plugins", value: Extractors.getIEPlugins(fp)});
+        fillKeys(keys, "ie_plugins", Extractors.getIEPlugins(fp));
       }
     } else {
-      keys.push({key: "regular_plugins", value: Extractors.getRegularPlugins(fp)});
+      fillKeys(keys, "regular_plugins", Extractors.getRegularPlugins(fp));
     }
   }
 };
@@ -755,7 +775,7 @@ var Extractors = {
    * @static
    *
    * @param {!Fingerprint2} fp
-   * @returns {Array}
+   * @returns {!Array}
    */
   getFonts: function (fp) {
     // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
@@ -959,7 +979,7 @@ var Extractors = {
    * @static
    *
    * @param {!Fingerprint2} fp
-   * @returns {Array|null}
+   * @returns {!Array}
    */
   getIEPlugins: function (fp) {
     var result = [];
@@ -1048,7 +1068,7 @@ var Extractors = {
   /**
    * @static
    *
-   * @returns {Array<*>}
+   * @returns {!Array}
    */
   getTouchSupport: function () {
     // This is a crude and primitive touch screen detection.
@@ -1143,13 +1163,17 @@ var Extractors = {
   /**
    * @static
    *
-   * @returns {string|null}
+   * @returns {string}
    */
   getWebglFp: function() {
     /**
      * @type {WebGLRenderingContext}
      */
     var gl;
+    /**
+     *
+     * @returns {string}
+     */
     var fa2s = function(fa) {
       gl.clearColor(0.0, 0.0, 0.0, 1.0);
       gl.enable(WebGLRenderingContext.DEPTH_TEST);
@@ -1157,12 +1181,25 @@ var Extractors = {
       gl.clear(WebGLRenderingContext.COLOR_BUFFER_BIT | WebGLRenderingContext.DEPTH_BUFFER_BIT);
       return "[" + fa[0] + ", " + fa[1] + "]";
     };
+    /**
+     *
+     * @param {WebGLRenderingContext} gl
+     * @returns {*}
+     */
     var maxAnisotropy = function(gl) {
-      var anisotropy, ext = gl.getExtension("EXT_texture_filter_anisotropic") || gl.getExtension("WEBKIT_EXT_texture_filter_anisotropic") || gl.getExtension("MOZ_EXT_texture_filter_anisotropic");
-      return ext ? (anisotropy = gl.getParameter(ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT), 0 === anisotropy && (anisotropy = 2), anisotropy) : null;
+      var ext = gl.getExtension("EXT_texture_filter_anisotropic") ||
+        gl.getExtension("WEBKIT_EXT_texture_filter_anisotropic") ||
+        gl.getExtension("MOZ_EXT_texture_filter_anisotropic");
+      if (ext) {
+        var anisotropy = gl.getParameter(ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+        return (0 === anisotropy ? 2 : anisotropy);
+      } else {
+        return null;
+      }
     };
+
     gl = Extractors.getWebglCanvas();
-    if(!gl) { return null; }
+    if(!gl) { return ""; }
     // WebGL fingerprinting is a combination of techniques, found in MaxMind antifraud script & Augur fingerprinting.
     // First it draws a gradient object with shaders and convers the image to the Base64 string.
     // Then it enumerates all WebGL extensions & capabilities and appends them to the Base64 string, resulting in a huge WebGL string, potentially very unique on each device
@@ -1194,32 +1231,45 @@ var Extractors = {
     gl.uniform2f(program.offsetUniform, 1, 1);
     gl.drawArrays(WebGLRenderingContext.TRIANGLE_STRIP, 0, vertexPosBuffer.numItems);
     if (gl.canvas != null) { result.push(gl.canvas.toDataURL()); }
-    result.push("extensions:" + gl.getSupportedExtensions().join(";"));
-    result.push("webgl aliased line width range:" + fa2s(gl.getParameter(WebGLRenderingContext.ALIASED_LINE_WIDTH_RANGE)));
-    result.push("webgl aliased point size range:" + fa2s(gl.getParameter(WebGLRenderingContext.ALIASED_POINT_SIZE_RANGE)));
-    result.push("webgl alpha bits:" + gl.getParameter(WebGLRenderingContext.ALPHA_BITS));
-    result.push("webgl antialiasing:" + (gl.getContextAttributes().antialias ? "yes" : "no"));
-    result.push("webgl blue bits:" + gl.getParameter(WebGLRenderingContext.BLUE_BITS));
-    result.push("webgl depth bits:" + gl.getParameter(WebGLRenderingContext.DEPTH_BITS));
-    result.push("webgl green bits:" + gl.getParameter(WebGLRenderingContext.GREEN_BITS));
-    result.push("webgl max anisotropy:" + maxAnisotropy(gl));
-    result.push("webgl max combined texture image units:" + gl.getParameter(WebGLRenderingContext.MAX_COMBINED_TEXTURE_IMAGE_UNITS));
-    result.push("webgl max cube map texture size:" + gl.getParameter(WebGLRenderingContext.MAX_CUBE_MAP_TEXTURE_SIZE));
-    result.push("webgl max fragment uniform vectors:" + gl.getParameter(WebGLRenderingContext.MAX_FRAGMENT_UNIFORM_VECTORS));
-    result.push("webgl max render buffer size:" + gl.getParameter(WebGLRenderingContext.MAX_RENDERBUFFER_SIZE));
-    result.push("webgl max texture image units:" + gl.getParameter(WebGLRenderingContext.MAX_TEXTURE_IMAGE_UNITS));
-    result.push("webgl max texture size:" + gl.getParameter(WebGLRenderingContext.MAX_TEXTURE_SIZE));
-    result.push("webgl max varying vectors:" + gl.getParameter(WebGLRenderingContext.MAX_VARYING_VECTORS));
-    result.push("webgl max vertex attribs:" + gl.getParameter(WebGLRenderingContext.MAX_VERTEX_ATTRIBS));
-    result.push("webgl max vertex texture image units:" + gl.getParameter(WebGLRenderingContext.MAX_VERTEX_TEXTURE_IMAGE_UNITS));
-    result.push("webgl max vertex uniform vectors:" + gl.getParameter(WebGLRenderingContext.MAX_VERTEX_UNIFORM_VECTORS));
-    result.push("webgl max viewport dims:" + fa2s(gl.getParameter(WebGLRenderingContext.MAX_VIEWPORT_DIMS)));
-    result.push("webgl red bits:" + gl.getParameter(WebGLRenderingContext.RED_BITS));
-    result.push("webgl renderer:" + gl.getParameter(WebGLRenderingContext.RENDERER));
-    result.push("webgl shading language version:" + gl.getParameter(WebGLRenderingContext.SHADING_LANGUAGE_VERSION));
-    result.push("webgl stencil bits:" + gl.getParameter(WebGLRenderingContext.STENCIL_BITS));
-    result.push("webgl vendor:" + gl.getParameter(WebGLRenderingContext.VENDOR));
-    result.push("webgl version:" + gl.getParameter(WebGLRenderingContext.VERSION));
+    /**
+     *
+     * @param {string} description
+     * @param {*} value
+     */
+    var fillResult = function (description, value) {
+      if(VERBOSE_MODE){
+        result.push(description + value);
+      }else{
+        result.push(value);
+      }
+    };
+
+    fillResult("extensions:", gl.getSupportedExtensions().join(";"));
+    fillResult("webgl aliased line width range:", fa2s(gl.getParameter(WebGLRenderingContext.ALIASED_LINE_WIDTH_RANGE)));
+    fillResult("webgl aliased point size range:", fa2s(gl.getParameter(WebGLRenderingContext.ALIASED_POINT_SIZE_RANGE)));
+    fillResult("webgl alpha bits:", gl.getParameter(WebGLRenderingContext.ALPHA_BITS));
+    fillResult("webgl antialiasing:", (gl.getContextAttributes().antialias ? "yes" : "no"));
+    fillResult("webgl blue bits:", gl.getParameter(WebGLRenderingContext.BLUE_BITS));
+    fillResult("webgl depth bits:", gl.getParameter(WebGLRenderingContext.DEPTH_BITS));
+    fillResult("webgl green bits:", gl.getParameter(WebGLRenderingContext.GREEN_BITS));
+    fillResult("webgl max anisotropy:", maxAnisotropy(gl));
+    fillResult("webgl max combined texture image units:", gl.getParameter(WebGLRenderingContext.MAX_COMBINED_TEXTURE_IMAGE_UNITS));
+    fillResult("webgl max cube map texture size:", gl.getParameter(WebGLRenderingContext.MAX_CUBE_MAP_TEXTURE_SIZE));
+    fillResult("webgl max fragment uniform vectors:", gl.getParameter(WebGLRenderingContext.MAX_FRAGMENT_UNIFORM_VECTORS));
+    fillResult("webgl max render buffer size:", gl.getParameter(WebGLRenderingContext.MAX_RENDERBUFFER_SIZE));
+    fillResult("webgl max texture image units:", gl.getParameter(WebGLRenderingContext.MAX_TEXTURE_IMAGE_UNITS));
+    fillResult("webgl max texture size:", gl.getParameter(WebGLRenderingContext.MAX_TEXTURE_SIZE));
+    fillResult("webgl max varying vectors:", gl.getParameter(WebGLRenderingContext.MAX_VARYING_VECTORS));
+    fillResult("webgl max vertex attribs:", gl.getParameter(WebGLRenderingContext.MAX_VERTEX_ATTRIBS));
+    fillResult("webgl max vertex texture image units:", gl.getParameter(WebGLRenderingContext.MAX_VERTEX_TEXTURE_IMAGE_UNITS));
+    fillResult("webgl max vertex uniform vectors:", gl.getParameter(WebGLRenderingContext.MAX_VERTEX_UNIFORM_VECTORS));
+    fillResult("webgl max viewport dims:", fa2s(gl.getParameter(WebGLRenderingContext.MAX_VIEWPORT_DIMS)));
+    fillResult("webgl red bits:", gl.getParameter(WebGLRenderingContext.RED_BITS));
+    fillResult("webgl renderer:", gl.getParameter(WebGLRenderingContext.RENDERER));
+    fillResult("webgl shading language version:", gl.getParameter(WebGLRenderingContext.SHADING_LANGUAGE_VERSION));
+    fillResult("webgl stencil bits:", gl.getParameter(WebGLRenderingContext.STENCIL_BITS));
+    fillResult("webgl vendor:", gl.getParameter(WebGLRenderingContext.VENDOR));
+    fillResult("webgl version:", gl.getParameter(WebGLRenderingContext.VERSION));
 
     /**
      * @link https://developer.mozilla.org/en-US/docs/Web/API/WebGLShaderPrecisionFormat
@@ -1232,42 +1282,42 @@ var Extractors = {
     if (!gl.getShaderPrecisionFormat) {
       log("WebGL fingerprinting is incomplete, because your browser does not support getShaderPrecisionFormat");
     }else{
-      result.push("webgl vertex shader high float precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_FLOAT).precision);
-      result.push("webgl vertex shader high float precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_FLOAT).rangeMin);
-      result.push("webgl vertex shader high float precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_FLOAT).rangeMax);
-      result.push("webgl vertex shader medium float precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).precision);
-      result.push("webgl vertex shader medium float precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).rangeMin);
-      result.push("webgl vertex shader medium float precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).rangeMax);
-      result.push("webgl vertex shader low float precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_FLOAT).precision);
-      result.push("webgl vertex shader low float precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_FLOAT).rangeMin);
-      result.push("webgl vertex shader low float precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_FLOAT).rangeMax);
-      result.push("webgl fragment shader high float precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_FLOAT).precision);
-      result.push("webgl fragment shader high float precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_FLOAT).rangeMin);
-      result.push("webgl fragment shader high float precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_FLOAT).rangeMax);
-      result.push("webgl fragment shader medium float precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).precision);
-      result.push("webgl fragment shader medium float precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).rangeMin);
-      result.push("webgl fragment shader medium float precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).rangeMax);
-      result.push("webgl fragment shader low float precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_FLOAT).precision);
-      result.push("webgl fragment shader low float precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_FLOAT).rangeMin);
-      result.push("webgl fragment shader low float precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_FLOAT).rangeMax);
-      result.push("webgl vertex shader high int precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_INT).precision);
-      result.push("webgl vertex shader high int precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_INT).rangeMin);
-      result.push("webgl vertex shader high int precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_INT).rangeMax);
-      result.push("webgl vertex shader medium int precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_INT).precision);
-      result.push("webgl vertex shader medium int precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_INT).rangeMin);
-      result.push("webgl vertex shader medium int precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_INT).rangeMax);
-      result.push("webgl vertex shader low int precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_INT).precision);
-      result.push("webgl vertex shader low int precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_INT).rangeMin);
-      result.push("webgl vertex shader low int precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_INT).rangeMax);
-      result.push("webgl fragment shader high int precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_INT).precision);
-      result.push("webgl fragment shader high int precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_INT).rangeMin);
-      result.push("webgl fragment shader high int precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_INT).rangeMax);
-      result.push("webgl fragment shader medium int precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_INT).precision);
-      result.push("webgl fragment shader medium int precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_INT).rangeMin);
-      result.push("webgl fragment shader medium int precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_INT).rangeMax);
-      result.push("webgl fragment shader low int precision:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_INT).precision);
-      result.push("webgl fragment shader low int precision rangeMin:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_INT).rangeMin);
-      result.push("webgl fragment shader low int precision rangeMax:" + gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_INT).rangeMax);
+      fillResult("webgl vertex shader high float precision:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_FLOAT).precision);
+      fillResult("webgl vertex shader high float precision rangeMin:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_FLOAT).rangeMin);
+      fillResult("webgl vertex shader high float precision rangeMax:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_FLOAT).rangeMax);
+      fillResult("webgl vertex shader medium float precision:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).precision);
+      fillResult("webgl vertex shader medium float precision rangeMin:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).rangeMin);
+      fillResult("webgl vertex shader medium float precision rangeMax:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).rangeMax);
+      fillResult("webgl vertex shader low float precision:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_FLOAT).precision);
+      fillResult("webgl vertex shader low float precision rangeMin:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_FLOAT).rangeMin);
+      fillResult("webgl vertex shader low float precision rangeMax:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_FLOAT).rangeMax);
+      fillResult("webgl fragment shader high float precision:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_FLOAT).precision);
+      fillResult("webgl fragment shader high float precision rangeMin:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_FLOAT).rangeMin);
+      fillResult("webgl fragment shader high float precision rangeMax:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_FLOAT).rangeMax);
+      fillResult("webgl fragment shader medium float precision:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).precision);
+      fillResult("webgl fragment shader medium float precision rangeMin:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).rangeMin);
+      fillResult("webgl fragment shader medium float precision rangeMax:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_FLOAT).rangeMax);
+      fillResult("webgl fragment shader low float precision:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_FLOAT).precision);
+      fillResult("webgl fragment shader low float precision rangeMin:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_FLOAT).rangeMin);
+      fillResult("webgl fragment shader low float precision rangeMax:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_FLOAT).rangeMax);
+      fillResult("webgl vertex shader high int precision:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_INT).precision);
+      fillResult("webgl vertex shader high int precision rangeMin:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_INT).rangeMin);
+      fillResult("webgl vertex shader high int precision rangeMax:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.HIGH_INT).rangeMax);
+      fillResult("webgl vertex shader medium int precision:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_INT).precision);
+      fillResult("webgl vertex shader medium int precision rangeMin:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_INT).rangeMin);
+      fillResult("webgl vertex shader medium int precision rangeMax:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.MEDIUM_INT).rangeMax);
+      fillResult("webgl vertex shader low int precision:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_INT).precision);
+      fillResult("webgl vertex shader low int precision rangeMin:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_INT).rangeMin);
+      fillResult("webgl vertex shader low int precision rangeMax:", gl.getShaderPrecisionFormat(WebGLRenderingContext.VERTEX_SHADER, WebGLRenderingContext.LOW_INT).rangeMax);
+      fillResult("webgl fragment shader high int precision:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_INT).precision);
+      fillResult("webgl fragment shader high int precision rangeMin:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_INT).rangeMin);
+      fillResult("webgl fragment shader high int precision rangeMax:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.HIGH_INT).rangeMax);
+      fillResult("webgl fragment shader medium int precision:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_INT).precision);
+      fillResult("webgl fragment shader medium int precision rangeMin:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_INT).rangeMin);
+      fillResult("webgl fragment shader medium int precision rangeMax:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.MEDIUM_INT).rangeMax);
+      fillResult("webgl fragment shader low int precision:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_INT).precision);
+      fillResult("webgl fragment shader low int precision rangeMin:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_INT).rangeMin);
+      fillResult("webgl fragment shader low int precision rangeMax:", gl.getShaderPrecisionFormat(WebGLRenderingContext.FRAGMENT_SHADER, WebGLRenderingContext.LOW_INT).rangeMax);
     }
     return result.join("~");
   },
@@ -1339,9 +1389,9 @@ var Extractors = {
     // We detect if the person uses a mobile device
     var mobileDevice;
     if (("ontouchstart" in window) ||
-         (navigator.maxTouchPoints > 0) ||
-         (navigator.msMaxTouchPoints > 0)) {
-          mobileDevice = true;
+      (navigator.maxTouchPoints > 0) ||
+      (navigator.msMaxTouchPoints > 0)) {
+      mobileDevice = true;
     } else{
       mobileDevice = false;
     }
@@ -1458,7 +1508,7 @@ var Extractors = {
     }
 
     var canvas = document.createElement("canvas"),
-        glContext;
+      glContext;
 
     try {
       glContext = canvas.getContext && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"));
@@ -1529,10 +1579,12 @@ Fingerprint2.prototype = {
     var keys = Features.runDetections(this);
 
     var values = [];
-    this.each(keys, function(pair) {
-      var value = pair.value;
-      if (typeof pair.value.join !== "undefined") {
-        value = pair.value.join(";");
+    this.each(keys, function(value) {
+      if(VERBOSE_MODE) {
+        value = value.value;
+      }
+      if (typeof value.join !== "undefined") {
+        value = value.join(";");
       }
       values.push(value);
     });
