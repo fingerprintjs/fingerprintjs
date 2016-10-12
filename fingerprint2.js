@@ -319,7 +319,7 @@ var FP2Options = function(){
    *
    * @type {Object<string,boolean>}
    */
-  this["exclude"]  = {
+  this["exclude"] = {
     UserAgent: false,
     Language: false,
     ColorDepth: false,
@@ -625,7 +625,7 @@ var Extractors = {
       // starting to detect plugins in IE
       result = fp.map(names, function(name) {
         try {
-          new ActiveXObject(name); // eslint-disable-no-new
+          new ActiveXObject(name);
           return name;
         } catch(e) {
           return null;
@@ -1345,7 +1345,7 @@ var Features = {
    * @param {!Array} keys
    */
   timezoneOffsetKey: function(keys) {
-    fillKeys(keys, "timezone_offset", (new Date).getTimezoneOffset());
+    fillKeys(keys, "timezone_offset", new Date().getTimezoneOffset());
   },
   /**
    * @static
@@ -1621,9 +1621,4 @@ if(EXPORT_MODE){
   Fingerprint2["Options"] = FP2Options;
   Fingerprint2["create"] = Fingerprint2.create;
   window["Fingerprint2"] = Fingerprint2;
-}else{
-
-  var options2 = new FP2Options;
-//    options2.extendedJsFonts = true;
-  console.log(new Fingerprint2(options2).get())
 }

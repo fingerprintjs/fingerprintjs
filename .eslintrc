@@ -14,7 +14,8 @@
     "no-shadow": false,
     "no-new": false,
     "no-extend-native": false,
-    "dot-notation" : false
+    "dot-notation" : false,
+    "no-extra-boolean-cast" : false
   },
   "ignore": [
     "gulpfile.js",
