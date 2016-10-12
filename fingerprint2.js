@@ -982,56 +982,75 @@ var Extractors = {
     var userAgent = navigator.userAgent.toLowerCase();
     var oscpu = navigator["oscpu"];
     var platform = navigator.platform.toLowerCase();
+
+    /**
+     *
+     * @enum {number}
+     */
+    var OsEnum = {
+      OTHER: 0,
+      WINDOWS: 1,
+      MAC: 2,
+      ANDROID: 3,
+      IOS: 4,
+      LINUX: 5,
+      WINDOWS_PHONE: 6
+    };
+
+    /**
+     * @type {OsEnum}
+     */
     var os;
+
     //We extract the OS from the user agent (respect the order of the if else if statement)
-    if(userAgent.indexOf("windows phone") >= 0){
-      os = "Windows Phone";
-    } else if(userAgent.indexOf("win") >= 0){
-      os = "Windows";
-    } else if(userAgent.indexOf("android") >= 0){
-      os = "Android";
-    } else if(userAgent.indexOf("linux") >= 0){
-      os = "Linux";
-    } else if(userAgent.indexOf("iphone") >= 0 || userAgent.indexOf("ipad") >= 0 ){
-      os = "iOS";
-    } else if(userAgent.indexOf("mac") >= 0){
-      os = "Mac";
+    if (userAgent.indexOf("windows phone") >= 0) {
+      os = OsEnum.WINDOWS_PHONE;
+    } else if (userAgent.indexOf("win") >= 0) {
+      os = OsEnum.WINDOWS;
+    } else if (userAgent.indexOf("android") >= 0) {
+      os = OsEnum.ANDROID;
+    } else if (userAgent.indexOf("linux") >= 0) {
+      os = OsEnum.LINUX;
+    } else if (userAgent.indexOf("iphone") >= 0 || userAgent.indexOf("ipad") >= 0) {
+      os = OsEnum.IOS;
+    } else if (userAgent.indexOf("mac") >= 0) {
+      os = OsEnum.MAC;
     } else{
-      os = "Other";
+      os = OsEnum.OTHER;
     }
 
     // We detect if the person uses a mobile device
     var mobileDevice = !!(("ontouchstart" in window) || navigator["maxTouchPoints"] > 0 || navigator["msMaxTouchPoints"] > 0);
-    if(mobileDevice && os !== "Windows Phone" && os !== "Android" && os !== "iOS" && os !== "Other"){
+    if(mobileDevice && os !== OsEnum.WINDOWS_PHONE && os !== OsEnum.ANDROID && os !== OsEnum.IOS && os !== OsEnum.OTHER){
       return true;
     }
 
     // We compare oscpu with the OS extracted from the UA
     if(typeof oscpu !== "undefined"){
       oscpu = oscpu.toLowerCase();
-      if(oscpu.indexOf("win") >= 0 && os !== "Windows" && os !== "Windows Phone"){
+      if (os !== OsEnum.WINDOWS_PHONE && os !== OsEnum.WINDOWS && oscpu.indexOf("win") >= 0) {
         return true;
-      } else if(oscpu.indexOf("linux") >= 0 && os !== "Linux" && os !== "Android"){
+      } else if (os !== OsEnum.ANDROID && os !== OsEnum.LINUX && oscpu.indexOf("linux") >= 0) {
         return true;
-      } else if(oscpu.indexOf("mac") >= 0 && os !== "Mac" && os !== "iOS"){
+      } else if (os !== OsEnum.IOS && os !== OsEnum.MAC && oscpu.indexOf("mac") >= 0) {
         return true;
-      } else if(oscpu.indexOf("win") === 0 && oscpu.indexOf("linux") === 0 && oscpu.indexOf("mac") >= 0 && os !== "other"){
+      } else if (os !== OsEnum.OTHER && oscpu.indexOf("mac") >= 0 && oscpu.indexOf("linux") === 0 && oscpu.indexOf("win") === 0) {
         return true;
       }
     }
 
     //We compare platform with the OS extracted from the UA
-    if(platform.indexOf("win") >= 0 && os !== "Windows" && os !== "Windows Phone"){
+    if (os !== OsEnum.WINDOWS_PHONE && os !== OsEnum.WINDOWS && platform.indexOf("win") >= 0) {
       return true;
-    } else if((platform.indexOf("linux") >= 0 || platform.indexOf("android") >= 0 || platform.indexOf("pike") >= 0) && os !== "Linux" && os !== "Android"){
+    } else if (os !== OsEnum.ANDROID && os !== OsEnum.LINUX && (platform.indexOf("linux") >= 0 || platform.indexOf("android") >= 0 || platform.indexOf("pike") >= 0)) {
       return true;
-    } else if((platform.indexOf("mac") >= 0 || platform.indexOf("ipad") >= 0 || platform.indexOf("ipod") >= 0 || platform.indexOf("iphone") >= 0) && os !== "Mac" && os !== "iOS"){
+    } else if (os !== OsEnum.IOS && os !== OsEnum.MAC && (platform.indexOf("mac") >= 0 || platform.indexOf("ipad") >= 0 || platform.indexOf("ipod") >= 0 || platform.indexOf("iphone") >= 0)) {
       return true;
-    } else if(platform.indexOf("win") === 0 && platform.indexOf("linux") === 0 && platform.indexOf("mac") >= 0 && os !== "other"){
+    } else if (os !== OsEnum.OTHER && platform.indexOf("mac") >= 0 && platform.indexOf("linux") === 0 && platform.indexOf("win") === 0) {
       return true;
     }
 
-    if(typeof navigator.plugins === "undefined" && os !== "Windows" && os !== "Windows Phone"){
+    if (os !== OsEnum.WINDOWS_PHONE && os !== OsEnum.WINDOWS && typeof navigator.plugins === "undefined") {
       //We are are in the case where the person uses ie, therefore we can infer that it's windows
       return true;
     }
@@ -1047,32 +1066,49 @@ var Extractors = {
     var userAgent = navigator.userAgent.toLowerCase();
     var productSub = navigator["productSub"];
 
-    //we extract the browser from the user agent (respect the order of the tests)
+    /**
+     *
+     * @enum {number}
+     */
+    var BrowserEnum = {
+      OTHER: 0,
+      CHROME: 1,
+      FIREFOX: 2,
+      MSIE: 3,
+      OPERA: 4,
+      SAFARI: 5
+    };
+
+    /**
+     * @type {BrowserEnum}
+     */
     var browser;
-    if(userAgent.indexOf("firefox") >= 0){
-      browser = "Firefox";
-    } else if(userAgent.indexOf("opera") >= 0 || userAgent.indexOf("opr") >= 0){
-      browser = "Opera";
-    } else if(userAgent.indexOf("chrome") >= 0){
-      browser = "Chrome";
-    } else if(userAgent.indexOf("safari") >= 0){
-      browser = "Safari";
-    } else if(userAgent.indexOf("trident") >= 0){
-      browser = "Internet Explorer";
+
+    //we extract the browser from the user agent (respect the order of the tests)
+    if (userAgent.indexOf("firefox") >= 0) {
+      browser = BrowserEnum.FIREFOX;
+    } else if (userAgent.indexOf("opera") >= 0 || userAgent.indexOf("opr") >= 0) {
+      browser = BrowserEnum.OPERA;
+    } else if (userAgent.indexOf("chrome") >= 0) {
+      browser = BrowserEnum.CHROME;
+    } else if (userAgent.indexOf("safari") >= 0) {
+      browser = BrowserEnum.SAFARI;
+    } else if (userAgent.indexOf("trident") >= 0) {
+      browser = BrowserEnum.MSIE;
     } else{
-      browser = "Other";
+      browser = BrowserEnum.OTHER;
     }
 
-    if((browser === "Chrome" || browser === "Safari" || browser === "Opera") && productSub !== "20030107"){
+    if((browser === BrowserEnum.CHROME || browser === BrowserEnum.SAFARI || browser === BrowserEnum.OPERA) && productSub !== "20030107"){
       return true;
     }
 
     var tempRes = eval.toString().length;
-    if(tempRes === 37 && browser !== "Safari" && browser !== "Firefox" && browser !== "Other"){
+    if(tempRes === 37 && browser !== BrowserEnum.SAFARI && browser !== BrowserEnum.FIREFOX && browser !== BrowserEnum.OTHER){
       return true;
-    } else if(tempRes === 39 && browser !== "Internet Explorer" && browser !== "Other"){
+    } else if(tempRes === 39 && browser !== BrowserEnum.MSIE && browser !== BrowserEnum.OTHER){
       return true;
-    } else if(tempRes === 33 && browser !== "Chrome" && browser !== "Opera" && browser !== "Other"){
+    } else if(tempRes === 33 && browser !== BrowserEnum.CHROME && browser !== BrowserEnum.OPERA && browser !== BrowserEnum.OTHER){
       return true;
     }
 
@@ -1088,7 +1124,8 @@ var Extractors = {
         errFirefox = false;
       }
     }
-    if(errFirefox && browser !== "Firefox" && browser !== "Other"){
+
+    if(errFirefox && browser !== BrowserEnum.FIREFOX && browser !== BrowserEnum.OTHER){
       return true;
     }
     return false;
@@ -1625,7 +1662,6 @@ if(EXPORT_MODE){
 
 //TODO: todo's before releasing v2:
 //TODO: =========================
-//TODO: replace "key" strings with enums
 //TODO: add tests for unknown symbols that the compiler renames (brackets notation..)
 //TODO: support feature overriding
 //TODO: support hash overriding
