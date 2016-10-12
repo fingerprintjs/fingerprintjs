@@ -1404,7 +1404,7 @@ var Features = {
    * @param {!Array} keys
    */
   cpuClassKey: function(keys) {
-    fillKeys(keys, "cpu_class", navigator.cpuClass || "unknown");
+    fillKeys(keys, "cpu_class", navigator["cpuClass"] || "unknown");
   },
   /**
    * @static
@@ -1420,7 +1420,7 @@ var Features = {
    * @param {!Array} keys
    */
   doNotTrackKey: function(keys) {
-    fillKeys(keys, "do_not_track", navigator.doNotTrack || navigator.msDoNotTrack || window.doNotTrack || "unknown");
+    fillKeys(keys, "do_not_track", navigator["doNotTrack"] || navigator["msDoNotTrack"] || window["doNotTrack"] || "unknown");
   },
   /**
    * @static
