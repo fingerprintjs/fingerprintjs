@@ -1622,3 +1622,15 @@ if(EXPORT_MODE){
   Fingerprint2["create"] = Fingerprint2.create;
   window["Fingerprint2"] = Fingerprint2;
 }
+
+//TODO: todo's before releasing v2:
+//TODO: =========================
+//TODO: replace "key" strings with enums
+//TODO: add tests for unknown symbols that the compiler renames (brackets notation..)
+//TODO: support feature overriding
+//TODO: support hash overriding
+//TODO: remove async API
+//TODO: test compiled code as-is
+//TODO: test compiled code with VERBOSE_MODE = false
+//TODO: test compiled code with EXPORT_MODE = true
+//TODO: test compiled code with EXPORT_MODE = false
