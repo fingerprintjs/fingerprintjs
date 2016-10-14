@@ -20,17 +20,17 @@
  *
  * @define {boolean}
  */
-var DEBUG_MODE = false;
+var FP2_DEBUG_MODE = false;
 /**
  *
  * @define {boolean}
  */
-var EXPORT_MODE = true;
+var FP2_EXPORT_MODE = true;
 /**
  *
  * @define {boolean}
  */
-var VERBOSE_MODE = true;
+var FP2_VERBOSE_MODE = true;
 
 /**
  * @private
@@ -278,7 +278,7 @@ var murmur3x64hash128 = function (key, seed) {
  * @param {*} msg
  */
 var log = function(msg){
-  if(DEBUG_MODE){
+  if(FP2_DEBUG_MODE){
     if(window.console){
       console.log(msg);
     }
@@ -377,7 +377,7 @@ Fingerprint2.create = function (options) {
  * @param {string} key
  */
 var fillKeys = function (keys, key, value) {
-  if (VERBOSE_MODE) {
+  if (FP2_VERBOSE_MODE) {
     keys.push({key: key, value: value});
   } else {
     keys.push(value);
@@ -850,7 +850,7 @@ var Extractors = {
      * @param {*} value
      */
     var fillResult = function (description, value) {
-      if(VERBOSE_MODE){
+      if(FP2_VERBOSE_MODE){
         result.push(description + value);
       }else{
         result.push(value);
@@ -1587,7 +1587,7 @@ Fingerprint2.prototype = {
 
     var values = [];
     this.each(keys, function(value) {
-      if(VERBOSE_MODE) {
+      if(FP2_VERBOSE_MODE) {
         value = value.value;
       }
       if (typeof value.join !== "undefined") {
@@ -1649,7 +1649,7 @@ Fingerprint2.prototype = {
   }
 };
 
-if(EXPORT_MODE){
+if(FP2_EXPORT_MODE){
   Fingerprint2["VERSION"] = "2.0.0-dev";
   Fingerprint2["Features"] = Features;
   Fingerprint2["Extractors"] = Extractors;
@@ -1665,6 +1665,6 @@ if(EXPORT_MODE){
 //TODO: support hash overriding
 //TODO: remove async API
 //TODO: test compiled code as-is
-//TODO: test compiled code with VERBOSE_MODE = false
-//TODO: test compiled code with EXPORT_MODE = true
-//TODO: test compiled code with EXPORT_MODE = false
+//TODO: test compiled code with FP2_VERBOSE_MODE = false
+//TODO: test compiled code with FP2_EXPORT_MODE = true
+//TODO: test compiled code with FP2_EXPORT_MODE = false

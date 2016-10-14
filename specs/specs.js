@@ -199,16 +199,16 @@ describe("Fingerprint2", function () {
         });
       });
 
-      it("VERBOSE_MODE=false returns user_agent as the actual value and not in an object", function (done) {
+      it("FP2_VERBOSE_MODE=false returns user_agent as the actual value and not in an object", function (done) {
         //FIXME: this is very bad! (assuming jasmine is single threaded and not invoking an async function - this should pass)
         //FIXME: we need to find a better way to test compiled code with flags.
-        var previousVerboseMode = VERBOSE_MODE;
-        VERBOSE_MODE = false;
+        var previousVerboseMode = FP2_VERBOSE_MODE;
+        FP2_VERBOSE_MODE = false;
         var fp2 = new Fingerprint2();
         var withComponents = fp2.getWithComponents();
         var components = withComponents[1];
         expect(components[0]).toEqual(navigator.userAgent);
-        VERBOSE_MODE = previousVerboseMode;
+        FP2_VERBOSE_MODE = previousVerboseMode;
         done();
       });
 

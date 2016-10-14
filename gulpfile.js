@@ -34,9 +34,9 @@ gulp.task("minify", function() {
         js_output_file: 'fingerprint2.min.js',
         use_types_for_optimization : true,
         define: [
-          "DEBUG_MODE=false",
-          "EXPORT_MODE=true",
-          "VERBOSE_MODE=false",
+          "FP2_DEBUG_MODE=false",
+          "FP2_EXPORT_MODE=true",
+          "FP2_VERBOSE_MODE=false",
         ]
       }))
       .pipe(gulp.dest("dist/"));
