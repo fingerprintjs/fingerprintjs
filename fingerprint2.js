@@ -18,8 +18,9 @@
 
 (function (name, context, definition) {
   "use strict";
-  if (typeof module !== "undefined" && module.exports) { module.exports = definition(); }
-  else if (typeof define === "function" && define.amd) { define(definition); }
+  if (typeof define === "function" && define.amd) { define(definition); }
+  else if (typeof module !== "undefined" && module.exports) { module.exports = definition(); }
+  else if (context.exports) { context.exports = definition(); }
   else { context[name] = definition(); }
 })("Fingerprint2", this, function() {
   "use strict";
