@@ -626,7 +626,11 @@
       }
     },
     hasIndexedDB: function (){
-      return !!window.indexedDB;
+      try {
+        return !!window.indexedDB;  
+      } catch(e) {
+        return true; // SecurityError when referencing it means it exists
+      }
     },
     getNavigatorCpuClass: function () {
       if(navigator.cpuClass){
