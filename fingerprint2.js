@@ -87,7 +87,18 @@
       }
     },
     get: function(done){
-      var keys = [];
+      var that = this;
+      var keys = {
+          data: [],
+          push: function(pair){
+              var tmpKey = pair.key;
+              var tmpValue = pair.value;
+              if(typeof that.options.preprocessor === "function"){
+                  tmpValue = that.options.preprocessor(tmpKey, tmpValue);
+              }
+              this.data.push({key: tmpKey, value: tmpValue});
+          }
+      };
       keys = this.userAgentKey(keys);
       keys = this.languageKey(keys);
       keys = this.colorDepthKey(keys);
@@ -112,10 +123,9 @@
       keys = this.hasLiedOsKey(keys);
       keys = this.hasLiedBrowserKey(keys);
       keys = this.touchSupportKey(keys);
-      var that = this;
       this.fontsKey(keys, function(newKeys){
         var values = [];
-        that.each(newKeys, function(pair) {
+        that.each(newKeys.data, function(pair) {
           var value = pair.value;
           if (typeof pair.value.join !== "undefined") {
             value = pair.value.join(";");
@@ -123,7 +133,7 @@
           values.push(value);
         });
         var murmur = that.x64hash128(values.join("~~~"), 31);
-        return done(murmur, newKeys);
+        return done(murmur, newKeys.data);
       });
     },
     userAgentKey: function(keys) {

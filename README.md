@@ -110,6 +110,25 @@ new Fingerprint2({
 );
 ```
 
+#### `preprocessor` option
+
+Since some components can be changed frequently, this option may help you improve hash accuracy. You can modify any component value before hash calculation. For example: strip browser version from user agent.
+
+```
+new Fingerprint2({
+  preprocessor: function(key, value){
+    if(key == "user_agent"){
+      var parsedUserAgent = SomeUserAgentParser.parse(value);
+      var userAgentMinusVersion = parsedUserAgent.base_platform + ' ' + parsedUserAgent.browser_name;
+      return userAgentMinusVersion;
+    }
+  }
+}).get(function(result, components){}
+  //user_agent component will contain string processed with our function. For example: Windows Chrome
+  console.log(result, components);
+);
+```
+
 #### View the fingerprint locally
 
 You can view your browser fingerprint locally by starting a webserver and viewing the `index.html` page.
@@ -123,15 +142,15 @@ To start a web server you can try using one of the following:
 
 * Python 2.x
 
-	`python -m SimpleHTTPServer 8080`
+    `python -m SimpleHTTPServer 8080`
 
 * Python 3.x
 
-	`python -m http.server 8080`
+    `python -m http.server 8080`
 
 * PHP 5.4+
 
-	`php -S 0.0.0.0:8080`
+    `php -S 0.0.0.0:8080`
 
 
 ### List of fingerprinting sources

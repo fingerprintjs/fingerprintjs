@@ -224,5 +224,40 @@ describe("Fingerprint2", function () {
         done();
       });
     });
+
+    describe("preprocessor", function () {
+      it("checks if user_agent not processed by default", function (done) {
+        var fp2 = new Fingerprint2();
+        fp2.get(function(result, components) {
+          for(var x = 0; x < components.length; x++) {
+            if(components[x].key == "user_agent") {
+                expect(components[x].value).not.toEqual("MyUserAgent");
+            }
+          }
+          done();
+        });
+      });
+      
+      it("checks if user_agent processed with user function", function (done) {
+        var options = {
+            preprocessor: function(key, value) {
+                if(key == "user_agent") {
+                    value = "MyUserAgent";
+                }
+                
+                return value;
+            }
+        };
+        var fp2 = new Fingerprint2(options);
+        fp2.get(function(result, components) {
+          for(var x = 0; x < components.length; x++) {
+            if(components[x].key == "user_agent") {
+                expect(components[x].value).toEqual("MyUserAgent");
+            }
+          }
+          done();
+        });
+      });
+    });
   });
 });
