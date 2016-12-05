@@ -24,6 +24,11 @@ This project uses `semver`.
 ```
 //cdn.jsdelivr.net/fingerprintjs2/<VERSION>/fingerprint2.min.js
 ```
+or
+
+```
+https://cdnjs.com/libraries/fingerprintjs2
+```
 
 #### Bower
 
@@ -93,23 +98,41 @@ new Fingerprint2().get(function(result, components){
 });
 ```
 
+#### `userDefinedFonts` option
+
+While hundreds of the most popular fonts are included in the extended font list, you may wish to increase the entropy of the font fingerprint by specifying the `userDefinedFonts` option as an array of font names.
+
+```
+new Fingerprint2({
+  userDefinedFonts: ["Nimbus Mono", "Junicode", "Presto"]
+}).get(function(result, components){}
+  console.log(result);
+);
+```
+
 #### View the fingerprint locally
 
 You can view your browser fingerprint locally by starting a webserver and viewing the `index.html` page.
 Loading `index.html` from the filesystem won't work due to Flash's ExternalInterface security restrictions.
 
-To start a web server you can use either Ruby:
+To start a web server you can try using one of the following:
 
-```
-ruby -run -e httpd . -p 8080
-```
+* Ruby 1.9.2+
 
-or Python:
+    `ruby -run -e httpd . -p 8080`
 
-```
-# will load on port 8000
-python -m SimpleHTTPServer
-```
+* Python 2.x
+
+	`python -m SimpleHTTPServer 8080`
+
+* Python 3.x
+
+	`python -m http.server 8080`
+
+* PHP 5.4+
+
+	`php -S 0.0.0.0:8080`
+
 
 ### List of fingerprinting sources
 
@@ -137,20 +160,19 @@ python -m SimpleHTTPServer
 22. Has the user tampered with its OS <sup>[1](https://github.com/Valve/fingerprintjs2/wiki/Browser-tampering)</sup>
 23. Has the user tampered with its browser <sup>[1](https://github.com/Valve/fingerprintjs2/wiki/Browser-tampering)</sup>
 24. Touch screen detection and capabilities
+25. Pixel Ratio
 
 
 By default, JS font detection will only detect up to 65 installed fonts. If you want to improve the font detection,
 you can pass `extendedFontList: true` option. This will increase the number of detectable fonts to ~500.
 
-On my machine (MBP 2013 Core i5) + Chrome 46 the default FP process takes about 80-100ms. If you use `extendedFontList` option this time will increase up to 200-600ms.
-This option can incur even more overhead on mobile Firefox browsers, which is much slower in font detection, so use it with caution.
+On my machine (MBP 2013 Core i5) + Chrome 46 the default FP process takes about 80-100ms. If you use `extendedFontList` option this time will increase up to 160-200ms.
+This option can incur even more overhead on mobile Firefox browsers, which is much slower in font detection, so use it with caution on mobile devices.
 
 ### Many more fingerprinting sources will be implemented, such as
 (in no particular order)
 
 * Multi-monitor detection,
-* silverlight integration,
-* Flash linux kernel version,
 * Internal HashTable implementation detection
 * WebRTC fingerprinting
 * Math constants
@@ -162,6 +184,7 @@ This option can incur even more overhead on mobile Firefox browsers, which is mu
 * List of supported gestures (for touch-enabled devices)
 * Pixel density
 * Video and audio codecs availability
+* Audio stack fingerprinting
 
 #### To recompile the `FontList.swf` file:
 
