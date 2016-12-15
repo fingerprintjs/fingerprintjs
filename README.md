@@ -164,9 +164,9 @@ To start a web server you can try using one of the following:
 
 
 By default, JS font detection will only detect up to 65 installed fonts. If you want to improve the font detection,
-you can pass `extendedFontList: true` option. This will increase the number of detectable fonts to ~500.
+you can pass `extendedJsFonts: true` option. This will increase the number of detectable fonts to ~500.
 
-On my machine (MBP 2013 Core i5) + Chrome 46 the default FP process takes about 80-100ms. If you use `extendedFontList` option this time will increase up to 160-200ms.
+On my machine (MBP 2013 Core i5) + Chrome 46 the default FP process takes about 80-100ms. If you use `extendedJsFonts` option this time will increase up to 160-200ms.
 This option can incur even more overhead on mobile Firefox browsers, which is much slower in font detection, so use it with caution on mobile devices.
 
 ### Many more fingerprinting sources will be implemented, such as
