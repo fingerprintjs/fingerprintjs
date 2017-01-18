@@ -92,6 +92,7 @@
       keys = this.languageKey(keys);
       keys = this.colorDepthKey(keys);
       keys = this.pixelRatioKey(keys);
+      keys = this.hardwareConcurrencyKey(keys);
       keys = this.screenResolutionKey(keys);
       keys = this.availableScreenResolutionKey(keys);
       keys = this.timezoneOffsetKey(keys);
@@ -610,6 +611,12 @@
       }
       return keys;
     },
+    hardwareConcurrencyKey: function(keys){
+      if(!this.options.excludeHardwareConcurrency){
+        keys.push({key: "hardware_concurrency", value: this.getHardwareConcurrency()});
+      }
+      return keys;
+    },
     hasSessionStorage: function () {
       try {
         return !!window.sessionStorage;
@@ -631,6 +638,12 @@
       } catch(e) {
         return true; // SecurityError when referencing it means it exists
       }
+    },
+    getHardwareConcurrency: function(){
+      if(navigator.hardwareConcurrency){
+        return navigator.hardwareConcurrency;
+      }
+      return "unknown";
     },
     getNavigatorCpuClass: function () {
       if(navigator.cpuClass){

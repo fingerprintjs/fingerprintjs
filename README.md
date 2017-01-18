@@ -161,6 +161,7 @@ To start a web server you can try using one of the following:
 23. Has the user tampered with its browser <sup>[1](https://github.com/Valve/fingerprintjs2/wiki/Browser-tampering)</sup>
 24. Touch screen detection and capabilities
 25. Pixel Ratio
+26. System's total number of logical processors available to the user agent.
 
 
 By default, JS font detection will only detect up to 65 installed fonts. If you want to improve the font detection,
