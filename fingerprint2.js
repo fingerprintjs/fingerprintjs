@@ -289,63 +289,74 @@ var log = function(msg){
  * @dict
  * @constructor
  */
-var FP2Options = function(){
+var FP2Options = function(options){
+  if (typeof options !== 'object') {
+    options = {
+      exclude: {}
+    };
+  }
+
   /**
    *
    * @type {boolean}
    */
-  this["detectScreenOrientation"] = true;
+  this["detectScreenOrientation"] = options["detectScreenOrientation"] || true;
   /**
    *
    * @type {Array<RegExp>}
    */
-  this["sortPluginsFor"] = [/palemoon/i];
+  this["sortPluginsFor"] = options["sortPluginsFor"] || [/palemoon/i];
   /**
    *
    * @type {Array<string>}
    */
-  this["userDefinedFonts"] = [];
+  this["userDefinedFonts"] = options["userDefinedFonts"] || [];
   /**
    *
    * @type {boolean}
    */
-  this["extendedJsFonts"] = false;
+  this["extendedJsFonts"] = options["extendedJsFonts"] || false;
   /**
    *
    * @type {boolean}
    */
-  this["dontUseFakeFontInCanvas"] = false;
+  this["dontUseFakeFontInCanvas"] = options["dontUseFakeFontInCanvas"] || false;
+
+  if (typeof options["exclude"] !== 'object') {
+    options["exclude"] = {};
+  }
+
   /**
    *
    * @type {Object<string,boolean>}
    */
   this["exclude"] = {
-    "UserAgent": false,
-    "Language": false,
-    "ColorDepth": false,
-    "PixelRatio": false,
-    "ScreenResolution": false,
-    "AvailableScreenResolution": false,
-    "TimezoneOffset": false,
-    "SessionStorage": false,
-    "LocalStorage": false,
-    "IndexedDB": false,
-    "AddBehavior": false,
-    "OpenDatabase": false,
-    "CpuClass": false,
-    "Platform": false,
-    "DoNotTrack": false,
-    "Plugins": false,
-    "IEPlugins": false,
-    "Canvas": false,
-    "WebGL": false,
-    "AdBlock": false,
-    "HasLiedLanguages": false,
-    "HasLiedResolution": false,
-    "HasLiedOs": false,
-    "HasLiedBrowser": false,
-    "TouchSupport": false,
-    "JsFonts": false
+    "UserAgent": options["exclude"]["UserAgent"] || false,
+    "Language": options["exclude"]["Language"] || false,
+    "ColorDepth": options["exclude"]["ColorDepth"] || false,
+    "PixelRatio": options["exclude"]["PixelRatio"] || false,
+    "ScreenResolution": options["exclude"]["ScreenResolution"] || false,
+    "AvailableScreenResolution": options["exclude"]["AvailableScreenResolution"] || false,
+    "TimezoneOffset": options["exclude"]["TimezoneOffset"] || false,
+    "SessionStorage": options["exclude"]["SessionStorage"] || false,
+    "LocalStorage": options["exclude"]["LocalStorage"] || false,
+    "IndexedDB": options["exclude"]["IndexedDB"] || false,
+    "AddBehavior": options["exclude"]["AddBehavior"] || false,
+    "OpenDatabase": options["exclude"]["OpenDatabase"] || false,
+    "CpuClass": options["exclude"]["CpuClass"] || false,
+    "Platform": options["exclude"]["Platform"] || false,
+    "DoNotTrack": options["exclude"]["DoNotTrack"] || false,
+    "Plugins": options["exclude"]["Plugins"] || false,
+    "IEPlugins": options["exclude"]["IEPlugins"] || false,
+    "Canvas": options["exclude"]["Canvas"] || false,
+    "WebGL": options["exclude"]["WebGL"] || false,
+    "AdBlock": options["exclude"]["AdBlock"] || false,
+    "HasLiedLanguages": options["exclude"]["HasLiedLanguages"] || false,
+    "HasLiedResolution": options["exclude"]["HasLiedResolution"] || false,
+    "HasLiedOs": options["exclude"]["HasLiedOs"] || false,
+    "HasLiedBrowser": options["exclude"]["HasLiedBrowser"] || false,
+    "TouchSupport": options["exclude"]["TouchSupport"] || false,
+    "JsFonts": options["exclude"]["JsFonts"] || false
   };
 };
 
@@ -354,7 +365,7 @@ var FP2Options = function(){
  * @constructor
  */
 var Fingerprint2 = function(options) {
-  this.options = options || new FP2Options();
+  this.options = new FP2Options(options);
   this.nativeForEach = Array.prototype.forEach;
   this.nativeMap = Array.prototype.map;
 };

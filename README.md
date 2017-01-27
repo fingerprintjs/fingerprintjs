@@ -65,7 +65,7 @@ console.log(fpTuple[1]); // an array of FP components
 #### You can pass an object with options (all of which are optional):
 
 ```js
-var options = {excludeUserAgent: true};
+var options = {exclude: {UserAgent: true}};
 new Fingerprint2(options).get(function(result){
   console.log(result);
 });
