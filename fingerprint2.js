@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 1.4.4 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 1.4.5 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -827,16 +827,18 @@
       result.push("webgl vendor:" + gl.getParameter(gl.VENDOR));
       result.push("webgl version:" + gl.getParameter(gl.VERSION));
 
-      // Add the unmasked vendor and unmasked renderer if the debug_renderer_info extension is available
-      var extensionDebugRendererInfo = gl.getExtension("WEBGL_debug_renderer_info");
-      if (!extensionDebugRendererInfo) {
-        if (typeof NODEBUG === "undefined") {
-          this.log("WebGL fingerprinting is incomplete, because your browser does not have the extension WEBGL_debug_renderer_info");
-        }
-      } else {
+      try {
+        // Add the unmasked vendor and unmasked renderer if the debug_renderer_info extension is available
+        var extensionDebugRendererInfo = gl.getExtension("WEBGL_debug_renderer_info");
+        if (!extensionDebugRendererInfo) {
+          if (typeof NODEBUG === "undefined") {
+            this.log("WebGL fingerprinting is incomplete, because your browser does not have the extension WEBGL_debug_renderer_info");
+          }
+        } else {
           result.push("webgl unmasked vendor:" + gl.getParameter(extensionDebugRendererInfo.UNMASKED_VENDOR_WEBGL));
           result.push("webgl unmasked renderer:" + gl.getParameter(extensionDebugRendererInfo.UNMASKED_RENDERER_WEBGL));
-      }
+        }
+      } catch(e) { /* squelch */ }
 
       if (!gl.getShaderPrecisionFormat) {
         if (typeof NODEBUG === "undefined") {
@@ -1325,6 +1327,6 @@
       return ("00000000" + (h1[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h1[1] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[1] >>> 0).toString(16)).slice(-8);
     }
   };
-  Fingerprint2.VERSION = "1.4.4";
+  Fingerprint2.VERSION = "1.4.5";
   return Fingerprint2;
 });
