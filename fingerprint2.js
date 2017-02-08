@@ -634,7 +634,7 @@
     },
     hasIndexedDB: function (){
       try {
-        return !!window.indexedDB;  
+        return !!window.indexedDB;
       } catch(e) {
         return true; // SecurityError when referencing it means it exists
       }
@@ -826,6 +826,17 @@
       result.push("webgl stencil bits:" + gl.getParameter(gl.STENCIL_BITS));
       result.push("webgl vendor:" + gl.getParameter(gl.VENDOR));
       result.push("webgl version:" + gl.getParameter(gl.VERSION));
+
+      // Add the unmasked vendor and unmasked renderer if the debug_renderer_info extension is available
+      var extensionDebugRendererInfo = gl.getExtension("WEBGL_debug_renderer_info");
+      if (!extensionDebugRendererInfo) {
+        if (typeof NODEBUG === "undefined") {
+          this.log("WebGL fingerprinting is incomplete, because your browser does not have the extension WEBGL_debug_renderer_info");
+        }
+      } else {
+          result.push("webgl unmasked vendor:" + gl.getParameter(extensionDebugRendererInfo.UNMASKED_VENDOR_WEBGL));
+          result.push("webgl unmasked renderer:" + gl.getParameter(extensionDebugRendererInfo.UNMASKED_RENDERER_WEBGL));
+      }
 
       if (!gl.getShaderPrecisionFormat) {
         if (typeof NODEBUG === "undefined") {
