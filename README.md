@@ -192,6 +192,7 @@ This option can incur even more overhead on mobile Firefox browsers, which is mu
 * Download [Adobe Flex SDK](http://www.adobe.com/devnet/flex/flex-sdk-download.html)
 * Unzip it, add the `bin/` directory to your `$PATH`  (mxmlc binary should be in path)
 * Run `make`
+
 #### My talk about the library (in Russian) on FrontEnd Conf 2015
 
 https://player.vimeo.com/video/151208427
