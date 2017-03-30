@@ -51,11 +51,6 @@
       }
       return target;
     },
-    log: function(msg){
-      if(window.console){
-        console.log(msg);
-      }
-    },
     get: function(done){
       var keys = [];
       keys = this.userAgentKey(keys);
@@ -237,15 +232,9 @@
     },
     webglKey: function(keys) {
       if(this.options.excludeWebGL) {
-        if(typeof NODEBUG === "undefined"){
-          this.log("Skipping WebGL fingerprinting per excludeWebGL configuration option");
-        }
         return keys;
       }
       if(!this.isWebGlSupported()) {
-        if(typeof NODEBUG === "undefined"){
-          this.log("Skipping WebGL fingerprinting because it is not supported in this browser");
-        }
         return keys;
       }
       keys.push({key: "webgl", value: this.getWebglFp()});
@@ -290,28 +279,16 @@
     // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
     flashFontsKey: function(keys, done) {
       if(this.options.excludeFlashFonts) {
-        if(typeof NODEBUG === "undefined"){
-          this.log("Skipping flash fonts detection per excludeFlashFonts configuration option");
-        }
         return done(keys);
       }
       // we do flash if swfobject is loaded
       if(!this.hasSwfObjectLoaded()){
-        if(typeof NODEBUG === "undefined"){
-          this.log("Swfobject is not detected, Flash fonts enumeration is skipped");
-        }
         return done(keys);
       }
       if(!this.hasMinFlashInstalled()){
-        if(typeof NODEBUG === "undefined"){
-          this.log("Flash is not installed, skipping Flash fonts enumeration");
-        }
         return done(keys);
       }
       if(typeof this.options.swfPath === "undefined"){
-        if(typeof NODEBUG === "undefined"){
-          this.log("To use Flash fonts detection, you must pass a valid swfPath option, skipping Flash fonts enumeration");
-        }
         return done(keys);
       }
       this.loadSwfAndDetectFonts(function(fonts){
@@ -808,9 +785,6 @@
         // Add the unmasked vendor and unmasked renderer if the debug_renderer_info extension is available
         var extensionDebugRendererInfo = gl.getExtension("WEBGL_debug_renderer_info");
         if (!extensionDebugRendererInfo) {
-          if (typeof NODEBUG === "undefined") {
-            this.log("WebGL fingerprinting is incomplete, because your browser does not have the extension WEBGL_debug_renderer_info");
-          }
         } else {
           result.push("webgl unmasked vendor:" + gl.getParameter(extensionDebugRendererInfo.UNMASKED_VENDOR_WEBGL));
           result.push("webgl unmasked renderer:" + gl.getParameter(extensionDebugRendererInfo.UNMASKED_RENDERER_WEBGL));
@@ -818,9 +792,6 @@
       } catch(e) { /* squelch */ }
 
       if (!gl.getShaderPrecisionFormat) {
-        if (typeof NODEBUG === "undefined") {
-          this.log("WebGL fingerprinting is incomplete, because your browser does not support getShaderPrecisionFormat");
-        }
         return result.join("~");
       }
 
