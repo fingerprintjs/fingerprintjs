@@ -83,6 +83,7 @@
       keys = this.hasLiedOsKey(keys);
       keys = this.hasLiedBrowserKey(keys);
       keys = this.touchSupportKey(keys);
+      keys = this.customEntropyFunction(keys);
       var that = this;
       this.fontsKey(keys, function(newKeys){
         var values = [];
@@ -96,6 +97,12 @@
         var murmur = that.x64hash128(values.join("~~~"), 31);
         return done(murmur, newKeys);
       });
+    },
+    customEntropyFunction: function (keys) {
+      if (typeof this.options.customFunction === "function") {
+        keys.push({key:"custom", value:this.options.customFunction()});
+      }
+      return keys;
     },
     userAgentKey: function(keys) {
       if(!this.options.excludeUserAgent) {
