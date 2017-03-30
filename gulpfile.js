@@ -17,9 +17,7 @@ gulp.task("minify", function() {
       .pipe(rename({suffix: ".min"}))
       .pipe(uglify({
           compress: {
-            global_defs: {
-              NODEBUG: true
-            }
+            global_defs: {}
           },
           output: {
               ascii_only: true
