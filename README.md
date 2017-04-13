@@ -105,9 +105,9 @@ While hundreds of the most popular fonts are included in the extended font list,
 ```
 new Fingerprint2({
   userDefinedFonts: ["Nimbus Mono", "Junicode", "Presto"]
-}).get(function(result, components){}
+}).get(function(result, components){
   console.log(result);
-);
+});
 ```
 
 #### View the fingerprint locally
