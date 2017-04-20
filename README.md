@@ -2,6 +2,8 @@
 [![](https://travis-ci.org/Valve/fingerprintjs2.svg?branch=master)](https://travis-ci.org/Valve/fingerprintjs2)
 [![](https://badges.gitter.im/Valve/fingerprintjs2.svg)](https://gitter.im/Valve/fingerprintjs2)
 
+[![Join the chat at https://gitter.im/Valve/fingerprintjs2](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Valve/fingerprintjs2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Original fingerprintjs library was developed in 2012, it's now impossible to evolve it
 without breaking backwards compatibilty, so this project will be where
 all the new development happens.
