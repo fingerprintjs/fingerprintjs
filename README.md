@@ -42,6 +42,12 @@ bower install fingerprintjs2
 npm install fingerprintjs2
 ```
 
+### Yarn
+
+```
+yarn add fingerprintjs2
+```
+
 
 ### Usage
 
