@@ -11,7 +11,7 @@
     "gulp-uglify": "^1.1.0"
   },
   "scripts": {
-    "test": "specs/phantomjs.runner.sh specs/spec_runner.html"
+    "test": "bash -c \"specs/phantomjs.runner.sh specs/spec_runner.html\""
   },
   "repository": {
     "type": "git",
