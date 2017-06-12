@@ -90,7 +90,6 @@
       keys = this.hasLiedBrowserKey(keys);
       keys = this.touchSupportKey(keys);
       keys = this.customEntropyFunction(keys);
-      var that = this;
       this.fontsKey(keys, function(newKeys){
         var values = [];
         that.each(newKeys.data, function(pair) {
