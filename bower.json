@@ -1,7 +1,7 @@
 {
   "name": "fingerprintjs2",
   "description": "Modern & flexible browser fingerprinting library",
-  "main": "dist/fingerprint2.min.js",
+  "main": "fingerprint2.js",
   "moduleType": [
     "es6"
   ],

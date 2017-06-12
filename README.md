@@ -105,9 +105,9 @@ While hundreds of the most popular fonts are included in the extended font list,
 ```
 new Fingerprint2({
   userDefinedFonts: ["Nimbus Mono", "Junicode", "Presto"]
-}).get(function(result, components){}
+}).get(function(result, components){
   console.log(result);
-);
+});
 ```
 
 #### `preprocessor` option
@@ -180,12 +180,13 @@ To start a web server you can try using one of the following:
 23. Has the user tampered with its browser <sup>[1](https://github.com/Valve/fingerprintjs2/wiki/Browser-tampering)</sup>
 24. Touch screen detection and capabilities
 25. Pixel Ratio
+26. System's total number of logical processors available to the user agent.
 
 
 By default, JS font detection will only detect up to 65 installed fonts. If you want to improve the font detection,
-you can pass `extendedFontList: true` option. This will increase the number of detectable fonts to ~500.
+you can pass `extendedJsFonts: true` option. This will increase the number of detectable fonts to ~500.
 
-On my machine (MBP 2013 Core i5) + Chrome 46 the default FP process takes about 80-100ms. If you use `extendedFontList` option this time will increase up to 160-200ms.
+On my machine (MBP 2013 Core i5) + Chrome 46 the default FP process takes about 80-100ms. If you use `extendedJsFonts` option this time will increase up to 160-200ms.
 This option can incur even more overhead on mobile Firefox browsers, which is much slower in font detection, so use it with caution on mobile devices.
 
 ### Many more fingerprinting sources will be implemented, such as
@@ -210,5 +211,9 @@ This option can incur even more overhead on mobile Firefox browsers, which is mu
 * Download [Adobe Flex SDK](http://www.adobe.com/devnet/flex/flex-sdk-download.html)
 * Unzip it, add the `bin/` directory to your `$PATH`  (mxmlc binary should be in path)
 * Run `make`
+
+#### My talk about the library (in Russian) on FrontEnd Conf 2015
+
+https://player.vimeo.com/video/151208427
 
 #### License: MIT or Apache, whichever you prefer.

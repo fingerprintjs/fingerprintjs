@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 1.4.4 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 1.5.1 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -24,36 +24,6 @@
   else { context[name] = definition(); }
 })("Fingerprint2", this, function() {
   "use strict";
-  // This will only be polyfilled for IE8 and older
-  // Taken from Mozilla MDC
-  if (!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function(searchElement, fromIndex) {
-      var k;
-      if (this == null) {
-        throw new TypeError("'this' is null or undefined");
-      }
-      var O = Object(this);
-      var len = O.length >>> 0;
-      if (len === 0) {
-        return -1;
-      }
-      var n = +fromIndex || 0;
-      if (Math.abs(n) === Infinity) {
-        n = 0;
-      }
-      if (n >= len) {
-        return -1;
-      }
-      k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
-      while (k < len) {
-        if (k in O && O[k] === searchElement) {
-          return k;
-        }
-        k++;
-      }
-      return -1;
-    };
-  }
   var Fingerprint2 = function(options) {
 
     if (!(this instanceof Fingerprint2)) {
@@ -81,11 +51,6 @@
       }
       return target;
     },
-    log: function(msg){
-      if(window.console){
-        console.log(msg);
-      }
-    },
     get: function(done){
       var that = this;
       var keys = {
@@ -103,6 +68,7 @@
       keys = this.languageKey(keys);
       keys = this.colorDepthKey(keys);
       keys = this.pixelRatioKey(keys);
+      keys = this.hardwareConcurrencyKey(keys);
       keys = this.screenResolutionKey(keys);
       keys = this.availableScreenResolutionKey(keys);
       keys = this.timezoneOffsetKey(keys);
@@ -123,6 +89,8 @@
       keys = this.hasLiedOsKey(keys);
       keys = this.hasLiedBrowserKey(keys);
       keys = this.touchSupportKey(keys);
+      keys = this.customEntropyFunction(keys);
+      var that = this;
       this.fontsKey(keys, function(newKeys){
         var values = [];
         that.each(newKeys.data, function(pair) {
@@ -135,6 +103,12 @@
         var murmur = that.x64hash128(values.join("~~~"), 31);
         return done(murmur, newKeys.data);
       });
+    },
+    customEntropyFunction: function (keys) {
+      if (typeof this.options.customFunction === "function") {
+        keys.push({key: "custom", value: this.options.customFunction()});
+      }
+      return keys;
     },
     userAgentKey: function(keys) {
       if(!this.options.excludeUserAgent) {
@@ -269,15 +243,9 @@
     },
     webglKey: function(keys) {
       if(this.options.excludeWebGL) {
-        if(typeof NODEBUG === "undefined"){
-          this.log("Skipping WebGL fingerprinting per excludeWebGL configuration option");
-        }
         return keys;
       }
       if(!this.isWebGlSupported()) {
-        if(typeof NODEBUG === "undefined"){
-          this.log("Skipping WebGL fingerprinting because it is not supported in this browser");
-        }
         return keys;
       }
       keys.push({key: "webgl", value: this.getWebglFp()});
@@ -322,28 +290,16 @@
     // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
     flashFontsKey: function(keys, done) {
       if(this.options.excludeFlashFonts) {
-        if(typeof NODEBUG === "undefined"){
-          this.log("Skipping flash fonts detection per excludeFlashFonts configuration option");
-        }
         return done(keys);
       }
       // we do flash if swfobject is loaded
       if(!this.hasSwfObjectLoaded()){
-        if(typeof NODEBUG === "undefined"){
-          this.log("Swfobject is not detected, Flash fonts enumeration is skipped");
-        }
         return done(keys);
       }
       if(!this.hasMinFlashInstalled()){
-        if(typeof NODEBUG === "undefined"){
-          this.log("Flash is not installed, skipping Flash fonts enumeration");
-        }
         return done(keys);
       }
       if(typeof this.options.swfPath === "undefined"){
-        if(typeof NODEBUG === "undefined"){
-          this.log("To use Flash fonts detection, you must pass a valid swfPath option, skipping Flash fonts enumeration");
-        }
         return done(keys);
       }
       this.loadSwfAndDetectFonts(function(fonts){
@@ -620,6 +576,12 @@
       }
       return keys;
     },
+    hardwareConcurrencyKey: function(keys){
+      if(!this.options.excludeHardwareConcurrency){
+        keys.push({key: "hardware_concurrency", value: this.getHardwareConcurrency()});
+      }
+      return keys;
+    },
     hasSessionStorage: function () {
       try {
         return !!window.sessionStorage;
@@ -636,7 +598,17 @@
       }
     },
     hasIndexedDB: function (){
-      return !!window.indexedDB;
+      try {
+        return !!window.indexedDB;
+      } catch(e) {
+        return true; // SecurityError when referencing it means it exists
+      }
+    },
+    getHardwareConcurrency: function(){
+      if(navigator.hardwareConcurrency){
+        return navigator.hardwareConcurrency;
+      }
+      return "unknown";
     },
     getNavigatorCpuClass: function () {
       if(navigator.cpuClass){
@@ -820,10 +792,16 @@
       result.push("webgl vendor:" + gl.getParameter(gl.VENDOR));
       result.push("webgl version:" + gl.getParameter(gl.VERSION));
 
-      if (!gl.getShaderPrecisionFormat) {
-        if (typeof NODEBUG === "undefined") {
-          this.log("WebGL fingerprinting is incomplete, because your browser does not support getShaderPrecisionFormat");
+      try {
+        // Add the unmasked vendor and unmasked renderer if the debug_renderer_info extension is available
+        var extensionDebugRendererInfo = gl.getExtension("WEBGL_debug_renderer_info");
+        if (extensionDebugRendererInfo) {
+          result.push("webgl unmasked vendor:" + gl.getParameter(extensionDebugRendererInfo.UNMASKED_VENDOR_WEBGL));
+          result.push("webgl unmasked renderer:" + gl.getParameter(extensionDebugRendererInfo.UNMASKED_RENDERER_WEBGL));
         }
+      } catch(e) { /* squelch */ }
+
+      if (!gl.getShaderPrecisionFormat) {
         return result.join("~");
       }
 
@@ -1307,6 +1285,6 @@
       return ("00000000" + (h1[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h1[1] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[0] >>> 0).toString(16)).slice(-8) + ("00000000" + (h2[1] >>> 0).toString(16)).slice(-8);
     }
   };
-  Fingerprint2.VERSION = "1.4.4";
+  Fingerprint2.VERSION = "1.5.1";
   return Fingerprint2;
 });
