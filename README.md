@@ -1,8 +1,7 @@
-# Fingerprintjs2 - looking for maintainer
+# Fingerprintjs2
 [![](https://travis-ci.org/Valve/fingerprintjs2.svg?branch=master)](https://travis-ci.org/Valve/fingerprintjs2)
 [![](https://badges.gitter.im/Valve/fingerprintjs2.svg)](https://gitter.im/Valve/fingerprintjs2)
 
-If you want to become a maintainer of this library, please email me: my first name at the domain of the company I work for.
 
 Original fingerprintjs library was developed in 2012, it's now impossible to evolve it
 without breaking backwards compatibilty, so this project will be where
