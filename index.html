@@ -91,7 +91,7 @@
           console.log(result);
           for (var index in components) {
             var obj = components[index];
-            var value = obj.value;
+            var value = (typeof obj.value === 'object' ? JSON.stringify(obj.value) : obj.value);
             var line = obj.key + " = " + value.toString().substr(0, 100);
             console.log(line);
             details += line + "<br />";
