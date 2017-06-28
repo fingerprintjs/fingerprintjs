@@ -1,4 +1,7 @@
-# Fingerprintjs2
+# Fingerprintjs2 - looking for maintainer
+
+If you want to become a maintainer of this library, please email me: my first name at the domain of the company I work for.
+
 [![](https://travis-ci.org/Valve/fingerprintjs2.svg?branch=master)](https://travis-ci.org/Valve/fingerprintjs2)
 [![](https://badges.gitter.im/Valve/fingerprintjs2.svg)](https://gitter.im/Valve/fingerprintjs2)
 
