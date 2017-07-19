@@ -914,7 +914,7 @@
           return true;
         } else if(oscpu.indexOf("mac") >= 0 && os !== "Mac" && os !== "iOS"){
           return true;
-        } else if(oscpu.indexOf("win") === 0 && oscpu.indexOf("linux") === 0 && oscpu.indexOf("mac") >= 0 && os !== "other"){
+        } else if((oscpu.indexOf("win") === -1 && oscpu.indexOf("linux") === -1 && oscpu.indexOf("mac") === -1) !== (os == "Other")){
           return true;
         }
       }
@@ -926,7 +926,7 @@
         return true;
       } else if((platform.indexOf("mac") >= 0 || platform.indexOf("ipad") >= 0 || platform.indexOf("ipod") >= 0 || platform.indexOf("iphone") >= 0) && os !== "Mac" && os !== "iOS"){
         return true;
-      } else if(platform.indexOf("win") === 0 && platform.indexOf("linux") === 0 && platform.indexOf("mac") >= 0 && os !== "other"){
+      } else if((platform.indexOf("win") === -1 && platform.indexOf("linux") === -1 && platform.indexOf("mac") === -1) !== (os == "Other")){
         return true;
       }
 
