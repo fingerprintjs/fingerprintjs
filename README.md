@@ -112,7 +112,8 @@ new Fingerprint2({
 
 #### `preprocessor` option
 
-Since some components can be changed frequently, this option may help you improve hash accuracy. You can modify any component value before hash calculation. For example: strip browser version from user agent.
+Function that is called with each component value that may be used to modify component values before computing the fingerprint.
+For example: strip browser version from user agent.
 
 ```
 new Fingerprint2({
@@ -142,15 +143,15 @@ To start a web server you can try using one of the following:
 
 * Python 2.x
 
-    `python -m SimpleHTTPServer 8080`
+	`python -m SimpleHTTPServer 8080`
 
 * Python 3.x
 
-    `python -m http.server 8080`
+	`python -m http.server 8080`
 
 * PHP 5.4+
 
-    `php -S 0.0.0.0:8080`
+	`php -S 0.0.0.0:8080`
 
 
 ### List of fingerprinting sources
