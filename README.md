@@ -1,4 +1,4 @@
-# Fingerprintjs2 - looking for maintainer
+# Fingerprintjs2
 
 [![](https://travis-ci.org/Valve/fingerprintjs2.svg?branch=master)](https://travis-ci.org/Valve/fingerprintjs2)
 [![](https://badges.gitter.im/Valve/fingerprintjs2.svg)](https://gitter.im/Valve/fingerprintjs2)
