@@ -119,8 +119,8 @@ For example: strip browser version from user agent.
 new Fingerprint2({
   preprocessor: function(key, value){
     if(key == "user_agent"){
-      var parsedUserAgent = SomeUserAgentParser.parse(value);
-      var userAgentMinusVersion = parsedUserAgent.base_platform + ' ' + parsedUserAgent.browser_name;
+      var parser = new UAParser(value); // https://github.com/faisalman/ua-parser-js
+      var userAgentMinusVersion = parser.getOS().name + ' ' + parser.getBrowser().name;
       return userAgentMinusVersion;
     }
   }
