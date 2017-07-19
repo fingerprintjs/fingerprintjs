@@ -56,12 +56,11 @@
       var keys = {
           data: [],
           addPreprocessedComponent: function(pair){
-              var componentKey = pair.key;
               var componentValue = pair.value;
               if(typeof that.options.preprocessor === "function"){
-                  componentValue = that.options.preprocessor(componentKey, componentValue);
+                  componentValue = that.options.preprocessor(pair.key, componentValue);
               }
-              this.data.push({key: componentKey, value: componentValue});
+              this.data.push({key: pair.key, value: componentValue});
           }
       };
       keys = this.userAgentKey(keys);
