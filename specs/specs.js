@@ -245,7 +245,7 @@ describe("Fingerprint2", function () {
     });
 
     describe("preprocessor", function () {
-      it("checks if user_agent not processed by default", function (done) {
+      it("checks that preprocessor not used by default", function (done) {
         var fp2 = new Fingerprint2();
         fp2.get(function(result, components) {
           for(var x = 0; x < components.length; x++) {
@@ -257,7 +257,7 @@ describe("Fingerprint2", function () {
         });
       });
       
-      it("checks if user_agent processed with user function", function (done) {
+      it("checks that preprocessor function applied to component value", function (done) {
         var options = {
             preprocessor: function(key, value) {
                 if(key == "user_agent") {
