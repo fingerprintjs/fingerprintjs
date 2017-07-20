@@ -151,15 +151,15 @@ To start a web server you can try using one of the following:
 
 * Python 2.x
 
-	`python -m SimpleHTTPServer 8080`
+    `python -m SimpleHTTPServer 8080`
 
 * Python 3.x
 
-	`python -m http.server 8080`
+    `python -m http.server 8080`
 
 * PHP 5.4+
 
-	`php -S 0.0.0.0:8080`
+    `php -S 0.0.0.0:8080`
 
 
 ### List of fingerprinting sources
