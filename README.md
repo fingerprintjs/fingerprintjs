@@ -118,6 +118,26 @@ new Fingerprint2({
 });
 ```
 
+#### `preprocessor` option
+
+Function that is called with each component value that may be used to modify component values before computing the fingerprint.
+For example: strip browser version from user agent.
+
+```
+new Fingerprint2({
+  preprocessor: function(key, value){
+    if(key == "user_agent"){
+      var parser = new UAParser(value); // https://github.com/faisalman/ua-parser-js
+      var userAgentMinusVersion = parser.getOS().name + ' ' + parser.getBrowser().name;
+      return userAgentMinusVersion;
+    }
+  }
+}).get(function(result, components){}
+  //user_agent component will contain string processed with our function. For example: Windows Chrome
+  console.log(result, components);
+);
+```
+
 #### View the fingerprint locally
 
 You can view your browser fingerprint locally by starting a webserver and viewing the `index.html` page.

@@ -52,7 +52,17 @@
       return target;
     },
     get: function(done){
-      var keys = [];
+      var that = this;
+      var keys = {
+          data: [],
+          addPreprocessedComponent: function(pair){
+              var componentValue = pair.value;
+              if(typeof that.options.preprocessor === "function"){
+                  componentValue = that.options.preprocessor(pair.key, componentValue);
+              }
+              this.data.push({key: pair.key, value: componentValue});
+          }
+      };
       keys = this.userAgentKey(keys);
       keys = this.languageKey(keys);
       keys = this.colorDepthKey(keys);
@@ -79,10 +89,9 @@
       keys = this.hasLiedBrowserKey(keys);
       keys = this.touchSupportKey(keys);
       keys = this.customEntropyFunction(keys);
-      var that = this;
       this.fontsKey(keys, function(newKeys){
         var values = [];
-        that.each(newKeys, function(pair) {
+        that.each(newKeys.data, function(pair) {
           var value = pair.value;
           if (typeof pair.value.join !== "undefined") {
             value = pair.value.join(";");
@@ -90,18 +99,18 @@
           values.push(value);
         });
         var murmur = that.x64hash128(values.join("~~~"), 31);
-        return done(murmur, newKeys);
+        return done(murmur, newKeys.data);
       });
     },
     customEntropyFunction: function (keys) {
       if (typeof this.options.customFunction === "function") {
-        keys.push({key: "custom", value: this.options.customFunction()});
+        keys.addPreprocessedComponent({key: "custom", value: this.options.customFunction()});
       }
       return keys;
     },
     userAgentKey: function(keys) {
       if(!this.options.excludeUserAgent) {
-        keys.push({key: "user_agent", value: this.getUserAgent()});
+        keys.addPreprocessedComponent({key: "user_agent", value: this.getUserAgent()});
       }
       return keys;
     },
@@ -112,19 +121,19 @@
     languageKey: function(keys) {
       if(!this.options.excludeLanguage) {
         // IE 9,10 on Windows 10 does not have the `navigator.language` property any longer
-        keys.push({ key: "language", value: navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || "" });
+        keys.addPreprocessedComponent({ key: "language", value: navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || "" });
       }
       return keys;
     },
     colorDepthKey: function(keys) {
       if(!this.options.excludeColorDepth) {
-        keys.push({key: "color_depth", value: screen.colorDepth || -1});
+        keys.addPreprocessedComponent({key: "color_depth", value: screen.colorDepth || -1});
       }
       return keys;
     },
     pixelRatioKey: function(keys) {
       if(!this.options.excludePixelRatio) {
-        keys.push({key: "pixel_ratio", value: this.getPixelRatio()});
+        keys.addPreprocessedComponent({key: "pixel_ratio", value: this.getPixelRatio()});
       }
       return keys;
     },
@@ -145,7 +154,7 @@
         resolution = [screen.width, screen.height];
       }
       if(typeof resolution !== "undefined") { // headless browsers
-        keys.push({key: "resolution", value: resolution});
+        keys.addPreprocessedComponent({key: "resolution", value: resolution});
       }
       return keys;
     },
@@ -165,68 +174,68 @@
         }
       }
       if(typeof available !== "undefined") { // headless browsers
-        keys.push({key: "available_resolution", value: available});
+        keys.addPreprocessedComponent({key: "available_resolution", value: available});
       }
       return keys;
     },
     timezoneOffsetKey: function(keys) {
       if(!this.options.excludeTimezoneOffset) {
-        keys.push({key: "timezone_offset", value: new Date().getTimezoneOffset()});
+        keys.addPreprocessedComponent({key: "timezone_offset", value: new Date().getTimezoneOffset()});
       }
       return keys;
     },
     sessionStorageKey: function(keys) {
       if(!this.options.excludeSessionStorage && this.hasSessionStorage()) {
-        keys.push({key: "session_storage", value: 1});
+        keys.addPreprocessedComponent({key: "session_storage", value: 1});
       }
       return keys;
     },
     localStorageKey: function(keys) {
       if(!this.options.excludeSessionStorage && this.hasLocalStorage()) {
-        keys.push({key: "local_storage", value: 1});
+        keys.addPreprocessedComponent({key: "local_storage", value: 1});
       }
       return keys;
     },
     indexedDbKey: function(keys) {
       if(!this.options.excludeIndexedDB && this.hasIndexedDB()) {
-        keys.push({key: "indexed_db", value: 1});
+        keys.addPreprocessedComponent({key: "indexed_db", value: 1});
       }
       return keys;
     },
     addBehaviorKey: function(keys) {
       //body might not be defined at this point or removed programmatically
       if(document.body && !this.options.excludeAddBehavior && document.body.addBehavior) {
-        keys.push({key: "add_behavior", value: 1});
+        keys.addPreprocessedComponent({key: "add_behavior", value: 1});
       }
       return keys;
     },
     openDatabaseKey: function(keys) {
       if(!this.options.excludeOpenDatabase && window.openDatabase) {
-        keys.push({key: "open_database", value: 1});
+        keys.addPreprocessedComponent({key: "open_database", value: 1});
       }
       return keys;
     },
     cpuClassKey: function(keys) {
       if(!this.options.excludeCpuClass) {
-        keys.push({key: "cpu_class", value: this.getNavigatorCpuClass()});
+        keys.addPreprocessedComponent({key: "cpu_class", value: this.getNavigatorCpuClass()});
       }
       return keys;
     },
     platformKey: function(keys) {
       if(!this.options.excludePlatform) {
-        keys.push({key: "navigator_platform", value: this.getNavigatorPlatform()});
+        keys.addPreprocessedComponent({key: "navigator_platform", value: this.getNavigatorPlatform()});
       }
       return keys;
     },
     doNotTrackKey: function(keys) {
       if(!this.options.excludeDoNotTrack) {
-        keys.push({key: "do_not_track", value: this.getDoNotTrack()});
+        keys.addPreprocessedComponent({key: "do_not_track", value: this.getDoNotTrack()});
       }
       return keys;
     },
     canvasKey: function(keys) {
       if(!this.options.excludeCanvas && this.isCanvasSupported()) {
-        keys.push({key: "canvas", value: this.getCanvasFp()});
+        keys.addPreprocessedComponent({key: "canvas", value: this.getCanvasFp()});
       }
       return keys;
     },
@@ -237,36 +246,36 @@
       if(!this.isWebGlSupported()) {
         return keys;
       }
-      keys.push({key: "webgl", value: this.getWebglFp()});
+      keys.addPreprocessedComponent({key: "webgl", value: this.getWebglFp()});
       return keys;
     },
     adBlockKey: function(keys){
       if(!this.options.excludeAdBlock) {
-        keys.push({key: "adblock", value: this.getAdBlock()});
+        keys.addPreprocessedComponent({key: "adblock", value: this.getAdBlock()});
       }
       return keys;
     },
     hasLiedLanguagesKey: function(keys){
       if(!this.options.excludeHasLiedLanguages){
-        keys.push({key: "has_lied_languages", value: this.getHasLiedLanguages()});
+        keys.addPreprocessedComponent({key: "has_lied_languages", value: this.getHasLiedLanguages()});
       }
       return keys;
     },
     hasLiedResolutionKey: function(keys){
       if(!this.options.excludeHasLiedResolution){
-        keys.push({key: "has_lied_resolution", value: this.getHasLiedResolution()});
+        keys.addPreprocessedComponent({key: "has_lied_resolution", value: this.getHasLiedResolution()});
       }
       return keys;
     },
     hasLiedOsKey: function(keys){
       if(!this.options.excludeHasLiedOs){
-        keys.push({key: "has_lied_os", value: this.getHasLiedOs()});
+        keys.addPreprocessedComponent({key: "has_lied_os", value: this.getHasLiedOs()});
       }
       return keys;
     },
     hasLiedBrowserKey: function(keys){
       if(!this.options.excludeHasLiedBrowser){
-        keys.push({key: "has_lied_browser", value: this.getHasLiedBrowser()});
+        keys.addPreprocessedComponent({key: "has_lied_browser", value: this.getHasLiedBrowser()});
       }
       return keys;
     },
@@ -292,7 +301,7 @@
         return done(keys);
       }
       this.loadSwfAndDetectFonts(function(fonts){
-        keys.push({key: "swf_fonts", value: fonts.join(";")});
+        keys.addPreprocessedComponent({key: "swf_fonts", value: fonts.join(";")});
         done(keys);
       });
     },
@@ -469,7 +478,7 @@
         h.removeChild(fontsDiv);
         h.removeChild(baseFontsDiv);
 
-        keys.push({key: "js_fonts", value: available});
+        keys.addPreprocessedComponent({key: "js_fonts", value: available});
         done(keys);
       }, 1);
     },
@@ -477,10 +486,10 @@
       if(!this.options.excludePlugins){
         if(this.isIE()){
           if(!this.options.excludeIEPlugins) {
-            keys.push({key: "ie_plugins", value: this.getIEPlugins()});
+            keys.addPreprocessedComponent({key: "ie_plugins", value: this.getIEPlugins()});
           }
         } else {
-          keys.push({key: "regular_plugins", value: this.getRegularPlugins()});
+          keys.addPreprocessedComponent({key: "regular_plugins", value: this.getRegularPlugins()});
         }
       }
       return keys;
@@ -561,13 +570,13 @@
     },
     touchSupportKey: function (keys) {
       if(!this.options.excludeTouchSupport){
-        keys.push({key: "touch_support", value: this.getTouchSupport()});
+        keys.addPreprocessedComponent({key: "touch_support", value: this.getTouchSupport()});
       }
       return keys;
     },
     hardwareConcurrencyKey: function(keys){
       if(!this.options.excludeHardwareConcurrency){
-        keys.push({key: "hardware_concurrency", value: this.getHardwareConcurrency()});
+        keys.addPreprocessedComponent({key: "hardware_concurrency", value: this.getHardwareConcurrency()});
       }
       return keys;
     },
