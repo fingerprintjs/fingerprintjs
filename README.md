@@ -110,7 +110,7 @@ new Fingerprint2().get(function(result, components){
 
 While hundreds of the most popular fonts are included in the extended font list, you may wish to increase the entropy of the font fingerprint by specifying the `userDefinedFonts` option as an array of font names.
 
-```
+```js
 new Fingerprint2({
   userDefinedFonts: ["Nimbus Mono", "Junicode", "Presto"]
 }).get(function(result, components){
@@ -123,7 +123,7 @@ new Fingerprint2({
 Function that is called with each component value that may be used to modify component values before computing the fingerprint.
 For example: strip browser version from user agent.
 
-```
+```js
 new Fingerprint2({
   preprocessor: function(key, value){
     if(key == "user_agent"){
@@ -132,10 +132,10 @@ new Fingerprint2({
       return userAgentMinusVersion;
     }
   }
-}).get(function(result, components){}
+}).get(function(result, components){
   //user_agent component will contain string processed with our function. For example: Windows Chrome
   console.log(result, components);
-);
+});
 ```
 
 #### View the fingerprint locally
