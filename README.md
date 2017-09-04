@@ -24,7 +24,7 @@ This project uses `semver`.
 
 #### CDN:
 ```
-//cdn.jsdelivr.net/fingerprintjs2/<VERSION>/fingerprint2.min.js
+//cdn.jsdelivr.net/npm/fingerprintjs2@<VERSION>/dist/fingerprint2.min.js
 ```
 or
 
