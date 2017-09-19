@@ -503,8 +503,11 @@
     },
     getRegularPlugins: function () {
       var plugins = [];
-      for(var i = 0, l = navigator.plugins.length; i < l; i++) {
-        plugins.push(navigator.plugins[i]);
+      if (navigator.plugins) {
+        // plugins isn't defined in Node envs.
+        for(var i = 0, l = navigator.plugins.length; i < l; i++) {
+          plugins.push(navigator.plugins[i]);
+        }
       }
       // sorting plugins only for those user agents, that we know randomize the plugins
       // every time we try to enumerate them
