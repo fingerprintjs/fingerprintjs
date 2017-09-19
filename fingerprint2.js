@@ -180,7 +180,14 @@
     },
     timezoneOffsetKey: function(keys) {
       if(!this.options.excludeTimezoneOffset) {
-        keys.addPreprocessedComponent({key: "timezone_offset", value: new Date().getTimezoneOffset()});
+        // Fallback for older browsers or Node.
+        let offset = Date().getTimezoneOffset();
+        if (typeof Intl === "object") {
+          // in IE11 this will return undefined, because standards? Hah.
+          const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          offset = tz || offset;
+        }
+        keys.addPreprocessedComponent({key: "timezone_offset", value: offset});
       }
       return keys;
     },
