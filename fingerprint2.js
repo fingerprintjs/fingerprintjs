@@ -153,9 +153,7 @@
       } else {
         resolution = [screen.width, screen.height];
       }
-      if(typeof resolution !== "undefined") { // headless browsers
-        keys.addPreprocessedComponent({key: "resolution", value: resolution});
-      }
+      keys.addPreprocessedComponent({key: "resolution", value: resolution});
       return keys;
     },
     availableScreenResolutionKey: function(keys) {
