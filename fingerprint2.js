@@ -78,6 +78,7 @@
       keys = this.pluginsKey(keys)
       keys = this.canvasKey(keys)
       keys = this.webglKey(keys)
+      keys = this.webglVendorAndRendererKey(keys)
       keys = this.adBlockKey(keys)
       keys = this.hasLiedLanguagesKey(keys)
       keys = this.hasLiedResolutionKey(keys)
@@ -236,13 +237,15 @@
       return keys
     },
     webglKey: function (keys) {
-      if (this.options.excludeWebGL) {
-        return keys
+      if (!this.options.excludeWebGL && this.isWebGlSupported()) {
+        keys.addPreprocessedComponent({key: 'webgl', value: this.getWebglFp()})
       }
-      if (!this.isWebGlSupported()) {
-        return keys
+      return keys
+    },
+    webglVendorAndRendererKey: function (keys) {
+      if (!this.options.excludeWebGLVendorAndRenderer && this.isWebGlSupported()) {
+        keys.addPreprocessedComponent({key: 'webgl_vendor', value: this.getWebglVendorAndRenderer()})
       }
-      keys.addPreprocessedComponent({key: 'webgl', value: this.getWebglFp()})
       return keys
     },
     adBlockKey: function (keys) {
@@ -846,6 +849,16 @@
       result.push('webgl fragment shader low int precision rangeMax:' + gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.LOW_INT).rangeMax)
       return result.join('~')
     },
+    getWebglVendorAndRenderer: function () {
+      /* This a subset of the WebGL fingerprint with a lot of entropy, while being reasonably browser-independent */
+      try {
+        var glContext = this.getWebglCanvas()
+        var extensionDebugRendererInfo = glContext.getExtension('WEBGL_debug_renderer_info')
+        return glContext.getParameter(extensionDebugRendererInfo.UNMASKED_VENDOR_WEBGL) + '~' + glContext.getParameter(extensionDebugRendererInfo.UNMASKED_RENDERER_WEBGL)
+      } catch (e) {
+        return null
+      }
+    },
     getAdBlock: function () {
       var ads = document.createElement('div')
       ads.innerHTML = '&nbsp;'
@@ -1013,15 +1026,7 @@
         return false
       }
 
-      var canvas = document.createElement('canvas')
-      var glContext
-
-      try {
-        glContext = canvas.getContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
-      } catch (e) {
-        glContext = false
-      }
-
+      var glContext = this.getWebglCanvas()
       return !!window.WebGLRenderingContext && !!glContext
     },
     isIE: function () {
