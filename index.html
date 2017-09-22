@@ -12,7 +12,6 @@
     ga('create', 'UA-42202458-2', 'auto');
     ga('send', 'pageview');
   </script>
-  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
   <style>
     body{
       font-family: sans-serif;
@@ -79,7 +78,7 @@
 
   <script src="fingerprint2.js"></script>
   <script>
-    $("#btn").on("click", function () {
+    document.querySelector("#btn").addEventListener("click", function () {
       var d1 = new Date();
       var fp = new Fingerprint2();
       fp.get(function(result, components) {
@@ -97,9 +96,9 @@
             details += line + "<br />";
           }
         }
-        $("#details").html(details);
-        $("#fp").text(result);
-        $("#time").text(timeString);
+        document.querySelector("#details").innerHTML = details
+        document.querySelector("#fp").textContent = result
+        document.querySelector("#time").textContent = timeString
       });
     });
   </script>
