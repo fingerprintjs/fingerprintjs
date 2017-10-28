@@ -86,6 +86,7 @@
       keys = this.hasLiedBrowserKey(keys)
       keys = this.touchSupportKey(keys)
       keys = this.customEntropyFunction(keys)
+      keys = this.workerApiKey(keys)
       this.fontsKey(keys, function (newKeys) {
         var values = []
         that.each(newKeys.data, function (pair) {
@@ -102,6 +103,12 @@
     customEntropyFunction: function (keys) {
       if (typeof this.options.customFunction === 'function') {
         keys.addPreprocessedComponent({key: 'custom', value: this.options.customFunction()})
+      }
+      return keys
+    },
+    workerApiKey: function (keys) {
+      if (!this.options.excludeWorkerApi) {
+        keys.addPreprocessedComponent({key: 'worker_api', value: window.Worker || -1})
       }
       return keys
     },
