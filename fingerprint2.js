@@ -62,6 +62,7 @@
       keys = this.userAgentKey(keys)
       keys = this.languageKey(keys)
       keys = this.colorDepthKey(keys)
+      keys = this.deviceMemoryKey(keys)
       keys = this.pixelRatioKey(keys)
       keys = this.hardwareConcurrencyKey(keys)
       keys = this.screenResolutionKey(keys)
@@ -127,6 +128,15 @@
         keys.addPreprocessedComponent({key: 'color_depth', value: window.screen.colorDepth || -1})
       }
       return keys
+    },
+    deviceMemoryKey: function (keys) {
+      if (!this.options.excludeDeviceMemory) {
+        keys.addPreprocessedComponent({key: 'device_memory', value: this.getDeviceMemory()})
+      }
+      return keys
+    },
+    getDeviceMemory: function () {
+      return navigator.deviceMemory || -1
     },
     pixelRatioKey: function (keys) {
       if (!this.options.excludePixelRatio) {
