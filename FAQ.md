@@ -4,7 +4,6 @@
 #### OK, I get it, I cannot _uniquely_ identify users, but can I identify users at all?
 ##### No, you cannot. This library is strictly for non-deterministic device identification.
 
-
 #### How good is your library? Can you guarantee that different devices will have different identifiers?
 ##### This library is not good. It has an error margin of 10-20%
 
@@ -17,5 +16,5 @@
 #### How can I build a complete identification solution?
 ##### You should either use commercial services, such as https://augur.io, or develop such service yourself. If you don't know how to do it, please use StackOverflow.
 
-#### The fingerprint is changing frequently for me, is library broken?
-##### Well, most likely not. You may have different user agents (because of the browser ugprades), or different screen resolutions. You can disable corresponding options (please see README and Wiki for details). V2 will have a callback/extension system which will allow to use UserAgent parsers and cut off the frequently changing parts of user agents (such as verion numbers). If you're sure it is a bug, please submit an issue and don't forget to attach the relevant info about which component, participating in fingerprint building, changes for your from call to call. This will greatly help me fix the issue
+#### The fingerprint is changing frequently for me, is the library broken?
+##### Well, most likely not. You may have different user agents (because of the browser upgrades), or different screen resolutions. You can disable corresponding options (please see README and Wiki for details). V2 will have a callback/extension system which will allow you to use UserAgent parsers and cut off the frequently changing parts of user agents (such as version numbers). If you're sure it is a bug, please submit an issue and don't forget to attach the relevant info about which component, participating in fingerprint building, changes for your from call to call. This will greatly help to fix the issue.
