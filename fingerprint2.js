@@ -160,10 +160,8 @@
       } else {
         resolution = [window.screen.width, window.screen.height]
       }
-      if (typeof resolution !== 'undefined') { // headless browsers
-        keys.addPreprocessedComponent({key: 'resolution', value: resolution})
-      }
-      return keys
+      keys.addPreprocessedComponent({key: "resolution", value: resolution});
+      return keys;
     },
     availableScreenResolutionKey: function (keys) {
       if (!this.options.excludeAvailableScreenResolution) {
@@ -503,9 +501,12 @@
       return keys
     },
     getRegularPlugins: function () {
-      var plugins = []
-      for (var i = 0, l = navigator.plugins.length; i < l; i++) {
-        plugins.push(navigator.plugins[i])
+      var plugins = [];
+      if (navigator.plugins) {
+        // plugins isn't defined in Node envs.
+        for(var i = 0, l = navigator.plugins.length; i < l; i++) {
+          plugins.push(navigator.plugins[i]);
+        }
       }
       // sorting plugins only for those user agents, that we know randomize the plugins
       // every time we try to enumerate them
