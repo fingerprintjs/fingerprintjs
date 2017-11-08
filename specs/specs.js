@@ -88,6 +88,15 @@ describe("Fingerprint2", function () {
         });
       });
 
+      it("does not use deviceMemory when excluded", function (done) {
+        var fp2 = new Fingerprint2({excludeDeviceMemory: true});
+        spyOn(fp2, "getDeviceMemory");
+        fp2.get(function (result) {
+          expect(fp2.getDeviceMemory).not.toHaveBeenCalled();
+          done();
+        });
+      });
+
       it("does not use screen resolution when excluded", function (done) {
         var fp2 = new Fingerprint2({excludeScreenResolution: true});
         spyOn(fp2, "getScreenResolution");
