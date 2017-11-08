@@ -315,7 +315,7 @@
     // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
     jsFontsKey: function (keys, done) {
       var that = this
-      // doing js >fonts detection in a pseudo-async fashion
+      // doing js fonts detection in a pseudo-async fashion
       return setTimeout(function () {
         // a font will be compared against all the three default fonts.
         // and if it doesn't match all 3 then that font is not available.
