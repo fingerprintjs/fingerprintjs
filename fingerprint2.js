@@ -21,6 +21,10 @@
   if (typeof window.define === 'function' && window.define.amd) { window.define(definition) } else if (typeof module !== 'undefined' && module.exports) { module.exports = definition() } else if (context.exports) { context.exports = definition() } else { context[name] = definition() }
 })('Fingerprint2', this, function () {
   'use strict'
+  /**
+   * @constructor
+   * @param {Object=} options
+   */
   var Fingerprint2 = function (options) {
     if (!(this instanceof Fingerprint2)) {
       return new Fingerprint2(options)
@@ -56,7 +60,7 @@
           if (typeof that.options.preprocessor === 'function') {
             componentValue = that.options.preprocessor(pair.key, componentValue)
           }
-          this.data.push({key: pair.key, value: componentValue})
+          keys.data.push({key: pair.key, value: componentValue})
         }
       }
       keys = this.userAgentKey(keys)
@@ -1079,6 +1083,11 @@
       if (!gl) { gl = null }
       return gl
     },
+
+    /**
+     * @template T
+     * @param {T=} context
+     */
     each: function (obj, iterator, context) {
       if (obj === null) {
         return
@@ -1098,6 +1107,12 @@
       }
     },
 
+    /**
+     * @template T,V
+     * @param {T=} context
+     * @param {function(this:T, ?, (string|number), T=):V} iterator
+     * @return {V}
+     */
     map: function (obj, iterator, context) {
       var results = []
       // Not using strict equality so that this acts as a
