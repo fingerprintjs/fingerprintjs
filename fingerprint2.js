@@ -562,7 +562,7 @@
           }
         })
       }
-      if (navigator.plugins) {
+      if (!this.options.excludeIERegularPlugins && navigator.plugins) {
         result = result.concat(this.getRegularPlugins())
       }
       return result
