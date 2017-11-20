@@ -782,7 +782,7 @@
       gl.uniform2f(program.offsetUniform, 1, 1)
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexPosBuffer.numItems)
       if (gl.canvas && gl.canvas.toDataURL) { result.push(gl.canvas.toDataURL()) }
-      result.push('extensions:' + gl.getSupportedExtensions().join(';'))
+      result.push('extensions:' + (gl.getSupportedExtensions() || []).join(';'))
       result.push('webgl aliased line width range:' + fa2s(gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE)))
       result.push('webgl aliased point size range:' + fa2s(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)))
       result.push('webgl alpha bits:' + gl.getParameter(gl.ALPHA_BITS))
