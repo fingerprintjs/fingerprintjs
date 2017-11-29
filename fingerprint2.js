@@ -91,8 +91,8 @@
         var values = []
         that.each(newKeys.data, function (pair) {
           var value = pair.value
-          if (typeof pair.value.join !== 'undefined') {
-            value = pair.value.join(';')
+          if (value && typeof value.join === 'function') {
+            value = value.join(';')
           }
           values.push(value)
         })
