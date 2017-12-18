@@ -213,7 +213,7 @@
     },
     addBehaviorKey: function (keys) {
       // body might not be defined at this point or removed programmatically
-      if (document.body && !this.options.excludeAddBehavior && document.body.addBehavior) {
+      if (!this.options.excludeAddBehavior && document.body && document.body.addBehavior) {
         keys.addPreprocessedComponent({key: 'add_behavior', value: 1})
       }
       return keys
