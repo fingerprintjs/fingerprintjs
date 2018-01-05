@@ -785,7 +785,11 @@
       gl.vertexAttribPointer(program.vertexPosAttrib, vertexPosBuffer.itemSize, gl.FLOAT, !1, 0, 0)
       gl.uniform2f(program.offsetUniform, 1, 1)
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexPosBuffer.numItems)
-      if (gl.canvas && gl.canvas.toDataURL) { result.push(gl.canvas.toDataURL()) }
+      try {
+        result.push(gl.canvas.toDataURL())
+      } catch (e) {
+        /* .toDataURL may be absent or broken (blocked by extension) */
+      }
       result.push('extensions:' + (gl.getSupportedExtensions() || []).join(';'))
       result.push('webgl aliased line width range:' + fa2s(gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE)))
       result.push('webgl aliased point size range:' + fa2s(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)))
