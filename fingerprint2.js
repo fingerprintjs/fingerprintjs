@@ -164,8 +164,8 @@
       } else {
         resolution = [window.screen.width, window.screen.height]
       }
-      keys.addPreprocessedComponent({key: "resolution", value: resolution});
-      return keys;
+      keys.addPreprocessedComponent({key: 'resolution', value: resolution})
+      return keys
     },
     availableScreenResolutionKey: function (keys) {
       if (!this.options.excludeAvailableScreenResolution) {
@@ -505,10 +505,10 @@
       return keys
     },
     getRegularPlugins: function () {
-      var plugins = [];
+      var plugins = []
       if (navigator.plugins) {
         // plugins isn't defined in Node envs.
-        for(var i = 0, l = navigator.plugins.length; i < l; i++) {
+        for (var i = 0, l = navigator.plugins.length; i < l; i++) {
           if (navigator.plugins[i]) { plugins.push(navigator.plugins[i]) }
         }
       }
