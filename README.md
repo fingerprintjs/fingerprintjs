@@ -60,6 +60,31 @@ new Fingerprint2().get(function(result, components){
 });
 ```
 
+Or using Promise
+
+```js
+new Fingerprint2(options).getPromise()
+  .then(function([result, components]){
+    console.log(result); //a hash, representing your device fingerprint
+    console.log(components); // an array of FP components
+  })
+  .catch(function(error){
+    console.error('Failed to compute fingerprint (probably due to some fingerprint-blocking browser extension/plugin)', error);
+  });
+```
+
+Another Promise example - it never fails and resolves with either computed fingerprint or value ('<blocked>') in case of an error
+
+```js
+new Fingerprint2(options).getOrDefaultPromise('<blocked>')
+  .then(function([result, components, error]){
+    console.log(result); // computed fingerprint or '<blocked>' in case of an error
+    console.log(components); // an array of FP components or undefined in case of an error
+    if (error) { // undefined or exception in case of an error
+      console.warn('Fingerprint probably blocked, resolved with value \'' + result + '\'', error);
+    }
+});
+
 #### You can pass an object with options (all of which are optional):
 
 ```js
