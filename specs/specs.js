@@ -59,6 +59,15 @@ describe("Fingerprint2", function () {
         });
       });
 
+      it("caculates fingerprint with promise", function (done) {
+        var fp2 = new Fingerprint2();
+        fp2.get()
+          .then(function (data) {
+            expect(data.result).toMatch(/^[0-9a-f]{32}$/i);
+            done();
+          })
+      });
+
       it("does not try calling flash font detection", function (done) {
         var fp2 = new Fingerprint2();
         spyOn(fp2, "flashFontsKey");
@@ -265,14 +274,14 @@ describe("Fingerprint2", function () {
           done();
         });
       });
-      
+
       it("checks that preprocessor function applied to component value", function (done) {
         var options = {
             preprocessor: function(key, value) {
                 if(key == "user_agent") {
                     value = "MyUserAgent";
                 }
-                
+
                 return value;
             }
         };
