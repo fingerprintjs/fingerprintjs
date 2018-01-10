@@ -91,18 +91,40 @@
       keys = this.hasLiedBrowserKey(keys)
       keys = this.touchSupportKey(keys)
       keys = this.customEntropyFunction(keys)
-      this.fontsKey(keys, function (newKeys) {
-        var values = []
-        that.each(newKeys.data, function (pair) {
-          var value = pair.value
-          if (value && typeof value.join === 'function') {
-            value = value.join(';')
-          }
-          values.push(value)
+
+      if (done && typeof done === 'function') {
+        this.fontsKey(keys, function (newKeys) {
+          var values = []
+          that.each(newKeys.data, function (pair) {
+            var value = pair.value
+            if (value && typeof value.join === 'function') {
+              value = value.join(';')
+            }
+            values.push(value)
+          })
+          var murmur = that.x64hash128(values.join('~~~'), 31)
+          return done(murmur, newKeys.data)
         })
-        var murmur = that.x64hash128(values.join('~~~'), 31)
-        return done(murmur, newKeys.data)
-      })
+      } else {
+        return new Promise(function (resolve, reject) {
+          that.fontsKey(keys, function (newKeys) {
+            var values = []
+            that.each(newKeys.data, function (pair) {
+              var value = pair.value
+              if (value && typeof value.join === 'function') {
+                value = value.join(';')
+              }
+              values.push(value)
+            })
+
+            var murmur = that.x64hash128(values.join('~~~'), 31)
+            return resolve({
+              result: murmur,
+              components: newKeys.data
+            })
+          })
+        })
+      }
     },
     customEntropyFunction: function (keys) {
       if (typeof this.options.customFunction === 'function') {
