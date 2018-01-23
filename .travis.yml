@@ -1,1 +1,3 @@
-script: "specs/phantomjs.runner.sh specs/spec_runner.html"
+script:
+  - yarn run gulp
+  - yarn run test

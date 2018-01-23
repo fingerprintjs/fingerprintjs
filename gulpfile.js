@@ -1,14 +1,16 @@
 var gulp = require("gulp"),
-    eslint = require("gulp-eslint"),
+    standard = require("gulp-standard"),
     rename = require("gulp-rename"),
     uglify = require("gulp-uglify");
 
 gulp.task("lint", function() {
   return gulp
     .src("fingerprint2.js")
-    .pipe(eslint())
-    .pipe(eslint.format())
-    .pipe(eslint.failOnError());
+    .pipe(standard())
+    .pipe(standard.reporter('default', {
+      breakOnError: true,
+      quiet: true
+    }))
 });
 
 gulp.task("minify", function() {
