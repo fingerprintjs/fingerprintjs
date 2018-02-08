@@ -380,7 +380,7 @@
 
         // we use m or w because these two characters take up the maximum width.
         // And we use a LLi so that the same matching fonts can get separated
-        var testString = 'mmmmmmwwwwwwMMMMMMWWWWWWlililiLILILI111lllIII'
+        var testString = 'mMwWlLiI0123456789'
 
         // we test using 72px font size, we may use any size. I guess larger the better.
         var testSize = '72px'
