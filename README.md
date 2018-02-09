@@ -130,6 +130,8 @@ new Fingerprint2({
       var parser = new UAParser(value); // https://github.com/faisalman/ua-parser-js
       var userAgentMinusVersion = parser.getOS().name + ' ' + parser.getBrowser().name;
       return userAgentMinusVersion;
+    } else {
+      return value
     }
   }
 }).get(function(result, components){
