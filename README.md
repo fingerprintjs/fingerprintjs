@@ -54,19 +54,19 @@ yarn add fingerprintjs2
 ### Usage
 
 ```js
-new Fingerprint2().get(function(result, components){
-  console.log(result); //a hash, representing your device fingerprint
-  console.log(components); // an array of FP components
-});
+new Fingerprint2().get(function(result, components) {
+  console.log(result) // a hash, representing your device fingerprint
+  console.log(components) // an array of FP components
+})
 ```
 
 #### You can pass an object with options (all of which are optional):
 
 ```js
-var options = {swfPath: '/assets/FontList.swf', excludeUserAgent: true};
-new Fingerprint2(options).get(function(result){
-  console.log(result);
-});
+var options = {swfPath: '/assets/FontList.swf', excludeUserAgent: true}
+new Fingerprint2(options).get(function(result) {
+  console.log(result)
+})
 ```
 
 Full list of options will be in the
@@ -98,12 +98,12 @@ devices.
 ##### All fingerprinting sources are enabled by default, i.e. you don't need to explicitly configure the library to include them.
 
 ```js
-new Fingerprint2().get(function(result, components){
+new Fingerprint2().get(function(result, components) {
   // this will use all available fingerprinting sources
-  console.log(result);
+  console.log(result)
   // components is an array of all fingerprinting components used
-  console.log(components);
-});
+  console.log(components)
+})
 ```
 
 #### `userDefinedFonts` option
@@ -113,9 +113,9 @@ While hundreds of the most popular fonts are included in the extended font list,
 ```js
 new Fingerprint2({
   userDefinedFonts: ["Nimbus Mono", "Junicode", "Presto"]
-}).get(function(result, components){
-  console.log(result);
-});
+}).get(function(result, components) {
+  console.log(result)
+})
 ```
 
 #### `preprocessor` option
@@ -125,18 +125,18 @@ For example: strip browser version from user agent.
 
 ```js
 new Fingerprint2({
-  preprocessor: function(key, value){
-    if(key == "user_agent"){
+  preprocessor: function(key, value) {
+    if (key == "user_agent") {
       var parser = new UAParser(value); // https://github.com/faisalman/ua-parser-js
-      var userAgentMinusVersion = parser.getOS().name + ' ' + parser.getBrowser().name;
-      return userAgentMinusVersion;
+      var userAgentMinusVersion = parser.getOS().name + ' ' + parser.getBrowser().name
+      return userAgentMinusVersion
     } else {
       return value
     }
   }
-}).get(function(result, components){
-  //user_agent component will contain string processed with our function. For example: Windows Chrome
-  console.log(result, components);
+}).get(function(result, components) {
+  // user_agent component will contain string processed with our function. For example: Windows Chrome
+  console.log(result, components)
 });
 ```
 
