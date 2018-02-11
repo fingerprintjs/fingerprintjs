@@ -5,7 +5,7 @@
 
 ## FingerprintJS PRO - https://fingerprintjspro.com
 
-Professional version for state of the art identification. Sign up for early access.
+Professional version for state of the art identification. Contact for early access.
 
 --------------------------
 
