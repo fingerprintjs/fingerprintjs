@@ -3,6 +3,9 @@
 [![](https://travis-ci.org/Valve/fingerprintjs2.svg?branch=master)](https://travis-ci.org/Valve/fingerprintjs2)
 [![](https://badges.gitter.im/Valve/fingerprintjs2.svg)](https://gitter.im/Valve/fingerprintjs2)
 
+## FingerprintJS PRO - https://fingerprintjspro.com
+
+Professional version for state of the art identification. Sign up for early access.
 
 Original fingerprintjs library was developed in 2012, it's now impossible to evolve it
 without breaking backwards compatibilty, so this project will be where
