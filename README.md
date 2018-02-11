@@ -3,7 +3,7 @@
 [![](https://travis-ci.org/Valve/fingerprintjs2.svg?branch=master)](https://travis-ci.org/Valve/fingerprintjs2)
 [![](https://badges.gitter.im/Valve/fingerprintjs2.svg)](https://gitter.im/Valve/fingerprintjs2)
 
-## FingerprintJS PRO - https://fingerprintjspro.com
+## FingerprintJS PRO - [https://fingerprintjspro.com](https://fingerprintjspro.com/#contact)
 
 Professional version for state of the art identification. Contact for early access.
 
