@@ -380,7 +380,7 @@
 
         // we use m or w because these two characters take up the maximum width.
         // And we use a LLi so that the same matching fonts can get separated
-        var testString = 'mMwWlLiI0123456789'
+        var testString = 'aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ0123456789'
 
         // we test using 72px font size, we may use any size. I guess larger the better.
         var testSize = '72px'
@@ -407,7 +407,21 @@
           s.style.position = 'absolute'
           s.style.left = '-9999px'
           s.style.fontSize = testSize
+
+          // css font reset to reset external styles
+          s.style.fontStyle = 'normal'
+          s.style.fontWeight = 'normal'
+          s.style.letterSpacing = 'normal'
+          s.style.lineBreak = 'auto'
           s.style.lineHeight = 'normal'
+          s.style.texTransform = 'none'
+          s.style.textAlign = 'left'
+          s.style.textDecoration = 'none'
+          s.style.textShadow = 'none'
+          s.style.whiteSpace = 'normal'
+          s.style.wordBreak = 'normal'
+          s.style.wordSpacing = 'normal'
+
           s.innerHTML = testString
           return s
         }
