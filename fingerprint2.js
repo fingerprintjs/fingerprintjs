@@ -407,7 +407,21 @@
           s.style.position = 'absolute'
           s.style.left = '-9999px'
           s.style.fontSize = testSize
+
+          // css font reset to reset external styles
+          s.style.fontStyle = 'normal'
+          s.style.fontWeight = 'normal'
+          s.style.letterSpacing = 'normal'
+          s.style.lineBreak = 'auto'
           s.style.lineHeight = 'normal'
+          s.style.texTransform = 'none'
+          s.style.textAlign = 'left'
+          s.style.textDecoration = 'none'
+          s.style.textShadow = 'none'
+          s.style.whiteSpace = 'normal'
+          s.style.wordBreak = 'normal'
+          s.style.wordSpacing = 'normal'
+
           s.innerHTML = testString
           return s
         }
