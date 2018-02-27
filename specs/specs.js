@@ -229,10 +229,16 @@ describe("Fingerprint2", function () {
         fontList.concat(userDefinedFonts);
         expect(fontList.length).toEqual(65);
 
-        userDefinedFonts = ["Adria Grotesk", "Butler", "Nimbus Mono"];
-        expect(userDefinedFonts.length).toEqual(3);
+        userDefinedFonts = ["Adria Grotesk", "Butler", "Nimbus Mono", "Arial", "Nimbus Mono"];
+        expect(userDefinedFonts.length).toEqual(5);
         fontList = fontList.concat(userDefinedFonts);
-        expect(fontList.length).toEqual(65 + 3);
+
+        // remove duplicate fonts: "Arial" from default fonts & duplicate "Nimbus Mono" from `userDefinedFonts` variable.
+        fontList = fontList.filter(function (font, position) {
+          return fontList.indexOf(font) === position
+        })
+
+        expect(fontList.length).toEqual(65 + 5 - 2);
         done();
       });
     });
