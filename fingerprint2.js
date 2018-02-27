@@ -379,6 +379,11 @@
 
         fontList = fontList.concat(that.options.userDefinedFonts)
 
+        // remove duplicate fonts
+        fontList = fontList.filter(function (font, position) {
+          return fontList.indexOf(font) === position
+        })
+
         // we use m or w because these two characters take up the maximum width.
         // And we use a LLi so that the same matching fonts can get separated
         var testString = 'mmmmmmmmmmlli'
