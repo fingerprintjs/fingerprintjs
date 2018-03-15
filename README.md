@@ -25,38 +25,15 @@ fingerprintjs.
 
 This project uses `semver`.
 
-### Installation
+## Installation
 
-#### CDN:
-```
-//cdn.jsdelivr.net/npm/fingerprintjs2@<VERSION>/dist/fingerprint2.min.js
-```
-or
-
-```
-https://cdnjs.com/libraries/fingerprintjs2
-```
-
-#### Bower
-
-```
-bower install fingerprintjs2
-```
-
-#### NPM
-
-```
-npm install fingerprintjs2
-```
-
-### Yarn
-
-```
-yarn add fingerprintjs2
-```
+- CDN: `//cdn.jsdelivr.net/npm/fingerprintjs2@<VERSION>/dist/fingerprint2.min.js` or `https://cdnjs.com/libraries/fingerprintjs2`
+- Bower: `bower install fingerprintjs2`
+- NPM: `npm install fingerprintjs2`
+- Yarn: `yarn add fingerprintjs2`
 
 
-### Usage
+## Usage
 
 ```js
 new Fingerprint2().get(function(result, components) {
@@ -64,6 +41,8 @@ new Fingerprint2().get(function(result, components) {
   console.log(components) // an array of FP components
 })
 ```
+
+**Note:** You should not run fingerprinting directly on or after page load. Rather, delay it for a few milliseconds to ensure consistent fingerprints. See [#307](https://github.com/Valve/fingerprintjs2/issues/307), [#254](https://github.com/Valve/fingerprintjs2/issues/254), and others.
 
 #### You can pass an object with options (all of which are optional):
 
