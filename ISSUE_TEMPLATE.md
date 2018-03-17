@@ -6,9 +6,8 @@ Before submitting an issue:
 1) I checked that my issue is not already fixed in GitHub master:
 
 2) My fingerprint retrieved with [this jsfiddle](https://jsfiddle.net/efer6pgy/) is:
-
-```
-...
-```
+   ```
+   ...
+   ```
 
 3) My device is:
