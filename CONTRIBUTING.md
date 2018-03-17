@@ -9,14 +9,13 @@ ISSUES WITH QUESTIONS IN THEM WILL BE CLOSED W/OUT EXPLANATION!
 
 ## Found a bug?
 
-Please submit an issue.
-Include in the issue:
+Please first try if the issue is gone in GitHub master.
 
-* List of components you received in the `get` call (make sure values are not truncated)
-* If FP is different every time you call the library, include 2 versions of components
-* Include your OS version
-* Include steps to reproduce
-* Include library call code (I need all options you used when calling the library function)
+Please include the following information in your bug report:
+
+* List of components you received in the `get` call (make sure values are not truncated). If FP is different every time you call the library, include 2 versions of components. Please use this jsfiddle: https://jsfiddle.net/efer6pgy/
+* Device info (e.g. MacBook Pro 2015)
+* Your code with all options you used when calling the library function
 
 ## Want to add a feature / contribute?
 * Make sure the issue/suggestion does not exist by searching existing issues
