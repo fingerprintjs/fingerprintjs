@@ -13,7 +13,7 @@ Please first try if the issue is gone in GitHub master.
 
 Please include the following information in your bug report:
 
-* List of components you received in the `get` call (make sure values are not truncated). If FP is different every time you call the library, include 2 versions of components. Please use this jsfiddle: https://jsfiddle.net/efer6pgy/
+* List of components you received in the `get` call (make sure values are not truncated). If FP is different every time you call the library, include 2 versions of components. Please use this jsfiddle: https://jsfiddle.net/L2gLq4rg/
 * Device info (e.g. MacBook Pro 2015)
 * Your code with all options you used when calling the library function
 
