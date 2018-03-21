@@ -330,7 +330,7 @@
           'Andale Mono', 'Arial', 'Arial Black', 'Arial Hebrew', 'Arial MT', 'Arial Narrow', 'Arial Rounded MT Bold', 'Arial Unicode MS',
           'Bitstream Vera Sans Mono', 'Book Antiqua', 'Bookman Old Style',
           'Calibri', 'Cambria', 'Cambria Math', 'Century', 'Century Gothic', 'Century Schoolbook', 'Comic Sans', 'Comic Sans MS', 'Consolas', 'Courier', 'Courier New',
-          'Garamond', 'Geneva', 'Georgia',
+          'Geneva', 'Georgia',
           'Helvetica', 'Helvetica Neue',
           'Impact',
           'Lucida Bright', 'Lucida Calligraphy', 'Lucida Console', 'Lucida Fax', 'LUCIDA GRANDE', 'Lucida Handwriting', 'Lucida Sans', 'Lucida Sans Typewriter', 'Lucida Sans Unicode',
