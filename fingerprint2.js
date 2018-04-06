@@ -36,7 +36,8 @@
       detectScreenOrientation: true,
       sortPluginsFor: [/palemoon/i],
       userDefinedFonts: [],
-      excludeDoNotTrack: true
+      excludeDoNotTrack: true,
+      excludePixelRatio: true
     }
     this.options = this.extend(options, defaultOptions)
     this.nativeForEach = Array.prototype.forEach
