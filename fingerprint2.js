@@ -421,7 +421,7 @@
           s.style.letterSpacing = 'normal'
           s.style.lineBreak = 'auto'
           s.style.lineHeight = 'normal'
-          s.style.texTransform = 'none'
+          s.style.textTransform = 'none'
           s.style.textAlign = 'left'
           s.style.textDecoration = 'none'
           s.style.textShadow = 'none'
