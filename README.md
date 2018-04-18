@@ -3,6 +3,7 @@
 [![](https://travis-ci.org/Valve/fingerprintjs2.svg?branch=master)](https://travis-ci.org/Valve/fingerprintjs2)
 [![](https://badges.gitter.im/Valve/fingerprintjs2.svg)](https://gitter.im/Valve/fingerprintjs2)
 
+<a href="https://www.patreon.com/bePatron?u=7954991" data-patreon-widget-type="become-patron-button">Support library on Patreon!</a>
 
 --------------------------
 
