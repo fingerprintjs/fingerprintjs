@@ -24,6 +24,8 @@ gulp.task('minify', function () {
         output: {
           ascii_only: true
         }
+       }).on('error', function(e) {
+         console.log(e);
       }))
       .pipe(gulp.dest('dist/'))
 })
