@@ -192,7 +192,6 @@ describe('Fingerprint2', function () {
         Array.prototype.bar = 2
         ctr = 0
         for (var y in baseFonts) {
-          console.log(y)
           ctr++
           // Now foo & bar is a part of EVERY array and
           // will show up here as a value of 'x'.
@@ -266,7 +265,7 @@ describe('Fingerprint2', function () {
 
         var fp2 = new Fingerprint2()
         var gl = fp2.getWebglCanvas();
-        var item  = function (name, descr, shaderDescr, attr1, attr2, attr3) {
+        var item  = function (name, descr, attr1, attr2, attr3) {
           var fmt = gl.getShaderPrecisionFormat(attr1, attr2)[attr3]
           return ['webgl ', name, ' shader ', descr, ':', fmt].join('')
         }
@@ -280,15 +279,6 @@ describe('Fingerprint2', function () {
           item('vertex'  , 'low float precision'            , gl.VERTEX_SHADER  , gl.LOW_FLOAT   , 'precision'),
           item('vertex'  , 'low float precision rangeMin'   , gl.VERTEX_SHADER  , gl.LOW_FLOAT   , 'rangeMin'),
           item('vertex'  , 'low float precision rangeMax'   , gl.VERTEX_SHADER  , gl.LOW_FLOAT   , 'rangeMax'),
-          item('fragment', 'high float precision'           , gl.FRAGMENT_SHADER, gl.HIGH_FLOAT  , 'precision'),
-          item('fragment', 'high float precision rangeMin'  , gl.FRAGMENT_SHADER, gl.HIGH_FLOAT  , 'rangeMin'),
-          item('fragment', 'high float precision rangeMax'  , gl.FRAGMENT_SHADER, gl.HIGH_FLOAT  , 'rangeMax'),
-          item('fragment', 'medium float precision'         , gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT, 'precision'),
-          item('fragment', 'medium float precision rangeMin', gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT, 'rangeMin'),
-          item('fragment', 'medium float precision rangeMax', gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT, 'rangeMax'),
-          item('fragment', 'low float precision'            , gl.FRAGMENT_SHADER, gl.LOW_FLOAT   , 'precision'),
-          item('fragment', 'low float precision rangeMin'   , gl.FRAGMENT_SHADER, gl.LOW_FLOAT   , 'rangeMin'),
-          item('fragment', 'low float precision rangeMax'   , gl.FRAGMENT_SHADER, gl.LOW_FLOAT   , 'rangeMax'),
           item('vertex'  , 'high int precision'             , gl.VERTEX_SHADER  , gl.HIGH_INT    , 'precision'),
           item('vertex'  , 'high int precision rangeMin'    , gl.VERTEX_SHADER  , gl.HIGH_INT    , 'rangeMin'),
           item('vertex'  , 'high int precision rangeMax'    , gl.VERTEX_SHADER  , gl.HIGH_INT    , 'rangeMax'),
@@ -298,6 +288,15 @@ describe('Fingerprint2', function () {
           item('vertex'  , 'low int precision'              , gl.VERTEX_SHADER  , gl.LOW_INT     , 'precision'),
           item('vertex'  , 'low int precision rangeMin'     , gl.VERTEX_SHADER  , gl.LOW_INT     , 'rangeMin'),
           item('vertex'  , 'low int precision rangeMax'     , gl.VERTEX_SHADER  , gl.LOW_INT     , 'rangeMax'),
+          item('fragment', 'high float precision'           , gl.FRAGMENT_SHADER, gl.HIGH_FLOAT  , 'precision'),
+          item('fragment', 'high float precision rangeMin'  , gl.FRAGMENT_SHADER, gl.HIGH_FLOAT  , 'rangeMin'),
+          item('fragment', 'high float precision rangeMax'  , gl.FRAGMENT_SHADER, gl.HIGH_FLOAT  , 'rangeMax'),
+          item('fragment', 'medium float precision'         , gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT, 'precision'),
+          item('fragment', 'medium float precision rangeMin', gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT, 'rangeMin'),
+          item('fragment', 'medium float precision rangeMax', gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT, 'rangeMax'),
+          item('fragment', 'low float precision'            , gl.FRAGMENT_SHADER, gl.LOW_FLOAT   , 'precision'),
+          item('fragment', 'low float precision rangeMin'   , gl.FRAGMENT_SHADER, gl.LOW_FLOAT   , 'rangeMin'),
+          item('fragment', 'low float precision rangeMax'   , gl.FRAGMENT_SHADER, gl.LOW_FLOAT   , 'rangeMax'),
           item('fragment', 'high int precision'             , gl.FRAGMENT_SHADER, gl.HIGH_INT    , 'precision'),
           item('fragment', 'high int precision rangeMin'    , gl.FRAGMENT_SHADER, gl.HIGH_INT    , 'rangeMin'),
           item('fragment', 'high int precision rangeMax'    , gl.FRAGMENT_SHADER, gl.HIGH_INT    , 'rangeMax'),
@@ -312,12 +311,14 @@ describe('Fingerprint2', function () {
         fp2.get(function (result, components) {
           for (var x = 0; x < components.length; x++) {
             if (components[x].key === 'webgl') {
-              expect(components[x].value).toEqual(webglExpectedArray)
+              fp2.each(webglExpectedArray, function (item) {
+                expect(components[x].value.indexOf(item)).not.toEqual(-1)
+              })
               done()
               return
             }
-            done.fail()
           }
+          done.fail()
         })
       })
     })
