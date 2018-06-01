@@ -889,6 +889,9 @@
         document.body.appendChild(ads)
         result = document.getElementsByClassName('adsbox')[0].offsetHeight === 0
         document.body.removeChild(ads)
+        If (result == null){
+          result=false
+        }
       } catch (e) {
         result = false
       }
