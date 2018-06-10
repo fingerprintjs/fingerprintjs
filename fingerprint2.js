@@ -99,67 +99,59 @@
           that.each(newKeys.data, function (pair) {
             var value = pair.value
             if (value && typeof value.join === 'function') {
-              value = value.join(';')
+              values.push(value.join(';'))
+            } else {
+              values.push(value)
             }
-            values.push(value)
           })
           var murmur = that.x64hash128(values.join('~~~'), 31)
           return done(murmur, newKeys.data)
         })
       })
     },
-    // Thanks to https://github.com/cozylife/audio-fingerprint
+    // Inspired by and based on https://github.com/cozylife/audio-fingerprint
     audioKey: function (keys, done) {
       if (this.options.excludeAudioFP) {
         return done(keys)
       }
-      var fingerprint = null
-      /* setup-start */
-      // setContext
+
       var AudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext
       var context = new AudioContext(1, 44100, 44100)
-      var currentTime = context.currentTime
 
-      // setOscillator
       var oscillator = context.createOscillator()
       oscillator.type = 'triangle'
-      oscillator.frequency.setValueAtTime(10000, currentTime)
+      oscillator.frequency.setValueAtTime(10000, context.currentTime)
 
-      var setCompressorValueIfDefined = function (item, value) {
-        if (compressor[item] !== undefined && typeof compressor[item].setValueAtTime === 'function') {
-          compressor[item].setValueAtTime(value, context.currentTime)
-        }
-      }
-      // setCompressor
       var compressor = context.createDynamicsCompressor()
-      setCompressorValueIfDefined('threshold', -50)
-      setCompressorValueIfDefined('knee', 40)
-      setCompressorValueIfDefined('ratio', 12)
-      setCompressorValueIfDefined('reduction', -20)
-      setCompressorValueIfDefined('attack', 0)
-      setCompressorValueIfDefined('release', 0.25)
-      /* setup-end */
-
-      var complete = function (keys) {
-        return function (event) {
-          var output = null
-          for (var i = 4500; i < 5e3; i++) {
-            var channelData = event.renderedBuffer.getChannelData(0)[i]
-            output += Math.abs(channelData)
-          }
-          fingerprint = output.toString()
-          compressor.disconnect()
-          keys.addPreprocessedComponent({key: 'audio_fp', value: fingerprint})
-          if (typeof done === 'function') {
-            return done(keys)
-          }
+      this.each([
+        ['threshold', -50],
+        ['knee', 40],
+        ['ratio', 12],
+        ['reduction', -20],
+        ['attack', 0],
+        ['release', 0.25]
+      ], function (item) {
+        if (compressor[item[0]] !== undefined && typeof compressor[item[0]].setValueAtTime === 'function') {
+          compressor[item[0]].setValueAtTime(item[1], context.currentTime)
         }
+      })
+
+      context.oncomplete = function (event) {
+        var fingerprint = event.renderedBuffer.getChannelData(0)
+                     .slice(4500, 5000)
+                     .reduce(function (acc, val) { return acc + Math.abs(val) }, 0)
+                     .toString()
+        oscillator.disconnect()
+        compressor.disconnect()
+
+        keys.addPreprocessedComponent({key: 'audio_fp', value: fingerprint})
+        return done(keys)
       }
+
       oscillator.connect(compressor)
       compressor.connect(context.destination)
       oscillator.start(0)
       context.startRendering()
-      context.oncomplete = complete(keys)
     },
     customEntropyFunction: function (keys) {
       if (typeof this.options.customFunction === 'function') {
