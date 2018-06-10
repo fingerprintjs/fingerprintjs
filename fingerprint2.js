@@ -93,18 +93,73 @@
       keys = this.hasLiedBrowserKey(keys)
       keys = this.touchSupportKey(keys)
       keys = this.customEntropyFunction(keys)
-      this.fontsKey(keys, function (newKeys) {
-        var values = []
-        that.each(newKeys.data, function (pair) {
-          var value = pair.value
-          if (value && typeof value.join === 'function') {
-            value = value.join(';')
-          }
-          values.push(value)
+      this.fontsKey(keys, function (keysWithFont) {
+        that.audioKey(keysWithFont, function (newKeys) {
+          var values = []
+          that.each(newKeys.data, function (pair) {
+            var value = pair.value
+            if (value && typeof value.join === 'function') {
+              value = value.join(';')
+            }
+            values.push(value)
+          })
+          var murmur = that.x64hash128(values.join('~~~'), 31)
+          return done(murmur, newKeys.data)
         })
-        var murmur = that.x64hash128(values.join('~~~'), 31)
-        return done(murmur, newKeys.data)
       })
+    },
+    // Thanks to https://github.com/cozylife/audio-fingerprint
+    audioKey: function (keys, done) {
+      if (this.options.excludeAudioFP) {
+        return done(keys)
+      }
+      var fingerprint = null
+      /* setup-start */
+      // setContext
+      var AudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext
+      var context = new AudioContext(1, 44100, 44100)
+      var currentTime = context.currentTime
+
+      // setOscillator
+      var oscillator = context.createOscillator()
+      oscillator.type = 'triangle'
+      oscillator.frequency.setValueAtTime(10000, currentTime)
+
+      var setCompressorValueIfDefined = function (item, value) {
+        if (compressor[item] !== undefined && typeof compressor[item].setValueAtTime === 'function') {
+          compressor[item].setValueAtTime(value, context.currentTime)
+        }
+      }
+      // setCompressor
+      var compressor = context.createDynamicsCompressor()
+      setCompressorValueIfDefined('threshold', -50)
+      setCompressorValueIfDefined('knee', 40)
+      setCompressorValueIfDefined('ratio', 12)
+      setCompressorValueIfDefined('reduction', -20)
+      setCompressorValueIfDefined('attack', 0)
+      setCompressorValueIfDefined('release', 0.25)
+      /* setup-end */
+
+      var complete = function (keys) {
+        return function (event) {
+          var output = null
+          for (var i = 4500; i < 5e3; i++) {
+            var channelData = event.renderedBuffer.getChannelData(0)[i]
+            output += Math.abs(channelData)
+          }
+          fingerprint = output.toString()
+          compressor.disconnect()
+          keys.addPreprocessedComponent({key: 'audio_fp', value: fingerprint})
+          if (typeof done === 'function') {
+            return done(keys)
+          }
+        }
+      }
+      oscillator.connect(compressor)
+      compressor.connect(context.destination)
+      oscillator.start(0)
+      context.startRendering()
+      context.oncomplete = complete(keys)
     },
     customEntropyFunction: function (keys) {
       if (typeof this.options.customFunction === 'function') {

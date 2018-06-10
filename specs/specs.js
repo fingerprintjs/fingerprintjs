@@ -260,6 +260,36 @@ describe('Fingerprint2', function () {
       })
     })
 
+    describe('audio fingerprint', function () {
+      it('checks audio fingerprint', function (done) {
+        var fp2 = new Fingerprint2()
+        fp2.get(function (result, components) {
+          var audioFp = null
+          for (var x = 0; x < components.length; x++) {
+            if (components[x].key === 'audio_fp') {
+              audioFp = components[x].value
+            }
+          }
+          expect(audioFp).not.toBeNull()
+          done()
+        })
+      })
+
+      it('checks exclude audio fingerprint', function (done) {
+        var fp2 = new Fingerprint2({excludeAudioFP: true})
+        fp2.get(function (result, components) {
+          var audioFp = null
+          for (var x = 0; x < components.length; x++) {
+            if (components[x].key === 'audio_fp') {
+              audioFp = components[x].value
+            }
+          }
+          expect(audioFp).toBeNull()
+          done()
+        })
+      })
+    })
+
     describe('webgl shader precision format', function () {
       it('checks webgl shader precision format loop', function (done) {
 
@@ -354,11 +384,13 @@ describe('Fingerprint2', function () {
             if (components[x].key === 'user_agent') {
               expect(components[x].value).toEqual('MyUserAgent')
               done()
+              return
             }
           }
           done.fail()
         })
       })
     })
+
   })
 })
