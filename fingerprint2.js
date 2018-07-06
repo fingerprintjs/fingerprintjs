@@ -1020,7 +1020,7 @@
         return true
       } else if ((platform.indexOf('mac') >= 0 || platform.indexOf('ipad') >= 0 || platform.indexOf('ipod') >= 0 || platform.indexOf('iphone') >= 0) && os !== 'Mac' && os !== 'iOS') {
         return true
-      } else if ((platform.indexOf('win') === -1 && platform.indexOf('linux') === -1 && platform.indexOf('mac') === -1) !== (os === 'Other')) {
+      } else if ((platform.indexOf('win') === -1 || platform.indexOf('linux') === -1 || platform.indexOf('mac') === -1 || platform.indexOf('iphone') === -1 || platform.indexOf('ipad') === -1 || platform.indexOf('android') === -1 ) && (os === 'Other')) {
         return true
       }
 
