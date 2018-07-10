@@ -10,6 +10,8 @@ function getComponent(components, key) {
   throw new Error('Component not found: ' + key)
 }
 
+onPhantomJs = window._phantom != null
+
 describe('Fingerprint2', function () {
   describe('new', function () {
     it('creates a new instance of FP2', function () {
@@ -262,71 +264,75 @@ describe('Fingerprint2', function () {
       })
     })
 
-    describe('audio fingerprint', function () {
-      it('checks audio fingerprint', function (done) {
-        (new Fingerprint2()).get(function (_, components) {
-          expect(getComponent(components, 'audio_fp')).not.toBeNull()
-          done()
-        })
-      })
-    })
-
-    describe('webgl shader precision format', function () {
-      it('checks webgl shader precision format loop', function (done) {
-
-        var fp2 = new Fingerprint2()
-        var gl = fp2.getWebglCanvas();
-        var item  = function (name, descr, attr1, attr2, attr3) {
-          var fmt = gl.getShaderPrecisionFormat(attr1, attr2)[attr3]
-          return ['webgl ', name, ' shader ', descr, ':', fmt].join('')
-        }
-        var webglExpectedArray = [
-          item('vertex'  , 'high float precision'           , gl.VERTEX_SHADER  , gl.HIGH_FLOAT  , 'precision'),
-          item('vertex'  , 'high float precision rangeMin'  , gl.VERTEX_SHADER  , gl.HIGH_FLOAT  , 'rangeMin'),
-          item('vertex'  , 'high float precision rangeMax'  , gl.VERTEX_SHADER  , gl.HIGH_FLOAT  , 'rangeMax'),
-          item('vertex'  , 'medium float precision'         , gl.VERTEX_SHADER  , gl.MEDIUM_FLOAT, 'precision'),
-          item('vertex'  , 'medium float precision rangeMin', gl.VERTEX_SHADER  , gl.MEDIUM_FLOAT, 'rangeMin'),
-          item('vertex'  , 'medium float precision rangeMax', gl.VERTEX_SHADER  , gl.MEDIUM_FLOAT, 'rangeMax'),
-          item('vertex'  , 'low float precision'            , gl.VERTEX_SHADER  , gl.LOW_FLOAT   , 'precision'),
-          item('vertex'  , 'low float precision rangeMin'   , gl.VERTEX_SHADER  , gl.LOW_FLOAT   , 'rangeMin'),
-          item('vertex'  , 'low float precision rangeMax'   , gl.VERTEX_SHADER  , gl.LOW_FLOAT   , 'rangeMax'),
-          item('vertex'  , 'high int precision'             , gl.VERTEX_SHADER  , gl.HIGH_INT    , 'precision'),
-          item('vertex'  , 'high int precision rangeMin'    , gl.VERTEX_SHADER  , gl.HIGH_INT    , 'rangeMin'),
-          item('vertex'  , 'high int precision rangeMax'    , gl.VERTEX_SHADER  , gl.HIGH_INT    , 'rangeMax'),
-          item('vertex'  , 'medium int precision'           , gl.VERTEX_SHADER  , gl.MEDIUM_INT  , 'precision'),
-          item('vertex'  , 'medium int precision rangeMin'  , gl.VERTEX_SHADER  , gl.MEDIUM_INT  , 'rangeMin'),
-          item('vertex'  , 'medium int precision rangeMax'  , gl.VERTEX_SHADER  , gl.MEDIUM_INT  , 'rangeMax'),
-          item('vertex'  , 'low int precision'              , gl.VERTEX_SHADER  , gl.LOW_INT     , 'precision'),
-          item('vertex'  , 'low int precision rangeMin'     , gl.VERTEX_SHADER  , gl.LOW_INT     , 'rangeMin'),
-          item('vertex'  , 'low int precision rangeMax'     , gl.VERTEX_SHADER  , gl.LOW_INT     , 'rangeMax'),
-          item('fragment', 'high float precision'           , gl.FRAGMENT_SHADER, gl.HIGH_FLOAT  , 'precision'),
-          item('fragment', 'high float precision rangeMin'  , gl.FRAGMENT_SHADER, gl.HIGH_FLOAT  , 'rangeMin'),
-          item('fragment', 'high float precision rangeMax'  , gl.FRAGMENT_SHADER, gl.HIGH_FLOAT  , 'rangeMax'),
-          item('fragment', 'medium float precision'         , gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT, 'precision'),
-          item('fragment', 'medium float precision rangeMin', gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT, 'rangeMin'),
-          item('fragment', 'medium float precision rangeMax', gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT, 'rangeMax'),
-          item('fragment', 'low float precision'            , gl.FRAGMENT_SHADER, gl.LOW_FLOAT   , 'precision'),
-          item('fragment', 'low float precision rangeMin'   , gl.FRAGMENT_SHADER, gl.LOW_FLOAT   , 'rangeMin'),
-          item('fragment', 'low float precision rangeMax'   , gl.FRAGMENT_SHADER, gl.LOW_FLOAT   , 'rangeMax'),
-          item('fragment', 'high int precision'             , gl.FRAGMENT_SHADER, gl.HIGH_INT    , 'precision'),
-          item('fragment', 'high int precision rangeMin'    , gl.FRAGMENT_SHADER, gl.HIGH_INT    , 'rangeMin'),
-          item('fragment', 'high int precision rangeMax'    , gl.FRAGMENT_SHADER, gl.HIGH_INT    , 'rangeMax'),
-          item('fragment', 'medium int precision'           , gl.FRAGMENT_SHADER, gl.MEDIUM_INT  , 'precision'),
-          item('fragment', 'medium int precision rangeMin'  , gl.FRAGMENT_SHADER, gl.MEDIUM_INT  , 'rangeMin'),
-          item('fragment', 'medium int precision rangeMax'  , gl.FRAGMENT_SHADER, gl.MEDIUM_INT  , 'rangeMax'),
-          item('fragment', 'low int precision'              , gl.FRAGMENT_SHADER, gl.LOW_INT     , 'precision'),
-          item('fragment', 'low int precision rangeMin'     , gl.FRAGMENT_SHADER, gl.LOW_INT     , 'rangeMin'),
-          item('fragment', 'low int precision rangeMax'     , gl.FRAGMENT_SHADER, gl.LOW_INT     , 'rangeMax'),
-        ]
-
-        fp2.get(function (_, components) {
-          fp2.each(webglExpectedArray, function (item) {
-            expect(getComponent(components, 'webgl').indexOf(item)).not.toEqual(-1)
+    if (!onPhantomJs) {
+      describe('audio fingerprint', function () {
+        it('checks audio fingerprint', function (done) {
+          (new Fingerprint2()).get(function (_, components) {
+            expect(getComponent(components, 'audio_fp')).not.toBeNull()
+            done()
           })
-          done()
         })
       })
-    })
+    }
+
+    if (!onPhantomJs) {
+      describe('webgl shader precision format', function () {
+        it('checks webgl shader precision format loop', function (done) {
+
+          var fp2 = new Fingerprint2()
+          var gl = fp2.getWebglCanvas();
+          var item  = function (name, descr, attr1, attr2, attr3) {
+            var fmt = gl.getShaderPrecisionFormat(attr1, attr2)[attr3]
+            return ['webgl ', name, ' shader ', descr, ':', fmt].join('')
+          }
+          var webglExpectedArray = [
+            item('vertex'  , 'high float precision'           , gl.VERTEX_SHADER  , gl.HIGH_FLOAT  , 'precision'),
+            item('vertex'  , 'high float precision rangeMin'  , gl.VERTEX_SHADER  , gl.HIGH_FLOAT  , 'rangeMin'),
+            item('vertex'  , 'high float precision rangeMax'  , gl.VERTEX_SHADER  , gl.HIGH_FLOAT  , 'rangeMax'),
+            item('vertex'  , 'medium float precision'         , gl.VERTEX_SHADER  , gl.MEDIUM_FLOAT, 'precision'),
+            item('vertex'  , 'medium float precision rangeMin', gl.VERTEX_SHADER  , gl.MEDIUM_FLOAT, 'rangeMin'),
+            item('vertex'  , 'medium float precision rangeMax', gl.VERTEX_SHADER  , gl.MEDIUM_FLOAT, 'rangeMax'),
+            item('vertex'  , 'low float precision'            , gl.VERTEX_SHADER  , gl.LOW_FLOAT   , 'precision'),
+            item('vertex'  , 'low float precision rangeMin'   , gl.VERTEX_SHADER  , gl.LOW_FLOAT   , 'rangeMin'),
+            item('vertex'  , 'low float precision rangeMax'   , gl.VERTEX_SHADER  , gl.LOW_FLOAT   , 'rangeMax'),
+            item('vertex'  , 'high int precision'             , gl.VERTEX_SHADER  , gl.HIGH_INT    , 'precision'),
+            item('vertex'  , 'high int precision rangeMin'    , gl.VERTEX_SHADER  , gl.HIGH_INT    , 'rangeMin'),
+            item('vertex'  , 'high int precision rangeMax'    , gl.VERTEX_SHADER  , gl.HIGH_INT    , 'rangeMax'),
+            item('vertex'  , 'medium int precision'           , gl.VERTEX_SHADER  , gl.MEDIUM_INT  , 'precision'),
+            item('vertex'  , 'medium int precision rangeMin'  , gl.VERTEX_SHADER  , gl.MEDIUM_INT  , 'rangeMin'),
+            item('vertex'  , 'medium int precision rangeMax'  , gl.VERTEX_SHADER  , gl.MEDIUM_INT  , 'rangeMax'),
+            item('vertex'  , 'low int precision'              , gl.VERTEX_SHADER  , gl.LOW_INT     , 'precision'),
+            item('vertex'  , 'low int precision rangeMin'     , gl.VERTEX_SHADER  , gl.LOW_INT     , 'rangeMin'),
+            item('vertex'  , 'low int precision rangeMax'     , gl.VERTEX_SHADER  , gl.LOW_INT     , 'rangeMax'),
+            item('fragment', 'high float precision'           , gl.FRAGMENT_SHADER, gl.HIGH_FLOAT  , 'precision'),
+            item('fragment', 'high float precision rangeMin'  , gl.FRAGMENT_SHADER, gl.HIGH_FLOAT  , 'rangeMin'),
+            item('fragment', 'high float precision rangeMax'  , gl.FRAGMENT_SHADER, gl.HIGH_FLOAT  , 'rangeMax'),
+            item('fragment', 'medium float precision'         , gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT, 'precision'),
+            item('fragment', 'medium float precision rangeMin', gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT, 'rangeMin'),
+            item('fragment', 'medium float precision rangeMax', gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT, 'rangeMax'),
+            item('fragment', 'low float precision'            , gl.FRAGMENT_SHADER, gl.LOW_FLOAT   , 'precision'),
+            item('fragment', 'low float precision rangeMin'   , gl.FRAGMENT_SHADER, gl.LOW_FLOAT   , 'rangeMin'),
+            item('fragment', 'low float precision rangeMax'   , gl.FRAGMENT_SHADER, gl.LOW_FLOAT   , 'rangeMax'),
+            item('fragment', 'high int precision'             , gl.FRAGMENT_SHADER, gl.HIGH_INT    , 'precision'),
+            item('fragment', 'high int precision rangeMin'    , gl.FRAGMENT_SHADER, gl.HIGH_INT    , 'rangeMin'),
+            item('fragment', 'high int precision rangeMax'    , gl.FRAGMENT_SHADER, gl.HIGH_INT    , 'rangeMax'),
+            item('fragment', 'medium int precision'           , gl.FRAGMENT_SHADER, gl.MEDIUM_INT  , 'precision'),
+            item('fragment', 'medium int precision rangeMin'  , gl.FRAGMENT_SHADER, gl.MEDIUM_INT  , 'rangeMin'),
+            item('fragment', 'medium int precision rangeMax'  , gl.FRAGMENT_SHADER, gl.MEDIUM_INT  , 'rangeMax'),
+            item('fragment', 'low int precision'              , gl.FRAGMENT_SHADER, gl.LOW_INT     , 'precision'),
+            item('fragment', 'low int precision rangeMin'     , gl.FRAGMENT_SHADER, gl.LOW_INT     , 'rangeMin'),
+            item('fragment', 'low int precision rangeMax'     , gl.FRAGMENT_SHADER, gl.LOW_INT     , 'rangeMax'),
+          ]
+
+          fp2.get(function (_, components) {
+            fp2.each(webglExpectedArray, function (item) {
+              expect(getComponent(components, 'webgl').indexOf(item)).not.toEqual(-1)
+            })
+            done()
+          })
+        })
+      })
+    }
 
     describe('preprocessor', function () {
       it('checks that preprocessor not used by default', function (done) {
