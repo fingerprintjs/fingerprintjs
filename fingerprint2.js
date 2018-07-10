@@ -117,7 +117,7 @@
 
       var AudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext
 
-      if (AudioContext === null) {
+      if (AudioContext == null) {
         keys.addPreprocessedComponent({key: 'audio_fp', value: null})
         return done(keys)
       }
