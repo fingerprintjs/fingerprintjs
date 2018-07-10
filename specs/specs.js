@@ -176,11 +176,8 @@ describe('Fingerprint2', function () {
     describe('baseFontArray iteration', function () {
       it('only iterates specified items', function (done) {
         var baseFonts = ['monospace', 'sans-serif', 'serif']
-        var ctr = 0
-        for (var _ in baseFonts) {
-          (() => 'ignored')(_)
-          ctr++
-        }
+        // eslint-disable-next-line
+        var ctr = 0; for (var _ in baseFonts) { ctr++ }
 
         expect(baseFonts.length).toEqual(3)
         expect(ctr).toEqual(baseFonts.length)
