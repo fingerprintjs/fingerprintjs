@@ -116,6 +116,12 @@
       }
 
       var AudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext
+
+      if (AudioContext === null) {
+        keys.addPreprocessedComponent({key: 'audio_fp', value: null})
+        return done(keys)
+      }
+
       var context = new AudioContext(1, 44100, 44100)
 
       var oscillator = context.createOscillator()
@@ -172,7 +178,7 @@
     languageKey: function (keys) {
       if (!this.options.excludeLanguage) {
         // IE 9,10 on Windows 10 does not have the `navigator.language` property any longer
-        keys.addPreprocessedComponent({ key: 'language', value: navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || '' })
+        keys.addPreprocessedComponent({key: 'language', value: navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || ''})
       }
       return keys
     },
