@@ -1,5 +1,5 @@
 /* global jasmine, describe, spyOn, it, expect, Fingerprint2 */
-'use strict'
+'use strict';
 describe('Fingerprint2', function () {
   describe('new', function () {
     it('creates a new instance of FP2', function () {
@@ -390,4 +390,4 @@ describe('Fingerprint2', function () {
     })
 
   })
-})
+});
