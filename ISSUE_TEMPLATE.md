@@ -1,13 +1,17 @@
-Before submitting an issue:
+**ALL** BUG REPORTS MUST USE THIS TEMPLATE. BUG REPORTS NOT USING THE TEMPLATE ARE SUBJECT TO BEING CLOSED WITHOUT COMMMENT.
 
-- Read this: https://github.com/Valve/fingerprintjs2/blob/master/FAQ.md
-- Follow these instructions: https://github.com/Valve/fingerprintjs2/blob/master/CONTRIBUTING.md
+### Problem description
 
-1) I checked that my issue is not already fixed in GitHub master:
+- Your bug report here
 
-2) My fingerprint retrieved with [this jsfiddle](https://jsfiddle.net/L2gLq4rg/) is:
-   ```
-   ...
-   ```
+If you're seeing two different fingerprints for the same device/browser, please provide the details of both fingerprints using this jsfiddle: https://jsfiddle.net/L2gLq4rg/
 
-3) My device is:
+### Fingerprintjs2 version and devices used
+
+- I can reproduce the bug in fingerprintjs versions: 1.X, 1.Y, master/GitHub
+- I can reproduce the bug on these devices: iPhone XYZ
+
+### Minimal reproducing example
+
+- I can reproduce the bug with this jsfiddle: https://jsfiddle.net/L2gLq4rg/
+- Alternatively, I have provided a jsfiddle that reproduces the bug here: <jsfiddle url>
