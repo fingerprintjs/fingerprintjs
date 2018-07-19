@@ -10,7 +10,7 @@ function getComponent(components, key) {
   throw new Error('Component not found: ' + key)
 }
 
-onPhantomJs = window._phantom != null
+var onPhantomJs = window._phantom != null
 
 describe('Fingerprint2', function () {
   describe('new', function () {
