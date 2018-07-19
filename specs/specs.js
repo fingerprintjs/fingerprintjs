@@ -351,7 +351,8 @@ describe('Fingerprint2', function () {
             return value
           }
         }
-        (new Fingerprint2(options)).get(function (_, components) {
+        var fp2 = new Fingerprint2(options)
+        fp2.get(function (_, components) {
           expect(getComponent(components, 'user_agent')).toEqual('MyUserAgent')
           done()
         })
