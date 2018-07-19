@@ -1,7 +1,7 @@
 /* global jasmine, describe, spyOn, it, expect, Fingerprint2 */
 'use strict'
 
-function getComponent(components, key) {
+function getComponent (components, key) {
   for (var x = 0; x < components.length; x++) {
     if (components[x].key === key) {
       return components[x].value
@@ -194,8 +194,8 @@ describe('Fingerprint2', function () {
         Array.prototype.foo = 1
         // eslint-disable-next-line
         Array.prototype.bar = 2
-        ctr = 0
-        for (var y in baseFonts) {
+        // eslint-disable-next-line
+        ctr = 0; for (var _ in baseFonts) {
           ctr++
           // Now foo & bar is a part of EVERY array and
           // will show up here as a value of 'x'.
@@ -278,14 +278,13 @@ describe('Fingerprint2', function () {
     if (!onPhantomJs) {
       describe('webgl shader precision format', function () {
         it('checks webgl shader precision format loop', function (done) {
-
           var fp2 = new Fingerprint2()
-          var gl = fp2.getWebglCanvas();
-          var item  = function (name, descr, attr1, attr2, attr3) {
+          var gl = fp2.getWebglCanvas()
+          var item = function (name, descr, attr1, attr2, attr3) {
             var fmt = gl.getShaderPrecisionFormat(attr1, attr2)[attr3]
             return ['webgl ', name, ' shader ', descr, ':', fmt].join('')
           }
-          var webglExpectedArray = [
+          var webglExpectedArray = [ /* eslint-disable */
             item('vertex'  , 'high float precision'           , gl.VERTEX_SHADER  , gl.HIGH_FLOAT  , 'precision'),
             item('vertex'  , 'high float precision rangeMin'  , gl.VERTEX_SHADER  , gl.HIGH_FLOAT  , 'rangeMin'),
             item('vertex'  , 'high float precision rangeMax'  , gl.VERTEX_SHADER  , gl.HIGH_FLOAT  , 'rangeMax'),
