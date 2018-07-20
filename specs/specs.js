@@ -10,7 +10,7 @@ function getComponent(components, key) {
   throw new Error('Component not found: ' + key)
 }
 
-onPhantomJs = window._phantom != null
+var onPhantomJs = window._phantom != null
 
 describe('Fingerprint2', function () {
   describe('new', function () {
@@ -145,6 +145,34 @@ describe('Fingerprint2', function () {
           done()
         })
       })
+      if (!onPhantomJs) {
+        describe('maxLength option', function () {
+          it('compares length of canvas value', function (done) {
+            var fp2 = new Fingerprint2({maxLength: 200})
+            fp2.get(function (_, components) {
+              expect(getComponent(components, 'canvas').length).toEqual(fp2.options.maxLength)
+              done()
+            })
+          })
+
+          it('compares length of webgl value', function (done) {
+            var fp2 = new Fingerprint2({maxLength: 400})
+            fp2.get(function (_, components) {
+              expect(getComponent(components, 'webgl').length).toEqual(fp2.options.maxLength)
+              done()
+            })
+          })
+
+          it('compares canvas fp value with maxLengthSalt option', function (done) {
+            var fp2 = new Fingerprint2({maxLength: 500, maxLengthSalt: 12534123512})
+            fp2.get(function (_, components) {
+              var canvasFp = fp2.getCanvasFp()
+              expect(getComponent(components, 'canvas')).toEqual(fp2.getSubstrByMaxLength(canvasFp))
+              done()
+            })
+          })
+        })
+      }
     })
 
     describe('returns components', function () {

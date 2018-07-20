@@ -299,15 +299,28 @@
     },
     canvasKey: function (keys) {
       if (!this.options.excludeCanvas && this.isCanvasSupported()) {
-        keys.addPreprocessedComponent({key: 'canvas', value: this.getCanvasFp()})
+        var canvasFp = this.getCanvasFp()
+        keys.addPreprocessedComponent({key: 'canvas', value: (typeof this.options.maxLength === 'number') ? this.getSubstrByMaxLength(canvasFp) : canvasFp})
       }
       return keys
     },
     webglKey: function (keys) {
       if (!this.options.excludeWebGL && this.isWebGlSupported()) {
-        keys.addPreprocessedComponent({key: 'webgl', value: this.getWebglFp()})
+        var webGlFp = this.getWebglFp()
+        keys.addPreprocessedComponent({key: 'webgl', value: (typeof this.options.maxLength === 'number') ? this.getSubstrByMaxLength(webGlFp) : webGlFp})
       }
       return keys
+    },
+    getSubstrByMaxLength: function (targetString) {
+      var salt = this.getSalt()
+      var startPointMaxValue = targetString.length - this.options.maxLength
+      var startPoint = (startPointMaxValue > 0) ? salt % startPointMaxValue : 0
+
+      return targetString.substring(startPoint, startPoint + this.options.maxLength)
+    },
+    getSalt: function () {
+      var numberOfUserAgent = (this.options.excludeUserAgent) ? 165928639842698 : (parseInt(this.getUserAgent().replace(/[^0-9]/g, '')) || 0)
+      return (typeof this.options.maxLengthSalt === 'number' && this.options.maxLengthSalt > 0) ? this.options.maxLengthSalt : numberOfUserAgent
     },
     webglVendorAndRendererKey: function (keys) {
       if (!this.options.excludeWebGLVendorAndRenderer && this.isWebGlSupported()) {

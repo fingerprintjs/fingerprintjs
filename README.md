@@ -122,6 +122,33 @@ new Fingerprint2({
 });
 ```
 
+#### `maxLength` option
+
+In some cases, if the length of the canvas and webgl fingerprint are too large, it can cause performance degradation. To prevent this, you can limit the length of the canvas and webgl fingerprint. **It is recommended to set it to 200 or more.**  
+  
+If you do not set the `maxLengthSalt` option when restricting length of canvas and webgl fingerprints, their length will be truncated based on UserAgent. However, if the excludeUserAgent option is enabled, they are restricted by static integer value (ex. 165928639842698).
+
+```js
+new Fingerprint2({
+  maxLength: 200
+}).get(function(result, components) {
+  console.log(result, components)
+})
+```
+
+#### `maxLengthSalt` option
+
+`maxLength` option is used with this option. `maxLengthSalt` option value is used instead of UserAgent when canvas and webgl fingerprint gets restricted by `maxLength` option value. **maxLengthSalt option value must be an integer greater than 0.**
+
+```js
+new Fingerprint2({
+  maxLength: 200
+  maxLengthSalt: 151233132312312 // it must be > 0
+}).get(function(result, components) {
+  console.log(result, components)
+})
+```
+
 #### View the fingerprint locally
 
 You can view your browser fingerprint locally by starting a webserver and viewing the `index.html` page.
