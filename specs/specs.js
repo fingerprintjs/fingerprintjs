@@ -265,6 +265,19 @@ describe('Fingerprint2', function () {
     })
 
     if (!onPhantomJs) {
+      describe('enumerate devices fingerprint', function () {
+        it('checks enumerate devices fingerprint', function (done) {
+          var fp2 = new Fingerprint2(); 
+          fp2.get(function (_, components) {
+            if(fp2.isEnumerateDevicesSupported())
+              expect(getComponent(components, 'enumerate_devices')).not.toBeNull()
+            done()
+          })
+        })
+      })
+    }
+
+    if (!onPhantomJs) {
       describe('audio fingerprint', function () {
         it('checks audio fingerprint', function (done) {
           (new Fingerprint2()).get(function (_, components) {
