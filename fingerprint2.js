@@ -95,19 +95,43 @@
       keys = this.customEntropyFunction(keys)
       this.fontsKey(keys, function (keysWithFont) {
         that.audioKey(keysWithFont, function (newKeys) {
-          var values = []
-          that.each(newKeys.data, function (pair) {
-            var value = pair.value
-            if (value && typeof value.join === 'function') {
-              values.push(value.join(';'))
-            } else {
-              values.push(value)
-            }
+          that.enumerateDevicesKey(newKeys, function (keysWithDevices) {
+            var values = []
+            that.each(keysWithDevices.data, function (pair) {
+              var value = pair.value
+              if (value && typeof value.join === 'function') {
+                values.push(value.join(';'))
+              } else {
+                values.push(value)
+              }
+            })
+            var murmur = that.x64hash128(values.join('~~~'), 31)
+            return done(murmur, keysWithDevices.data)
           })
-          var murmur = that.x64hash128(values.join('~~~'), 31)
-          return done(murmur, newKeys.data)
         })
       })
+    },
+    // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices
+    enumerateDevicesKey: function (keys, done) {
+      if (this.options.excludeEnumerateDevices || !this.isEnumerateDevicesSupported()) {
+        return done(keys)
+      }
+
+      navigator.mediaDevices.enumerateDevices()
+      .then(function (devices) {
+        var enumerateDevicesFp = []
+        devices.forEach(function (device) {
+          enumerateDevicesFp.push('id=' + device.deviceId + ';gid=' + device.groupId + ';' + device.kind + ';' + device.label)
+        })
+        keys.addPreprocessedComponent({key: 'enumerate_devices', value: enumerateDevicesFp})
+        return done(keys)
+      })
+      .catch(function (e) {
+        return done(keys)
+      })
+    },
+    isEnumerateDevicesSupported: function () {
+      return (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices)
     },
     // Inspired by and based on https://github.com/cozylife/audio-fingerprint
     audioKey: function (keys, done) {
