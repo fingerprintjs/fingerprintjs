@@ -17,7 +17,6 @@ gulp.task('lint', function () {
 })
 
 gulp.task('minify', function () {
-  console.log(year);
   return gulp
       .src('fingerprint2.js')
       .pipe(rename({suffix: '.min'}))
