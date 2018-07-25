@@ -135,7 +135,7 @@
     },
     // Inspired by and based on https://github.com/cozylife/audio-fingerprint
     audioKey: function (keys, done) {
-      if (this.options.excludeAudioFP) {
+      if (this.options.excludeAudio) {
         return done(keys)
       }
 
