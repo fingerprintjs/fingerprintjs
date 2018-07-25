@@ -121,7 +121,7 @@
       .then(function (devices) {
         var enumerateDevicesFp = []
         devices.forEach(function (device) {
-          enumerateDevicesFp.push(device.kind + ':' + device.label + 'id=' + device.deviceId)
+          enumerateDevicesFp.push('id=' + device.deviceId + ';gid=' + device.groupId + ';' + device.kind + ';' + device.label)
         })
         keys.addPreprocessedComponent({key: 'enumerate_devices', value: enumerateDevicesFp})
         return done(keys)
@@ -135,7 +135,7 @@
     },
     // Inspired by and based on https://github.com/cozylife/audio-fingerprint
     audioKey: function (keys, done) {
-      if (this.options.excludeAudioFP) {
+      if (this.options.excludeAudio) {
         return done(keys)
       }
 

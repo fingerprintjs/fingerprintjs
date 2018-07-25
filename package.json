@@ -22,6 +22,7 @@
   "main": "dist/fingerprint2.min.js",
   "devDependencies": {
     "gulp": "^3.9.1",
+    "gulp-header-license": "^1.0.9",
     "gulp-rename": "^1.2.2",
     "gulp-standard": "^10.1.1",
     "gulp-uglify": "^3.0.0",

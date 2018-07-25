@@ -3,3 +3,4 @@ node_modules/
 fingerprintjs2.iml
 *.log
 package-lock.json
+dist/
