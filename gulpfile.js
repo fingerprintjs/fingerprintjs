@@ -30,7 +30,7 @@ gulp.task('minify', function () {
       }).on('error', function (e) {
         console.log(e)
       }))
-      .pipe(license(fs.readFileSync('license.txt', 'utf8'), {YEAR: year, }, 0.9))
+      .pipe(license(fs.readFileSync('license.txt', 'utf8'), {YEAR: year}, 0.9))
       .pipe(gulp.dest('dist/'))
 })
 
