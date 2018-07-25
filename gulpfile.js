@@ -2,9 +2,9 @@ const gulp = require('gulp')
 const standard = require('gulp-standard')
 const rename = require('gulp-rename')
 const uglify = require('gulp-uglify')
-const license = require('gulp-header-license');
-const fs = require('fs');
-const year = (new Date()).getFullYear();
+const license = require('gulp-header-license')
+const fs = require('fs')
+const year = (new Date()).getFullYear()
 
 gulp.task('lint', function () {
   return gulp
