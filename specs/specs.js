@@ -262,6 +262,18 @@ describe('Fingerprint2', function () {
           done()
         })
       })
+      it('with customKey option changes the key', function (done) {
+        var fp = new Fingerprint2({
+          customFunction: function () {
+            return 'RANDOM_STRING'
+          },
+          customKey: 'TEST_STRING'
+        })
+        fp.get(function (_, components) {
+          expect(getComponent(components, 'TEST_STRING')).toEqual('RANDOM_STRING')
+          done()
+        })
+      })
     })
 
     if (!onPhantomJs) {
