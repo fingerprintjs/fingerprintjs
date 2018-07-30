@@ -122,6 +122,38 @@ new Fingerprint2({
 });
 ```
 
+#### `customFunction` option 
+
+`customFunction` option concatinates the current keys with the `customFunction` output. The key of the component will be set to `custom`.  
+For example: add ip value to keys
+
+``` js
+new Fingerprint2({
+  customFunction: function() {
+    return '172.0.0.1'
+  }
+}).get(function(result, components) {
+  // component with 'custom' key will contain '172.0.0.1'
+  console.log(result, components)
+});
+```
+
+##### `customKey` option
+
+`customKey` option allows you to change the key of the component. customKey must be string
+
+``` js
+new Fingerprint2({
+  customFunction: function() {
+    return '172.0.0.1'
+  },
+  customKey: 'ip'
+}).get(function(result, components) {
+  // component with 'ip' key will contain '172.0.0.1'
+  console.log(result, components)
+});
+```
+
 #### View the fingerprint locally
 
 You can view your browser fingerprint locally by starting a webserver and viewing the `index.html` page.
