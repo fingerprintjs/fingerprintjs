@@ -185,7 +185,8 @@
     },
     customEntropyFunction: function (keys) {
       if (typeof this.options.customFunction === 'function') {
-        keys.addPreprocessedComponent({key: 'custom', value: this.options.customFunction()})
+        var customKey = typeof this.options.customKey === 'string' ? this.options.customKey : 'custom'
+        keys.addPreprocessedComponent({key: customKey, value: this.options.customFunction()})
       }
       return keys
     },
