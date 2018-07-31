@@ -36,8 +36,14 @@
       detectScreenOrientation: true,
       sortPluginsFor: [/palemoon/i],
       userDefinedFonts: [],
+      // DNT depends on incognito mode for some browsers (Chrome) and it's impossible to detect incognito mode
       excludeDoNotTrack: true,
-      excludePixelRatio: true
+      // devicePixelRatio depends on browser zoom, and it's impossible to detect browser zoom
+      excludePixelRatio: true,
+      // On iOS 11, audio context can only be used in response to user interaction.
+      // We require users to explicitly enable audio fingerprinting on iOS 11.
+      // See https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
+      excludeAudioIOS11: true,
     }
     this.options = this.extend(options, defaultOptions)
     this.nativeForEach = Array.prototype.forEach
@@ -139,6 +145,11 @@
         return done(keys)
       }
 
+      if (this.options.excludeAudioIOS11 && navigator.userAgent.match(/OS 11.+Version\/11.+Safari/)) {
+        // See comment for excludeUserAgent and https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
+        return done(keys)
+      }
+
       var AudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext
 
       if (AudioContext == null) {
@@ -166,7 +177,13 @@
         }
       })
 
+      var oncompleteTimeout = setTimeout(function () {
+        console.warn('Audio fingerprint timed out. Please report bug at https://github.com/Valve/fingerprintjs2 with your user agent: "' + navigator.userAgent + '".')
+        return done(keys)
+      }, 1000)
+
       context.oncomplete = function (event) {
+        clearTimeout(oncompleteTimeout)
         var fingerprint = event.renderedBuffer.getChannelData(0)
                      .slice(4500, 5000)
                      .reduce(function (acc, val) { return acc + Math.abs(val) }, 0)
