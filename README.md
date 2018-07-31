@@ -63,7 +63,9 @@ This option can incur even more overhead on mobile Firefox browsers, which is mu
 
 To speed up fingerprint computation, you can exclude font detection (~ 40ms), canvas fingerprint (~ 10ms),  WebGL fingerprint (~ 35 ms), and Audio fingerprint (~30 ms).
 
-## Future development
+## Other
+
+### Future development
 
 Many more fingerprinting sources will be implemented, such as (in no particular order)
 
@@ -79,8 +81,6 @@ Many more fingerprinting sources will be implemented, such as (in no particular 
 * List of supported gestures (for touch-enabled devices)
 * Pixel density
 * Video and audio codecs availability
-
-## Other
 
 ### To recompile the `FontList.swf` file:
 
