@@ -35,6 +35,7 @@
       swfPath: 'flash/compiled/FontList.swf',
       detectScreenOrientation: true,
       sortPluginsFor: [/palemoon/i],
+      // To ensure consistent fingerprints when users rotate their mobile devices
       userDefinedFonts: [],
       // DNT depends on incognito mode for some browsers (Chrome) and it's impossible to detect incognito mode
       excludeDoNotTrack: true,
