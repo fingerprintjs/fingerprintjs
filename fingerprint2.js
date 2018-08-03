@@ -44,7 +44,7 @@
       // On iOS 11, audio context can only be used in response to user interaction.
       // We require users to explicitly enable audio fingerprinting on iOS 11.
       // See https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
-      excludeAudioIOS11: true,
+      excludeAudioIOS11: true
     }
     this.options = this.extend(options, defaultOptions)
     this.nativeForEach = Array.prototype.forEach
@@ -65,9 +65,9 @@
       var timeNow = function () {
         // Inspired from https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
         var time = window && window.performance && window.performance.now()
-        return time ? time : new Date().getTime()
+        return time && new Date().getTime()
       }
-      var start_time = timeNow()
+      var startTime = timeNow()
       var keys = {
         data: [],
         addPreprocessedComponent: function (pair) {
@@ -75,12 +75,12 @@
           if (typeof that.options.preprocessor === 'function') {
             componentValue = that.options.preprocessor(pair.key, componentValue)
           }
-          if(that.options.measurePerformance) {
-            keys.data.push({key: pair.key, value: componentValue, time: timeNow() - start_time})
-            start_time = timeNow()
-          }
-          else 
+          if (that.options.measurePerformance) {
+            keys.data.push({key: pair.key, value: componentValue, time: timeNow() - startTime})
+            startTime = timeNow()
+          } else {
             keys.data.push({key: pair.key, value: componentValue})
+          }
         }
       }
       keys = this.userAgentKey(keys)
