@@ -62,6 +62,12 @@
     },
     get: function (done) {
       var that = this
+      var timeNow = function () {
+        // Inspired from https://developer.mozilla.org/en-US/docs/Web/API/Performance/now
+        var time = window && window.performance && window.performance.now()
+        return time ? time : new Date().getTime()
+      }
+      var start_time = timeNow()
       var keys = {
         data: [],
         addPreprocessedComponent: function (pair) {
@@ -69,7 +75,12 @@
           if (typeof that.options.preprocessor === 'function') {
             componentValue = that.options.preprocessor(pair.key, componentValue)
           }
-          keys.data.push({key: pair.key, value: componentValue})
+          if(that.options.measurePerformance) {
+            keys.data.push({key: pair.key, value: componentValue, time: timeNow() - start_time})
+            start_time = timeNow()
+          }
+          else 
+            keys.data.push({key: pair.key, value: componentValue})
         }
       }
       keys = this.userAgentKey(keys)
