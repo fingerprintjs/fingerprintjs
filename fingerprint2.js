@@ -298,7 +298,7 @@
       return keys
     },
     localStorageKey: function (keys) {
-      if (!this.options.excludeLocaltorage && this.hasLocalStorage()) {
+      if (!this.options.excludeLocalStorage && this.hasLocalStorage()) {
         keys.addPreprocessedComponent({key: 'local_storage', value: 1})
       }
       return keys
