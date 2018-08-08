@@ -145,6 +145,14 @@ describe('Fingerprint2', function () {
           done()
         })
       })
+
+      it('does not use timezone when excluded', function (done) {
+        var fp2 = new Fingerprint2({excludeTimezone: true})
+        fp2.get(function (result, components) {
+          expect(components).not.toContain(jasmine.objectContaining({"key": "timezone"}))
+          done()
+        })
+      })
     })
 
     describe('returns components', function () {

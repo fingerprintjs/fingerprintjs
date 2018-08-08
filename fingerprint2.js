@@ -81,6 +81,7 @@
       keys = this.screenResolutionKey(keys)
       keys = this.availableScreenResolutionKey(keys)
       keys = this.timezoneOffsetKey(keys)
+      keys = this.timezoneKey(keys)
       keys = this.sessionStorageKey(keys)
       keys = this.localStorageKey(keys)
       keys = this.indexedDbKey(keys)
@@ -288,6 +289,16 @@
     timezoneOffsetKey: function (keys) {
       if (!this.options.excludeTimezoneOffset) {
         keys.addPreprocessedComponent({key: 'timezone_offset', value: new Date().getTimezoneOffset()})
+      }
+      return keys
+    },
+    timezoneKey: function (keys) {
+      if (!this.options.excludeTimezone) {
+        var value = null
+        if (window.Intl && window.Intl.DateTimeFormat) {
+          value = new window.Intl.DateTimeFormat().resolvedOptions().timeZone
+        }
+        keys.addPreprocessedComponent({key: 'timezone', value: value})
       }
       return keys
     },
