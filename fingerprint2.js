@@ -44,7 +44,7 @@
       // On iOS 11, audio context can only be used in response to user interaction.
       // We require users to explicitly enable audio fingerprinting on iOS 11.
       // See https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
-      excludeAudioIOS11: true,
+      excludeAudioIOS11: true
     }
     this.options = this.extend(options, defaultOptions)
     this.nativeForEach = Array.prototype.forEach
