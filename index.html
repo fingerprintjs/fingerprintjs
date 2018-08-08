@@ -78,6 +78,13 @@
 
   <script src="fingerprint2.js"></script>
   <script>
+    function escapeHTML (str){
+        var div = document.createElement('div');
+        var text = document.createTextNode(str);
+        div.appendChild(text);
+        return div.innerHTML;
+    }
+
     document.querySelector("#btn").addEventListener("click", function () {
       var d1 = new Date();
       var fp = new Fingerprint2();
@@ -90,7 +97,7 @@
           console.log(result);
           for (var index in components) {
             var obj = components[index];
-            var value = obj.value;
+            var value = obj.value !== null ? escapeHTML(obj.value) : "-";
             var line = obj.key + " = " + value.toString().substr(0, 100);
             console.log(line);
             details += line + "<br />";
