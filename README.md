@@ -2,6 +2,7 @@
 
 [![](https://travis-ci.org/Valve/fingerprintjs2.svg?branch=master)](https://travis-ci.org/Valve/fingerprintjs2)
 [![](https://badges.gitter.im/Valve/fingerprintjs2.svg)](https://gitter.im/Valve/fingerprintjs2)
+[![npm](https://img.shields.io/npm/dm/fingerprintjs2.svg)][npm-link]
 
 <a href="https://www.patreon.com/bePatron?u=7954991" data-patreon-widget-type="become-patron-button">Support library on Patreon!</a>
 
@@ -93,3 +94,4 @@ Many more fingerprinting sources will be implemented, such as (in no particular 
 https://player.vimeo.com/video/151208427
 
 #### License: MIT or Apache, whichever you prefer.
+[npm-link]: https://www.npmjs.com/package/fingerprintjs2
