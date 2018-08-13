@@ -72,6 +72,8 @@
           keys.data.push({key: pair.key, value: componentValue})
         }
       }
+      keys = this.isSilverlightKey(keys)
+      keys = this.silverlightVersionKey(keys)
       keys = this.userAgentKey(keys)
       keys = this.languageKey(keys)
       keys = this.colorDepthKey(keys)
@@ -208,6 +210,32 @@
         keys.addPreprocessedComponent({key: customKey, value: this.options.customFunction()})
       }
       return keys
+    },
+    isSilverlightKey: function(keys){
+      if (!this.options.excludeIsSilverlight){
+          keys.addPreprocessedComponent({key: 'is_silverlight', value:this.getIsSilverlight()})
+      }
+      return keys
+    },
+    getIsSilverlight: function() {
+      var objPlugin = navigator.plugins["Silverlight Plug-In"];
+      if (objPlugin) {
+        return true;
+      }
+      return false;
+    },
+    silverlightVersionKey: function(keys){
+      if (!this.options.excludeSilverlightVersion){
+          keys.addPreprocessedComponent({key: 'silverlight_version', value:this.getSilverlightVersion()})
+      }
+      return keys
+    },
+    getSilverlightVersion: function() {
+      if (this.getIsSilverlight()) {
+        var objPlugin = navigator.plugins["Silverlight Plug-In"];
+        return objPlugin.description;
+      }
+      return "unknown";
     },
     userAgentKey: function (keys) {
       if (!this.options.excludeUserAgent) {
