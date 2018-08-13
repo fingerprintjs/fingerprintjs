@@ -76,6 +76,7 @@
       keys = this.silverlightVersionKey(keys)
       keys = this.isMimeTypesKey(keys)
       keys = this.mimeTypesKey(keys)
+      keys = this.isCookieKey(keys)
       keys = this.userAgentKey(keys)
       keys = this.languageKey(keys)
       keys = this.colorDepthKey(keys)
@@ -268,6 +269,12 @@
         }
       }
       return mimeTypeList;
+    },
+    isCookieKey: function(keys) {
+      if (!this.options.excludeMimeTypes){
+          keys.addPreprocessedComponent({key: 'is_cookie', value:navigator.cookieEnabled})
+      }
+      return keys
     },
     userAgentKey: function (keys) {
       if (!this.options.excludeUserAgent) {
