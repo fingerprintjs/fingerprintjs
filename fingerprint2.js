@@ -74,6 +74,8 @@
       }
       keys = this.isSilverlightKey(keys)
       keys = this.silverlightVersionKey(keys)
+      keys = this.isMimeTypesKey(keys)
+      keys = this.mimeTypesKey(keys)
       keys = this.userAgentKey(keys)
       keys = this.languageKey(keys)
       keys = this.colorDepthKey(keys)
@@ -236,6 +238,36 @@
         return objPlugin.description;
       }
       return "unknown";
+    },
+    isMimeTypesKey: function(keys){
+      if (!this.options.excludeIsMimeTypes){
+          keys.addPreprocessedComponent({key: 'is_mime_types', value:this.getIsMimeTypes()})
+      }
+      return keys
+    },
+    getIsMimeTypes: function() {
+      if (navigator.mimeTypes.length) {
+        return true;
+      }
+      return false;
+    },
+    mimeTypesKey: function (keys){
+      if (!this.options.excludeMimeTypes){
+          keys.addPreprocessedComponent({key: 'mime_types', value:this.getMimeTypes()})
+      }
+      return keys
+    },
+    getMimeTypes: function() {
+      var mimeTypeList = "";
+
+      for (var i = 0; i < navigator.mimeTypes.length; i++) {
+        if (i == navigator.mimeTypes.length - 1) {
+          mimeTypeList += navigator.mimeTypes[i].description;
+        } else {
+          mimeTypeList += navigator.mimeTypes[i].description + ", ";
+        }
+      }
+      return mimeTypeList;
     },
     userAgentKey: function (keys) {
       if (!this.options.excludeUserAgent) {
