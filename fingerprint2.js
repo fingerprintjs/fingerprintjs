@@ -76,7 +76,6 @@
       keys = this.flashVersionKey(keys)
       keys = this.hasSilverlightKey(keys)
       keys = this.silverlightVersionKey(keys)
-      keys = this.isMimeTypesKey(keys)
       keys = this.mimeTypesKey(keys)
       keys = this.isCookieKey(keys)
       keys = this.userAgentKey(keys)
@@ -268,18 +267,6 @@
       }
       return "unknown";
     },
-    isMimeTypesKey: function(keys){
-      if (!this.options.excludeIsMimeTypes){
-          keys.addPreprocessedComponent({key: 'is_mime_types', value:this.getIsMimeTypes()})
-      }
-      return keys
-    },
-    getIsMimeTypes: function() {
-      if (navigator.mimeTypes.length) {
-        return true;
-      }
-      return false;
-    },
     mimeTypesKey: function (keys){
       if (!this.options.excludeMimeTypes){
           keys.addPreprocessedComponent({key: 'mime_types', value:this.getMimeTypes()})
@@ -287,16 +274,14 @@
       return keys
     },
     getMimeTypes: function() {
-      var mimeTypeList = "";
-
-      for (var i = 0; i < navigator.mimeTypes.length; i++) {
-        if (i == navigator.mimeTypes.length - 1) {
-          mimeTypeList += navigator.mimeTypes[i].description;
-        } else {
-          mimeTypeList += navigator.mimeTypes[i].description + ", ";
+      var mimeTypeList = [];
+      if (navigator.mimeTypes.length){
+        for (var i = 0; i < navigator.mimeTypes.length; i++) {
+          mimeTypeList.push(navigator.mimeTypes[i].description);
         }
+        return mimeTypeList.join(",");
       }
-      return mimeTypeList;
+      return "unknown" 
     },
     isCookieKey: function(keys) {
       if (!this.options.excludeMimeTypes){
