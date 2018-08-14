@@ -74,7 +74,7 @@
       }
       keys = this.hasFlashKey(keys)
       keys = this.flashVersionKey(keys)
-      keys = this.isSilverlightKey(keys)
+      keys = this.hasSilverlightKey(keys)
       keys = this.silverlightVersionKey(keys)
       keys = this.isMimeTypesKey(keys)
       keys = this.mimeTypesKey(keys)
@@ -242,13 +242,13 @@
       }
       return "unknown";
     },
-    isSilverlightKey: function(keys){
-      if (!this.options.excludeIsSilverlight){
-          keys.addPreprocessedComponent({key: 'is_silverlight', value:this.getIsSilverlight()})
+    hasSilverlightKey: function(keys){
+      if (!this.options.excludeHasSilverlight){
+          keys.addPreprocessedComponent({key: 'has_silverlight', value:this.getHasSilverlight()})
       }
       return keys
     },
-    getIsSilverlight: function() {
+    getHasSilverlight: function() {
       var objPlugin = navigator.plugins["Silverlight Plug-In"];
       if (objPlugin) {
         return true;
@@ -262,7 +262,7 @@
       return keys
     },
     getSilverlightVersion: function() {
-      if (this.getIsSilverlight()) {
+      if (this.getHasSilverlight()) {
         var objPlugin = navigator.plugins["Silverlight Plug-In"];
         return objPlugin.description;
       }
