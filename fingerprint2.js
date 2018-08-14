@@ -72,6 +72,8 @@
           keys.data.push({key: pair.key, value: componentValue})
         }
       }
+      keys = this.hasJavaKey(keys)
+      keys = this.javaVersionKey(keys)
       keys = this.hasFlashKey(keys)
       keys = this.flashVersionKey(keys)
       keys = this.hasSilverlightKey(keys)
@@ -233,6 +235,29 @@
           keys.addPreprocessedComponent({key: 'flash_version', value:this.getFlashVersion()})
       }
       return keys
+    },
+    hasJavaKey: function (keys){
+      if (!this.options.excludeHasJava) {
+        keys.addPreprocessedComponent({key: 'has_java', value: navigator.javaEnabled()})
+      }
+      return keys
+    },
+    javaVersionKey: function (keys){
+      if (!this.options.excludeJavaVersion){
+        keys.addPreprocessedComponent({key: 'java_version', value: this.getJavaVersion()})
+      }
+      return keys
+    },
+    getJavaVersion: function(){
+      if (navigator.javaEnabled()){
+        var result = null;
+        for( var i=0,size=navigator.mimeTypes.length; i<size; i++ )
+        {
+            if( (result = navigator.mimeTypes[i].type.match(/^application\/x-java-applet;jpi-version=(.*)$/)) !== null )
+                return result[1];
+        }
+      }
+      return "unknown"
     },
     hasSilverlightKey: function(keys){
       if (!this.options.excludeHasSilverlight){
