@@ -72,7 +72,7 @@
           keys.data.push({key: pair.key, value: componentValue})
         }
       }
-      keys = this.isFlashKey(keys)
+      keys = this.hasFlashKey(keys)
       keys = this.flashVersionKey(keys)
       keys = this.isSilverlightKey(keys)
       keys = this.silverlightVersionKey(keys)
@@ -216,13 +216,13 @@
       }
       return keys
     },
-    isFlashKey: function (keys){
-      if (!this.options.excludeIsFlash){
-          keys.addPreprocessedComponent({key: 'is_flash', value:this.getIsFlash()})
+    hasFlashKey: function (keys){
+      if (!this.options.excludeHasFlash){
+          keys.addPreprocessedComponent({key: 'has_flash', value:this.getHasFlash()})
       }
       return keys
     },
-    getIsFlash: function(){
+    getHasFlash: function(){
       var objPlugin = navigator.plugins["Shockwave Flash"];
       if (objPlugin) {
         return true;
@@ -236,7 +236,7 @@
       return keys
     },
     getFlashVersion: function() {
-      if (this.getIsFlash()) {
+      if (this.getHasFlash()) {
         var objPlayerVersion = swfobject.getFlashPlayerVersion();
         return objPlayerVersion.major + "." + objPlayerVersion.minor + "." + objPlayerVersion.release;
       }
