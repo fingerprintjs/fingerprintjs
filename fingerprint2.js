@@ -234,13 +234,6 @@
       }
       return keys
     },
-    getFlashVersion: function() {
-      if (this.getHasFlash()) {
-        var objPlayerVersion = this.getFlashPlayerVersion();
-        return objPlayerVersion.major + "." + objPlayerVersion.minor + "." + objPlayerVersion.release;
-      }
-      return "unknown";
-    },
     hasSilverlightKey: function(keys){
       if (!this.options.excludeHasSilverlight){
           keys.addPreprocessedComponent({key: 'has_silverlight', value:this.getHasSilverlight()})
@@ -1525,23 +1518,22 @@
     },
 
     getFlashVersion: function (){
-      try{
-          try{ 
-              var axo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash.6'); 
-              try{axo.AllowScriptAccess = 'always'; }
-              catch(e) { return '6,0,0'; }
-          }
-   
-          catch(e) {} 
-   
-          return new ActiveXObject('ShockwaveFlash.ShockwaveFlash').GetVariable('$version').replace(/\D+/g, ',').match(/^,?(.+),?$/)[1];
-   
-      }catch(e){
-          try{ 
-              if(navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin){ 
-                  return (navigator.plugins["Shockwave Flash 2.0"] || navigator.plugins["Shockwave Flash"]).description.replace(/\D+/g, ",").match(/^,?(.+),?$/)[1];
-              } 
-          }catch(e) {} 
+      if (this.getHasFlash()) {
+        try{
+            try{ 
+                var axo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash.6'); 
+                try{axo.AllowScriptAccess = 'always'; }
+                catch(e) { return '6,0,0'; }
+            }
+            catch(e) {} 
+            return new ActiveXObject('ShockwaveFlash.ShockwaveFlash').GetVariable('$version').replace(/\D+/g, ',').match(/^,?(.+),?$/)[1];
+        }catch(e){
+            try{ 
+                if(navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin){ 
+                    return (navigator.plugins["Shockwave Flash 2.0"] || navigator.plugins["Shockwave Flash"]).description.replace(/\D+/g, ",").match(/^,?(.+),?$/)[1];
+                } 
+            }catch(e) {} 
+        }
       }
       return 'unknown'; 
     }
