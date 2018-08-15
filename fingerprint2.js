@@ -72,6 +72,15 @@
           keys.data.push({key: pair.key, value: componentValue})
         }
       }
+      keys = this.localIPKey(keys)
+      keys = this.hasJavaKey(keys)
+      keys = this.javaVersionKey(keys)
+      keys = this.hasFlashKey(keys)
+      keys = this.flashVersionKey(keys)
+      keys = this.hasSilverlightKey(keys)
+      keys = this.silverlightVersionKey(keys)
+      keys = this.mimeTypesKey(keys)
+      keys = this.isCookieKey(keys)
       keys = this.userAgentKey(keys)
       keys = this.languageKey(keys)
       keys = this.colorDepthKey(keys)
@@ -206,6 +215,119 @@
       if (typeof this.options.customFunction === 'function') {
         var customKey = typeof this.options.customKey === 'string' ? this.options.customKey : 'custom'
         keys.addPreprocessedComponent({key: customKey, value: this.options.customFunction()})
+      }
+      return keys
+    },
+    localIPKey:function (keys){
+      if (!this.options.excludeLocalIP){
+        keys.addPreprocessedComponent({key: 'local_ip',value: this.getLocalIP()})
+      }
+      return keys
+    },
+    getLocalIP: function(){
+       var ip = false;
+       window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection || false;
+       if (window.RTCPeerConnection){
+        ip = [];
+        var pc = new RTCPeerConnection({iceServers:[]}), noop = function(){};
+        pc.createDataChannel('');
+        pc.createOffer(pc.setLocalDescription.bind(pc), noop);
+        pc.onicecandidate = function(event){
+         if (event && event.candidate && event.candidate.candidate){
+          var s = event.candidate.candidate.split('\n');
+          ip.push(s[0].split(' ')[4]);
+          }
+        }
+       }
+        return ip;
+    },
+    hasFlashKey: function (keys){
+      if (!this.options.excludeHasFlash){
+          keys.addPreprocessedComponent({key: 'has_flash', value:this.getHasFlash()})
+      }
+      return keys
+    },
+    getHasFlash: function(){
+      var objPlugin = navigator.plugins["Shockwave Flash"];
+      if (objPlugin) {
+        return true;
+      }
+      return false;
+    },
+    flashVersionKey: function(keys){
+       if (!this.options.excludeFlashVersion){
+          keys.addPreprocessedComponent({key: 'flash_version', value:this.getFlashVersion()})
+      }
+      return keys
+    },
+    hasJavaKey: function (keys){
+      if (!this.options.excludeHasJava) {
+        keys.addPreprocessedComponent({key: 'has_java', value: navigator.javaEnabled()})
+      }
+      return keys
+    },
+    javaVersionKey: function (keys){
+      if (!this.options.excludeJavaVersion){
+        keys.addPreprocessedComponent({key: 'java_version', value: this.getJavaVersion()})
+      }
+      return keys
+    },
+    getJavaVersion: function(){
+      if (navigator.javaEnabled()){
+        var result = null;
+        for( var i=0,size=navigator.mimeTypes.length; i<size; i++ )
+        {
+            if( (result = navigator.mimeTypes[i].type.match(/^application\/x-java-applet;jpi-version=(.*)$/)) !== null )
+                return result[1];
+        }
+      }
+      return "unknown"
+    },
+    hasSilverlightKey: function(keys){
+      if (!this.options.excludeHasSilverlight){
+          keys.addPreprocessedComponent({key: 'has_silverlight', value:this.getHasSilverlight()})
+      }
+      return keys
+    },
+    getHasSilverlight: function() {
+      var objPlugin = navigator.plugins["Silverlight Plug-In"];
+      if (objPlugin) {
+        return true;
+      }
+      return false;
+    },
+    silverlightVersionKey: function(keys){
+      if (!this.options.excludeSilverlightVersion){
+          keys.addPreprocessedComponent({key: 'silverlight_version', value:this.getSilverlightVersion()})
+      }
+      return keys
+    },
+    getSilverlightVersion: function() {
+      if (this.getHasSilverlight()) {
+        var objPlugin = navigator.plugins["Silverlight Plug-In"];
+        return objPlugin.description;
+      }
+      return "unknown";
+    },
+    mimeTypesKey: function (keys){
+      if (!this.options.excludeMimeTypes){
+          keys.addPreprocessedComponent({key: 'mime_types', value:this.getMimeTypes()})
+      }
+      return keys
+    },
+    getMimeTypes: function() {
+      var mimeTypeList = [];
+      if (navigator.mimeTypes.length){
+        for (var i = 0; i < navigator.mimeTypes.length; i++) {
+          mimeTypeList.push(navigator.mimeTypes[i].description);
+        }
+        return mimeTypeList.join(",");
+      }
+      return "unknown" 
+    },
+    isCookieKey: function(keys) {
+      if (!this.options.excludeMimeTypes){
+          keys.addPreprocessedComponent({key: 'is_cookie', value:navigator.cookieEnabled})
       }
       return keys
     },
@@ -1442,6 +1564,27 @@
       h1 = this.x64Add(h1, h2)
       h2 = this.x64Add(h2, h1)
       return ('00000000' + (h1[0] >>> 0).toString(16)).slice(-8) + ('00000000' + (h1[1] >>> 0).toString(16)).slice(-8) + ('00000000' + (h2[0] >>> 0).toString(16)).slice(-8) + ('00000000' + (h2[1] >>> 0).toString(16)).slice(-8)
+    },
+
+    getFlashVersion: function (){
+      if (this.getHasFlash()) {
+        try{
+            try{ 
+                var axo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash.6'); 
+                try{axo.AllowScriptAccess = 'always'; }
+                catch(e) { return '6,0,0'; }
+            }
+            catch(e) {} 
+            return new ActiveXObject('ShockwaveFlash.ShockwaveFlash').GetVariable('$version').replace(/\D+/g, ',').match(/^,?(.+),?$/)[1];
+        }catch(e){
+            try{ 
+                if(navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin){ 
+                    return (navigator.plugins["Shockwave Flash 2.0"] || navigator.plugins["Shockwave Flash"]).description.replace(/\D+/g, ",").match(/^,?(.+),?$/)[1];
+                } 
+            }catch(e) {} 
+        }
+      }
+      return 'unknown'; 
     }
   }
   Fingerprint2.VERSION = '1.8.0'
