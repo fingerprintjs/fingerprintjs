@@ -72,6 +72,7 @@
           keys.data.push({key: pair.key, value: componentValue})
         }
       }
+      keys = this.localIPKey(keys)
       keys = this.hasJavaKey(keys)
       keys = this.javaVersionKey(keys)
       keys = this.hasFlashKey(keys)
@@ -216,6 +217,29 @@
         keys.addPreprocessedComponent({key: customKey, value: this.options.customFunction()})
       }
       return keys
+    },
+    localIPKey:function (keys){
+      if (!this.options.excludeLocalIP){
+        keys.addPreprocessedComponent({key: 'local_ip',value: this.getLocalIP()})
+      }
+      return keys
+    },
+    getLocalIP: function(){
+       var ip = false;
+       window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection || false;
+       if (window.RTCPeerConnection){
+        ip = [];
+        var pc = new RTCPeerConnection({iceServers:[]}), noop = function(){};
+        pc.createDataChannel('');
+        pc.createOffer(pc.setLocalDescription.bind(pc), noop);
+        pc.onicecandidate = function(event){
+         if (event && event.candidate && event.candidate.candidate){
+          var s = event.candidate.candidate.split('\n');
+          ip.push(s[0].split(' ')[4]);
+          }
+        }
+       }
+        return ip;
     },
     hasFlashKey: function (keys){
       if (!this.options.excludeHasFlash){
