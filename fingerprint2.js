@@ -91,8 +91,11 @@
       keys = this.openDatabaseKey(keys)
       keys = this.appCodeNameKey(keys)
       keys = this.appVersionKey(keys)
+      keys = this.appMinorVersionKey(keys)
+      keys = this.buildIdKey(keys)
       keys = this.cookieEnabledKey(keys)
       keys = this.javaEnabledKey(keys)
+      keys = this.osCpuKey(keys)
       keys = this.cpuClassKey(keys)
       keys = this.platformKey(keys)
       keys = this.productKey(keys)
@@ -353,6 +356,18 @@
       }
       return keys
     },
+    appMinorVersionKey: function (keys) {
+      if (!this.options.excludeAppMinorVersion) {
+        keys.addPreprocessedComponent({key: 'app_minor_version', value: this.getNavigatorAppMinorVersion()})
+      }
+      return keys
+    },
+    buildIdKey: function (keys) {
+      if (!this.options.excludeBuildId) {
+        keys.addPreprocessedComponent({key: 'build_id', value: this.getNavigatorBuildId()})
+      }
+      return keys
+    },
     cookieEnabledKey: function (keys) {
       if (!this.options.excludeCookieEnabled) {
         keys.addPreprocessedComponent({key: 'cookie_enabled', value: this.getCookieEnabled()})
@@ -362,6 +377,12 @@
     javaEnabledKey: function (keys) {
       if (!this.options.excludeJavaEnabled) {
         keys.addPreprocessedComponent({key: 'java_enabled', value: this.getJavaEnabled()})
+      }
+      return keys
+    },
+    osCpuKey: function (keys) {
+      if (this.options.excludeOsCpu) {
+        keys.addPreprocessedComponent({key: 'os_cpu', value: this.getNavigatorOsCpu()})
       }
       return keys
     },
@@ -827,6 +848,29 @@
     getNavigatorAppVersion: function () {
       if (navigator.appVersion) {
         return navigator.appVersion
+      } else {
+        return 'unknown'
+      }
+    },
+    getNavigatorAppMinorVersion: function () {
+      if (navigator.appMinorVersion) {
+        return navigator.appMinorVersion
+      } else {
+        return 'unknown'
+      }
+    },
+    getNavigatorBuildId: function () {
+      if (navigator.buildID) {
+        return navigator.buildID
+      } else if (navigator.buildid) {
+        return navigator.buildid
+      } else {
+        return 'unknown'
+      }
+    },
+    getNavigatorOsCpu: function () {
+      if (navigator.oscpu) {
+        return navigator.oscpu
       } else {
         return 'unknown'
       }
