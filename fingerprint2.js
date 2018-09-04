@@ -89,8 +89,17 @@
       keys = this.indexedDbKey(keys)
       keys = this.addBehaviorKey(keys)
       keys = this.openDatabaseKey(keys)
+      keys = this.appCodeNameKey(keys)
+      keys = this.appVersionKey(keys)
+      keys = this.appMinorVersionKey(keys)
+      keys = this.buildIdKey(keys)
+      keys = this.cookieEnabledKey(keys)
+      keys = this.javaEnabledKey(keys)
+      keys = this.osCpuKey(keys)
       keys = this.cpuClassKey(keys)
       keys = this.platformKey(keys)
+      keys = this.productKey(keys)
+      keys = this.vendorKey(keys)
       keys = this.doNotTrackKey(keys)
       keys = this.pluginsKey(keys)
       keys = this.canvasKey(keys)
@@ -335,6 +344,48 @@
       }
       return keys
     },
+    appCodeNameKey: function (keys) {
+      if (!this.options.excludeAppCodeName) {
+        keys.addPreprocessedComponent({key: 'app_code_name', value: this.getNavigatorAppCodeName()})
+      }
+      return keys
+    },
+    appVersionKey: function (keys) {
+      if (!this.options.excludeAppVersion) {
+        keys.addPreprocessedComponent({key: 'app_version', value: this.getNavigatorAppVersion()})
+      }
+      return keys
+    },
+    appMinorVersionKey: function (keys) {
+      if (!this.options.excludeAppMinorVersion) {
+        keys.addPreprocessedComponent({key: 'app_minor_version', value: this.getNavigatorAppMinorVersion()})
+      }
+      return keys
+    },
+    buildIdKey: function (keys) {
+      if (!this.options.excludeBuildId) {
+        keys.addPreprocessedComponent({key: 'build_id', value: this.getNavigatorBuildId()})
+      }
+      return keys
+    },
+    cookieEnabledKey: function (keys) {
+      if (!this.options.excludeCookieEnabled) {
+        keys.addPreprocessedComponent({key: 'cookie_enabled', value: this.getCookieEnabled()})
+      }
+      return keys
+    },
+    javaEnabledKey: function (keys) {
+      if (!this.options.excludeJavaEnabled) {
+        keys.addPreprocessedComponent({key: 'java_enabled', value: this.getJavaEnabled()})
+      }
+      return keys
+    },
+    osCpuKey: function (keys) {
+      if (this.options.excludeOsCpu) {
+        keys.addPreprocessedComponent({key: 'os_cpu', value: this.getNavigatorOsCpu()})
+      }
+      return keys
+    },
     cpuClassKey: function (keys) {
       if (!this.options.excludeCpuClass) {
         keys.addPreprocessedComponent({key: 'cpu_class', value: this.getNavigatorCpuClass()})
@@ -344,6 +395,24 @@
     platformKey: function (keys) {
       if (!this.options.excludePlatform) {
         keys.addPreprocessedComponent({key: 'navigator_platform', value: this.getNavigatorPlatform()})
+      }
+      return keys
+    },
+    productKey: function (keys) {
+      if (!this.options.excludeProduct) {
+        keys.addPreprocessedComponent({key: 'navigator_product', value: this.getNavigatorProduct()})
+      }
+      return keys
+    },
+    productSubKey: function (keys) {
+      if (!this.options.excludeProductSub) {
+        keys.addPreprocessedComponent({key: 'product_sub', value: this.getNavigatorProductSub()})
+      }
+      return keys
+    },
+    vendorKey: function (keys) {
+      if (!this.options.excludeVendor) {
+        keys.addPreprocessedComponent({key: 'navigator_vendor', value: this.getNavigatorVendor()})
       }
       return keys
     },
@@ -746,11 +815,65 @@
         return true // SecurityError when referencing it means it exists
       }
     },
+    getCookieEnabled: function () {
+      try {
+        if (typeof navigator.cookieEnabled === 'undefined') {
+          document.cookie = 'cookie';
+          return document.cookie.indexOf('cookie') !== -1 ? true : false;
+        }
+        return navigator.cookieEnabled;
+      } catch { return false; }
+    },
+    getJavaEnabled: function () {
+      try {
+        if (navigator.javaEnabled()) {
+          return true;
+        }
+        return false;
+      } catch { return false; }
+    },
     getHardwareConcurrency: function () {
       if (navigator.hardwareConcurrency) {
         return navigator.hardwareConcurrency
       }
       return 'unknown'
+    },
+    getNavigatorAppCodeName: function () {
+      if (navigator.appCodeName) {
+        return navigator.appCodeName
+      } else {
+        return 'unknown'
+      }
+    },
+    getNavigatorAppVersion: function () {
+      if (navigator.appVersion) {
+        return navigator.appVersion
+      } else {
+        return 'unknown'
+      }
+    },
+    getNavigatorAppMinorVersion: function () {
+      if (navigator.appMinorVersion) {
+        return navigator.appMinorVersion
+      } else {
+        return 'unknown'
+      }
+    },
+    getNavigatorBuildId: function () {
+      if (navigator.buildID) {
+        return navigator.buildID
+      } else if (navigator.buildid) {
+        return navigator.buildid
+      } else {
+        return 'unknown'
+      }
+    },
+    getNavigatorOsCpu: function () {
+      if (navigator.oscpu) {
+        return navigator.oscpu
+      } else {
+        return 'unknown'
+      }
     },
     getNavigatorCpuClass: function () {
       if (navigator.cpuClass) {
@@ -762,6 +885,27 @@
     getNavigatorPlatform: function () {
       if (navigator.platform) {
         return navigator.platform
+      } else {
+        return 'unknown'
+      }
+    },
+    getNavigatorProduct: function () {
+      if (navigator.product) {
+        return navigator.product
+      } else {
+        return 'unknown'
+      }
+    },
+    getNavigatorProductSub: function() {
+      if (navigator.productSub) {
+        return navigator.productSub
+      } else {
+        return 'unknown'
+      }
+    },
+    getNavigatorVendor: function () {
+      if (navigator.vendor) {
+        return navigator.vendor
       } else {
         return 'unknown'
       }
