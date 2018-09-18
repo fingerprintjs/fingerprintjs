@@ -181,13 +181,13 @@
         }
       })
 
-      var oncompleteTimeout = setTimeout(function () {
+      var audioTimeoutId = setTimeout(function () {
         console.warn('Audio fingerprint timed out. Please report bug at https://github.com/Valve/fingerprintjs2 with your user agent: "' + navigator.userAgent + '".')
         return done(keys)
       }, 1000)
 
       context.oncomplete = function (event) {
-        clearTimeout(oncompleteTimeout)
+        clearTimeout(audioTimeoutId)
         var fingerprint = event.renderedBuffer.getChannelData(0)
                      .slice(4500, 5000)
                      .reduce(function (acc, val) { return acc + Math.abs(val) }, 0)
