@@ -1446,6 +1446,6 @@
       return ('00000000' + (h1[0] >>> 0).toString(16)).slice(-8) + ('00000000' + (h1[1] >>> 0).toString(16)).slice(-8) + ('00000000' + (h2[0] >>> 0).toString(16)).slice(-8) + ('00000000' + (h2[1] >>> 0).toString(16)).slice(-8)
     }
   }
-  Fingerprint2.VERSION = '1.8.0'
+  Fingerprint2.VERSION = '1.8.1'
   return Fingerprint2
 })
