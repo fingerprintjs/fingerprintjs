@@ -76,40 +76,51 @@
 
   <script src="fingerprint2.js"></script>
   <script>
-    var hasConsole = typeof console !== "undefined";
+    var hasConsole = typeof console !== "undefined"
 
     var fingerprintReport = function () {
-      var d1 = new Date();
-      var fp = new Fingerprint2();
+      var d1 = new Date()
+      var fp = new Fingerprint2()
       fp.get(function(result, components) {
-        var d2 = new Date();
-        var time =d2 - d1;
+        var d2 = new Date()
+        var time =d2 - d1
         document.querySelector("#time").textContent = time
         document.querySelector("#fp").textContent = result
-        var details = "";
+        var details = ""
         if(hasConsole) {
-          console.log("time", time);
-          console.log("fingerprint hash", result);
+          console.log("time", time)
+          console.log("fingerprint hash", result)
         }
         for (var index in components) {
-          var obj = components[index];
-          var line = obj.key + " = " + String(obj.value).substr(0, 100);
+          var obj = components[index]
+          var line = obj.key + " = " + String(obj.value).substr(0, 100)
           if(hasConsole) {
-            console.log(line);
+            console.log(line)
           }
-          details += line + "\n";
+          details += line + "\n"
         }
         document.querySelector("#details").textContent = details
-      });
-    };
-
-    if (window.requestIdleCallback) {
-      requestIdleCallback(fingerprintReport)
-    } else {
-      setTimeout(fingerprintReport, 500)
+      })
     }
 
-    document.querySelector("#btn").addEventListener("click", fingerprintReport);
+    var cancelId
+    var cancelFunction
+    
+    if (window.requestIdleCallback) {
+      cancelId = requestIdleCallback(fingerprintReport)
+      cancelFunction = cancelIdleCallback
+    } else {
+      cancelId = setTimeout(fingerprintReport, 500)
+      cancelFunction = clearTimeout
+    }
+
+    document.querySelector("#btn").addEventListener("click", function () {
+      if (cancelId) {
+        cancelFunction(cancelId)
+        cancelId = undefined
+      }
+      fingerprintReport()
+    });
   </script>
 </body>
 </html>
