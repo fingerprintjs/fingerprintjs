@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 1.8.0 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 1.8.2 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -74,35 +74,35 @@
           keys.data.push({key: pair.key, value: componentValue})
         }
       }
-      keys = this.userAgentKey(keys)
-      keys = this.languageKey(keys)
-      keys = this.colorDepthKey(keys)
-      keys = this.deviceMemoryKey(keys)
-      keys = this.pixelRatioKey(keys)
-      keys = this.hardwareConcurrencyKey(keys)
-      keys = this.screenResolutionKey(keys)
-      keys = this.availableScreenResolutionKey(keys)
-      keys = this.timezoneOffsetKey(keys)
-      keys = this.timezoneKey(keys)
-      keys = this.sessionStorageKey(keys)
-      keys = this.localStorageKey(keys)
-      keys = this.indexedDbKey(keys)
-      keys = this.addBehaviorKey(keys)
-      keys = this.openDatabaseKey(keys)
-      keys = this.cpuClassKey(keys)
-      keys = this.platformKey(keys)
-      keys = this.doNotTrackKey(keys)
-      keys = this.pluginsKey(keys)
-      keys = this.canvasKey(keys)
-      keys = this.webglKey(keys)
-      keys = this.webglVendorAndRendererKey(keys)
-      keys = this.adBlockKey(keys)
-      keys = this.hasLiedLanguagesKey(keys)
-      keys = this.hasLiedResolutionKey(keys)
-      keys = this.hasLiedOsKey(keys)
-      keys = this.hasLiedBrowserKey(keys)
-      keys = this.touchSupportKey(keys)
-      keys = this.customEntropyFunction(keys)
+      this.userAgentKey(keys)
+      this.languageKey(keys)
+      this.colorDepthKey(keys)
+      this.deviceMemoryKey(keys)
+      this.pixelRatioKey(keys)
+      this.hardwareConcurrencyKey(keys)
+      this.screenResolutionKey(keys)
+      this.availableScreenResolutionKey(keys)
+      this.timezoneOffsetKey(keys)
+      this.timezoneKey(keys)
+      this.sessionStorageKey(keys)
+      this.localStorageKey(keys)
+      this.indexedDbKey(keys)
+      this.addBehaviorKey(keys)
+      this.openDatabaseKey(keys)
+      this.cpuClassKey(keys)
+      this.platformKey(keys)
+      this.doNotTrackKey(keys)
+      this.pluginsKey(keys)
+      this.canvasKey(keys)
+      this.webglKey(keys)
+      this.webglVendorAndRendererKey(keys)
+      this.adBlockKey(keys)
+      this.hasLiedLanguagesKey(keys)
+      this.hasLiedResolutionKey(keys)
+      this.hasLiedOsKey(keys)
+      this.hasLiedBrowserKey(keys)
+      this.touchSupportKey(keys)
+      this.customEntropyFunction(keys)
       this.fontsKey(keys, function (keysWithFont) {
         that.audioKey(keysWithFont, function (newKeys) {
           that.enumerateDevicesKey(newKeys, function (keysWithDevices) {
@@ -181,13 +181,13 @@
         }
       })
 
-      var oncompleteTimeout = setTimeout(function () {
+      var audioTimeoutId = setTimeout(function () {
         console.warn('Audio fingerprint timed out. Please report bug at https://github.com/Valve/fingerprintjs2 with your user agent: "' + navigator.userAgent + '".')
         return done(keys)
       }, 1000)
 
       context.oncomplete = function (event) {
-        clearTimeout(oncompleteTimeout)
+        clearTimeout(audioTimeoutId)
         var fingerprint = event.renderedBuffer.getChannelData(0)
                      .slice(4500, 5000)
                      .reduce(function (acc, val) { return acc + Math.abs(val) }, 0)
@@ -1446,6 +1446,6 @@
       return ('00000000' + (h1[0] >>> 0).toString(16)).slice(-8) + ('00000000' + (h1[1] >>> 0).toString(16)).slice(-8) + ('00000000' + (h2[0] >>> 0).toString(16)).slice(-8) + ('00000000' + (h2[1] >>> 0).toString(16)).slice(-8)
     }
   }
-  Fingerprint2.VERSION = '1.8.0'
+  Fingerprint2.VERSION = '1.8.2'
   return Fingerprint2
 })

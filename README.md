@@ -35,13 +35,24 @@ This project uses `semver`.
 ## Usage
 
 ```js
-new Fingerprint2().get(function(result, components) {
-  console.log(result) // a hash, representing your device fingerprint
-  console.log(components) // an array of FP components
-})
+if (window.requestIdleCallback) {
+    requestIdleCallback(function () {
+        new Fingerprint2().get(function(result, components) {
+          console.log(result) // a hash, representing your device fingerprint
+          console.log(components) // an array of FP components
+        })  
+    })
+} else {
+    setTimeout(function () {
+        new Fingerprint2().get(function(result, components) {
+        
+        })  
+    }, 500)
+}
+
 ```
 
-**Note:** You should not run fingerprinting directly on or after page load. Rather, delay it for a few milliseconds to ensure consistent fingerprints. See [#307](https://github.com/Valve/fingerprintjs2/issues/307), [#254](https://github.com/Valve/fingerprintjs2/issues/254), and others.
+**Note:** You should not run fingerprinting directly on or after page load. Rather, delay it for a few milliseconds with [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout) or [requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback) to ensure consistent fingerprints. See [#307](https://github.com/Valve/fingerprintjs2/issues/307), [#254](https://github.com/Valve/fingerprintjs2/issues/254), and others.
 
 ## Options
 
