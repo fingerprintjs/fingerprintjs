@@ -35,12 +35,20 @@ This project uses `semver`.
 ## Usage
 
 ```js
-setTimeout(function () {
-    new Fingerprint2().get(function(result, components) {
-      console.log(result) // a hash, representing your device fingerprint
-      console.log(components) // an array of FP components
-    })  
-}, 500)
+if (window.requestIdleCallback) {
+    requestIdleCallback(function () {
+        new Fingerprint2().get(function(result, components) {
+          console.log(result) // a hash, representing your device fingerprint
+          console.log(components) // an array of FP components
+        })  
+    })
+} else {
+    setTimeout(function () {
+        new Fingerprint2().get(function(result, components) {
+        
+        })  
+    }, 500)
+}
 
 ```
 
