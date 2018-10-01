@@ -1,6 +1,6 @@
-/* global jasmine, describe, spyOn, it, expect, Fingerprint2 */
+/* global jasmine, describe, it, xit , expect, Fingerprint2 */
 'use strict'
-
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
 function getComponent (components, key) {
   for (var x = 0; x < components.length; x++) {
     if (components[x].key === key) {
@@ -22,21 +22,22 @@ describe('Fingerprint2', function () {
       expect(new Fingerprint2({})).not.toBeNull()
     })
 
-    it('uses default options', function () {
+    // options is not accessible anymore
+    xit('uses default options', function () {
       var fp2 = new Fingerprint2()
       expect(fp2.options.swfContainerId).toEqual('fingerprintjs2')
       expect(fp2.options.swfPath).toEqual('flash/compiled/FontList.swf')
       expect(fp2.options.userDefinedFonts).toEqual([])
     })
 
-    it('allows to override default options', function () {
+    xit('allows to override default options', function () {
       var fp2 = new Fingerprint2({swfPath: 'newpath', userDefinedFonts: ['Ethos', 'Quenda']})
       expect(fp2.options.swfContainerId).toEqual('fingerprintjs2')
       expect(fp2.options.swfPath).toEqual('newpath')
       expect(fp2.options.userDefinedFonts).toEqual(['Ethos', 'Quenda'])
     })
 
-    it('allows to add new options', function () {
+    xit('allows to add new options', function () {
       var fp2 = new Fingerprint2({excludeUserAgent: true})
       expect(fp2.options.swfContainerId).toEqual('fingerprintjs2')
       expect(fp2.options.swfPath).toEqual('flash/compiled/FontList.swf')
@@ -44,12 +45,12 @@ describe('Fingerprint2', function () {
     })
 
     describe('sortPluginsFor', function () {
-      it('has default value', function () {
+      xit('has default value', function () {
         var fp2 = new Fingerprint2()
         expect(fp2.options.sortPluginsFor).toEqual([/palemoon/i])
       })
 
-      it('allows to set new array of regexes', function () {
+      xit('allows to set new array of regexes', function () {
         var fp2 = new Fingerprint2({sortPluginsFor: [/firefox/i, /chrome/i]})
         expect(fp2.options.sortPluginsFor).toEqual([/firefox/i, /chrome/i])
       })
@@ -59,6 +60,15 @@ describe('Fingerprint2', function () {
   describe('without new keyword', function () {
     it('creates a new instance of FP2', function () {
       expect(Fingerprint2()).not.toBeNull()
+    })
+  })
+
+  describe('FP2', function () {
+    it('.get should be available', function () {
+      expect(Fingerprint2.get).toBeDefined()
+    })
+    it('.getPromise should be available', function () {
+      expect(Fingerprint2.getPromise).toBeDefined()
     })
   })
 
@@ -73,10 +83,12 @@ describe('Fingerprint2', function () {
       })
 
       it('does not try calling flash font detection', function (done) {
+        var flashFontKey = 'fontsFlash'
         var fp2 = new Fingerprint2()
-        spyOn(fp2, 'flashFontsKey')
-        fp2.get(function (result) {
-          expect(fp2.flashFontsKey).not.toHaveBeenCalled()
+        fp2.get(function (result, components) {
+          expect(components.some(function (componentResult) {
+            return componentResult.key === flashFontKey
+          })).toBeFalse()
           done()
         })
       })
@@ -84,72 +96,93 @@ describe('Fingerprint2', function () {
 
     describe('non-default options', function () {
       it('does not use userAgent when excluded', function (done) {
-        var fp2 = new Fingerprint2({excludeUserAgent: true})
-        spyOn(fp2, 'getUserAgent')
-        fp2.get(function (result) {
-          expect(fp2.getUserAgent).not.toHaveBeenCalled()
+        var userAgentKey = 'userAgent'
+        var fp2 = new Fingerprint2({excludes: [userAgentKey]})
+        fp2.get(function (result, components) {
+          expect(components.some(function (componentResult) {
+            return componentResult.key === userAgentKey
+          })).toBeFalse()
           done()
         })
       })
 
       it('does not use pixelRatio when excluded', function (done) {
-        var fp2 = new Fingerprint2({excludePixelRatio: true})
-        spyOn(fp2, 'getPixelRatio')
-        fp2.get(function (result) {
-          expect(fp2.getPixelRatio).not.toHaveBeenCalled()
+        var key = 'pixelRatio'
+        var fp2 = new Fingerprint2({excludes: [key]})
+        fp2.get(function (result, components) {
+          expect(components.some(function (componentResult) {
+            return componentResult.key === key
+          })).toBeFalse()
           done()
         })
       })
 
       it('does not use deviceMemory when excluded', function (done) {
-        var fp2 = new Fingerprint2({excludeDeviceMemory: true})
-        spyOn(fp2, 'getDeviceMemory')
-        fp2.get(function (result) {
-          expect(fp2.getDeviceMemory).not.toHaveBeenCalled()
+        var key = 'deviceMemory'
+        var fp2 = new Fingerprint2({excludes: [key]})
+        fp2.get(function (result, components) {
+          expect(components.some(function (componentResult) {
+            return componentResult.key === key
+          })).toBeFalse()
           done()
         })
       })
 
       it('does not use screen resolution when excluded', function (done) {
-        var fp2 = new Fingerprint2({excludeScreenResolution: true})
-        spyOn(fp2, 'getScreenResolution')
-        fp2.get(function (result) {
-          expect(fp2.getScreenResolution).not.toHaveBeenCalled()
+        var key = 'screenResolution'
+        var fp2 = new Fingerprint2({excludes: [key]})
+        fp2.get(function (result, components) {
+          expect(components.some(function (componentResult) {
+            return componentResult.key === key
+          })).toBeFalse()
           done()
         })
       })
 
       it('does not use available screen resolution when excluded', function (done) {
-        var fp2 = new Fingerprint2({excludeAvailableScreenResolution: true})
-        spyOn(fp2, 'getAvailableScreenResolution')
-        fp2.get(function (result) {
-          expect(fp2.getAvailableScreenResolution).not.toHaveBeenCalled()
+        var key = 'availableScreenResolution'
+        var fp2 = new Fingerprint2({excludes: [key]})
+        fp2.get(function (result, components) {
+          expect(components.some(function (componentResult) {
+            return componentResult.key === key
+          })).toBeFalse()
           done()
         })
       })
 
       it('does not use plugins info when excluded', function (done) {
-        var fp2 = new Fingerprint2({excludePlugins: true})
-        spyOn(fp2, 'getRegularPlugins')
-        fp2.get(function (result) {
-          expect(fp2.getRegularPlugins).not.toHaveBeenCalled()
+        var key = 'plugins'
+        var fp2 = new Fingerprint2({excludes: [key]})
+        fp2.get(function (result, components) {
+          expect(components.some(function (componentResult) {
+            return componentResult.key === key
+          })).toBeFalse()
           done()
         })
       })
 
-      it('does not use IE plugins info when excluded', function (done) {
+      // navigator.appName is read only
+      xit('does not use IE plugins info when excluded', function (done) {
+        var previous = navigator.appName
+        navigator.appName = 'Microsoft Internet Explorer'
+        var key = 'plugins'
         var fp2 = new Fingerprint2({excludeIEPlugins: true})
-        spyOn(fp2, 'getIEPlugins')
-        fp2.get(function (result) {
-          expect(fp2.getIEPlugins).not.toHaveBeenCalled()
+        fp2.get(function (result, components) {
+          expect(components.some(function (componentResult) {
+            return componentResult.key === key
+          })).toBeFalse()
+          navigator.appName = previous
           done()
         })
       })
 
       it('does not use timezone when excluded', function (done) {
-        var fp2 = new Fingerprint2({excludeTimezone: true})
+        var key = 'timezone'
+        var fp2 = new Fingerprint2({excludes: [key]})
         fp2.get(function (result, components) {
-          expect(components).not.toContain(jasmine.objectContaining({"key": "timezone"}))
+          expect(components.some(function (componentResult) {
+            return componentResult.key === key
+          })).toBeFalse()
           done()
         })
       })
@@ -172,17 +205,17 @@ describe('Fingerprint2', function () {
         })
       })
 
-      it('checks if js_fonts component is array', function (done) {
+      it('checks if fonts component is array', function (done) {
         (new Fingerprint2()).get(function (_, components) {
-          expect(getComponent(components, 'js_fonts')).toBeArray()
+          expect(getComponent(components, 'fonts')).toBeArray()
           done()
         })
       })
 
-      it('returns user_agent as the first element', function (done) {
+      it('returns userAgent as the first element', function (done) {
         var fp2 = new Fingerprint2()
         fp2.get(function (result, components) {
-          expect(components[0].key).toEqual('user_agent')
+          expect(components[0].key).toEqual('userAgent')
           done()
         })
       })
@@ -256,29 +289,52 @@ describe('Fingerprint2', function () {
         done()
       })
     })
-    describe('customFunction option', function () {
-      it('concatinates the current keys with the customFunction output', function (done) {
-        function customFunction () {
-          return 'RANDOM_STRING'
+    describe('extraComponents option', function () {
+      it('uses extraComponents', function (done) {
+        function customFunction (done) {
+          done('RANDOM_STRING')
         }
+
         var spy = jasmine.createSpy('customFunction', customFunction).and.callThrough()
         var fp = new Fingerprint2({
-          'customFunction': spy
+          extraComponents: [{key: 'customFunction', getData: spy}]
         })
         fp.get(function (result, keys) {
           expect(spy).toHaveBeenCalled()
           done()
         })
       })
-      it('with customKey option changes the key', function (done) {
+      it('its key is used', function (done) {
         var fp = new Fingerprint2({
-          customFunction: function () {
-            return 'RANDOM_STRING'
-          },
-          customKey: 'TEST_STRING'
+          extraComponents: [
+            {
+              key: 'TEST_STRING',
+              getData: function customFunction (done) {
+                done('RANDOM_STRING')
+              }
+            }
+          ]
         })
         fp.get(function (_, components) {
           expect(getComponent(components, 'TEST_STRING')).toEqual('RANDOM_STRING')
+          done()
+        })
+      })
+
+      it('safely introduce a new component even if it thorws', function (done) {
+        var fp = new Fingerprint2({
+          extraComponents: [
+            {
+              key: 'my key',
+              getData: function customFunction (done) {
+                throw 'unstable component'
+              }
+            }
+          ]
+        })
+        fp.get(function (_, components) {
+          // if we arrive here, it means the rest of the fingerprint was not disturbed
+          expect(components).toBeDefined()
           done()
         })
       })
@@ -287,10 +343,11 @@ describe('Fingerprint2', function () {
     if (!onPhantomJs) {
       describe('enumerate devices fingerprint', function () {
         it('checks enumerate devices fingerprint', function (done) {
-          var fp2 = new Fingerprint2(); 
+          var fp2 = new Fingerprint2({excludes: []})
           fp2.get(function (_, components) {
-            if(fp2.isEnumerateDevicesSupported())
-              expect(getComponent(components, 'enumerate_devices')).not.toBeNull()
+            if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+              expect(getComponent(components, 'enumerateDevices')).not.toBeNull()
+            }
             done()
           })
         })
@@ -301,7 +358,7 @@ describe('Fingerprint2', function () {
       describe('audio fingerprint', function () {
         it('checks audio fingerprint', function (done) {
           (new Fingerprint2()).get(function (_, components) {
-            expect(getComponent(components, 'audio_fp')).not.toBeNull()
+            expect(getComponent(components, 'audio')).not.toBeNull()
             done()
           })
         })
@@ -310,8 +367,12 @@ describe('Fingerprint2', function () {
 
     if (!onPhantomJs) {
       describe('webgl shader precision format', function () {
-        it('checks webgl shader precision format loop', function (done) {
+        // fp2.getWebglCanvas() no longer exposed
+        xit('checks webgl shader precision format loop', function (done) {
           var fp2 = new Fingerprint2()
+          fp2.get(function (_, components) {
+            getComponent(components, 'webgl')
+          })
           var gl = fp2.getWebglCanvas()
           var item = function (name, descr, attr1, attr2, attr3) {
             var fmt = gl.getShaderPrecisionFormat(attr1, attr2)[attr3]
@@ -357,7 +418,7 @@ describe('Fingerprint2', function () {
           ]
 
           fp2.get(function (_, components) {
-            fp2.each(webglExpectedArray, function (item) {
+            webglExpectedArray.forEach(function (item) {
               expect(getComponent(components, 'webgl').indexOf(item)).not.toEqual(-1)
             })
             done()
@@ -369,23 +430,24 @@ describe('Fingerprint2', function () {
     describe('preprocessor', function () {
       it('checks that preprocessor not used by default', function (done) {
         (new Fingerprint2()).get(function (_, components) {
-          expect(getComponent(components, 'user_agent')).not.toEqual('MyUserAgent')
+          expect(getComponent(components, 'userAgent')).not.toEqual('MyUserAgent')
           done()
         })
       })
 
       it('checks that preprocessor function applied to component value', function (done) {
+        var mykey = 'userAgent'
         var options = {
           preprocessor: function (key, value) {
-            if (key === 'user_agent') {
-              value = 'MyUserAgent'
+            if (key === mykey) {
+              return 'MyUserAgent'
             }
             return value
           }
         }
         var fp2 = new Fingerprint2(options)
         fp2.get(function (_, components) {
-          expect(getComponent(components, 'user_agent')).toEqual('MyUserAgent')
+          expect(getComponent(components, mykey)).toEqual('MyUserAgent')
           done()
         })
       })
