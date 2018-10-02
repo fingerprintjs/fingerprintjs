@@ -327,6 +327,7 @@
         done(error)
       })
   }
+
   var isEnumerateDevicesSupported = function () {
     return (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices)
   }
@@ -1351,7 +1352,7 @@
       }
     }
 
-    let i = -1
+    var i = -1
     var chainComponents = function (alreadyWaited) {
       i += 1
       if (i === options.components.length) { // on finish
