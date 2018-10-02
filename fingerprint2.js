@@ -1334,7 +1334,10 @@
     this.options = options
   }
 
-  Fingerprint2.get = function (options = {}, callback) {
+  Fingerprint2.get = function (options, callback) {
+    if (!options) {
+      options = {}
+    }
     extendSoft(options, defaultOptions)
     options.components = options.extraComponents.concat(components)
 
@@ -1349,7 +1352,7 @@
     }
 
     let i = -1
-    var chainComponents = function (alreadyWaited = false) {
+    var chainComponents = function (alreadyWaited) {
       i += 1
       if (i === options.components.length) { // on finish
         callback(keys.data)
@@ -1358,7 +1361,7 @@
       var component = options.components[i]
 
       if (options['exclude' + component.key] || options.excludes.includes(component.key)) {
-        chainComponents()// skip
+        chainComponents(false)// skip
         return
       }
 
@@ -1373,16 +1376,16 @@
       try {
         component.getData(function (value) {
           keys.addPreprocessedComponent(component.key, value)
-          chainComponents()
+          chainComponents(false)
         }, options)
       } catch (error) {
       // main body error
         keys.addPreprocessedComponent(component.key, String(error))
-        chainComponents()
+        chainComponents(false)
       }
     }
 
-    chainComponents(true)
+    chainComponents(false)
   }
 
   Fingerprint2.getPromise = function (options) {
