@@ -11,8 +11,8 @@ gulp.task('lint', function () {
     .src('fingerprint2.js')
     .pipe(standard())
     .pipe(standard.reporter('default', {
-      breakOnError: true,
-      quiet: true
+      breakOnError: false,
+      quiet: false
     }))
 })
 
