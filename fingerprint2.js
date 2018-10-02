@@ -1361,7 +1361,7 @@
       }
       var component = options.components[i]
 
-      if (options['exclude' + component.key] || options.excludes.includes(component.key)) {
+      if (options['exclude' + component.key] || (options.excludes.indexOf(component.key) > -1)) {
         chainComponents(false)// skip
         return
       }
