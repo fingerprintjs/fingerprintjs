@@ -481,9 +481,9 @@
   var doNotTrackKey = function (done) {
     done(getDoNotTrack())
   }
-  var canvasKey = function (done) {
+  var canvasKey = function (done, options) {
     if (isCanvasSupported()) {
-      done(getCanvasFp())
+      done(getCanvasFp(options))
       return
     }
     done(UNKNOWN)
