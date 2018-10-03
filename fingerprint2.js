@@ -366,18 +366,20 @@
     }, options.audioTimeout)
 
     context.oncomplete = function (event) {
+      var fingerprint
       try {
         clearTimeout(audioTimeoutId)
-        var fingerprint = event.renderedBuffer.getChannelData(0)
+        fingerprint = event.renderedBuffer.getChannelData(0)
             .slice(4500, 5000)
             .reduce(function (acc, val) { return acc + Math.abs(val) }, 0)
             .toString()
         oscillator.disconnect()
         compressor.disconnect()
-        done(fingerprint)
       } catch (error) {
         done(error)
+        return
       }
+      done(fingerprint)
     }
   }
   var UserAgent = function (done) {
