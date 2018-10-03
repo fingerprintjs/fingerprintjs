@@ -883,7 +883,7 @@
 
   var getTouchSupport = function () {
     var maxTouchPoints = 0
-    var touchEvent = false
+    var touchEvent
     if (typeof navigator.maxTouchPoints !== 'undefined') {
       maxTouchPoints = navigator.maxTouchPoints
     } else if (typeof navigator.msMaxTouchPoints !== 'undefined') {
@@ -892,7 +892,9 @@
     try {
       document.createEvent('TouchEvent')
       touchEvent = true
-    } catch (_) { /* squelch */ }
+    } catch (_) {
+      touchEvent = false
+    }
     var touchStart = 'ontouchstart' in window
     return [maxTouchPoints, touchEvent, touchStart]
   }
