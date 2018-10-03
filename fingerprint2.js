@@ -229,9 +229,8 @@
     return ('00000000' + (h1[0] >>> 0).toString(16)).slice(-8) + ('00000000' + (h1[1] >>> 0).toString(16)).slice(-8) + ('00000000' + (h2[0] >>> 0).toString(16)).slice(-8) + ('00000000' + (h2[1] >>> 0).toString(16)).slice(-8)
   }
 
-  var UNKNOWN = 'Unknown'
+  var NOT_AVAILABLE = 'not available'
   var ERROR = 'error'
-  var NOT_YET = 'not yet implemented'
   var EXCLUDED = 'excluded'
 
   var defaultOptions = {
@@ -306,7 +305,7 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices
   var enumerateDevicesKey = function (done) {
     if (!isEnumerateDevicesSupported()) {
-      return done(NOT_YET)
+      return done(NOT_AVAILABLE)
     }
     navigator.mediaDevices.enumerateDevices().then(function (devices) {
       done(devices.map(function (device) {
@@ -331,7 +330,7 @@
     var AudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext
 
     if (AudioContext == null) {
-      return done(NOT_YET)
+      return done(NOT_AVAILABLE)
     }
 
     var context = new AudioContext(1, 44100, 44100)
@@ -385,22 +384,22 @@
     done(navigator.userAgent)
   }
   var languageKey = function (done) {
-    done(navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || NOT_YET)
+    done(navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || NOT_AVAILABLE)
   }
   var colorDepthKey = function (done) {
-    done(window.screen.colorDepth || NOT_YET)
+    done(window.screen.colorDepth || NOT_AVAILABLE)
   }
   var deviceMemoryKey = function (done) {
     done(getDeviceMemory())
   }
   var getDeviceMemory = function () {
-    return navigator.deviceMemory || NOT_YET
+    return navigator.deviceMemory || NOT_AVAILABLE
   }
   var pixelRatioKey = function (done) {
     done(getPixelRatio())
   }
   var getPixelRatio = function () {
-    return window.devicePixelRatio || NOT_YET
+    return window.devicePixelRatio || NOT_AVAILABLE
   }
   var screenResolutionKey = function (done, options) {
     done(getScreenResolution(options))
@@ -424,7 +423,7 @@
       return available
     }
     // headless browsers
-    return UNKNOWN
+    return NOT_AVAILABLE
   }
   var timezoneOffset = function (done) {
     done(new Date().getTimezoneOffset())
@@ -434,7 +433,7 @@
       done(new window.Intl.DateTimeFormat().resolvedOptions().timeZone)
       return
     }
-    done(UNKNOWN)
+    done(NOT_AVAILABLE)
   }
   var sessionStorageKey = function (done) {
     if (hasSessionStorage()) {
@@ -486,14 +485,14 @@
       done(getCanvasFp(options))
       return
     }
-    done(UNKNOWN)
+    done(NOT_AVAILABLE)
   }
   var webglKey = function (done) {
     if (isWebGlSupported()) {
       done(getWebglFp())
       return
     }
-    done(UNKNOWN)
+    done(NOT_AVAILABLE)
   }
   var webglVendorAndRendererKey = function (done) {
     if (isWebGlSupported()) {
@@ -735,7 +734,7 @@
   }
   var getRegularPlugins = function (options) {
     if (navigator.plugins == null) {
-      return UNKNOWN
+      return NOT_AVAILABLE
     }
 
     var plugins = []
@@ -798,7 +797,7 @@
         }
       })
     } else {
-      result.push(UNKNOWN)
+      result.push(NOT_AVAILABLE)
     }
     if (navigator.plugins) {
       result = result.concat(getRegularPlugins(options))
@@ -849,16 +848,16 @@
     if (navigator.hardwareConcurrency) {
       return navigator.hardwareConcurrency
     }
-    return UNKNOWN
+    return NOT_AVAILABLE
   }
   var getNavigatorCpuClass = function () {
-    return navigator.cpuClass || UNKNOWN
+    return navigator.cpuClass || NOT_AVAILABLE
   }
   var getNavigatorPlatform = function () {
     if (navigator.platform) {
       return navigator.platform
     } else {
-      return UNKNOWN
+      return NOT_AVAILABLE
     }
   }
   var getDoNotTrack = function () {
@@ -869,7 +868,7 @@
     } else if (window.doNotTrack) {
       return window.doNotTrack
     } else {
-      return UNKNOWN
+      return NOT_AVAILABLE
     }
   }
 // This is a crude and primitive touch screen detection.
