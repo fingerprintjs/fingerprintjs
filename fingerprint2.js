@@ -260,10 +260,6 @@
     extraComponents: []
   }
 
-  /**
-   * @template T
-   * @param {T=} context
-   */
   var each = function (obj, iterator) {
     if (Array.prototype.forEach && obj.forEach === Array.prototype.forEach) {
       obj.forEach(iterator)
@@ -280,12 +276,6 @@
     }
   }
 
-  /**
-   * @template T,V
-   * @param {T=} context
-   * @param {function(this:T, ?, (string|number), T=):V} iterator
-   * @return {V}
-   */
   var map = function (obj, iterator) {
     var results = []
     // Not using strict equality so that this acts as a
@@ -394,22 +384,22 @@
     done(navigator.userAgent)
   }
   var languageKey = function (done) {
-    done(navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || '')
+    done(navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || NOT_YET)
   }
   var colorDepthKey = function (done) {
-    done(window.screen.colorDepth || -1)
+    done(window.screen.colorDepth || NOT_YET)
   }
   var deviceMemoryKey = function (done) {
     done(getDeviceMemory())
   }
   var getDeviceMemory = function () {
-    return navigator.deviceMemory || -1
+    return navigator.deviceMemory || NOT_YET
   }
   var pixelRatioKey = function (done) {
     done(getPixelRatio())
   }
   var getPixelRatio = function () {
-    return window.devicePixelRatio || ''
+    return window.devicePixelRatio || NOT_YET
   }
   var screenResolutionKey = function (done, options) {
     done(getScreenResolution(options))
@@ -535,13 +525,13 @@
   var flashFontsKey = function (done, options) {
     // we do flash if swfobject is loaded
     if (!hasSwfObjectLoaded()) {
-      return done(1)
+      return done('swf object not loaded')
     }
     if (!hasMinFlashInstalled()) {
-      return done(2)
+      return done('flash not installed')
     }
-    if (typeof options.swfPath === 'undefined') {
-      return done(3)
+    if (!options.swfPath) {
+      return done('missing swfPath in options')
     }
     loadSwfAndDetectFonts(function (fonts) {
       done(fonts.join(';'))
@@ -737,26 +727,27 @@
     done(available)
   }
   var pluginsComponent = function (done, options) {
-    if (!options.excludePlugins) {
-      if (isIE()) {
-        if (!options.excludeIEPlugins) {
-          done(getIEPlugins(options))
-        } else {
-          done(EXCLUDED)
-        }
+    if (isIE()) {
+      if (!options.excludeIEPlugins) {
+        done(getIEPlugins(options))
       } else {
-        done(getRegularPlugins(options))
+        done(EXCLUDED)
       }
+    } else {
+      done(getRegularPlugins(options))
     }
   }
   var getRegularPlugins = function (options) {
-    var plugins = []
-    if (navigator.plugins) {
-        // plugins isn't defined in Node envs.
-      for (var i = 0, l = navigator.plugins.length; i < l; i++) {
-        if (navigator.plugins[i]) { plugins.push(navigator.plugins[i]) }
-      }
+    if (navigator.plugins == null) {
+      return UNKNOWN
     }
+
+    var plugins = []
+      // plugins isn't defined in Node envs.
+    for (var i = 0, l = navigator.plugins.length; i < l; i++) {
+      if (navigator.plugins[i]) { plugins.push(navigator.plugins[i]) }
+    }
+
       // sorting plugins only for those user agents, that we know randomize the plugins
       // every time we try to enumerate them
     if (pluginsShouldBeSorted(options)) {
@@ -807,9 +798,11 @@
           new window.ActiveXObject(name)
           return name
         } catch (e) {
-          return null
+          return ERROR
         }
       })
+    } else {
+      result.push(UNKNOWN)
     }
     if (navigator.plugins) {
       result = result.concat(getRegularPlugins(options))
@@ -863,11 +856,7 @@
     return UNKNOWN
   }
   var getNavigatorCpuClass = function () {
-    if (navigator.cpuClass) {
-      return navigator.cpuClass
-    } else {
-      return UNKNOWN
-    }
+    return navigator.cpuClass || UNKNOWN
   }
   var getNavigatorPlatform = function () {
     if (navigator.platform) {
