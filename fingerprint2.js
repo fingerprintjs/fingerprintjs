@@ -362,6 +362,7 @@
     var audioTimeoutId = setTimeout(function () {
       console.warn('Audio fingerprint timed out. Please report bug at https://github.com/Valve/fingerprintjs2 with your user agent: "' + navigator.userAgent + '".')
       context.oncomplete = function () {}
+      context = null
       return done('audioTimeout')
     }, options.audioTimeout)
 
@@ -376,7 +377,7 @@
         compressor.disconnect()
         done(fingerprint)
       } catch (error) {
-        done(ERROR + error)
+        done(error)
       }
     }
   }
@@ -1369,7 +1370,7 @@
           chainComponents(false)
         }, options)
       } catch (error) {
-      // main body error
+        // main body error
         keys.addPreprocessedComponent(component.key, String(error))
         chainComponents(false)
       }
@@ -1385,17 +1386,17 @@
   }
 
   Fingerprint2.prototype.get = function (callback) {
-    console.warn("deprecated new Fingerprint() use \n\
-      Fingerprint2.get(options, function (components) {\n\
-        var values = Object.values(components).map(function (value) {\n\
-         if (value && typeof value.join === 'function') {\n\
-            return value.join(';')\n\
-          }\n\
-          return value\n\
-        })\n\
-        var murmur = Fingerprint2.x64hash128(values.join('~~~'), 31)\n\
-      })\n\
-       instead")
+    console.warn('deprecated new Fingerprint() use \n' +
+'      Fingerprint2.get(options, function (components) {\n' +
+'        var values = Object.values(components).map(function (value) {\n' +
+"         if (value && typeof value.join === 'function') {\n" +
+"            return value.join(';')\n" +
+'          }\n' +
+'          return value\n' +
+'        })\n' +
+"        var murmur = Fingerprint2.x64hash128(values.join('~~~'), 31)\n" +
+'      })\n' +
+'       instead')
     return Fingerprint2.get(this.options, function (components) {
       var values = []
       each(components, function (pair) {
