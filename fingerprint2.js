@@ -487,7 +487,7 @@
     done(getDoNotTrack())
   }
   var canvasKey = function (done) {
-    if (!isCanvasSupported()) {
+    if (isCanvasSupported()) {
       done(getCanvasFp())
       return
     }
