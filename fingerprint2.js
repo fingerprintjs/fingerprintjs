@@ -406,11 +406,9 @@
     done(getScreenResolution(options))
   }
   var getScreenResolution = function (options) {
-    var resolution
+    var resolution = [window.screen.width, window.screen.height]
     if (options.detectScreenOrientation) {
-      resolution = (window.screen.height > window.screen.width) ? [window.screen.height, window.screen.width] : [window.screen.width, window.screen.height]
-    } else {
-      resolution = [window.screen.width, window.screen.height]
+      resolution.sort().reverse()
     }
     return resolution
   }
@@ -418,17 +416,14 @@
     done(getAvailableScreenResolution(options))
   }
   var getAvailableScreenResolution = function (options) {
-    var available
     if (window.screen.availWidth && window.screen.availHeight) {
+      var available = [window.screen.availHeight, window.screen.availWidth]
       if (options.detectScreenOrientation) {
-        available = (window.screen.availHeight > window.screen.availWidth) ? [window.screen.availHeight, window.screen.availWidth] : [window.screen.availWidth, window.screen.availHeight]
-      } else {
-        available = [window.screen.availHeight, window.screen.availWidth]
+        available.sort().reverse()
       }
-    }
-    if (typeof available !== 'undefined') { // headless browsers
       return available
     }
+    // headless browsers
     return UNKNOWN
   }
   var timezoneOffset = function (done) {
