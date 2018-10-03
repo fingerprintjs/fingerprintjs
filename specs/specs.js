@@ -1,6 +1,6 @@
 /* global jasmine, describe, it, xit , expect, Fingerprint2 */
 'use strict'
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
+
 function getComponent (components, key) {
   for (var x = 0; x < components.length; x++) {
     if (components[x].key === key) {
@@ -94,97 +94,40 @@ describe('Fingerprint2', function () {
       })
     })
 
-    describe('non-default options', function () {
-      it('does not use userAgent when excluded', function (done) {
-        var userAgentKey = 'userAgent'
-        var fp2 = new Fingerprint2({excludes: [userAgentKey]})
-        fp2.get(function (result, components) {
-          expect(components.some(function (componentResult) {
-            return componentResult.key === userAgentKey
-          })).toBeFalse()
-          done()
+    describe('excludes work:', function () {
+      [
+        'userAgent',
+        'pixelRatio',
+        'deviceMemory',
+        'screenResolution',
+        'availableScreenResolution',
+        'plugins',
+        'timezone'
+      ].forEach(function (key) {
+        it('does not use ' + key + ' when excluded', function (done) {
+          var fp2 = new Fingerprint2({excludes: [key]})
+          fp2.get(function (result, components) {
+            expect(components.some(function (componentResult) {
+              return componentResult.key === key
+            })).toBeFalse()
+            done()
+          })
         })
       })
-
-      it('does not use pixelRatio when excluded', function (done) {
-        var key = 'pixelRatio'
-        var fp2 = new Fingerprint2({excludes: [key]})
-        fp2.get(function (result, components) {
-          expect(components.some(function (componentResult) {
-            return componentResult.key === key
-          })).toBeFalse()
-          done()
-        })
-      })
-
-      it('does not use deviceMemory when excluded', function (done) {
-        var key = 'deviceMemory'
-        var fp2 = new Fingerprint2({excludes: [key]})
-        fp2.get(function (result, components) {
-          expect(components.some(function (componentResult) {
-            return componentResult.key === key
-          })).toBeFalse()
-          done()
-        })
-      })
-
-      it('does not use screen resolution when excluded', function (done) {
-        var key = 'screenResolution'
-        var fp2 = new Fingerprint2({excludes: [key]})
-        fp2.get(function (result, components) {
-          expect(components.some(function (componentResult) {
-            return componentResult.key === key
-          })).toBeFalse()
-          done()
-        })
-      })
-
-      it('does not use available screen resolution when excluded', function (done) {
-        var key = 'availableScreenResolution'
-        var fp2 = new Fingerprint2({excludes: [key]})
-        fp2.get(function (result, components) {
-          expect(components.some(function (componentResult) {
-            return componentResult.key === key
-          })).toBeFalse()
-          done()
-        })
-      })
-
-      it('does not use plugins info when excluded', function (done) {
-        var key = 'plugins'
-        var fp2 = new Fingerprint2({excludes: [key]})
-        fp2.get(function (result, components) {
-          expect(components.some(function (componentResult) {
-            return componentResult.key === key
-          })).toBeFalse()
-          done()
-        })
-      })
+    })
 
       // navigator.appName is read only
-      xit('does not use IE plugins info when excluded', function (done) {
-        var previous = navigator.appName
-        navigator.appName = 'Microsoft Internet Explorer'
-        var key = 'plugins'
-        var fp2 = new Fingerprint2({excludeIEPlugins: true})
-        fp2.get(function (result, components) {
-          expect(components.some(function (componentResult) {
-            return componentResult.key === key
-          })).toBeFalse()
-          navigator.appName = previous
-          done()
-        })
-      })
-
-      it('does not use timezone when excluded', function (done) {
-        var key = 'timezone'
-        var fp2 = new Fingerprint2({excludes: [key]})
-        fp2.get(function (result, components) {
-          expect(components.some(function (componentResult) {
-            return componentResult.key === key
-          })).toBeFalse()
-          done()
-        })
+    xit('does not use IE plugins info when excluded', function (done) {
+      var previous = navigator.appName
+      navigator.appName = 'Microsoft Internet Explorer'
+      var key = 'plugins'
+      var fp2 = new Fingerprint2({excludeIEPlugins: true})
+      fp2.get(function (result, components) {
+        expect(components.some(function (componentResult) {
+          return componentResult.key === key
+        })).toBeFalse()
+        navigator.appName = previous
+        done()
       })
     })
 
@@ -321,7 +264,7 @@ describe('Fingerprint2', function () {
         })
       })
 
-      it('safely introduce a new component even if it thorws', function (done) {
+      it('safely introduce a new component even if it throws', function (done) {
         var fp = new Fingerprint2({
           extraComponents: [
             {
