@@ -327,7 +327,7 @@ describe('Fingerprint2', function () {
             {
               key: 'my key',
               getData: function customFunction (done) {
-                throw 'unstable component'
+                throw new Error('unstable component')
               }
             }
           ]
