@@ -438,25 +438,13 @@
     done(NOT_AVAILABLE)
   }
   var sessionStorageKey = function (done) {
-    if (hasSessionStorage()) {
-      done(1)
-      return
-    }
-    done(0)
+    done(hasSessionStorage())
   }
   var localStorageKey = function (done) {
-    if (hasLocalStorage()) {
-      done(1)
-      return
-    }
-    done(0)
+    done(hasLocalStorage())
   }
   var indexedDbKey = function (done) {
-    if (hasIndexedDB()) {
-      done(1)
-      return
-    }
-    done(0)
+    done(hasIndexedDB())
   }
   var addBehaviorKey = function (done) {
       // body might not be defined at this point or removed programmatically
@@ -827,7 +815,7 @@
     try {
       return !!window.sessionStorage
     } catch (e) {
-      return true // SecurityError when referencing it means it exists
+      return ERROR // SecurityError when referencing it means it exists
     }
   }
 
@@ -836,14 +824,14 @@
     try {
       return !!window.localStorage
     } catch (e) {
-      return true // SecurityError when referencing it means it exists
+      return ERROR // SecurityError when referencing it means it exists
     }
   }
   var hasIndexedDB = function () {
     try {
       return !!window.indexedDB
     } catch (e) {
-      return true // SecurityError when referencing it means it exists
+      return ERROR // SecurityError when referencing it means it exists
     }
   }
   var getHardwareConcurrency = function () {
