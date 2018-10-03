@@ -395,22 +395,26 @@ describe('Fingerprint2', function () {
         })
       })
     })
-
-    describe('extra', function () {
-      //https://github.com/jsdom/jsdom/blob/master/lib/jsdom/living/navigator/NavigatorPlugins-impl.js
-      it('should no throw in jsdom like environment', function (done) {
-        // direct assignment does not work
-        Object.defineProperty(navigator, "plugins", {value: {
-            javaEnabled: function () {
-              return false
+    
+    if (!onPhantomJs) {
+      describe('extra', function () {
+        //https://github.com/jsdom/jsdom/blob/master/lib/jsdom/living/navigator/NavigatorPlugins-impl.js
+        it('should no throw in jsdom like environment', function (done) {
+          // direct assignment does not work
+          Object.defineProperty(navigator, "plugins", {
+            value: {
+              javaEnabled: function () {
+                return false
+              }
             }
-          }})
-        new Fingerprint2().get(function (_, components) {
-          expect(getComponent(components, 'plugins')).toBeDefined()
-          done()
+          })
+          new Fingerprint2().get(function (_, components) {
+            expect(getComponent(components, 'plugins')).toBeDefined()
+            done()
+          })
         })
       })
-    })
+    }
 
   })
 })
