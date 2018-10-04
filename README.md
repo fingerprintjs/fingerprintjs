@@ -280,13 +280,8 @@ To still hash the result have a look at the following example:
 
 ```
 Fingerprint2.get(options, function (components) {
-    var values = Object.values(components).map(function (value) {
-     if (value && typeof value.join === 'function') {
-        return value.join(';')
-      }
-      return value
-    })
-    var murmur = Fingerprint2.x64hash128(values.join('~~~'), 31)
+    var values = Object.values(components)
+    var murmur = Fingerprint2.x64hash128(values.join(''), 31)
     var results = murmur;
 })
 ```
