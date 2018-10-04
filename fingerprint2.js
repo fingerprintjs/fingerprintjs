@@ -519,7 +519,7 @@
       return done('missing swfPath in options')
     }
     loadSwfAndDetectFonts(function (fonts) {
-      done(fonts.join(';'))
+      done(fonts)
     }, options)
   }
 // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
@@ -744,9 +744,9 @@
     }
     return map(plugins, function (p) {
       var mimeTypes = map(p, function (mt) {
-        return [mt.type, mt.suffixes].join('~')
-      }).join(',')
-      return [p.name, p.description, mimeTypes].join('::')
+        return [mt.type, mt.suffixes]
+      })
+      return [p.name, p.description, mimeTypes]
     })
   }
   var getIEPlugins = function (options) {
@@ -947,7 +947,7 @@
     ctx.fill('evenodd')
 
     if (canvas.toDataURL) { result.push('canvas fp:' + canvas.toDataURL()) }
-    return result.join('~')
+    return result
   }
   var getWebglFp = function () {
     var gl
@@ -1008,7 +1008,7 @@
     } catch (e) {
         /* .toDataURL may be absent or broken (blocked by extension) */
     }
-    result.push('extensions:' + (gl.getSupportedExtensions() || []).join(';'))
+    result.push('extensions:' + (gl.getSupportedExtensions() || []))
     result.push('webgl aliased line width range:' + fa2s(gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE)))
     result.push('webgl aliased point size range:' + fa2s(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)))
     result.push('webgl alpha bits:' + gl.getParameter(gl.ALPHA_BITS))
@@ -1045,7 +1045,7 @@
     } catch (e) { /* squelch */ }
 
     if (!gl.getShaderPrecisionFormat) {
-      return result.join('~')
+      return result
     }
 
     each(['FLOAT', 'INT'], function (numType) {
@@ -1057,12 +1057,12 @@
               key = 'precision ' + key
             }
             var line = ['webgl ', shader.toLowerCase(), ' shader ', numSize.toLowerCase(), ' ', numType.toLowerCase(), ' ', key, ':', format]
-            result.push(line.join(''))
+            result.push(line)
           })
         })
       })
     })
-    return result.join('~')
+    return result
   }
   var getWebglVendorAndRenderer = function () {
       /* This a subset of the WebGL fingerprint with a lot of entropy, while being reasonably browser-independent */
@@ -1378,25 +1378,16 @@
     console.warn('deprecated new Fingerprint() use \n' +
 '      Fingerprint2.get(options, function (components) {\n' +
 '        var values = Object.values(components).map(function (value) {\n' +
-"         if (value && typeof value.join === 'function') {\n" +
-"            return value.join(';')\n" +
-'          }\n' +
 '          return value\n' +
 '        })\n' +
-"        var murmur = Fingerprint2.x64hash128(values.join('~~~'), 31)\n" +
+"        var murmur = Fingerprint2.x64hash128(values.join(''), 31)\n" +
 '      })\n' +
 '       instead')
     return Fingerprint2.get(this.options, function (components) {
-      var values = []
-      each(components, function (pair) {
-        var value = pair.value
-        if (value && typeof value.join === 'function') {
-          values.push(value.join(';'))
-        } else {
-          values.push(value)
-        }
+      var values = map(components, function (pair) {
+        return pair.value
       })
-      var murmur = x64hash128(values.join('~~~'), 31)
+      var murmur = x64hash128(values.join(''), 31)
       callback(murmur, components)
     })
   }
