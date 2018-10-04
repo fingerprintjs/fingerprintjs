@@ -1377,9 +1377,7 @@
   Fingerprint2.prototype.get = function (callback) {
     console.warn('deprecated new Fingerprint() use \n' +
 '      Fingerprint2.get(options, function (components) {\n' +
-'        var values = Object.values(components).map(function (value) {\n' +
-'          return value\n' +
-'        })\n' +
+'        var values = Object.values(components)\n' +
 "        var murmur = Fingerprint2.x64hash128(values.join(''), 31)\n" +
 '      })\n' +
 '       instead')
