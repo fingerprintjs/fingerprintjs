@@ -1312,7 +1312,10 @@
   }
 
   Fingerprint2.get = function (options, callback) {
-    if (!options) {
+    if (!callback) {
+      callback = options
+      options = {}
+    } else if (!options) {
       options = {}
     }
     extendSoft(options, defaultOptions)
