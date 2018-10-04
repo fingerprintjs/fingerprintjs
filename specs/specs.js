@@ -13,7 +13,6 @@ function getComponent (components, key) {
 var onPhantomJs = window._phantom != null
 
 describe('Fingerprint2', function () {
-
   describe('FP2', function () {
     it('.get should be available', function () {
       expect(Fingerprint2.get).toBeDefined()
@@ -92,7 +91,7 @@ describe('Fingerprint2', function () {
 
   describe('get', function () {
     describe('default options', function () {
-      //legacy
+      // legacy
       it('calculates fingerprint hash', function (done) {
         (new Fingerprint2()).get(function (result) {
           expect(result).toMatch(/^[0-9a-f]{32}$/i)
@@ -326,7 +325,7 @@ describe('Fingerprint2', function () {
           Fingerprint2.get(function (components) {
             getComponent(components, 'webgl')
           })
-          var gl = fp2.getWebglCanvas()
+          var gl = Fingerprint2.getWebglCanvas()
           var item = function (name, descr, attr1, attr2, attr3) {
             var fmt = gl.getShaderPrecisionFormat(attr1, attr2)[attr3]
             return ['webgl ', name, ' shader ', descr, ':', fmt].join('')
