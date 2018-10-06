@@ -229,9 +229,7 @@
     return ('00000000' + (h1[0] >>> 0).toString(16)).slice(-8) + ('00000000' + (h1[1] >>> 0).toString(16)).slice(-8) + ('00000000' + (h2[0] >>> 0).toString(16)).slice(-8) + ('00000000' + (h2[1] >>> 0).toString(16)).slice(-8)
   }
 
-  var NOT_AVAILABLE = 'not available'
-  var ERROR = 'error'
-  var EXCLUDED = 'excluded'
+
 
   var defaultOptions = {
     audioTimeout: 1000,
@@ -303,9 +301,9 @@
   }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices
-  var enumerateDevicesKey = function (done) {
+  var enumerateDevicesKey = function (done, options) {
     if (!isEnumerateDevicesSupported()) {
-      return done(NOT_AVAILABLE)
+      return done(options.NOT_AVAILABLE)
     }
     navigator.mediaDevices.enumerateDevices().then(function (devices) {
       done(devices.map(function (device) {
@@ -324,13 +322,13 @@
   var audioKey = function (done, options) {
     if (options.excludeAudioIOS11 && navigator.userAgent.match(/OS 11.+Version\/11.+Safari/)) {
         // See comment for excludeUserAgent and https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
-      return done(EXCLUDED)
+      return done(options.EXCLUDED)
     }
 
     var AudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext
 
     if (AudioContext == null) {
-      return done(NOT_AVAILABLE)
+      return done(options.NOT_AVAILABLE)
     }
 
     var context = new AudioContext(1, 44100, 44100)
@@ -385,23 +383,17 @@
   var UserAgent = function (done) {
     done(navigator.userAgent)
   }
-  var languageKey = function (done) {
-    done(navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || NOT_AVAILABLE)
+  var languageKey = function (done, options) {
+    done(navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || options.NOT_AVAILABLE)
   }
-  var colorDepthKey = function (done) {
-    done(window.screen.colorDepth || NOT_AVAILABLE)
+  var colorDepthKey = function (done, options) {
+    done(window.screen.colorDepth || options.NOT_AVAILABLE)
   }
-  var deviceMemoryKey = function (done) {
-    done(getDeviceMemory())
+  var deviceMemoryKey = function (done, options) {
+    done(navigator.deviceMemory || options.NOT_AVAILABLE)
   }
-  var getDeviceMemory = function () {
-    return navigator.deviceMemory || NOT_AVAILABLE
-  }
-  var pixelRatioKey = function (done) {
-    done(getPixelRatio())
-  }
-  var getPixelRatio = function () {
-    return window.devicePixelRatio || NOT_AVAILABLE
+  var pixelRatioKey = function (done, options) {
+    done(window.devicePixelRatio || options.NOT_AVAILABLE)
   }
   var screenResolutionKey = function (done, options) {
     done(getScreenResolution(options))
@@ -425,26 +417,26 @@
       return available
     }
     // headless browsers
-    return NOT_AVAILABLE
+    return options.NOT_AVAILABLE
   }
   var timezoneOffset = function (done) {
     done(new Date().getTimezoneOffset())
   }
-  var timezone = function (done) {
+  var timezone = function (done, options) {
     if (window.Intl && window.Intl.DateTimeFormat) {
       done(new window.Intl.DateTimeFormat().resolvedOptions().timeZone)
       return
     }
-    done(NOT_AVAILABLE)
+    done(options.NOT_AVAILABLE)
   }
-  var sessionStorageKey = function (done) {
-    done(hasSessionStorage())
+  var sessionStorageKey = function (done, options) {
+    done(hasSessionStorage(options))
   }
-  var localStorageKey = function (done) {
-    done(hasLocalStorage())
+  var localStorageKey = function (done, options) {
+    done(hasLocalStorage(options))
   }
-  var indexedDbKey = function (done) {
-    done(hasIndexedDB())
+  var indexedDbKey = function (done, options) {
+    done(hasIndexedDB(options))
   }
   var addBehaviorKey = function (done) {
       // body might not be defined at this point or removed programmatically
@@ -464,25 +456,25 @@
   var cpuClassKey = function (done) {
     done(getNavigatorCpuClass())
   }
-  var platformKey = function (done) {
-    done(getNavigatorPlatform())
+  var platformKey = function (done, options) {
+    done(getNavigatorPlatform(options))
   }
-  var doNotTrackKey = function (done) {
-    done(getDoNotTrack())
+  var doNotTrackKey = function (done, options) {
+    done(getDoNotTrack(options))
   }
   var canvasKey = function (done, options) {
     if (isCanvasSupported()) {
       done(getCanvasFp(options))
       return
     }
-    done(NOT_AVAILABLE)
+    done(options.NOT_AVAILABLE)
   }
-  var webglKey = function (done) {
+  var webglKey = function (done, options) {
     if (isWebGlSupported()) {
       done(getWebglFp())
       return
     }
-    done(NOT_AVAILABLE)
+    done(options.NOT_AVAILABLE)
   }
   var webglVendorAndRendererKey = function (done) {
     if (isWebGlSupported()) {
@@ -716,7 +708,7 @@
       if (!options.excludeIEPlugins) {
         done(getIEPlugins(options))
       } else {
-        done(EXCLUDED)
+        done(options.EXCLUDED)
       }
     } else {
       done(getRegularPlugins(options))
@@ -724,7 +716,7 @@
   }
   var getRegularPlugins = function (options) {
     if (navigator.plugins == null) {
-      return NOT_AVAILABLE
+      return options.NOT_AVAILABLE
     }
 
     var plugins = []
@@ -783,11 +775,11 @@
           new window.ActiveXObject(name)
           return name
         } catch (e) {
-          return ERROR
+          return options.ERROR
         }
       })
     } else {
-      result.push(NOT_AVAILABLE)
+      result.push(options.NOT_AVAILABLE)
     }
     if (navigator.plugins) {
       result = result.concat(getRegularPlugins(options))
@@ -808,49 +800,49 @@
   var touchSupportKey = function (done) {
     done(getTouchSupport())
   }
-  var hardwareConcurrencyKey = function (done) {
-    done(getHardwareConcurrency())
+  var hardwareConcurrencyKey = function (done, options) {
+    done(getHardwareConcurrency(options))
   }
   var hasSessionStorage = function () {
     try {
       return !!window.sessionStorage
     } catch (e) {
-      return ERROR // SecurityError when referencing it means it exists
+      return options.ERROR // SecurityError when referencing it means it exists
     }
   }
 
 // https://bugzilla.mozilla.org/show_bug.cgi?id=781447
-  var hasLocalStorage = function () {
+  var hasLocalStorage = function (options) {
     try {
       return !!window.localStorage
     } catch (e) {
-      return ERROR // SecurityError when referencing it means it exists
+      return options.ERROR // SecurityError when referencing it means it exists
     }
   }
-  var hasIndexedDB = function () {
+  var hasIndexedDB = function (options) {
     try {
       return !!window.indexedDB
     } catch (e) {
-      return ERROR // SecurityError when referencing it means it exists
+      return options.ERROR // SecurityError when referencing it means it exists
     }
   }
-  var getHardwareConcurrency = function () {
+  var getHardwareConcurrency = function (options) {
     if (navigator.hardwareConcurrency) {
       return navigator.hardwareConcurrency
     }
-    return NOT_AVAILABLE
+    return options.NOT_AVAILABLE
   }
   var getNavigatorCpuClass = function () {
-    return navigator.cpuClass || NOT_AVAILABLE
+    return navigator.cpuClass || options.NOT_AVAILABLE
   }
-  var getNavigatorPlatform = function () {
+  var getNavigatorPlatform = function (options) {
     if (navigator.platform) {
       return navigator.platform
     } else {
-      return NOT_AVAILABLE
+      return options.NOT_AVAILABLE
     }
   }
-  var getDoNotTrack = function () {
+  var getDoNotTrack = function (options) {
     if (navigator.doNotTrack) {
       return navigator.doNotTrack
     } else if (navigator.msDoNotTrack) {
@@ -858,7 +850,7 @@
     } else if (window.doNotTrack) {
       return window.doNotTrack
     } else {
-      return NOT_AVAILABLE
+      return options.NOT_AVAILABLE
     }
   }
 // This is a crude and primitive touch screen detection.
@@ -1319,6 +1311,11 @@
       options = {}
     }
     extendSoft(options, defaultOptions)
+    extendSoft(options, {
+        NOT_AVAILABLE: Fingerprint2.NOT_AVAILABLE,
+        ERROR: Fingerprint2.ERROR,
+        EXCLUDED: Fingerprint2.EXCLUDED
+    })
     options.components = options.extraComponents.concat(components)
 
     var keys = {
@@ -1390,6 +1387,9 @@
     })
   }
 
+  Fingerprint2.NOT_AVAILABLE = 'not available'
+  Fingerprint2.ERROR = 'error'
+  Fingerprint2.EXCLUDED = 'excluded'
   Fingerprint2.x64hash128 = x64hash128
   Fingerprint2.VERSION = '2.0.0'
   return Fingerprint2
