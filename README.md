@@ -129,11 +129,11 @@ Arrays of extra components to include.
 
 ### excludes
 
-An array of components (strings) to exclude. Empty array to include everything.
+An object of with components keys to exclude. Empty object to include everything.
 
 ```
 var options = {
-    excludes: ['userAgent', 'language']
+    excludes: {'userAgent': true, 'language': true}
 }
 ```
 
@@ -233,7 +233,7 @@ Skip touch screen specific info fingerprinting
 Flash font enumeration is disabled by default. JS code is used by default to get the list of available fonts.
 
 The reason for this  is that Flash will not work in incognito mode.
-However, you can make the library to use Flash when detecting the fonts by not including 'fontsFlash' in the excludes array
+However, you can make the library to use Flash when detecting the fonts by not including 'fontsFlash' in the excludes object
 
 To use Flash font enumeration, make sure you have swfobject available. If you don't, the library will skip the Flash part entirely.
 
@@ -291,9 +291,9 @@ Fingerprint2.get(options, function (components) {
 
 Before exclusion was done by putting an individual excludes like `excludeTouchSupport: true` in the options.
 
-To exclude a component now, put its key inside the excludes array in options
+To exclude a component now, put its key inside the excludes object in options
 ```
-var options = {excludes: ['touchSupport']}
+var options = {excludes: {'touchSupport': true}}
 ```
 
 ### Custom Entropy Function

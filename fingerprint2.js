@@ -237,16 +237,16 @@
     sortPluginsFor: [/palemoon/i],
     // To ensure consistent fingerprints when users rotate their mobile devices
     userDefinedFonts: [],
-    excludes: [
+    excludes: {
       // Unreliable on Windows, see https://github.com/Valve/fingerprintjs2/issues/375
-      'enumerateDevices',
+      'enumerateDevices': true,
       // devicePixelRatio depends on browser zoom, and it's impossible to detect browser zoom
-      'pixelRatio',
+      'pixelRatio': true,
       // DNT depends on incognito mode for some browsers (Chrome) and it's impossible to detect incognito mode
-      'doNotTrack',
+      'doNotTrack': true,
       // uses js fonts already
-      'fontsFlash'
-    ],
+      'fontsFlash': true
+    },
 
     // On iOS 11, audio context can only be used in response to user interaction.
     // We require users to explicitly enable audio fingerprinting on iOS 11.
@@ -1335,7 +1335,7 @@
       }
       var component = options.components[i]
 
-      if (options.excludes.indexOf(component.key) > -1) {
+      if (options.excludes[component.key]) {
         chainComponents(false) // skip
         return
       }

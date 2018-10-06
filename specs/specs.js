@@ -121,7 +121,9 @@ describe('Fingerprint2', function () {
         'timezone'
       ].forEach(function (key) {
         it('does not use ' + key + ' when excluded', function (done) {
-          Fingerprint2.get({excludes: [key]}, function (components) {
+          var options = {excludes: {}}
+          options.excludes[key] = true
+          Fingerprint2.get(options, function (components) {
             expect(components.some(function (componentResult) {
               return componentResult.key === key
             })).toBeFalse()
@@ -339,7 +341,7 @@ describe('Fingerprint2', function () {
     if (!onPhantomJs) {
       describe('enumerate devices fingerprint', function () {
         it('checks enumerate devices fingerprint', function (done) {
-          var options = {excludes: []}
+          var options = {excludes: {}}
           Fingerprint2.get(options, function (components) {
             if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
               expect(getComponent(components, 'enumerateDevices')).not.toBeNull()
