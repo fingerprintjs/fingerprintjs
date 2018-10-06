@@ -44,7 +44,7 @@ if (window.requestIdleCallback) {
 } else {
     setTimeout(function () {
         Fingerprint2.get(function(components) {
-        
+
         })  
     }, 500)
 }
@@ -79,7 +79,7 @@ While hundreds of the most popular fonts are included in the extended font list,
 Fingerprint2.get({
   userDefinedFonts: ["Nimbus Mono", "Junicode", "Presto"]
 }, function(components) {
-  
+
 })
 ```
 
@@ -144,11 +144,11 @@ User agent should not take part in FP calculation (https://developer.mozilla.org
 
 #### `language`
 Exclude browser language (https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/language)
-    
+
 #### `colorDepth`
 
 Exclude color depth (https://developer.mozilla.org/en-US/docs/Web/API/Screen/colorDepth)
-    
+
 #### `deviceMemory`
 Skip device memory detection
 
@@ -245,7 +245,7 @@ Skip audio fingerprinting
 Skip `MediaDevices.enumerateDevices` based device list
 
 
- 
+
 
 By default, almost all components are included in the fingerprint.
 
@@ -276,7 +276,7 @@ Fingerprint2.getPromise(options).then(function (components) {
 })
 ```
 
-To still hash the result have a look at the following example: 
+To still hash the result have a look at the following example:
 
 ```
 Fingerprint2.get(options, function (components) {
@@ -294,10 +294,10 @@ Before exclusion was done by putting an individual excludes like `excludeTouchSu
 To exclude a component now, put its key inside the excludes array in options
 ```
 var options = {excludes: ['touchSupport']}
-``` 
+```
 
 ### Custom Entropy Function
- 
+
 `options.customEntropyFunction` and `customKey` have been replaced with a extension friendly, stable alternative. The new contract allows for async sources as well. See below for component definition. `options.extraComponents` should contain an array with custom components.
 
 
@@ -309,7 +309,7 @@ var options = {
         }
     ]
 }
-``` 
+```
 
 ### jsfonts and flashFonts
 
@@ -324,7 +324,15 @@ Components keys are now all camelCase. Example 'user_agent' -> 'userAgent'
 
 Fingerprint2.x64hash128 static function is now exposed
 
-### audioTimeout 
+### Error constants are exposed and configurable
+
+```
+Fingerprint2.NOT_AVAILABLE = 'not available'
+Fingerprint2.ERROR = 'error'
+Fingerprint2.EXCLUDED = 'excluded'
+```
+
+### audioTimeout
 
 audioTimeout is an option, default 1000ms
 
@@ -343,7 +351,7 @@ getData value is the components function.
 A components function takes done as first argument, and options as an optional second argument.
 It must call done exactly once with a value that can be cast to a String.
 It must wrap all unreachable code (setTimeout, requestAnimationFrame, etc) in its own try catch,
-it should use catch as an opportunity to give a unique value to `done` 
+it should use catch as an opportunity to give a unique value to `done`
 
 ```
 function (done, options) {
