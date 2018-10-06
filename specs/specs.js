@@ -50,9 +50,9 @@ describe('Fingerprint2', function () {
     // options is not accessible anymore
     xit('uses default options', function () {
       var fp2 = new Fingerprint2()
-      expect(fp2.options.swfContainerId).toEqual('fingerprintjs2')
-      expect(fp2.options.swfPath).toEqual('flash/compiled/FontList.swf')
-      expect(fp2.options.userDefinedFonts).toEqual([])
+      expect(fp2.options.fonts.swfContainerId).toEqual('fingerprintjs2')
+      expect(fp2.options.fonts.swfPath).toEqual('flash/compiled/FontList.swf')
+      expect(fp2.options.fonts.userDefinedFonts).toEqual([])
     })
 
     xit('allows to override default options', function () {
@@ -138,7 +138,7 @@ describe('Fingerprint2', function () {
       var previous = navigator.appName
       navigator.appName = 'Microsoft Internet Explorer'
       var key = 'plugins'
-      Fingerprint2.get({excludeIEPlugins: true}, function (components) {
+      Fingerprint2.get({plugins: {excludeIE: true}}, function (components) {
         expect(components.some(function (componentResult) {
           return componentResult.key === key
         })).toBeFalse()

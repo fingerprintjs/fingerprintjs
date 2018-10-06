@@ -230,13 +230,28 @@
   }
 
   var defaultOptions = {
-    audioTimeout: 1000,
-    swfContainerId: 'fingerprintjs2',
-    swfPath: 'flash/compiled/FontList.swf',
-    detectScreenOrientation: true,
-    sortPluginsFor: [/palemoon/i],
-    // To ensure consistent fingerprints when users rotate their mobile devices
-    userDefinedFonts: [],
+    audio: {
+      timeout: 1000,
+        // On iOS 11, audio context can only be used in response to user interaction.
+        // We require users to explicitly enable audio fingerprinting on iOS 11.
+        // See https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
+      excludeIOS11: true
+    },
+    fonts: {
+      swfContainerId: 'fingerprintjs2',
+      swfPath: 'flash/compiled/FontList.swf',
+      userDefinedFonts: [],
+      extendedJsFonts: false
+    },
+    screen: {
+       // To ensure consistent fingerprints when users rotate their mobile devices
+      detectScreenOrientation: true
+    },
+    plugins: {
+      sortPluginsFor: [/palemoon/i],
+      excludeIE: false
+    },
+    extraComponents: [],
     excludes: {
       // Unreliable on Windows, see https://github.com/Valve/fingerprintjs2/issues/375
       'enumerateDevices': true,
@@ -246,13 +261,7 @@
       'doNotTrack': true,
       // uses js fonts already
       'fontsFlash': true
-    },
-
-    // On iOS 11, audio context can only be used in response to user interaction.
-    // We require users to explicitly enable audio fingerprinting on iOS 11.
-    // See https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
-    excludeAudioIOS11: true,
-    extraComponents: []
+    }
   }
 
   var each = function (obj, iterator) {
@@ -318,7 +327,8 @@
   }
 // Inspired by and based on https://github.com/cozylife/audio-fingerprint
   var audioKey = function (done, options) {
-    if (options.excludeAudioIOS11 && navigator.userAgent.match(/OS 11.+Version\/11.+Safari/)) {
+    var audioOptions = options.audio
+    if (audioOptions.excludeIOS11 && navigator.userAgent.match(/OS 11.+Version\/11.+Safari/)) {
         // See comment for excludeUserAgent and https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
       return done(options.EXCLUDED)
     }
@@ -359,7 +369,7 @@
       context.oncomplete = function () {}
       context = null
       return done('audioTimeout')
-    }, options.audioTimeout)
+    }, audioOptions.timeout)
 
     context.oncomplete = function (event) {
       var fingerprint
@@ -398,7 +408,7 @@
   }
   var getScreenResolution = function (options) {
     var resolution = [window.screen.width, window.screen.height]
-    if (options.detectScreenOrientation) {
+    if (options.screen.detectScreenOrientation) {
       resolution.sort().reverse()
     }
     return resolution
@@ -409,7 +419,7 @@
   var getAvailableScreenResolution = function (options) {
     if (window.screen.availWidth && window.screen.availHeight) {
       var available = [window.screen.availHeight, window.screen.availWidth]
-      if (options.detectScreenOrientation) {
+      if (options.screen.detectScreenOrientation) {
         available.sort().reverse()
       }
       return available
@@ -505,8 +515,8 @@
     if (!hasMinFlashInstalled()) {
       return done('flash not installed')
     }
-    if (!options.swfPath) {
-      return done('missing swfPath in options')
+    if (!options.fonts.swfPath) {
+      return done('missing options.fonts.swfPath')
     }
     loadSwfAndDetectFonts(function (fonts) {
       done(fonts)
@@ -533,7 +543,7 @@
       'Verdana', 'Wingdings', 'Wingdings 2', 'Wingdings 3'
     ]
 
-    if (options.extendedJsFonts) {
+    if (options.fonts.extendedJsFonts) {
       var extendedFontList = [
         'Abadi MT Condensed Light', 'Academy Engraved LET', 'ADOBE CASLON PRO', 'Adobe Garamond', 'ADOBE GARAMOND PRO', 'Agency FB', 'Aharoni', 'Albertus Extra Bold', 'Albertus Medium', 'Algerian', 'Amazone BT', 'American Typewriter',
         'American Typewriter Condensed', 'AmerType Md BT', 'Andalus', 'Angsana New', 'AngsanaUPC', 'Antique Olive', 'Aparajita', 'Apple Chancery', 'Apple Color Emoji', 'Apple SD Gothic Neo', 'Arabic Typesetting', 'ARCHER',
@@ -569,7 +579,7 @@
       fontList = fontList.concat(extendedFontList)
     }
 
-    fontList = fontList.concat(options.userDefinedFonts)
+    fontList = fontList.concat(options.fonts.userDefinedFonts)
 
       // remove duplicate fonts
     fontList = fontList.filter(function (font, position) {
@@ -703,7 +713,7 @@
   }
   var pluginsComponent = function (done, options) {
     if (isIE()) {
-      if (!options.excludeIEPlugins) {
+      if (!options.plugins.excludeIE) {
         done(getIEPlugins(options))
       } else {
         done(options.EXCLUDED)
@@ -786,8 +796,8 @@
   }
   var pluginsShouldBeSorted = function (options) {
     var should = false
-    for (var i = 0, l = options.sortPluginsFor.length; i < l; i++) {
-      var re = options.sortPluginsFor[i]
+    for (var i = 0, l = options.plugins.sortPluginsFor.length; i < l; i++) {
+      var re = options.plugins.sortPluginsFor[i]
       if (navigator.userAgent.match(re)) {
         should = true
         break
@@ -1231,7 +1241,7 @@
   }
   var addFlashDivNode = function (options) {
     var node = document.createElement('div')
-    node.setAttribute('id', options.swfContainerId)
+    node.setAttribute('id', options.fonts.swfContainerId)
     document.body.appendChild(node)
   }
   var loadSwfAndDetectFonts = function (done, options) {
@@ -1239,11 +1249,11 @@
     window[hiddenCallback] = function (fonts) {
       done(fonts)
     }
-    var id = options.swfContainerId
+    var id = options.fonts.swfContainerId
     addFlashDivNode()
     var flashvars = { onReady: hiddenCallback }
     var flashparams = { allowScriptAccess: 'always', menu: 'false' }
-    window.swfobject.embedSWF(options.swfPath, id, '1', '1', '9.0.0', false, flashvars, flashparams, {})
+    window.swfobject.embedSWF(options.fonts.swfPath, id, '1', '1', '9.0.0', false, flashvars, flashparams, {})
   }
   var getWebglCanvas = function () {
     var canvas = document.createElement('canvas')
