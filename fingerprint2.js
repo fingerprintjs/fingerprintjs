@@ -229,8 +229,6 @@
     return ('00000000' + (h1[0] >>> 0).toString(16)).slice(-8) + ('00000000' + (h1[1] >>> 0).toString(16)).slice(-8) + ('00000000' + (h2[0] >>> 0).toString(16)).slice(-8) + ('00000000' + (h2[1] >>> 0).toString(16)).slice(-8)
   }
 
-
-
   var defaultOptions = {
     audioTimeout: 1000,
     swfContainerId: 'fingerprintjs2',
@@ -453,8 +451,8 @@
     }
     done(0)
   }
-  var cpuClassKey = function (done) {
-    done(getNavigatorCpuClass())
+  var cpuClassKey = function (done, options) {
+    done(getNavigatorCpuClass(options))
   }
   var platformKey = function (done, options) {
     done(getNavigatorPlatform(options))
@@ -803,7 +801,7 @@
   var hardwareConcurrencyKey = function (done, options) {
     done(getHardwareConcurrency(options))
   }
-  var hasSessionStorage = function () {
+  var hasSessionStorage = function (options) {
     try {
       return !!window.sessionStorage
     } catch (e) {
@@ -832,7 +830,7 @@
     }
     return options.NOT_AVAILABLE
   }
-  var getNavigatorCpuClass = function () {
+  var getNavigatorCpuClass = function (options) {
     return navigator.cpuClass || options.NOT_AVAILABLE
   }
   var getNavigatorPlatform = function (options) {
@@ -1312,9 +1310,9 @@
     }
     extendSoft(options, defaultOptions)
     extendSoft(options, {
-        NOT_AVAILABLE: Fingerprint2.NOT_AVAILABLE,
-        ERROR: Fingerprint2.ERROR,
-        EXCLUDED: Fingerprint2.EXCLUDED
+      NOT_AVAILABLE: Fingerprint2.NOT_AVAILABLE,
+      ERROR: Fingerprint2.ERROR,
+      EXCLUDED: Fingerprint2.EXCLUDED
     })
     options.components = options.extraComponents.concat(components)
 

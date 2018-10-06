@@ -293,48 +293,48 @@ describe('Fingerprint2', function () {
           done()
         })
       })
-  })
-      describe('error constants', function () {
-        it('are exposed', function (done) {
-          expect(Fingerprint2.NOT_AVAILABLE).toBeDefined()
-          expect(Fingerprint2.ERROR).toBeDefined()
-          expect(Fingerprint2.EXCLUDED).toBeDefined()
-          done()
-        })
+    })
+    describe('error constants', function () {
+      it('are exposed', function (done) {
+        expect(Fingerprint2.NOT_AVAILABLE).toBeDefined()
+        expect(Fingerprint2.ERROR).toBeDefined()
+        expect(Fingerprint2.EXCLUDED).toBeDefined()
+        done()
+      })
 
-        it('are configurable', function (done) {
-            var NA = 'NA'
-            var E = 'E'
-            var X = 'X'
-            Fingerprint2.NOT_AVAILABLE = NA
-          expect(Fingerprint2.NOT_AVAILABLE).toEqual(NA)
-          Fingerprint2.ERROR = E
-          expect(Fingerprint2.ERROR).toEqual(E)
-          Fingerprint2.EXCLUDED = X
-          expect(Fingerprint2.EXCLUDED).toEqual(X)
-          done()
-        })
+      it('are configurable', function (done) {
+        var NA = 'NA'
+        var E = 'E'
+        var X = 'X'
+        Fingerprint2.NOT_AVAILABLE = NA
+        expect(Fingerprint2.NOT_AVAILABLE).toEqual(NA)
+        Fingerprint2.ERROR = E
+        expect(Fingerprint2.ERROR).toEqual(E)
+        Fingerprint2.EXCLUDED = X
+        expect(Fingerprint2.EXCLUDED).toEqual(X)
+        done()
+      })
 
-        it('are used by components', function (done) {
-            var NA = 'NA'
-            Fingerprint2.NOT_AVAILABLE = NA
-          var options = {
-            extraComponents: [
-              {
-                key: 'my key',
-                getData: function customFunction (done, options) {
-                  done(options.NOT_AVAILABLE)
-                }
+      it('are used by components', function (done) {
+        var NA = 'NA'
+        Fingerprint2.NOT_AVAILABLE = NA
+        var options = {
+          extraComponents: [
+            {
+              key: 'my key',
+              getData: function customFunction (done, options) {
+                done(options.NOT_AVAILABLE)
               }
-            ]
-          }
-          Fingerprint2.get(options, function (components) {
-            expect(components).toBeDefined()
-            expect(getComponent(components, 'my key')).toEqual(NA)
-            done()
-          })
+            }
+          ]
+        }
+        Fingerprint2.get(options, function (components) {
+          expect(components).toBeDefined()
+          expect(getComponent(components, 'my key')).toEqual(NA)
+          done()
         })
       })
+    })
 
     if (!onPhantomJs) {
       describe('enumerate devices fingerprint', function () {
