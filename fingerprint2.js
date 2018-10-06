@@ -293,7 +293,7 @@
     var key
     for (key in source) {
       value = source[key]
-      if (value != null && !target[key]) {
+      if (value != null && !(Object.prototype.hasOwnProperty.call(target, key))) {
         target[key] = value
       }
     }
