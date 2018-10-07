@@ -46,40 +46,6 @@ describe('Fingerprint2', function () {
     it('accepts an empty options object', function () {
       expect(new Fingerprint2({})).not.toBeNull()
     })
-
-    // options is not accessible anymore
-    xit('uses default options', function () {
-      var fp2 = new Fingerprint2()
-      expect(fp2.options.fonts.swfContainerId).toEqual('fingerprintjs2')
-      expect(fp2.options.fonts.swfPath).toEqual('flash/compiled/FontList.swf')
-      expect(fp2.options.fonts.userDefinedFonts).toEqual([])
-    })
-
-    xit('allows to override default options', function () {
-      var fp2 = new Fingerprint2({swfPath: 'newpath', userDefinedFonts: ['Ethos', 'Quenda']})
-      expect(fp2.options.swfContainerId).toEqual('fingerprintjs2')
-      expect(fp2.options.swfPath).toEqual('newpath')
-      expect(fp2.options.userDefinedFonts).toEqual(['Ethos', 'Quenda'])
-    })
-
-    xit('allows to add new options', function () {
-      var fp2 = new Fingerprint2({excludeUserAgent: true})
-      expect(fp2.options.swfContainerId).toEqual('fingerprintjs2')
-      expect(fp2.options.swfPath).toEqual('flash/compiled/FontList.swf')
-      expect(fp2.options.excludeUserAgent).toBe(true)
-    })
-
-    describe('sortPluginsFor', function () {
-      xit('has default value', function () {
-        var fp2 = new Fingerprint2()
-        expect(fp2.options.sortPluginsFor).toEqual([/palemoon/i])
-      })
-
-      xit('allows to set new array of regexes', function () {
-        var fp2 = new Fingerprint2({sortPluginsFor: [/firefox/i, /chrome/i]})
-        expect(fp2.options.sortPluginsFor).toEqual([/firefox/i, /chrome/i])
-      })
-    })
   })
 
   // legacy
@@ -366,11 +332,18 @@ describe('Fingerprint2', function () {
     if (!onPhantomJs) {
       describe('webgl shader precision format', function () {
         // fp2.getWebglCanvas() not exposed
-        xit('checks webgl shader precision format loop', function (done) {
+        it('checks webgl shader precision format loop', function (done) {
           Fingerprint2.get(function (components) {
             getComponent(components, 'webgl')
           })
-          var gl = Fingerprint2.getWebglCanvas()
+          var canvas = document.createElement('canvas')
+          var gl = null
+          try {
+            gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+          } catch (e) { /* squelch */ }
+          if (gl == null) {
+            done()
+          }
           var item = function (name, descr, attr1, attr2, attr3) {
             var fmt = gl.getShaderPrecisionFormat(attr1, attr2)[attr3]
             return ['webgl ', name, ' shader ', descr, ':', fmt].join('')
