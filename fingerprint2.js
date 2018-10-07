@@ -1379,19 +1379,17 @@
         var pair = components[i]
         if (pair.value === Fingerprint2.NOT_AVAILABLE) {
           pairs.push({key: pair.key, value: 'unknown'})
-        }
-        else if (pair.key == 'plugins') {
-          pairs.push({key: 'plugins', value: map(pair.value, function (p) {
-            var mimeTypes = map(p[2], function (mt) {
-              return mt.join('~')
-            }).join(',')
-            return [p[0], p[1], mimeTypes].join('::')
-          })})
-        }
-        else if (['canvas', 'webgl'].indexOf(pair.key) !== -1) {
+        } else if (pair.key === 'plugins') {
+          pairs.push({key: 'plugins',
+            value: map(pair.value, function (p) {
+              var mimeTypes = map(p[2], function (mt) {
+                return mt.join('~')
+              }).join(',')
+              return [p[0], p[1], mimeTypes].join('::')
+            })})
+        } else if (['canvas', 'webgl'].indexOf(pair.key) !== -1) {
           pairs.push({key: pair.key, value: pair.value.join('~')})
-        }
-        else if (['sessionStorage', 'localStorage', 'indexedDb', 'addBehavior', 'openDatabase'].indexOf(pair.key) !== -1) {
+        } else if (['sessionStorage', 'localStorage', 'indexedDb', 'addBehavior', 'openDatabase'].indexOf(pair.key) !== -1) {
           if (pair.value) {
             pairs.push({key: pair.key, value: 1})
           } else {
