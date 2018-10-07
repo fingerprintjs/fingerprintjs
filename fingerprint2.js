@@ -1399,9 +1399,10 @@
             continue
           }
         } else {
-          pairs.push(pair.join ? pair.join(';') : pair)
+          pairs.push(pair.value.join ? {key: pair.key, value: pair.value.join(';')} : pair)
         }
       }
+      console.log(map(pairs, function (pair) { return pair.value }).join('~~~'))
       var murmur = x64hash128(map(pairs, function (pair) { return pair.value }).join('~~~'), 31)
       callback(murmur, pairs)
     })
