@@ -1331,7 +1331,7 @@
     var i = -1
     var chainComponents = function (alreadyWaited) {
       i += 1
-      if (i === options.components.length) { // on finish
+      if (i >= options.components.length) { // on finish
         callback(keys.data)
         return
       }
@@ -1383,7 +1383,8 @@
           pairs.push({key: 'plugins',
             value: map(pair.value, function (p) {
               var mimeTypes = map(p[2], function (mt) {
-                return mt.join('~')
+                if (mt.join) { return mt.join('~') }
+                return mt
               }).join(',')
               return [p[0], p[1], mimeTypes].join('::')
             })})
@@ -1397,7 +1398,11 @@
             continue
           }
         } else {
-          pairs.push(pair.value.join ? {key: pair.key, value: pair.value.join(';')} : pair)
+          if (pair.value) {
+            pairs.push(pair.value.join ? {key: pair.key, value: pair.value.join(';')} : pair)
+          } else {
+            pairs.push({key: pair.key, value: pair.value})
+          }
         }
       }
       console.log(map(pairs, function (pair) { return pair.value }).join('~~~'))
