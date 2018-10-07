@@ -448,18 +448,10 @@
   }
   var addBehaviorKey = function (done) {
       // body might not be defined at this point or removed programmatically
-    if (document.body && document.body.addBehavior) {
-      done(1)
-      return
-    }
-    done(0)
+    done(!!(document.body && document.body.addBehavior))
   }
   var openDatabaseKey = function (done) {
-    if (window.openDatabase) {
-      done(1)
-      return
-    }
-    done(0)
+    done(!!window.openDatabase)
   }
   var cpuClassKey = function (done, options) {
     done(getNavigatorCpuClass(options))
@@ -1008,7 +1000,7 @@
     } catch (e) {
         /* .toDataURL may be absent or broken (blocked by extension) */
     }
-    result.push('extensions:' + (gl.getSupportedExtensions() || []))
+    result.push('extensions:' + (gl.getSupportedExtensions() || []).join(';'))
     result.push('webgl aliased line width range:' + fa2s(gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE)))
     result.push('webgl aliased point size range:' + fa2s(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)))
     result.push('webgl alpha bits:' + gl.getParameter(gl.ALPHA_BITS))
@@ -1056,7 +1048,7 @@
             if (key !== 'precision') {
               key = 'precision ' + key
             }
-            var line = ['webgl ', shader.toLowerCase(), ' shader ', numSize.toLowerCase(), ' ', numType.toLowerCase(), ' ', key, ':', format]
+            var line = ['webgl ', shader.toLowerCase(), ' shader ', numSize.toLowerCase(), ' ', numType.toLowerCase(), ' ', key, ':', format].join('')
             result.push(line)
           })
         })
@@ -1380,18 +1372,38 @@
   }
 
   Fingerprint2.prototype.get = function (callback) {
-    console.warn('deprecated new Fingerprint() use \n' +
-'      Fingerprint2.get(options, function (components) {\n' +
-'        var values = Object.values(components)\n' +
-"        var murmur = Fingerprint2.x64hash128(values.join(''), 31)\n" +
-'      })\n' +
-'       instead')
+    console.warn("'new Fingerprint()' is deprecated, see XXX")
     return Fingerprint2.get(this.options, function (components) {
-      var values = map(components, function (pair) {
-        return pair.value
-      })
-      var murmur = x64hash128(values.join(''), 31)
-      callback(murmur, components)
+      var pairs = []
+      for (var i = 0; i < components.length; i++) {
+        var pair = components[i]
+        if (pair.value === Fingerprint2.NOT_AVAILABLE) {
+          pairs.push({key: pair.key, value: 'unknown'})
+        }
+        else if (pair.key == 'plugins') {
+          pairs.push({key: 'plugins', value: map(pair.value, function (p) {
+            var mimeTypes = map(p[2], function (mt) {
+              return mt.join('~')
+            }).join(',')
+            return [p[0], p[1], mimeTypes].join('::')
+          })})
+        }
+        else if (['canvas', 'webgl'].indexOf(pair.key) !== -1) {
+          pairs.push({key: pair.key, value: pair.value.join('~')})
+        }
+        else if (['sessionStorage', 'localStorage', 'indexedDb', 'addBehavior', 'openDatabase'].indexOf(pair.key) !== -1) {
+          if (pair.value) {
+            pairs.push({key: pair.key, value: 1})
+          } else {
+            // skip
+            continue
+          }
+        } else {
+          pairs.push(pair.join ? pair.join(';') : pair)
+        }
+      }
+      var murmur = x64hash128(map(pairs, function (pair) { return pair.value }).join(''), 31)
+      callback(murmur, pairs)
     })
   }
 
