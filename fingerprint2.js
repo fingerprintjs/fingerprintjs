@@ -1402,7 +1402,7 @@
           pairs.push(pair.join ? pair.join(';') : pair)
         }
       }
-      var murmur = x64hash128(map(pairs, function (pair) { return pair.value }).join(''), 31)
+      var murmur = x64hash128(map(pairs, function (pair) { return pair.value }).join('~~~'), 31)
       callback(murmur, pairs)
     })
   }
