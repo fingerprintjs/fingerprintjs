@@ -262,10 +262,10 @@
       'doNotTrack': true,
       // uses js fonts already
       'fontsFlash': true
-    }
+    },
     NOT_AVAILABLE: 'not available',
     ERROR: 'error',
-    EXCLUDED: 'excluded',
+    EXCLUDED: 'excluded'
   }
 
   var each = function (obj, iterator) {
