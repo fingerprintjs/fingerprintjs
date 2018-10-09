@@ -39,12 +39,8 @@ describe('Fingerprint2', function () {
 
   // legacy usage
   describe('new', function () {
-    it('creates a new instance of FP2', function () {
-      expect(new Fingerprint2()).not.toBeNull()
-    })
-
-    it('accepts an empty options object', function () {
-      expect(new Fingerprint2({})).not.toBeNull()
+    it('throws an error', function () {
+      expect(new Fingerprint2()).toThrow()
     })
   })
 
@@ -59,7 +55,7 @@ describe('Fingerprint2', function () {
     describe('default options', function () {
       // legacy
       it('calculates fingerprint hash', function (done) {
-        (new Fingerprint2()).get(function (result) {
+        Fingerprint2.getV18(function (result) {
           expect(result).toMatch(/^[0-9a-f]{32}$/i)
           done()
         })
