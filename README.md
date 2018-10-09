@@ -134,6 +134,7 @@ var options = {
     ERROR: 'error',
     EXCLUDED: 'excluded',
 }
+```
 
 - `NOT_AVAILABLE`: Component value if the browser doesn't support the API the component uses (e.g. `enumerateDevices`) or the browser doesn't provide a useful value (e.g. `deviceMemory`).
 - `ERROR`: The component function threw an error.
