@@ -230,6 +230,7 @@
   }
 
   var defaultOptions = {
+    preprocessor: null,
     audio: {
       timeout: 1000,
         // On iOS 11, audio context can only be used in response to user interaction.
@@ -262,6 +263,9 @@
       // uses js fonts already
       'fontsFlash': true
     }
+    NOT_AVAILABLE: 'not available',
+    ERROR: 'error',
+    EXCLUDED: 'excluded',
   }
 
   var each = function (obj, iterator) {
@@ -1304,11 +1308,6 @@
       options = {}
     }
     extendSoft(options, defaultOptions)
-    extendSoft(options, {
-      NOT_AVAILABLE: Fingerprint2.NOT_AVAILABLE,
-      ERROR: Fingerprint2.ERROR,
-      EXCLUDED: Fingerprint2.EXCLUDED
-    })
     options.components = options.extraComponents.concat(components)
 
     var keys = {
@@ -1373,7 +1372,7 @@
       var newComponents = []
       for (var i = 0; i < components.length; i++) {
         var component = components[i]
-        if (component.value === Fingerprint2.NOT_AVAILABLE) {
+        if (component.value === (options.NOT_AVAILABLE || 'not available')) {
           newComponents.push({key: component.key, value: 'unknown'})
         } else if (component.key === 'plugins') {
           newComponents.push({key: 'plugins',
@@ -1406,9 +1405,6 @@
     })
   }
 
-  Fingerprint2.NOT_AVAILABLE = 'not available'
-  Fingerprint2.ERROR = 'error'
-  Fingerprint2.EXCLUDED = 'excluded'
   Fingerprint2.x64hash128 = x64hash128
   Fingerprint2.VERSION = '2.0.0'
   return Fingerprint2
