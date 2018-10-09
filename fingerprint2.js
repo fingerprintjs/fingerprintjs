@@ -1292,15 +1292,8 @@
     {key: 'enumerateDevices', getData: enumerateDevicesKey}
   ]
 
-  /**
-   * @constructor
-   * @param {Object} options
-   */
   var Fingerprint2 = function (options) {
-    if (!(this instanceof Fingerprint2)) {
-      return new Fingerprint2(options)
-    }
-    this.options = options
+    throw new Error("'new Fingerprint()' is deprecated, see https://github.com/Valve/fingerprintjs2#upgrade-guide-from-182-to-200")
   }
 
   Fingerprint2.get = function (options, callback) {
@@ -1371,43 +1364,45 @@
     })
   }
 
-  Fingerprint2.prototype.get = function (callback) {
-    console.warn("'new Fingerprint()' is deprecated, see XXX")
-    return Fingerprint2.get(this.options, function (components) {
-      var pairs = []
+  Fingerprint2.getV18 = function (options, callback) {
+    if (callback == null) {
+      callback = options
+      options = {}
+    }
+    return Fingerprint2.get(options, function (components) {
+      var newComponents = []
       for (var i = 0; i < components.length; i++) {
-        var pair = components[i]
-        if (pair.value === Fingerprint2.NOT_AVAILABLE) {
-          pairs.push({key: pair.key, value: 'unknown'})
-        } else if (pair.key === 'plugins') {
-          pairs.push({key: 'plugins',
-            value: map(pair.value, function (p) {
+        var component = components[i]
+        if (component.value === Fingerprint2.NOT_AVAILABLE) {
+          newComponents.push({key: component.key, value: 'unknown'})
+        } else if (component.key === 'plugins') {
+          newComponents.push({key: 'plugins',
+            value: map(component.value, function (p) {
               var mimeTypes = map(p[2], function (mt) {
                 if (mt.join) { return mt.join('~') }
                 return mt
               }).join(',')
               return [p[0], p[1], mimeTypes].join('::')
             })})
-        } else if (['canvas', 'webgl'].indexOf(pair.key) !== -1) {
-          pairs.push({key: pair.key, value: pair.value.join('~')})
-        } else if (['sessionStorage', 'localStorage', 'indexedDb', 'addBehavior', 'openDatabase'].indexOf(pair.key) !== -1) {
-          if (pair.value) {
-            pairs.push({key: pair.key, value: 1})
+        } else if (['canvas', 'webgl'].indexOf(component.key) !== -1) {
+          newComponents.push({key: component.key, value: component.value.join('~')})
+        } else if (['sessionStorage', 'localStorage', 'indexedDb', 'addBehavior', 'openDatabase'].indexOf(component.key) !== -1) {
+          if (component.value) {
+            newComponents.push({key: component.key, value: 1})
           } else {
             // skip
             continue
           }
         } else {
-          if (pair.value) {
-            pairs.push(pair.value.join ? {key: pair.key, value: pair.value.join(';')} : pair)
+          if (component.value) {
+            newComponents.push(component.value.join ? {key: component.key, value: component.value.join(';')} : component)
           } else {
-            pairs.push({key: pair.key, value: pair.value})
+            newComponents.push({key: component.key, value: component.value})
           }
         }
       }
-      console.log(map(pairs, function (pair) { return pair.value }).join('~~~'))
-      var murmur = x64hash128(map(pairs, function (pair) { return pair.value }).join('~~~'), 31)
-      callback(murmur, pairs)
+      var murmur = x64hash128(map(newComponents, function (component) { return component.value }).join('~~~'), 31)
+      callback(murmur, newComponents)
     })
   }
 

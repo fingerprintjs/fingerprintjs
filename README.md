@@ -257,7 +257,19 @@ To speed up fingerprint computation, you can exclude font detection (~ 40ms), ca
 
 ## Upgrade guide from 1.8.2 to 2.0.0
 
-*The old usage still works but a deprecation warning is shown*
+### Backwards compatibility mode
+
+Fingerprintjs2 v2.0 provides a v1.8 compatibility wrapper that keeps user's fingerprints identical to the ones generated with v1.8. Note that we will drop this wrapper at some point.
+
+Note that the `options` parameter **must be provided in v2.0 syntax**.
+
+```js
+// options must be provided in v2.0 syntax
+Fingerprint2.getV18(options, function (result, components) {
+  // result is murmur hash fingerprint
+  // components is array of {key: 'foo', value: 'component value'}
+})
+```
 
 ### get and getPromise
 
@@ -266,23 +278,24 @@ To speed up fingerprint computation, you can exclude font detection (~ 40ms), ca
 ```
 var options = {}
 Fingerprint2.get(options, function (components) {
+  // components is array of {key: 'foo', value: 'component value'}
     ...
 })
 
 // or
 
 Fingerprint2.getPromise(options).then(function (components) {
+  // components is array of {key: 'foo', value: 'component value'}
     ...
 })
 ```
 
-To still hash the result have a look at the following example:
+Fingerprint2 ships with the murmur hash function that you may use to create a hash fingerprint:
 
 ```
 Fingerprint2.get(options, function (components) {
-    var values = Object.values(components)
+    var values = components.map(function (component) { return component.value })
     var murmur = Fingerprint2.x64hash128(values.join(''), 31)
-    var results = murmur;
 })
 ```
 
@@ -293,7 +306,7 @@ Before exclusion was done by putting an individual excludes like `excludeTouchSu
 
 To exclude a component now, put its key inside the excludes object in options
 ```
-var options = {excludes: {'touchSupport': true}}
+var options = {excludes: {touchSupport: true}}
 ```
 
 ### Custom Entropy Function
@@ -317,8 +330,7 @@ jsfonts has been renamed into fonts. fontsFlash and fonts are now separate compo
 
 ### Consistent names for components
 
-Components keys are now all camelCase. Example 'user_agent' -> 'userAgent'
-
+Components keys are now all camelCase. Example `'user_agent'` -> `'userAgent'`
 
 ### `Fingerprint2.x64hash128`
 
@@ -365,7 +377,7 @@ Unit tests are in `specs/specs.js`
 
 `npm test` to launch the tests, it requires phanomjs install
 
-To run the tests in the browser, launch spec_runner.html
+To run the tests in the browser, launch `spec_runner.html`
 
 
 ## Other
