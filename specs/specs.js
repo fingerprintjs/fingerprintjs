@@ -40,14 +40,14 @@ describe('Fingerprint2', function () {
   // legacy usage
   describe('new', function () {
     it('throws an error', function () {
-      expect(new Fingerprint2()).toThrow()
+      expect(function () { new Fingerprint2() }).toThrow()
     })
   })
 
   // legacy
   describe('without new keyword', function () {
-    it('creates a new instance of FP2', function () {
-      expect(Fingerprint2()).not.toBeNull()
+    it('throws an error', function () {
+      expect(function () { Fingerprint2() }).toThrow()
     })
   })
 
@@ -259,35 +259,15 @@ describe('Fingerprint2', function () {
       })
     })
     describe('error constants', function () {
-      it('are exposed', function (done) {
-        expect(Fingerprint2.NOT_AVAILABLE).toBeDefined()
-        expect(Fingerprint2.ERROR).toBeDefined()
-        expect(Fingerprint2.EXCLUDED).toBeDefined()
-        done()
-      })
-
       it('are configurable', function (done) {
         var NA = 'NA'
-        var E = 'E'
-        var X = 'X'
-        Fingerprint2.NOT_AVAILABLE = NA
-        expect(Fingerprint2.NOT_AVAILABLE).toEqual(NA)
-        Fingerprint2.ERROR = E
-        expect(Fingerprint2.ERROR).toEqual(E)
-        Fingerprint2.EXCLUDED = X
-        expect(Fingerprint2.EXCLUDED).toEqual(X)
-        done()
-      })
-
-      it('are used by components', function (done) {
-        var NA = 'NA'
-        Fingerprint2.NOT_AVAILABLE = NA
         var options = {
+          NOT_AVAILABLE: NA,
           extraComponents: [
             {
               key: 'my key',
-              getData: function customFunction (done, options) {
-                done(options.NOT_AVAILABLE)
+              getData: function customFunction (done, options2) {
+                done(options2.NOT_AVAILABLE)
               }
             }
           ]
