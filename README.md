@@ -91,6 +91,10 @@ iOS 11 prevents audio fingerprinting unless started from a user interaction (scr
 ### `audio.timeout` default 1000
 maximum time allowed for 'audio' component
 
+### `fontsFlash`
+
+To use Flash font enumeration, make sure you have swfobject available. If you don't, the library will skip the Flash part entirely.
+
 ### `extraComponents`
 
 Arrays of extra components to include.
@@ -142,7 +146,7 @@ var options = {
 
 ### excludes
 
-An object of with components keys to exclude. Empty object to include everything. By default most of the components are included (look at the source code for details).
+An object of with components keys to exclude. Empty object to include everything. By default most of the components are included (please see the source code for details).
 
 ```
 var options = {
@@ -150,38 +154,7 @@ var options = {
 }
 ```
 
-- `userAgent`
-- `language`
-- `colorDepth`
-- `deviceMemory`
-- `pixelRatio`
-- `hardwareConcurrency`
-- `screenResolution`
-- `availableScreenResolution`
-- `timezoneOffset`
-- `timezone`
-- `sessionStorage`
-- `localStorage`
-- `indexedDb`
-- `addBehavior`
-- `openDatabase`
-- `cpuClass`
-- `platform`
-- `doNotTrack`
-- `plugins`
-- `canvas`
-- `webgl`
-- `webglVendorAndRenderer`
-- `adBlock`
-- `hasLiedLanguages`
-- `hasLiedResolution`
-- `hasLiedOs`
-- `hasLiedBrowser`
-- `touchSupport`
-- `fonts`
-- `audio`
-- `enumerateDevices`
-- `fontsFlash`: To use Flash font enumeration, make sure you have swfobject available. If you don't, the library will skip the Flash part entirely.
+To see a list of possible excludes, please see the source code (look for `var components = [`).
 
 
 ## Upgrade guide from 1.8.2 to 2.0.0
