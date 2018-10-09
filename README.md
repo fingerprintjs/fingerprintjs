@@ -128,6 +128,18 @@ Fingerprint2.get({
 });
 ```
 
+### `excludes`
+
+An object of with components keys to exclude. Empty object to include everything. By default most of the components are included (please see the source code for details).
+
+```
+var options = {
+    excludes: {userAgent: true, language: true}
+}
+```
+
+To see a list of possible excludes, please see the source code (look for `var components = [`).
+
 ### Constants
 
 The constants used for unavailable, error'd, or excluded components' values.
@@ -143,18 +155,6 @@ var options = {
 - `NOT_AVAILABLE`: Component value if the browser doesn't support the API the component uses (e.g. `enumerateDevices`) or the browser doesn't provide a useful value (e.g. `deviceMemory`).
 - `ERROR`: The component function threw an error.
 - `EXCLUDED`: The component was excluded.
-
-### excludes
-
-An object of with components keys to exclude. Empty object to include everything. By default most of the components are included (please see the source code for details).
-
-```
-var options = {
-    excludes: {userAgent: true, language: true}
-}
-```
-
-To see a list of possible excludes, please see the source code (look for `var components = [`).
 
 
 ## Upgrade guide from 1.8.2 to 2.0.0
