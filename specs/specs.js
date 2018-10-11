@@ -40,6 +40,7 @@ describe('Fingerprint2', function () {
   // legacy usage
   describe('new', function () {
     it('throws an error', function () {
+      // eslint-disable-next-line
       expect(function () { new Fingerprint2() }).toThrow()
     })
   })
