@@ -1,0 +1,2 @@
+// Fingerprintjs2 - Copyright (c) ${YEAR} Valentin Vasilyev (valentin.vasilyev@outlook.com)
+// Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
