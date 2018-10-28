@@ -88,7 +88,7 @@ Skip IE plugin enumeration/detection
 
 iOS 11 prevents audio fingerprinting unless started from a user interaction (screen tap), preventing the fingerprinting process from finishing. If you're sure you start fingerprinting from a user interaction event handler, you may enable audio fingerprinting on iOS 11.
 
-### `audio.timeout` default 1000
+### `audio.timeout` (default: 1000)
 maximum time allowed for 'audio' component
 
 ### `fontsFlash`
@@ -311,5 +311,6 @@ Many more fingerprinting sources will be implemented, such as (in no particular 
 
 https://player.vimeo.com/video/151208427
 
-#### License: MIT or Apache, whichever you prefer.
+#### License: MIT or Apache, whichever you prefer
+
 [npm-link]: https://www.npmjs.com/package/fingerprintjs2
