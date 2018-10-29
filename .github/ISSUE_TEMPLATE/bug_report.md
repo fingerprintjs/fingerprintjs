@@ -13,7 +13,7 @@ ALL BUG REPORTS WITHOUT PULL REQUEST MUST USE THIS TEMPLATE. BUG REPORTS NOT USI
 
 - Your bug report here
 
-<!-- If you're seeing two different fingerprints for the same device/browser, please provide the details of both fingerprints using this jsfiddle: https://jsfiddle.net/L2gLq4rg/ -->
+<!-- If you're seeing two different fingerprints for the same device/browser, please provide the details of both fingerprints using this jsfiddle: https://jsfiddle.net/L2gLq4rg/85/ -->
 
 ### Fingerprintjs2 version and devices used
 
