@@ -1,28 +1,20 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: Other bugs
+about: Bugs not related to unexpectedly changing fingerprints
 
 ---
 
 <!--
-ALL BUG REPORTS WITHOUT PULL REQUEST MUST USE THIS TEMPLATE. BUG REPORTS NOT USING THE TEMPLATE ARE SUBJECT TO BEING CLOSED WITHOUT COMMMENT.
+BUG REPORTS NOT USING THE TEMPLATE ARE SUBJECT TO BEING CLOSED WITHOUT COMMMENT.
 -->
 
+### Scenario
 
-### Problem description
+- What's the scenario, what happens and what did you expect to happen? 
+- What device and browser are you using?
+- What version of fingerprintjs are you using? (Bug reports not applicable to fingerprintjs master are subject to be closed without comment.)
 
-- Your bug report here
+### Fingerprint data
 
-<!-- If you're seeing two different fingerprints for the same device/browser, please provide the details of both fingerprints using this jsfiddle: https://jsfiddle.net/L2gLq4rg/85/ -->
-
-### Fingerprintjs2 version and devices used
-
-[ ] I can reproduce the bug in [fingerprintjs master](https://github.com/Valve/fingerprintjs2/blob/master/fingerprint2.js)
-[ ] I can reproduce the bug on these devices: iPhone XYZ
-
-<!-- Unless reproduced with fingerprintjs master, your issue is subject to be closed without comment. -->
-
-### Minimal reproducing example
-
-[ ] I can reproduce the bug with this jsfiddle: https://jsfiddle.net/L2gLq4rg/
-[ ] Alternatively, I have provided a jsfiddle that reproduces the bug here: <jsfiddle url>
+If applicable, provide the FULL DATA of all fingerprints involved using this jsfiddle https://jsfiddle.net/L2gLq4rg/85/.
+Alternatively, provide a jsfiddle that reproduces the bug.
