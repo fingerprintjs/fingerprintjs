@@ -1,6 +1,6 @@
 {
   "name": "fingerprintjs2",
-  "version": "1.8.5",
+  "version": "1.8.6",
   "description": "Modern & flexible browser fingerprinting library",
   "repository": {
     "type": "git",
