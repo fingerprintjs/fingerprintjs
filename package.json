@@ -19,7 +19,7 @@
     "url": "https://github.com/Valve/fingerprintjs2/issues"
   },
   "homepage": "https://github.com/Valve/fingerprintjs2",
-  "main": "dist/fingerprint2.min.js",
+  "main": "fingerprint2.js",
   "devDependencies": {
     "gulp": "^4.0.0",
     "gulp-util": "^3.0.8",
