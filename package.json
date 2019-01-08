@@ -1,6 +1,6 @@
 {
   "name": "fingerprintjs2",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Modern & flexible browser fingerprinting library",
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Valve/fingerprintjs2",
   "main": "fingerprint2.js",
+  "files": ["dist/fingerprint2.min.js"],
   "devDependencies": {
     "gulp": "^4.0.0",
     "gulp-util": "^3.0.8",
