@@ -17,11 +17,8 @@
   <br/>
 </p>
 <p align="center">
-  <h3><a href="https://www.patreon.com/bePatron?u=7954991">Support library on Patreon</a></h3>
+  <h2><a href="https://www.patreon.com/bePatron?u=7954991">Support library on Patreon</a></h2>
 <p>
-<p align="center">
-  <h1>Fingerprint.js 2</h1>
-</p>
 
 ## Installation
 
