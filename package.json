@@ -7,6 +7,8 @@
     "url": "https://github.com/Valve/fingerprintjs2.git"
   },
   "keywords": [
+    "fraud",
+    "fraud-prevention",
     "browser",
     "identification",
     "fingerprint",
@@ -20,17 +22,22 @@
   },
   "homepage": "https://github.com/Valve/fingerprintjs2",
   "main": "fingerprint2.js",
-  "files": ["dist/fingerprint2.min.js"],
+  "files": [
+    "dist/fingerprint2.min.js"
+  ],
   "devDependencies": {
     "gulp": "^4.0.0",
     "gulp-util": "^3.0.8",
     "gulp-header-license": "^1.0.9",
     "gulp-rename": "^1.4.0",
     "gulp-uglify": "^3.0.1",
-    "standard": "^10.0.3"
+    "standard": "^10.0.3",
+    "karma": "^4.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^2.0.1"
   },
   "scripts": {
-    "test": "specs/phantomjs.runner.sh specs/spec_runner.html",
+    "test": "karma start --single-run --browsers ChromeHeadless tests/karma.conf.js",
     "gulp": "gulp",
     "lint": "standard --fix"
   },
