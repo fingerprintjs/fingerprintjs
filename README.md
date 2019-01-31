@@ -1,13 +1,20 @@
-# Fingerprintjs2
+<p align="center">
+  <img width="100" src="https://raw.githubusercontent.com/Valve/fpjs/master/fpjs-logo.png alt="FPjs logo">
+</p>
+<p align="center">
 
-[![](https://img.shields.io/travis/Valve/fingerprintjs2.svg?style=flat-square)](https://travis-ci.org/Valve/fingerprintjs2)
-[![](https://badges.gitter.im/Valve/fingerprintjs2.svg)](https://gitter.im/Valve/fingerprintjs2)
-[![npm](https://img.shields.io/npm/dt/fingerprintjs2.svg?style=flat-square)][npm-link]
-[![npm](https://img.shields.io/npm/v/fingerprintjs2.svg?style=flat-square)][npm-link]
-
-<strong><a href="https://www.patreon.com/bePatron?u=7954991" data-patreon-widget-type="become-patron-button">Support library on Patreon!</a></strong>
-
---------------------------
+  [![](https://img.shields.io/travis/Valve/fingerprintjs2.svg?style=flat-square)](https://travis-ci.org/Valve/fingerprintjs2)
+  [![](https://badges.gitter.im/Valve/fingerprintjs2.svg)](https://gitter.im/Valve/fingerprintjs2)
+  [![npm](https://img.shields.io/npm/dt/fingerprintjs2.svg?style=flat-square)][npm-link]
+  [![npm](https://img.shields.io/npm/v/fingerprintjs2.svg?style=flat-square)][npm-link]
+  <br/>
+  <strong>
+    <a href="https://www.patreon.com/bePatron?u=7954991">Support library on Patreon!</a>
+  </strong>
+</p>
+<p align="center">
+  Fingerprint.js 2
+</p>
 
 ## Installation
 
