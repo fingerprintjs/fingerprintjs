@@ -2,18 +2,25 @@
   <img width="100" src="https://raw.githubusercontent.com/Valve/fpjs/master/fpjs-logo.png" alt="FPjs logo">
 </p>
 <p align="center">
-
-  [![](https://img.shields.io/travis/Valve/fingerprintjs2.svg?style=flat-square)](https://travis-ci.org/Valve/fingerprintjs2)
-  [![](https://badges.gitter.im/Valve/fingerprintjs2.svg)](https://gitter.im/Valve/fingerprintjs2)
-  [![npm](https://img.shields.io/npm/dt/fingerprintjs2.svg?style=flat-square)][npm-link]
-  [![npm](https://img.shields.io/npm/v/fingerprintjs2.svg?style=flat-square)][npm-link]
+  <a href="https://travis-ci.org/Valve/fingerprintjs2">
+    <img src="https://img.shields.io/travis/Valve/fingerprintjs2.svg?style=flat-square" alt="build status">
+  </a>
+  <a href="https://gitter.im/Valve/fingerprintjs2">
+    <img src="https://badges.gitter.im/Valve/fingerprintjs2.svg" alt="gitter chat">
+  </a>
+  <a href="https://www.npmjs.com/package/fingerprintjs2">
+    <img src="https://img.shields.io/npm/dt/fingerprintjs2.svg?style=flat-square" alt="total downloads from NPM">
+  </a>
+  <a href="https://www.npmjs.com/package/fingerprintjs2">
+    <img src="https://img.shields.io/npm/v/fingerprintjs2.svg?style=flat-square" alt="Current NPM version">
+  </a>
   <br/>
   <strong>
     <a href="https://www.patreon.com/bePatron?u=7954991">Support library on Patreon!</a>
   </strong>
 </p>
 <p align="center">
-  <h1> Fingerprint.js 2</h1>
+  <h1>Fingerprint.js 2</h1>
 </p>
 
 ## Installation
