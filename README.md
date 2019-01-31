@@ -15,10 +15,10 @@
     <img src="https://img.shields.io/npm/v/fingerprintjs2.svg?style=flat-square" alt="Current NPM version">
   </a>
   <br/>
-  <p>
-    <h2><a href="https://www.patreon.com/bePatron?u=7954991">Support library on Patreon!</a></h2>
-  <p>
 </p>
+<p align="center">
+  <h3><a href="https://www.patreon.com/bePatron?u=7954991">Support library on Patreon</a></h3>
+<p>
 <p align="center">
   <h1>Fingerprint.js 2</h1>
 </p>
