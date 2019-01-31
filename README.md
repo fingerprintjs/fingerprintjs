@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="100" src="https://raw.githubusercontent.com/Valve/fpjs/master/fpjs-logo.png alt="FPjs logo">
+  <img width="100" src="https://raw.githubusercontent.com/Valve/fpjs/master/fpjs-logo.png" alt="FPjs logo">
 </p>
 <p align="center">
 
@@ -13,7 +13,7 @@
   </strong>
 </p>
 <p align="center">
-  Fingerprint.js 2
+  <h1> Fingerprint.js 2</h1>
 </p>
 
 ## Installation
