@@ -4,7 +4,7 @@
 [![](https://badges.gitter.im/Valve/fingerprintjs2.svg)](https://gitter.im/Valve/fingerprintjs2)
 [![npm](https://img.shields.io/npm/dm/fingerprintjs2.svg)][npm-link]
 
-<a href="https://www.patreon.com/bePatron?u=7954991" data-patreon-widget-type="become-patron-button">Support library on Patreon!</a>
+<strong><a href="https://www.patreon.com/bePatron?u=7954991" data-patreon-widget-type="become-patron-button">Support library on Patreon!</a></strong>
 
 --------------------------
 
