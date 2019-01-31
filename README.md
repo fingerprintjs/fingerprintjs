@@ -16,7 +16,7 @@
   </a>
   <br/>
   <strong>
-    <a href="https://www.patreon.com/bePatron?u=7954991">Support library on Patreon!</a>
+    <h2><a href="https://www.patreon.com/bePatron?u=7954991">Support library on Patreon!</a></h2>
   </strong>
 </p>
 <p align="center">
