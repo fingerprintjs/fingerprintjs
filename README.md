@@ -2,6 +2,7 @@
   <img width="100" src="https://raw.githubusercontent.com/Valve/fpjs/master/fpjs-logo.png" alt="FPjs logo">
 </p>
 <p align="center">
+
   [![](https://img.shields.io/travis/Valve/fingerprintjs2.svg?style=flat-square)](https://travis-ci.org/Valve/fingerprintjs2)
   [![](https://badges.gitter.im/Valve/fingerprintjs2.svg)](https://gitter.im/Valve/fingerprintjs2)
   [![npm](https://img.shields.io/npm/dt/fingerprintjs2.svg?style=flat-square)][npm-link]
