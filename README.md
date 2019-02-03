@@ -16,9 +16,7 @@
   </a>
   <br/>
 </p>
-<p align="center">
-  <h2><a href="https://www.patreon.com/bePatron?u=7954991">Support library on Patreon</a></h2>
-<p>
+
 
 ## Installation
 
