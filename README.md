@@ -16,6 +16,11 @@
   </a>
   <br/>
 </p>
+<p align="center">
+  <h3>
+  <a href="https://fingerprintjspro.com">Fingerprint.js PRO - sign up for a preview</a>
+  </h3>
+</p>
 
 
 ## Installation
