@@ -1114,7 +1114,7 @@
       os = 'Windows'
     } else if (userAgent.indexOf('android') >= 0) {
       os = 'Android'
-    } else if (userAgent.indexOf('linux') >= 0) {
+    } else if (userAgent.indexOf('linux') >= 0 || userAgent.indexOf('cros') >= 0) {
       os = 'Linux'
     } else if (userAgent.indexOf('iphone') >= 0 || userAgent.indexOf('ipad') >= 0) {
       os = 'iOS'
