@@ -1,5 +1,7 @@
 <p align="center">
-  <img width="100" src="https://raw.githubusercontent.com/Valve/fpjs/master/fpjs-logo.png" alt="FPjs logo">
+  <a href="https://fingerprintjs.com">
+    <img  src="https://fingerprintjs.com/img/logo-raster.png" alt="FPJS logo">
+  </a>
 </p>
 <p align="center">
   <a href="https://travis-ci.org/Valve/fingerprintjs2">
