@@ -133,7 +133,7 @@ Function that is called with each component value that may be used to modify com
 ```js
 Fingerprint2.get({
   preprocessor: function(key, value) {
-    if (key == "user_agent") {
+    if (key == "userAgent") {
       var parser = new UAParser(value); // https://github.com/faisalman/ua-parser-js
       var userAgentMinusVersion = parser.getOS().name + ' ' + parser.getBrowser().name
       return userAgentMinusVersion
@@ -141,7 +141,7 @@ Fingerprint2.get({
     return value
   }
 },function(components) {
-  // user_agent component will contain string processed with our function. For example: Windows Chrome
+  // userAgent component will contain string processed with our function. For example: Windows Chrome
 });
 ```
 
@@ -249,7 +249,7 @@ jsfonts has been renamed into fonts. fontsFlash and fonts are now separate compo
 
 ### Consistent names for components
 
-Components keys are now all camelCase. Example `'user_agent'` -> `'userAgent'`
+Components keys are now all camelCase. Example `'userAgent'` -> `'userAgent'`
 
 ### `Fingerprint2.x64hash128`
 
@@ -273,7 +273,7 @@ audioTimeout is an option, default 1000ms
 
 A components is an object with at least key and getData keys, example:
 ```
-{key: 'user_agent', getData: UserAgent, pauseBefore: false}
+{key: 'userAgent', getData: UserAgent, pauseBefore: false}
 ```
 getData value is the components function.
 
