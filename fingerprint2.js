@@ -396,7 +396,7 @@
     done(navigator.userAgent)
   }
   var webdriver = function (done) {
-    done(navigator.webdriver)
+    done(navigator.webdriver == null ? options.NOT_AVAILABLE : navigator.webdriver)
   }
   var languageKey = function (done, options) {
     done(navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || options.NOT_AVAILABLE)
