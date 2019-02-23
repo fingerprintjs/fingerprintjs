@@ -395,7 +395,7 @@
   var UserAgent = function (done) {
     done(navigator.userAgent)
   }
-  var webdriver = function (done) {
+  var webdriver = function (done, options) {
     done(navigator.webdriver == null ? options.NOT_AVAILABLE : navigator.webdriver)
   }
   var languageKey = function (done, options) {
