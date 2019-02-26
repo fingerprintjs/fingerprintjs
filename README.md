@@ -20,7 +20,7 @@
 </p>
 <p align="center">
   <h3>
-  <a href="https://fingerprintjspro.com">Fingerprint.js PRO - sign up for a preview</a>
+  <a href="https://fingerprintjs.com/pro.html">FPJS PRO - Try the beta</a>
   </h3>
 </p>
 
