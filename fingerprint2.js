@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 2.0.6 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 2.0.7 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -1388,14 +1388,9 @@
               return [p[0], p[1], mimeTypes].join('::')
             })})
         } else if (['canvas', 'webgl'].indexOf(component.key) !== -1) {
-          newComponents.push({key: component.key, value: component.value.join('~')})
+          if (component.value && typeof component.value.join === 'function') newComponents.push({key: component.key, value: component.value.join('~')})
         } else if (['sessionStorage', 'localStorage', 'indexedDb', 'addBehavior', 'openDatabase'].indexOf(component.key) !== -1) {
-          if (component.value) {
-            newComponents.push({key: component.key, value: 1})
-          } else {
-            // skip
-            continue
-          }
+          if (component.value) newComponents.push({key: component.key, value: 1})
         } else {
           if (component.value) {
             newComponents.push(component.value.join ? {key: component.key, value: component.value.join(';')} : component)
@@ -1410,6 +1405,6 @@
   }
 
   Fingerprint2.x64hash128 = x64hash128
-  Fingerprint2.VERSION = '2.0.6'
+  Fingerprint2.VERSION = '2.0.7'
   return Fingerprint2
 })
