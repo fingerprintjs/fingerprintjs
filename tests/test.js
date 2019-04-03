@@ -63,19 +63,19 @@ describe('Fingerprint2', () => {
       it('does not try calling flash font detection', (done) => {
         const flashFontKey = 'fontsFlash'
         Fingerprint2.get((components) => {
-          expect(components.some(({key, _value}) => key === flashFontKey)).toBeFalsy()
+          expect(components.some(({ key, _value }) => key === flashFontKey)).toBeFalsy()
           done()
         })
       })
 
       describe('excludes work:', () => {
-        const excludes = [ 'userAgent', 'pixelRatio', 'deviceMemory', 'screenResolution', 'availableScreenResolution', 'plugins', 'timezone' ]
+        const excludes = ['userAgent', 'pixelRatio', 'deviceMemory', 'screenResolution', 'availableScreenResolution', 'plugins', 'timezone']
         excludes.forEach((excludeKey) => {
           it('does not use ' + excludeKey + ' when excluded', (done) => {
-            let options = {excludes: {}}
+            let options = { excludes: {} }
             options.excludes[excludeKey] = true
             Fingerprint2.get(options, (components) => {
-              expect(components.some(({key, _value}) => excludeKey === key)).toBeFalsy()
+              expect(components.some(({ key, _value }) => excludeKey === key)).toBeFalsy()
               done()
             })
           })
@@ -187,7 +187,7 @@ describe('Fingerprint2', () => {
 
           let spy = jasmine.createSpy('customFunction', customFunction).and.callThrough()
           Fingerprint2.get({
-            extraComponents: [{key: 'customFunction', getData: spy}]
+            extraComponents: [{ key: 'customFunction', getData: spy }]
           }, (keys) => {
             expect(spy).toHaveBeenCalled()
             done()
@@ -199,7 +199,7 @@ describe('Fingerprint2', () => {
             extraComponents: [
               {
                 key: 'TEST_STRING',
-                getData: function customFunction (done) {
+                getData: function customFunction(done) {
                   done('RANDOM_STRING')
                 }
               }
@@ -216,7 +216,7 @@ describe('Fingerprint2', () => {
             extraComponents: [
               {
                 key: 'my key',
-                getData: function customFunction (done) {
+                getData: function customFunction(done) {
                   throw new Error('unstable component')
                 }
               }
@@ -238,7 +238,7 @@ describe('Fingerprint2', () => {
             extraComponents: [
               {
                 key: 'my key',
-                getData: function customFunction (done, options2) {
+                getData: function customFunction(done, options2) {
                   done(options2.NOT_AVAILABLE)
                 }
               }
@@ -254,7 +254,7 @@ describe('Fingerprint2', () => {
 
       describe('enumerate devices fingerprint', () => {
         it('checks enumerate devices fingerprint', (done) => {
-          let options = {excludes: {}}
+          let options = { excludes: {} }
           Fingerprint2.get(options, (components) => {
             if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
               expect(getComponent(components, 'enumerateDevices')).not.toBeNull()
@@ -328,7 +328,7 @@ describe('Fingerprint2', () => {
             item("fragment", "low int precision rangeMax"     , gl.FRAGMENT_SHADER, gl.LOW_INT     , "rangeMax"),
           ]
 
-          Fingerprint2.get( (components) => {
+          Fingerprint2.get((components) => {
             webglExpectedArray.forEach((item) => expect(getComponent(components, "webgl").indexOf(item)).not.toEqual(-1));
             done();
           });
@@ -343,7 +343,7 @@ describe('Fingerprint2', () => {
           });
         });
 
-        it("checks that preprocessor function applied to component value",  (done) => {
+        it("checks that preprocessor function applied to component value", (done) => {
           let mykey = "userAgent"
           let options = {
             preprocessor: (key, value) => {
@@ -371,6 +371,18 @@ describe('Fingerprint2', () => {
           });
           Fingerprint2.get((components) => {
             expect(getComponent(components, "plugins")).toBeDefined();
+            done();
+          });
+        });
+      });
+
+      describe("hasLiedOS", () => {
+        it("works for iPhone", (done) => {
+          // checks https://github.com/Valve/fingerprintjs2/issues/447
+          Object.defineProperty(navigator, "userAgent", { value: "Mozilla/5.0 (iPhone; CPU iPhone OS 12_1_4 like Mac OS X) AppleWebKit/605.1.15" });
+          Object.defineProperty(navigator, "platform", { value: "iPhone" });
+          Fingerprint2.get((components) => {
+            expect(getComponent(components, "hasLiedOs")).toEqual(false)
             done();
           });
         });
