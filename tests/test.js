@@ -290,42 +290,42 @@ describe('Fingerprint2', () => {
             return ['webgl ', name, ' shader ', descr, ':', fmt].join('')
           }
           let webglExpectedArray = [ /* eslint-disable */
-            item("vertex"  , "high float precision"           , gl.VERTEX_SHADER  , gl.HIGH_FLOAT  , "precision"),
-            item("vertex"  , "high float precision rangeMin"  , gl.VERTEX_SHADER  , gl.HIGH_FLOAT  , "rangeMin"),
-            item("vertex"  , "high float precision rangeMax"  , gl.VERTEX_SHADER  , gl.HIGH_FLOAT  , "rangeMax"),
-            item("vertex"  , "medium float precision"         , gl.VERTEX_SHADER  , gl.MEDIUM_FLOAT, "precision"),
-            item("vertex"  , "medium float precision rangeMin", gl.VERTEX_SHADER  , gl.MEDIUM_FLOAT, "rangeMin"),
-            item("vertex"  , "medium float precision rangeMax", gl.VERTEX_SHADER  , gl.MEDIUM_FLOAT, "rangeMax"),
-            item("vertex"  , "low float precision"            , gl.VERTEX_SHADER  , gl.LOW_FLOAT   , "precision"),
-            item("vertex"  , "low float precision rangeMin"   , gl.VERTEX_SHADER  , gl.LOW_FLOAT   , "rangeMin"),
-            item("vertex"  , "low float precision rangeMax"   , gl.VERTEX_SHADER  , gl.LOW_FLOAT   , "rangeMax"),
-            item("vertex"  , "high int precision"             , gl.VERTEX_SHADER  , gl.HIGH_INT    , "precision"),
-            item("vertex"  , "high int precision rangeMin"    , gl.VERTEX_SHADER  , gl.HIGH_INT    , "rangeMin"),
-            item("vertex"  , "high int precision rangeMax"    , gl.VERTEX_SHADER  , gl.HIGH_INT    , "rangeMax"),
-            item("vertex"  , "medium int precision"           , gl.VERTEX_SHADER  , gl.MEDIUM_INT  , "precision"),
-            item("vertex"  , "medium int precision rangeMin"  , gl.VERTEX_SHADER  , gl.MEDIUM_INT  , "rangeMin"),
-            item("vertex"  , "medium int precision rangeMax"  , gl.VERTEX_SHADER  , gl.MEDIUM_INT  , "rangeMax"),
-            item("vertex"  , "low int precision"              , gl.VERTEX_SHADER  , gl.LOW_INT     , "precision"),
-            item("vertex"  , "low int precision rangeMin"     , gl.VERTEX_SHADER  , gl.LOW_INT     , "rangeMin"),
-            item("vertex"  , "low int precision rangeMax"     , gl.VERTEX_SHADER  , gl.LOW_INT     , "rangeMax"),
-            item("fragment", "high float precision"           , gl.FRAGMENT_SHADER, gl.HIGH_FLOAT  , "precision"),
-            item("fragment", "high float precision rangeMin"  , gl.FRAGMENT_SHADER, gl.HIGH_FLOAT  , "rangeMin"),
-            item("fragment", "high float precision rangeMax"  , gl.FRAGMENT_SHADER, gl.HIGH_FLOAT  , "rangeMax"),
-            item("fragment", "medium float precision"         , gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT, "precision"),
+            item("vertex", "high float precision", gl.VERTEX_SHADER, gl.HIGH_FLOAT, "precision"),
+            item("vertex", "high float precision rangeMin", gl.VERTEX_SHADER, gl.HIGH_FLOAT, "rangeMin"),
+            item("vertex", "high float precision rangeMax", gl.VERTEX_SHADER, gl.HIGH_FLOAT, "rangeMax"),
+            item("vertex", "medium float precision", gl.VERTEX_SHADER, gl.MEDIUM_FLOAT, "precision"),
+            item("vertex", "medium float precision rangeMin", gl.VERTEX_SHADER, gl.MEDIUM_FLOAT, "rangeMin"),
+            item("vertex", "medium float precision rangeMax", gl.VERTEX_SHADER, gl.MEDIUM_FLOAT, "rangeMax"),
+            item("vertex", "low float precision", gl.VERTEX_SHADER, gl.LOW_FLOAT, "precision"),
+            item("vertex", "low float precision rangeMin", gl.VERTEX_SHADER, gl.LOW_FLOAT, "rangeMin"),
+            item("vertex", "low float precision rangeMax", gl.VERTEX_SHADER, gl.LOW_FLOAT, "rangeMax"),
+            item("vertex", "high int precision", gl.VERTEX_SHADER, gl.HIGH_INT, "precision"),
+            item("vertex", "high int precision rangeMin", gl.VERTEX_SHADER, gl.HIGH_INT, "rangeMin"),
+            item("vertex", "high int precision rangeMax", gl.VERTEX_SHADER, gl.HIGH_INT, "rangeMax"),
+            item("vertex", "medium int precision", gl.VERTEX_SHADER, gl.MEDIUM_INT, "precision"),
+            item("vertex", "medium int precision rangeMin", gl.VERTEX_SHADER, gl.MEDIUM_INT, "rangeMin"),
+            item("vertex", "medium int precision rangeMax", gl.VERTEX_SHADER, gl.MEDIUM_INT, "rangeMax"),
+            item("vertex", "low int precision", gl.VERTEX_SHADER, gl.LOW_INT, "precision"),
+            item("vertex", "low int precision rangeMin", gl.VERTEX_SHADER, gl.LOW_INT, "rangeMin"),
+            item("vertex", "low int precision rangeMax", gl.VERTEX_SHADER, gl.LOW_INT, "rangeMax"),
+            item("fragment", "high float precision", gl.FRAGMENT_SHADER, gl.HIGH_FLOAT, "precision"),
+            item("fragment", "high float precision rangeMin", gl.FRAGMENT_SHADER, gl.HIGH_FLOAT, "rangeMin"),
+            item("fragment", "high float precision rangeMax", gl.FRAGMENT_SHADER, gl.HIGH_FLOAT, "rangeMax"),
+            item("fragment", "medium float precision", gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT, "precision"),
             item("fragment", "medium float precision rangeMin", gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT, "rangeMin"),
             item("fragment", "medium float precision rangeMax", gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT, "rangeMax"),
-            item("fragment", "low float precision"            , gl.FRAGMENT_SHADER, gl.LOW_FLOAT   , "precision"),
-            item("fragment", "low float precision rangeMin"   , gl.FRAGMENT_SHADER, gl.LOW_FLOAT   , "rangeMin"),
-            item("fragment", "low float precision rangeMax"   , gl.FRAGMENT_SHADER, gl.LOW_FLOAT   , "rangeMax"),
-            item("fragment", "high int precision"             , gl.FRAGMENT_SHADER, gl.HIGH_INT    , "precision"),
-            item("fragment", "high int precision rangeMin"    , gl.FRAGMENT_SHADER, gl.HIGH_INT    , "rangeMin"),
-            item("fragment", "high int precision rangeMax"    , gl.FRAGMENT_SHADER, gl.HIGH_INT    , "rangeMax"),
-            item("fragment", "medium int precision"           , gl.FRAGMENT_SHADER, gl.MEDIUM_INT  , "precision"),
-            item("fragment", "medium int precision rangeMin"  , gl.FRAGMENT_SHADER, gl.MEDIUM_INT  , "rangeMin"),
-            item("fragment", "medium int precision rangeMax"  , gl.FRAGMENT_SHADER, gl.MEDIUM_INT  , "rangeMax"),
-            item("fragment", "low int precision"              , gl.FRAGMENT_SHADER, gl.LOW_INT     , "precision"),
-            item("fragment", "low int precision rangeMin"     , gl.FRAGMENT_SHADER, gl.LOW_INT     , "rangeMin"),
-            item("fragment", "low int precision rangeMax"     , gl.FRAGMENT_SHADER, gl.LOW_INT     , "rangeMax"),
+            item("fragment", "low float precision", gl.FRAGMENT_SHADER, gl.LOW_FLOAT, "precision"),
+            item("fragment", "low float precision rangeMin", gl.FRAGMENT_SHADER, gl.LOW_FLOAT, "rangeMin"),
+            item("fragment", "low float precision rangeMax", gl.FRAGMENT_SHADER, gl.LOW_FLOAT, "rangeMax"),
+            item("fragment", "high int precision", gl.FRAGMENT_SHADER, gl.HIGH_INT, "precision"),
+            item("fragment", "high int precision rangeMin", gl.FRAGMENT_SHADER, gl.HIGH_INT, "rangeMin"),
+            item("fragment", "high int precision rangeMax", gl.FRAGMENT_SHADER, gl.HIGH_INT, "rangeMax"),
+            item("fragment", "medium int precision", gl.FRAGMENT_SHADER, gl.MEDIUM_INT, "precision"),
+            item("fragment", "medium int precision rangeMin", gl.FRAGMENT_SHADER, gl.MEDIUM_INT, "rangeMin"),
+            item("fragment", "medium int precision rangeMax", gl.FRAGMENT_SHADER, gl.MEDIUM_INT, "rangeMax"),
+            item("fragment", "low int precision", gl.FRAGMENT_SHADER, gl.LOW_INT, "precision"),
+            item("fragment", "low int precision rangeMin", gl.FRAGMENT_SHADER, gl.LOW_INT, "rangeMin"),
+            item("fragment", "low int precision rangeMax", gl.FRAGMENT_SHADER, gl.LOW_INT, "rangeMax"),
           ]
 
           Fingerprint2.get((components) => {
@@ -379,8 +379,22 @@ describe('Fingerprint2', () => {
       describe("hasLiedOS", () => {
         it("works for iPhone", (done) => {
           // checks https://github.com/Valve/fingerprintjs2/issues/447
-          Object.defineProperty(navigator, "userAgent", { value: "Mozilla/5.0 (iPhone; CPU iPhone OS 12_1_4 like Mac OS X) AppleWebKit/605.1.15" });
-          Object.defineProperty(navigator, "platform", { value: "iPhone" });
+          Object.defineProperty(navigator, "userAgent", {
+            value: "Mozilla/5.0 (iPhone; CPU iPhone OS 12_1_4 like Mac OS X) AppleWebKit/605.1.15",
+            configurable: true
+          });
+          Object.defineProperty(navigator, "platform", { value: "iPhone", configurable: true });
+          Fingerprint2.get((components) => {
+            expect(getComponent(components, "hasLiedOs")).toEqual(false)
+            done();
+          });
+        });
+        it("works for iPad", (done) => {
+          Object.defineProperty(navigator, "userAgent", {
+            value: "Mozilla/5.0 (iPad; CPU OS 11_2_6 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D100 Safari/604.1",
+            configurable: true
+          });
+          Object.defineProperty(navigator, "platform", { value: "iPad", configurable: true });
           Fingerprint2.get((components) => {
             expect(getComponent(components, "hasLiedOs")).toEqual(false)
             done();
