@@ -401,6 +401,21 @@ describe('Fingerprint2', () => {
           });
         });
       });
+
+      describe("hasLiedLanguages", () => {
+        it("works for IE11", (done) => {
+          Object.defineProperty(navigator, "language", { value: "en-US", configurable: true });
+          Object.defineProperty(navigator, "languages", { value: undefined, configurable: true });
+          Object.defineProperty(navigator, "userAgent", {
+            value: "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko",
+            configurable: true
+          });
+          Fingerprint2.get((components) => {
+            expect(getComponent(components, "hasLiedLanguages")).toEqual(false)
+            done();
+          });
+        });
+      });
     });
   });
 });
