@@ -199,7 +199,7 @@ describe('Fingerprint2', () => {
             extraComponents: [
               {
                 key: 'TEST_STRING',
-                getData: function customFunction(done) {
+                getData: function customFunction (done) {
                   done('RANDOM_STRING')
                 }
               }
@@ -216,7 +216,7 @@ describe('Fingerprint2', () => {
             extraComponents: [
               {
                 key: 'my key',
-                getData: function customFunction(done) {
+                getData: function customFunction (done) {
                   throw new Error('unstable component')
                 }
               }
@@ -238,7 +238,7 @@ describe('Fingerprint2', () => {
             extraComponents: [
               {
                 key: 'my key',
-                getData: function customFunction(done, options2) {
+                getData: function customFunction (done, options2) {
                   done(options2.NOT_AVAILABLE)
                 }
               }
