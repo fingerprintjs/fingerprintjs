@@ -24,7 +24,7 @@
   "homepage": "https://github.com/Valve/fingerprintjs2",
   "main": "fingerprint2.js",
   "files": [
-    "dist/fingerprint2.min.js"
+    "dist"
   ],
   "devDependencies": {
     "gulp": "^4.0.0",
