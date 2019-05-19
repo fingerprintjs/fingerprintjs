@@ -1,28 +1,29 @@
-# Fingerprintjs2
+<p align="center">
+  <a href="https://fingerprintjs.com">
+    <img  src="https://fingerprintjs.com/img/logo-raster.png" alt="FPJS logo">
+  </a>
+</p>
+<p align="center">
+  <a href="https://travis-ci.org/Valve/fingerprintjs2">
+    <img src="https://img.shields.io/travis/Valve/fingerprintjs2.svg?style=flat-square" alt="build status">
+  </a>
+  <a href="https://gitter.im/Valve/fingerprintjs2">
+    <img src="https://badges.gitter.im/Valve/fingerprintjs2.svg" alt="gitter chat">
+  </a>
+  <a href="https://www.npmjs.com/package/fingerprintjs2">
+    <img src="https://img.shields.io/npm/dt/fingerprintjs2.svg?style=flat-square" alt="total downloads from NPM">
+  </a>
+  <a href="https://www.npmjs.com/package/fingerprintjs2">
+    <img src="https://img.shields.io/npm/v/fingerprintjs2.svg?style=flat-square" alt="Current NPM version">
+  </a>
+  <br/>
+</p>
+<p align="center">
+  <h3>
+  ⚡<a href="https://fingerprintjs.com/pro.html">FPJS PRO - free trial</a>⚡
+  </h3>
+</p>
 
-[![](https://travis-ci.org/Valve/fingerprintjs2.svg?branch=master)](https://travis-ci.org/Valve/fingerprintjs2)
-[![](https://badges.gitter.im/Valve/fingerprintjs2.svg)](https://gitter.im/Valve/fingerprintjs2)
-[![npm](https://img.shields.io/npm/dm/fingerprintjs2.svg)][npm-link]
-
-<a href="https://www.patreon.com/bePatron?u=7954991" data-patreon-widget-type="become-patron-button">Support library on Patreon!</a>
-
---------------------------
-
-Original fingerprintjs library was developed in 2012, it's now impossible to evolve it
-without breaking backwards compatibilty, so this project will be where
-all the new development happens.
-
-This project will use significantly more sources for fingerprinting, all
-of them will be configurable, that is it should be possible to
-cherry-pick only the options you need or just enable them all.
-
-I'm also paying special attention to IE plugins, popular in China, such
-as QQ, Baidu and others.
-
-This project will not be backwards compatible with original
-fingerprintjs.
-
-This project uses `semver`.
 
 ## Installation
 
@@ -37,14 +38,14 @@ This project uses `semver`.
 ```js
 if (window.requestIdleCallback) {
     requestIdleCallback(function () {
-        Fingerprint2.get(function(components) {
-          console.log(components) // an array of FP components
-        })  
+        Fingerprint2.get(function (components) {
+          console.log(components) // an array of components: {key: ..., value: ...}
+        })
     })
 } else {
     setTimeout(function () {
-        Fingerprint2.get(function(components) {
-
+        Fingerprint2.get(function (components) {
+          console.log(components) // an array of components: {key: ..., value: ...}
         })  
     }, 500)
 }
@@ -52,25 +53,27 @@ if (window.requestIdleCallback) {
 
 **Note:** You should not run fingerprinting directly on or after page load. Rather, delay it for a few milliseconds with [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout) or [requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback) to ensure consistent fingerprints. See [#307](https://github.com/Valve/fingerprintjs2/issues/307), [#254](https://github.com/Valve/fingerprintjs2/issues/254), and others.
 
-See wiki https://github.com/Valve/fingerprintjs2/wiki/
-
-## Options
-
-You choose which components to include in the fingerprint, and configure some other stuff.
-
-```js
-var options = {extendedJsFonts: true}
-```
-
-### `extendedJsFonts`
-
-By default, JS font detection will only detect up to 65 installed fonts. If you want to improve the font detection, you can pass `extendedJsFonts: true` option. This will increase the number of detectable fonts to ~500.
-
-On my machine (MBP 2013 Core i5) + Chrome 46 the default FP process takes about 80-100ms. If you use `extendedJsFonts` option this time will increase up to 2000ms (cold font cache). This option can incur even more overhead on mobile Firefox browsers, which is much slower in font detection, so use it with caution on mobile devices.
+On my machine (MBP 2013 Core i5) + Chrome 46 the default FP process takes about 80-100ms. If you use `extendedJsFonts` option this time will increase up to 2000ms (cold font cache).
 
 To speed up fingerprint computation, you can exclude font detection (~ 40ms), canvas fingerprint (~ 10ms),  WebGL fingerprint (~ 35 ms), and Audio fingerprint (~30 ms).
 
-### `userDefinedFonts`
+## Options
+
+You choose which components to include in the fingerprint, and configure some other stuff. Example:
+
+```js
+var options = {fonts: {extendedJsFonts: true}, excludes: {userAgent: true}}
+```
+
+For the default options, please see the source code (look for `var defaultOptions = {`).
+
+### `fonts.extendedJsFonts`
+
+By default, JS font detection will only detect up to 65 installed fonts. If you want to improve the font detection, you can pass `extendedJsFonts: true` option. This will increase the number of detectable fonts to ~500.
+
+Note that this option increases fingerprint duration from about 80-100ms to up to 2000ms (cold font cache).  It can incur even more overhead on mobile Firefox browsers, which is much slower in font detection, so use it with caution on mobile devices.
+
+### `fonts.userDefinedFonts`
 Specifies an array of user-defined fonts to increase font fingerprint entropy even more.
 
 While hundreds of the most popular fonts are included in the extended font list, you may wish to increase the entropy of the font fingerprint by specifying the `userDefinedFonts` option as an array of font names, **but make sure to call the Fingerprint function after the page load, and not before**, otherwise font detection might not work properly and in a result returned hash might be different every time you reloaded the page.
@@ -83,11 +86,45 @@ Fingerprint2.get({
 })
 ```
 
-### `detectScreenOrientation` (default: true)
+### `fonts.swfContainerId`
+Specifies the dom element ID to be used for swf embedding (flash fonts)
 
-### `sortPluginsFor` (default: `[/palemoon/i]`)
+### `fonts.swfPath`
+Specifies the path to the FontList.swf (flash fonts)
+
+### `screen.detectScreenOrientation` (default: true)
+
+### `plugins.sortPluginsFor` (default: `[/palemoon/i]`)
 
 Some browsers randomise plugin order. You can give a list of user agent regexes for which plugins should be sorted.
+
+### `plugins.excludeIE`
+Skip IE plugin enumeration/detection
+
+### `audio.excludeIOS11` (default: true)
+
+iOS 11 prevents audio fingerprinting unless started from a user interaction (screen tap), preventing the fingerprinting process from finishing. If you're sure you start fingerprinting from a user interaction event handler, you may enable audio fingerprinting on iOS 11.
+
+### `audio.timeout` (default: 1000)
+maximum time allowed for 'audio' component
+
+### `fontsFlash`
+
+To use Flash font enumeration, make sure you have swfobject available. If you don't, the library will skip the Flash part entirely.
+
+### `extraComponents`
+
+Arrays of extra components to include.
+
+```
+var options = {
+    extraComponents : [
+        {key: 'customKey', getData: function (done, options) {
+            done('infos ...')
+        }
+    ]
+}
+```
 
 ### `preprocessor`
 
@@ -96,7 +133,7 @@ Function that is called with each component value that may be used to modify com
 ```js
 Fingerprint2.get({
   preprocessor: function(key, value) {
-    if (key == "user_agent") {
+    if (key == "userAgent") {
       var parser = new UAParser(value); // https://github.com/faisalman/ua-parser-js
       var userAgentMinusVersion = parser.getOS().name + ' ' + parser.getBrowser().name
       return userAgentMinusVersion
@@ -104,160 +141,54 @@ Fingerprint2.get({
     return value
   }
 },function(components) {
-  // user_agent component will contain string processed with our function. For example: Windows Chrome
+  // userAgent component will contain string processed with our function. For example: Windows Chrome
 });
 ```
 
-### `swfContainerId`
-Specifies the dom element ID to be used for swf embedding (flash fonts)
+### `excludes`
 
-### `swfPath`
-Specifies the path to the FontList.swf (flash fonts)
-
-### `excludeAudioIOS11` (default: true)
-
-iOS 11 prevents audio fingerprinting unless started from a user interaction (screen tap), preventing the fingerprinting process from finishing. If you're sure you start fingerprinting from a user interaction event handler, you may enable audio fingerprinting on iOS 11.
-
-### `excludeIEPlugins`
-Skip IE plugin enumeration/detection
-
-### `audioTimeout` default 1000
-maximum time allowed for 'audio' component
-
-### extraComponents
-Arrays of extra components to include.
-
-### excludes
-
-An object of with components keys to exclude. Empty object to include everything.
+An object of with components keys to exclude. Empty object to include everything. By default most of the components are included (please see the source code for details).
 
 ```
 var options = {
-    excludes: {'userAgent': true, 'language': true}
+    excludes: {userAgent: true, language: true}
 }
 ```
 
-Below each possible exclude
+To see a list of possible excludes, please see the source code (look for `var components = [`).
 
-#### `userAgent`
-User agent should not take part in FP calculation (https://developer.mozilla.org/en-US/docs/Web/API/NavigatorID/userAgent)
+### Constants
 
-#### `language`
-Exclude browser language (https://developer.mozilla.org/en-US/docs/Web/API/NavigatorLanguage/language)
+The constants used for unavailable, error'd, or excluded components' values.
 
-#### `colorDepth`
+```js
+var options = {
+    NOT_AVAILABLE: 'not available',
+    ERROR: 'error',
+    EXCLUDED: 'excluded',
+}
+```
 
-Exclude color depth (https://developer.mozilla.org/en-US/docs/Web/API/Screen/colorDepth)
+- `NOT_AVAILABLE`: Component value if the browser doesn't support the API the component uses (e.g. `enumerateDevices`) or the browser doesn't provide a useful value (e.g. `deviceMemory`).
+- `ERROR`: The component function threw an error.
+- `EXCLUDED`: The component was excluded.
 
-#### `deviceMemory`
-Skip device memory detection
-
-#### `pixelRatio` (default: true)
-
-Device pixel ratio may change with browser zoom levels, and it's impossible to recognize browser zoom levels, that's why it's disabled by default.
-
-#### `hardwareConcurrency`
-Skip hardware concurrency
-
-#### `screenResolution`
-Exclude screen resolution
-
-#### `availableScreenResolution`
-Exclude available screen resolution
-
-#### `timezoneOffset`
-Exclude user time zone offset
-
-#### `timezone`
-Exclude user time zone
-
-#### `sessionStorage`
-Exclude user browser support of session storage
-
-#### `localStorage`
-Exclude user browser support of local storage
-
-#### `indexedDb`
-Exclude user browser support of IndexedDB
-
-#### `addBehavior`
-Exclude IE specific 'AddBehavior' method detection
-
-#### `openDatabase`
-Exclude user browser support of OpenDatabase
-
-#### `cpuClass`
-Exclude detection of CPU class
-
-#### `platform`
-Exclude detection of OS platform
-
-#### `doNotTrack` (default: true)
-
-DNT may be different in incognito from non-incognito mode, and we can't detect incognito mode. This is way it's disabled by default.
-
-#### `plugins`
-Skip all plugin enumeration/detection
-
-#### `canvas`
-Skip canvas fingerprinting entirely (you will most likely not need to set this to true)
-
-#### `webgl`
-Skip WebGL fingerprinting
-
-#### `webglVendorAndRenderer`
-Skip detection of the graphic driver via WebGL API
-
-#### `adBlock`
-Skip AdBlock detection
-
-#### `hasLiedLanguages`
-Skip check if user is trying to hide his browser language
-
-#### `hasLiedResolution`
-Skip check if user is trying to hide his screen resolution
-
-#### `hasLiedOs`
-Skip check if user is trying to hide his OS info
-
-#### `hasLiedBrowser`
-Skip check if user is trying to hide his browser information
-
-#### `touchSupport`
-Skip touch screen specific info fingerprinting
-
-#### `fonts`
-
-#### `fontsFlash` excluded by default
-
-Flash font enumeration is disabled by default. JS code is used by default to get the list of available fonts.
-
-The reason for this  is that Flash will not work in incognito mode.
-However, you can make the library to use Flash when detecting the fonts by not including 'fontsFlash' in the excludes object
-
-To use Flash font enumeration, make sure you have swfobject available. If you don't, the library will skip the Flash part entirely.
-
-
-#### `audio`
-Skip audio fingerprinting
-
-#### `enumerateDevices`
-Skip `MediaDevices.enumerateDevices` based device list
-
-
-
-
-By default, almost all components are included in the fingerprint.
-
-
-On my machine (MBP 2013 Core i5) + Chrome 46 the default FP process takes about 80-100ms. If you use `extendedJsFonts` option this time will increase up to 2000ms (cold font cache).
-This option can incur even more overhead on mobile Firefox browsers, which is much slower in font detection, so use it with caution on mobile devices.
-
-To speed up fingerprint computation, you can exclude font detection (~ 40ms), canvas fingerprint (~ 10ms),  WebGL fingerprint (~ 35 ms), and Audio fingerprint (~30 ms).
 
 ## Upgrade guide from 1.8.2 to 2.0.0
 
-*The old usage still works but a deprecation warning is shown*
+### Backwards compatibility mode
+
+Fingerprintjs2 v2.0 provides a v1.8 compatibility wrapper that keeps user's fingerprints identical to the ones generated with v1.8. Note that we will drop this wrapper at some point.
+
+Note that the `options` parameter **must be provided in v2.0 syntax**.
+
+```js
+// options must be provided in v2.0 syntax
+Fingerprint2.getV18(options, function (result, components) {
+  // result is murmur hash fingerprint
+  // components is array of {key: 'foo', value: 'component value'}
+})
+```
 
 ### get and getPromise
 
@@ -266,23 +197,24 @@ To speed up fingerprint computation, you can exclude font detection (~ 40ms), ca
 ```
 var options = {}
 Fingerprint2.get(options, function (components) {
+  // components is array of {key: 'foo', value: 'component value'}
     ...
 })
 
 // or
 
 Fingerprint2.getPromise(options).then(function (components) {
+  // components is array of {key: 'foo', value: 'component value'}
     ...
 })
 ```
 
-To still hash the result have a look at the following example:
+Fingerprint2 ships with the murmur hash function that you may use to create a hash fingerprint:
 
 ```
 Fingerprint2.get(options, function (components) {
-    var values = Object.values(components)
+    var values = components.map(function (component) { return component.value })
     var murmur = Fingerprint2.x64hash128(values.join(''), 31)
-    var results = murmur;
 })
 ```
 
@@ -293,7 +225,7 @@ Before exclusion was done by putting an individual excludes like `excludeTouchSu
 
 To exclude a component now, put its key inside the excludes object in options
 ```
-var options = {excludes: {'touchSupport': true}}
+var options = {excludes: {touchSupport: true}}
 ```
 
 ### Custom Entropy Function
@@ -317,8 +249,7 @@ jsfonts has been renamed into fonts. fontsFlash and fonts are now separate compo
 
 ### Consistent names for components
 
-Components keys are now all camelCase. Example 'user_agent' -> 'userAgent'
-
+Components keys are now all camelCase. Example `'userAgent'` -> `'userAgent'`
 
 ### `Fingerprint2.x64hash128`
 
@@ -342,7 +273,7 @@ audioTimeout is an option, default 1000ms
 
 A components is an object with at least key and getData keys, example:
 ```
-{key: 'user_agent', getData: UserAgent, pauseBefore: false}
+{key: 'userAgent', getData: UserAgent, pauseBefore: false}
 ```
 getData value is the components function.
 
@@ -365,7 +296,7 @@ Unit tests are in `specs/specs.js`
 
 `npm test` to launch the tests, it requires phanomjs install
 
-To run the tests in the browser, launch spec_runner.html
+To run the tests in the browser, launch `spec_runner.html`
 
 
 ## Other
@@ -397,5 +328,12 @@ Many more fingerprinting sources will be implemented, such as (in no particular 
 
 https://player.vimeo.com/video/151208427
 
-#### License: MIT or Apache, whichever you prefer.
+#### License: MIT or Apache, whichever you prefer
+
 [npm-link]: https://www.npmjs.com/package/fingerprintjs2
+
+## Contributors
+
+[<img alt="Valve" src="https://avatars1.githubusercontent.com/u/27387?v=4&s=117" width="117">](https://github.com/Valve)[<img alt="jonashaag" src="https://avatars1.githubusercontent.com/u/175722?v=4&s=117" width="117">](https://github.com/jonashaag)[<img alt="antoinevastel" src="https://avatars1.githubusercontent.com/u/5827148?v=4&s=117" width="117">](https://github.com/antoinevastel)[<img alt="S-anasol" src="https://avatars2.githubusercontent.com/u/1709666?v=4&s=117" width="117">](https://github.com/S-anasol)[<img alt="unDemian" src="https://avatars1.githubusercontent.com/u/2129455?v=4&s=117" width="117">](https://github.com/unDemian)
+
+[<img alt="nuschk" src="https://avatars1.githubusercontent.com/u/5167117?v=4&s=117" width="117">](https://github.com/nuschk)[<img alt="hiuny" src="https://avatars2.githubusercontent.com/u/2697067?v=4&s=117" width="117">](https://github.com/hiuny)[<img alt="wkdtjsgur100" src="https://avatars2.githubusercontent.com/u/17163958?v=4&s=117" width="117">](https://github.com/wkdtjsgur100)[<img alt="msp" src="https://avatars1.githubusercontent.com/u/15280?v=4&s=117" width="117">](https://github.com/msp)[<img alt="ProcrastinatorCp" src="https://avatars3.githubusercontent.com/u/29228904?v=4&s=117" width="117">](https://github.com/ProcrastinatorCp)

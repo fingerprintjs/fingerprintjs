@@ -1,12 +1,15 @@
 {
   "name": "fingerprintjs2",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Modern & flexible browser fingerprinting library",
   "repository": {
     "type": "git",
     "url": "https://github.com/Valve/fingerprintjs2.git"
   },
   "keywords": [
+    "fraud",
+    "fraud-detection",
+    "fraud-prevention",
     "browser",
     "identification",
     "fingerprint",
@@ -19,17 +22,26 @@
     "url": "https://github.com/Valve/fingerprintjs2/issues"
   },
   "homepage": "https://github.com/Valve/fingerprintjs2",
-  "main": "dist/fingerprint2.min.js",
+  "main": "fingerprint2.js",
+  "files": [
+    "dist/fingerprint2.min.js"
+  ],
   "devDependencies": {
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.0",
     "gulp-header-license": "^1.0.9",
-    "gulp-rename": "^1.2.2",
-    "gulp-standard": "^10.1.1",
-    "gulp-uglify": "^3.0.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-uglify": "^3.0.1",
+    "gulp-util": "^3.0.8",
+    "jasmine-expect": "^4.0.1",
+    "karma": "^4.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^2.0.1",
+    "karma-jasmine-matchers": "^4.0.1",
     "standard": "^10.0.3"
   },
   "scripts": {
-    "test": "specs/phantomjs.runner.sh specs/spec_runner.html",
+    "test": "karma start --single-run --browsers ChromeHeadless tests/karma.conf.js",
+    "test:debug": "karma start --single-run=false --browsers Chrome tests/karma.conf.js",
     "gulp": "gulp",
     "lint": "standard --fix"
   },

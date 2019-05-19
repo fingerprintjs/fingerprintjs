@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 2.0.0 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 2.1.0 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
 * Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -15,19 +15,19 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-
+/* global define */
 (function (name, context, definition) {
   'use strict'
-  if (typeof window !== 'undefined' && typeof window.define === 'function' && window.define.amd) { window.define(definition) } else if (typeof module !== 'undefined' && module.exports) { module.exports = definition() } else if (context.exports) { context.exports = definition() } else { context[name] = definition() }
+  if (typeof window !== 'undefined' && typeof define === 'function' && define.amd) { define(definition) } else if (typeof module !== 'undefined' && module.exports) { module.exports = definition() } else if (context.exports) { context.exports = definition() } else { context[name] = definition() }
 })('Fingerprint2', this, function () {
   'use strict'
 
-/// MurmurHash3 related functions
+  /// MurmurHash3 related functions
 
-//
-// Given two 64bit ints (as an array of two 32bit ints) returns the two
-// added together as a 64bit int (as an array of two 32bit ints).
-//
+  //
+  // Given two 64bit ints (as an array of two 32bit ints) returns the two
+  // added together as a 64bit int (as an array of two 32bit ints).
+  //
   var x64Add = function (m, n) {
     m = [m[0] >>> 16, m[0] & 0xffff, m[1] >>> 16, m[1] & 0xffff]
     n = [n[0] >>> 16, n[0] & 0xffff, n[1] >>> 16, n[1] & 0xffff]
@@ -46,10 +46,10 @@
     return [(o[0] << 16) | o[1], (o[2] << 16) | o[3]]
   }
 
-//
-// Given two 64bit ints (as an array of two 32bit ints) returns the two
-// multiplied together as a 64bit int (as an array of two 32bit ints).
-//
+  //
+  // Given two 64bit ints (as an array of two 32bit ints) returns the two
+  // multiplied together as a 64bit int (as an array of two 32bit ints).
+  //
   var x64Multiply = function (m, n) {
     m = [m[0] >>> 16, m[0] & 0xffff, m[1] >>> 16, m[1] & 0xffff]
     n = [n[0] >>> 16, n[0] & 0xffff, n[1] >>> 16, n[1] & 0xffff]
@@ -76,11 +76,11 @@
     o[0] &= 0xffff
     return [(o[0] << 16) | o[1], (o[2] << 16) | o[3]]
   }
-//
-// Given a 64bit int (as an array of two 32bit ints) and an int
-// representing a number of bit positions, returns the 64bit int (as an
-// array of two 32bit ints) rotated left by that number of positions.
-//
+  //
+  // Given a 64bit int (as an array of two 32bit ints) and an int
+  // representing a number of bit positions, returns the 64bit int (as an
+  // array of two 32bit ints) rotated left by that number of positions.
+  //
   var x64Rotl = function (m, n) {
     n %= 64
     if (n === 32) {
@@ -92,11 +92,11 @@
       return [(m[1] << n) | (m[0] >>> (32 - n)), (m[0] << n) | (m[1] >>> (32 - n))]
     }
   }
-//
-// Given a 64bit int (as an array of two 32bit ints) and an int
-// representing a number of bit positions, returns the 64bit int (as an
-// array of two 32bit ints) shifted left by that number of positions.
-//
+  //
+  // Given a 64bit int (as an array of two 32bit ints) and an int
+  // representing a number of bit positions, returns the 64bit int (as an
+  // array of two 32bit ints) shifted left by that number of positions.
+  //
   var x64LeftShift = function (m, n) {
     n %= 64
     if (n === 0) {
@@ -107,18 +107,18 @@
       return [m[1] << (n - 32), 0]
     }
   }
-//
-// Given two 64bit ints (as an array of two 32bit ints) returns the two
-// xored together as a 64bit int (as an array of two 32bit ints).
-//
+  //
+  // Given two 64bit ints (as an array of two 32bit ints) returns the two
+  // xored together as a 64bit int (as an array of two 32bit ints).
+  //
   var x64Xor = function (m, n) {
     return [m[0] ^ n[0], m[1] ^ n[1]]
   }
-//
-// Given a block, returns murmurHash3's final x64 mix of that block.
-// (`[0, h[0] >>> 1]` is a 33 bit unsigned right shift. This is the
-// only place where we need to right shift 64bit ints.)
-//
+  //
+  // Given a block, returns murmurHash3's final x64 mix of that block.
+  // (`[0, h[0] >>> 1]` is a 33 bit unsigned right shift. This is the
+  // only place where we need to right shift 64bit ints.)
+  //
   var x64Fmix = function (h) {
     h = x64Xor(h, [0, h[0] >>> 1])
     h = x64Multiply(h, [0xff51afd7, 0xed558ccd])
@@ -128,10 +128,10 @@
     return h
   }
 
-//
-// Given a string and an optional seed as an int, returns a 128 bit
-// hash using the x64 flavor of MurmurHash3, as an unsigned hex.
-//
+  //
+  // Given a string and an optional seed as an int, returns a 128 bit
+  // hash using the x64 flavor of MurmurHash3, as an unsigned hex.
+  //
   var x64hash128 = function (key, seed) {
     key = key || ''
     seed = seed || 0
@@ -230,11 +230,12 @@
   }
 
   var defaultOptions = {
+    preprocessor: null,
     audio: {
       timeout: 1000,
-        // On iOS 11, audio context can only be used in response to user interaction.
-        // We require users to explicitly enable audio fingerprinting on iOS 11.
-        // See https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
+      // On iOS 11, audio context can only be used in response to user interaction.
+      // We require users to explicitly enable audio fingerprinting on iOS 11.
+      // See https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
       excludeIOS11: true
     },
     fonts: {
@@ -244,7 +245,7 @@
       extendedJsFonts: false
     },
     screen: {
-       // To ensure consistent fingerprints when users rotate their mobile devices
+      // To ensure consistent fingerprints when users rotate their mobile devices
       detectScreenOrientation: true
     },
     plugins: {
@@ -261,7 +262,10 @@
       'doNotTrack': true,
       // uses js fonts already
       'fontsFlash': true
-    }
+    },
+    NOT_AVAILABLE: 'not available',
+    ERROR: 'error',
+    EXCLUDED: 'excluded'
   }
 
   var each = function (obj, iterator) {
@@ -307,7 +311,7 @@
     return target
   }
 
-// https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices
+  // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices
   var enumerateDevicesKey = function (done, options) {
     if (!isEnumerateDevicesSupported()) {
       return done(options.NOT_AVAILABLE)
@@ -325,11 +329,11 @@
   var isEnumerateDevicesSupported = function () {
     return (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices)
   }
-// Inspired by and based on https://github.com/cozylife/audio-fingerprint
+  // Inspired by and based on https://github.com/cozylife/audio-fingerprint
   var audioKey = function (done, options) {
     var audioOptions = options.audio
     if (audioOptions.excludeIOS11 && navigator.userAgent.match(/OS 11.+Version\/11.+Safari/)) {
-        // See comment for excludeUserAgent and https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
+      // See comment for excludeUserAgent and https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
       return done(options.EXCLUDED)
     }
 
@@ -347,12 +351,12 @@
 
     var compressor = context.createDynamicsCompressor()
     each([
-        ['threshold', -50],
-        ['knee', 40],
-        ['ratio', 12],
-        ['reduction', -20],
-        ['attack', 0],
-        ['release', 0.25]
+      ['threshold', -50],
+      ['knee', 40],
+      ['ratio', 12],
+      ['reduction', -20],
+      ['attack', 0],
+      ['release', 0.25]
     ], function (item) {
       if (compressor[item[0]] !== undefined && typeof compressor[item[0]].setValueAtTime === 'function') {
         compressor[item[0]].setValueAtTime(item[1], context.currentTime)
@@ -366,7 +370,7 @@
 
     var audioTimeoutId = setTimeout(function () {
       console.warn('Audio fingerprint timed out. Please report bug at https://github.com/Valve/fingerprintjs2 with your user agent: "' + navigator.userAgent + '".')
-      context.oncomplete = function () {}
+      context.oncomplete = function () { }
       context = null
       return done('audioTimeout')
     }, audioOptions.timeout)
@@ -376,9 +380,9 @@
       try {
         clearTimeout(audioTimeoutId)
         fingerprint = event.renderedBuffer.getChannelData(0)
-            .slice(4500, 5000)
-            .reduce(function (acc, val) { return acc + Math.abs(val) }, 0)
-            .toString()
+          .slice(4500, 5000)
+          .reduce(function (acc, val) { return acc + Math.abs(val) }, 0)
+          .toString()
         oscillator.disconnect()
         compressor.disconnect()
       } catch (error) {
@@ -390,6 +394,9 @@
   }
   var UserAgent = function (done) {
     done(navigator.userAgent)
+  }
+  var webdriver = function (done, options) {
+    done(navigator.webdriver == null ? options.NOT_AVAILABLE : navigator.webdriver)
   }
   var languageKey = function (done, options) {
     done(navigator.language || navigator.userLanguage || navigator.browserLanguage || navigator.systemLanguage || options.NOT_AVAILABLE)
@@ -447,7 +454,7 @@
     done(hasIndexedDB(options))
   }
   var addBehaviorKey = function (done) {
-      // body might not be defined at this point or removed programmatically
+    // body might not be defined at this point or removed programmatically
     done(!!(document.body && document.body.addBehavior))
   }
   var openDatabaseKey = function (done) {
@@ -498,7 +505,7 @@
   var hasLiedBrowserKey = function (done) {
     done(getHasLiedBrowser())
   }
-// flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
+  // flash fonts (will increase fingerprinting time 20X to ~ 130-150ms)
   var flashFontsKey = function (done, options) {
     // we do flash if swfobject is loaded
     if (!hasSwfObjectLoaded()) {
@@ -514,10 +521,10 @@
       done(fonts)
     }, options)
   }
-// kudos to http://www.lalit.org/lab/javascript-css-font-detect/
+  // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
   var jsFontsKey = function (done, options) {
-      // a font will be compared against all the three default fonts.
-      // and if it doesn't match all 3 then that font is not available.
+    // a font will be compared against all the three default fonts.
+    // and if it doesn't match all 3 then that font is not available.
     var baseFonts = ['monospace', 'sans-serif', 'serif']
 
     var fontList = [
@@ -573,42 +580,42 @@
 
     fontList = fontList.concat(options.fonts.userDefinedFonts)
 
-      // remove duplicate fonts
+    // remove duplicate fonts
     fontList = fontList.filter(function (font, position) {
       return fontList.indexOf(font) === position
     })
 
-      // we use m or w because these two characters take up the maximum width.
-      // And we use a LLi so that the same matching fonts can get separated
+    // we use m or w because these two characters take up the maximum width.
+    // And we use a LLi so that the same matching fonts can get separated
     var testString = 'mmmmmmmmmmlli'
 
-      // we test using 72px font size, we may use any size. I guess larger the better.
+    // we test using 72px font size, we may use any size. I guess larger the better.
     var testSize = '72px'
 
     var h = document.getElementsByTagName('body')[0]
 
-      // div to load spans for the base fonts
+    // div to load spans for the base fonts
     var baseFontsDiv = document.createElement('div')
 
-      // div to load spans for the fonts to detect
+    // div to load spans for the fonts to detect
     var fontsDiv = document.createElement('div')
 
     var defaultWidth = {}
     var defaultHeight = {}
 
-      // creates a span where the fonts will be loaded
+    // creates a span where the fonts will be loaded
     var createSpan = function () {
       var s = document.createElement('span')
-        /*
-         * We need this css as in some weird browser this
-         * span elements shows up for a microSec which creates a
-         * bad user experience
-         */
+      /*
+       * We need this css as in some weird browser this
+       * span elements shows up for a microSec which creates a
+       * bad user experience
+       */
       s.style.position = 'absolute'
       s.style.left = '-9999px'
       s.style.fontSize = testSize
 
-        // css font reset to reset external styles
+      // css font reset to reset external styles
       s.style.fontStyle = 'normal'
       s.style.fontWeight = 'normal'
       s.style.letterSpacing = 'normal'
@@ -626,14 +633,14 @@
       return s
     }
 
-      // creates a span and load the font to detect and a base font for fallback
+    // creates a span and load the font to detect and a base font for fallback
     var createSpanWithFonts = function (fontToDetect, baseFont) {
       var s = createSpan()
       s.style.fontFamily = "'" + fontToDetect + "'," + baseFont
       return s
     }
 
-      // creates spans for the base fonts and adds them to baseFontsDiv
+    // creates spans for the base fonts and adds them to baseFontsDiv
     var initializeBaseFontsSpans = function () {
       var spans = []
       for (var index = 0, length = baseFonts.length; index < length; index++) {
@@ -645,7 +652,7 @@
       return spans
     }
 
-      // creates spans for the fonts to detect and adds them to fontsDiv
+    // creates spans for the fonts to detect and adds them to fontsDiv
     var initializeFontsSpans = function () {
       var spans = {}
       for (var i = 0, l = fontList.length; i < l; i++) {
@@ -660,7 +667,7 @@
       return spans
     }
 
-      // checks if a font is available
+    // checks if a font is available
     var isFontAvailable = function (fontSpans) {
       var detected = false
       for (var i = 0; i < baseFonts.length; i++) {
@@ -672,25 +679,25 @@
       return detected
     }
 
-      // create spans for base fonts
+    // create spans for base fonts
     var baseFontsSpans = initializeBaseFontsSpans()
 
-      // add the spans to the DOM
+    // add the spans to the DOM
     h.appendChild(baseFontsDiv)
 
-      // get the default width for the three base fonts
+    // get the default width for the three base fonts
     for (var index = 0, length = baseFonts.length; index < length; index++) {
       defaultWidth[baseFonts[index]] = baseFontsSpans[index].offsetWidth // width for the default font
       defaultHeight[baseFonts[index]] = baseFontsSpans[index].offsetHeight // height for the default font
     }
 
-      // create spans for fonts to detect
+    // create spans for fonts to detect
     var fontsSpans = initializeFontsSpans()
 
-      // add all the spans to the DOM
+    // add all the spans to the DOM
     h.appendChild(fontsDiv)
 
-      // check available fonts
+    // check available fonts
     var available = []
     for (var i = 0, l = fontList.length; i < l; i++) {
       if (isFontAvailable(fontsSpans[fontList[i]])) {
@@ -698,7 +705,7 @@
       }
     }
 
-      // remove spans from DOM
+    // remove spans from DOM
     h.removeChild(fontsDiv)
     h.removeChild(baseFontsDiv)
     done(available)
@@ -720,13 +727,13 @@
     }
 
     var plugins = []
-      // plugins isn't defined in Node envs.
+    // plugins isn't defined in Node envs.
     for (var i = 0, l = navigator.plugins.length; i < l; i++) {
       if (navigator.plugins[i]) { plugins.push(navigator.plugins[i]) }
     }
 
-      // sorting plugins only for those user agents, that we know randomize the plugins
-      // every time we try to enumerate them
+    // sorting plugins only for those user agents, that we know randomize the plugins
+    // every time we try to enumerate them
     if (pluginsShouldBeSorted(options)) {
       plugins = plugins.sort(function (a, b) {
         if (a.name > b.name) { return 1 }
@@ -768,10 +775,10 @@
         'rmocx.RealPlayer G2 Control',
         'rmocx.RealPlayer G2 Control.1'
       ]
-        // starting to detect plugins in IE
+      // starting to detect plugins in IE
       result = map(names, function (name) {
         try {
-            // eslint-disable-next-line no-new
+          // eslint-disable-next-line no-new
           new window.ActiveXObject(name)
           return name
         } catch (e) {
@@ -811,7 +818,7 @@
     }
   }
 
-// https://bugzilla.mozilla.org/show_bug.cgi?id=781447
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=781447
   var hasLocalStorage = function (options) {
     try {
       return !!window.localStorage
@@ -853,14 +860,14 @@
       return options.NOT_AVAILABLE
     }
   }
-// This is a crude and primitive touch screen detection.
-// It's not possible to currently reliably detect the  availability of a touch screen
-// with a JS, without actually subscribing to a touch event.
-// http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
-// https://github.com/Modernizr/Modernizr/issues/548
-// method returns an array of 3 values:
-// maxTouchPoints, the success or failure of creating a TouchEvent,
-// and the availability of the 'ontouchstart' property
+  // This is a crude and primitive touch screen detection.
+  // It's not possible to currently reliably detect the  availability of a touch screen
+  // with a JS, without actually subscribing to a touch event.
+  // http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
+  // https://github.com/Modernizr/Modernizr/issues/548
+  // method returns an array of 3 values:
+  // maxTouchPoints, the success or failure of creating a TouchEvent,
+  // and the availability of the 'ontouchstart' property
 
   var getTouchSupport = function () {
     var maxTouchPoints = 0
@@ -879,19 +886,19 @@
     var touchStart = 'ontouchstart' in window
     return [maxTouchPoints, touchEvent, touchStart]
   }
-// https://www.browserleaks.com/canvas#how-does-it-work
+  // https://www.browserleaks.com/canvas#how-does-it-work
 
   var getCanvasFp = function (options) {
     var result = []
-      // Very simple now, need to make it more complex (geo shapes etc)
+    // Very simple now, need to make it more complex (geo shapes etc)
     var canvas = document.createElement('canvas')
     canvas.width = 2000
     canvas.height = 200
     canvas.style.display = 'inline'
     var ctx = canvas.getContext('2d')
-      // detect browser support of canvas winding
-      // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
-      // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/winding.js
+    // detect browser support of canvas winding
+    // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
+    // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/winding.js
     ctx.rect(0, 0, 10, 10)
     ctx.rect(2, 2, 6, 6)
     result.push('canvas winding:' + ((ctx.isPointInPath(5, 5, 'evenodd') === false) ? 'yes' : 'no'))
@@ -900,7 +907,7 @@
     ctx.fillStyle = '#f60'
     ctx.fillRect(125, 1, 62, 20)
     ctx.fillStyle = '#069'
-      // https://github.com/Valve/fingerprintjs2/issues/66
+    // https://github.com/Valve/fingerprintjs2/issues/66
     if (options.dontUseFakeFontInCanvas) {
       ctx.font = '11pt Arial'
     } else {
@@ -911,9 +918,9 @@
     ctx.font = '18pt Arial'
     ctx.fillText('Cwm fjordbank glyphs vext quiz, \ud83d\ude03', 4, 45)
 
-      // canvas blending
-      // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
-      // http://jsfiddle.net/NDYV8/16/
+    // canvas blending
+    // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
+    // http://jsfiddle.net/NDYV8/16/
     ctx.globalCompositeOperation = 'multiply'
     ctx.fillStyle = 'rgb(255,0,255)'
     ctx.beginPath()
@@ -931,9 +938,9 @@
     ctx.closePath()
     ctx.fill()
     ctx.fillStyle = 'rgb(255,0,255)'
-      // canvas winding
-      // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
-      // http://jsfiddle.net/NDYV8/19/
+    // canvas winding
+    // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
+    // http://jsfiddle.net/NDYV8/19/
     ctx.arc(75, 75, 75, 0, Math.PI * 2, true)
     ctx.arc(75, 75, 25, 0, Math.PI * 2, true)
     ctx.fill('evenodd')
@@ -965,10 +972,10 @@
 
     gl = getWebglCanvas()
     if (!gl) { return null }
-      // WebGL fingerprinting is a combination of techniques, found in MaxMind antifraud script & Augur fingerprinting.
-      // First it draws a gradient object with shaders and convers the image to the Base64 string.
-      // Then it enumerates all WebGL extensions & capabilities and appends them to the Base64 string, resulting in a huge WebGL string, potentially very unique on each device
-      // Since iOS supports webgl starting from version 8.1 and 8.1 runs on several graphics chips, the results may be different across ios devices, but we need to verify it.
+    // WebGL fingerprinting is a combination of techniques, found in MaxMind antifraud script & Augur fingerprinting.
+    // First it draws a gradient object with shaders and convers the image to the Base64 string.
+    // Then it enumerates all WebGL extensions & capabilities and appends them to the Base64 string, resulting in a huge WebGL string, potentially very unique on each device
+    // Since iOS supports webgl starting from version 8.1 and 8.1 runs on several graphics chips, the results may be different across ios devices, but we need to verify it.
     var result = []
     var vShaderTemplate = 'attribute vec2 attrVertex;varying vec2 varyinTexCoordinate;uniform vec2 uniformOffset;void main(){varyinTexCoordinate=attrVertex+uniformOffset;gl_Position=vec4(attrVertex,0,1);}'
     var fShaderTemplate = 'precision mediump float;varying vec2 varyinTexCoordinate;void main() {gl_FragColor=vec4(varyinTexCoordinate,0,1);}'
@@ -998,7 +1005,7 @@
     try {
       result.push(gl.canvas.toDataURL())
     } catch (e) {
-        /* .toDataURL may be absent or broken (blocked by extension) */
+      /* .toDataURL may be absent or broken (blocked by extension) */
     }
     result.push('extensions:' + (gl.getSupportedExtensions() || []).join(';'))
     result.push('webgl aliased line width range:' + fa2s(gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE)))
@@ -1028,7 +1035,7 @@
     result.push('webgl version:' + gl.getParameter(gl.VERSION))
 
     try {
-        // Add the unmasked vendor and unmasked renderer if the debug_renderer_info extension is available
+      // Add the unmasked vendor and unmasked renderer if the debug_renderer_info extension is available
       var extensionDebugRendererInfo = gl.getExtension('WEBGL_debug_renderer_info')
       if (extensionDebugRendererInfo) {
         result.push('webgl unmasked vendor:' + gl.getParameter(extensionDebugRendererInfo.UNMASKED_VENDOR_WEBGL))
@@ -1057,7 +1064,7 @@
     return result
   }
   var getWebglVendorAndRenderer = function () {
-      /* This a subset of the WebGL fingerprint with a lot of entropy, while being reasonably browser-independent */
+    /* This a subset of the WebGL fingerprint with a lot of entropy, while being reasonably browser-independent */
     try {
       var glContext = getWebglCanvas()
       var extensionDebugRendererInfo = glContext.getExtension('WEBGL_debug_renderer_info')
@@ -1072,7 +1079,7 @@
     ads.className = 'adsbox'
     var result = false
     try {
-        // body may not exist, that's why we need try/catch
+      // body may not exist, that's why we need try/catch
       document.body.appendChild(ads)
       result = document.getElementsByClassName('adsbox')[0].offsetHeight === 0
       document.body.removeChild(ads)
@@ -1082,7 +1089,8 @@
     return result
   }
   var getHasLiedLanguages = function () {
-      // We check if navigator.language is equal to the first language of navigator.languages
+    // We check if navigator.language is equal to the first language of navigator.languages
+    // navigator.languages is undefined on IE11 (and potentially older IEs)
     if (typeof navigator.languages !== 'undefined') {
       try {
         var firstLanguages = navigator.languages[0].substr(0, 2)
@@ -1103,14 +1111,14 @@
     var oscpu = navigator.oscpu
     var platform = navigator.platform.toLowerCase()
     var os
-      // We extract the OS from the user agent (respect the order of the if else if statement)
+    // We extract the OS from the user agent (respect the order of the if else if statement)
     if (userAgent.indexOf('windows phone') >= 0) {
       os = 'Windows Phone'
     } else if (userAgent.indexOf('win') >= 0) {
       os = 'Windows'
     } else if (userAgent.indexOf('android') >= 0) {
       os = 'Android'
-    } else if (userAgent.indexOf('linux') >= 0) {
+    } else if (userAgent.indexOf('linux') >= 0 || userAgent.indexOf('cros') >= 0) {
       os = 'Linux'
     } else if (userAgent.indexOf('iphone') >= 0 || userAgent.indexOf('ipad') >= 0) {
       os = 'iOS'
@@ -1119,16 +1127,16 @@
     } else {
       os = 'Other'
     }
-      // We detect if the person uses a mobile device
+    // We detect if the person uses a mobile device
     var mobileDevice = (('ontouchstart' in window) ||
-        (navigator.maxTouchPoints > 0) ||
-        (navigator.msMaxTouchPoints > 0))
+      (navigator.maxTouchPoints > 0) ||
+      (navigator.msMaxTouchPoints > 0))
 
     if (mobileDevice && os !== 'Windows Phone' && os !== 'Android' && os !== 'iOS' && os !== 'Other') {
       return true
     }
 
-      // We compare oscpu with the OS extracted from the UA
+    // We compare oscpu with the OS extracted from the UA
     if (typeof oscpu !== 'undefined') {
       oscpu = oscpu.toLowerCase()
       if (oscpu.indexOf('win') >= 0 && os !== 'Windows' && os !== 'Windows Phone') {
@@ -1142,15 +1150,22 @@
       }
     }
 
-      // We compare platform with the OS extracted from the UA
+    // We compare platform with the OS extracted from the UA
     if (platform.indexOf('win') >= 0 && os !== 'Windows' && os !== 'Windows Phone') {
       return true
     } else if ((platform.indexOf('linux') >= 0 || platform.indexOf('android') >= 0 || platform.indexOf('pike') >= 0) && os !== 'Linux' && os !== 'Android') {
       return true
     } else if ((platform.indexOf('mac') >= 0 || platform.indexOf('ipad') >= 0 || platform.indexOf('ipod') >= 0 || platform.indexOf('iphone') >= 0) && os !== 'Mac' && os !== 'iOS') {
       return true
-    } else if ((platform.indexOf('win') === -1 && platform.indexOf('linux') === -1 && platform.indexOf('mac') === -1) !== (os === 'Other')) {
-      return true
+    } else {
+      var platformIsOther = platform.indexOf('win') < 0 &&
+        platform.indexOf('linux') < 0 &&
+        platform.indexOf('mac') < 0 &&
+        platform.indexOf('iphone') < 0 &&
+        platform.indexOf('ipad') < 0
+      if (platformIsOther !== (os === 'Other')) {
+        return true
+      }
     }
 
     return typeof navigator.plugins === 'undefined' && os !== 'Windows' && os !== 'Windows Phone'
@@ -1159,7 +1174,7 @@
     var userAgent = navigator.userAgent.toLowerCase()
     var productSub = navigator.productSub
 
-      // we extract the browser from the user agent (respect the order of the tests)
+    // we extract the browser from the user agent (respect the order of the tests)
     var browser
     if (userAgent.indexOf('firefox') >= 0) {
       browser = 'Firefox'
@@ -1179,7 +1194,7 @@
       return true
     }
 
-      // eslint-disable-next-line no-eval
+    // eslint-disable-next-line no-eval
     var tempRes = eval.toString().length
     if (tempRes === 37 && browser !== 'Safari' && browser !== 'Firefox' && browser !== 'Other') {
       return true
@@ -1189,10 +1204,10 @@
       return true
     }
 
-      // We create an error to see how it is handled
+    // We create an error to see how it is handled
     var errFirefox
     try {
-        // eslint-disable-next-line no-throw-literal
+      // eslint-disable-next-line no-throw-literal
       throw 'a'
     } catch (err) {
       try {
@@ -1209,7 +1224,7 @@
     return !!(elem.getContext && elem.getContext('2d'))
   }
   var isWebGlSupported = function () {
-      // code taken from Modernizr
+    // code taken from Modernizr
     if (!isCanvasSupported()) {
       return false
     }
@@ -1258,49 +1273,43 @@
   }
 
   var components = [
-    {key: 'userAgent', getData: UserAgent},
-    {key: 'language', getData: languageKey},
-    {key: 'colorDepth', getData: colorDepthKey},
-    {key: 'deviceMemory', getData: deviceMemoryKey},
-    {key: 'pixelRatio', getData: pixelRatioKey},
-    {key: 'hardwareConcurrency', getData: hardwareConcurrencyKey},
-    {key: 'screenResolution', getData: screenResolutionKey},
-    {key: 'availableScreenResolution', getData: availableScreenResolutionKey},
-    {key: 'timezoneOffset', getData: timezoneOffset},
-    {key: 'timezone', getData: timezone},
-    {key: 'sessionStorage', getData: sessionStorageKey},
-    {key: 'localStorage', getData: localStorageKey},
-    {key: 'indexedDb', getData: indexedDbKey},
-    {key: 'addBehavior', getData: addBehaviorKey},
-    {key: 'openDatabase', getData: openDatabaseKey},
-    {key: 'cpuClass', getData: cpuClassKey},
-    {key: 'platform', getData: platformKey},
-    {key: 'doNotTrack', getData: doNotTrackKey},
-    {key: 'plugins', getData: pluginsComponent},
-    {key: 'canvas', getData: canvasKey},
-    {key: 'webgl', getData: webglKey},
-    {key: 'webglVendorAndRenderer', getData: webglVendorAndRendererKey},
-    {key: 'adBlock', getData: adBlockKey},
-    {key: 'hasLiedLanguages', getData: hasLiedLanguagesKey},
-    {key: 'hasLiedResolution', getData: hasLiedResolutionKey},
-    {key: 'hasLiedOs', getData: hasLiedOsKey},
-    {key: 'hasLiedBrowser', getData: hasLiedBrowserKey},
-    {key: 'touchSupport', getData: touchSupportKey},
-    {key: 'fonts', getData: jsFontsKey, pauseBefore: true},
-    {key: 'fontsFlash', getData: flashFontsKey, pauseBefore: true},
-    {key: 'audio', getData: audioKey},
-    {key: 'enumerateDevices', getData: enumerateDevicesKey}
+    { key: 'userAgent', getData: UserAgent },
+    { key: 'webdriver', getData: webdriver },
+    { key: 'language', getData: languageKey },
+    { key: 'colorDepth', getData: colorDepthKey },
+    { key: 'deviceMemory', getData: deviceMemoryKey },
+    { key: 'pixelRatio', getData: pixelRatioKey },
+    { key: 'hardwareConcurrency', getData: hardwareConcurrencyKey },
+    { key: 'screenResolution', getData: screenResolutionKey },
+    { key: 'availableScreenResolution', getData: availableScreenResolutionKey },
+    { key: 'timezoneOffset', getData: timezoneOffset },
+    { key: 'timezone', getData: timezone },
+    { key: 'sessionStorage', getData: sessionStorageKey },
+    { key: 'localStorage', getData: localStorageKey },
+    { key: 'indexedDb', getData: indexedDbKey },
+    { key: 'addBehavior', getData: addBehaviorKey },
+    { key: 'openDatabase', getData: openDatabaseKey },
+    { key: 'cpuClass', getData: cpuClassKey },
+    { key: 'platform', getData: platformKey },
+    { key: 'doNotTrack', getData: doNotTrackKey },
+    { key: 'plugins', getData: pluginsComponent },
+    { key: 'canvas', getData: canvasKey },
+    { key: 'webgl', getData: webglKey },
+    { key: 'webglVendorAndRenderer', getData: webglVendorAndRendererKey },
+    { key: 'adBlock', getData: adBlockKey },
+    { key: 'hasLiedLanguages', getData: hasLiedLanguagesKey },
+    { key: 'hasLiedResolution', getData: hasLiedResolutionKey },
+    { key: 'hasLiedOs', getData: hasLiedOsKey },
+    { key: 'hasLiedBrowser', getData: hasLiedBrowserKey },
+    { key: 'touchSupport', getData: touchSupportKey },
+    { key: 'fonts', getData: jsFontsKey, pauseBefore: true },
+    { key: 'fontsFlash', getData: flashFontsKey, pauseBefore: true },
+    { key: 'audio', getData: audioKey },
+    { key: 'enumerateDevices', getData: enumerateDevicesKey }
   ]
 
-  /**
-   * @constructor
-   * @param {Object} options
-   */
   var Fingerprint2 = function (options) {
-    if (!(this instanceof Fingerprint2)) {
-      return new Fingerprint2(options)
-    }
-    this.options = options
+    throw new Error("'new Fingerprint()' is deprecated, see https://github.com/Valve/fingerprintjs2#upgrade-guide-from-182-to-200")
   }
 
   Fingerprint2.get = function (options, callback) {
@@ -1311,11 +1320,6 @@
       options = {}
     }
     extendSoft(options, defaultOptions)
-    extendSoft(options, {
-      NOT_AVAILABLE: Fingerprint2.NOT_AVAILABLE,
-      ERROR: Fingerprint2.ERROR,
-      EXCLUDED: Fingerprint2.EXCLUDED
-    })
     options.components = options.extraComponents.concat(components)
 
     var keys = {
@@ -1324,7 +1328,7 @@
         if (typeof options.preprocessor === 'function') {
           value = options.preprocessor(key, value)
         }
-        keys.data.push({key: key, value: value})
+        keys.data.push({ key: key, value: value })
       }
     }
 
@@ -1371,50 +1375,51 @@
     })
   }
 
-  Fingerprint2.prototype.get = function (callback) {
-    console.warn("'new Fingerprint()' is deprecated, see XXX")
-    return Fingerprint2.get(this.options, function (components) {
-      var pairs = []
+  Fingerprint2.getV18 = function (options, callback) {
+    if (callback == null) {
+      callback = options
+      options = {}
+    }
+    return Fingerprint2.get(options, function (components) {
+      var newComponents = []
       for (var i = 0; i < components.length; i++) {
-        var pair = components[i]
-        if (pair.value === Fingerprint2.NOT_AVAILABLE) {
-          pairs.push({key: pair.key, value: 'unknown'})
-        } else if (pair.key === 'plugins') {
-          pairs.push({key: 'plugins',
-            value: map(pair.value, function (p) {
+        var component = components[i]
+        if (component.value === (options.NOT_AVAILABLE || 'not available')) {
+          newComponents.push({ key: component.key, value: 'unknown' })
+        } else if (component.key === 'plugins') {
+          newComponents.push({
+            key: 'plugins',
+            value: map(component.value, function (p) {
               var mimeTypes = map(p[2], function (mt) {
                 if (mt.join) { return mt.join('~') }
                 return mt
               }).join(',')
               return [p[0], p[1], mimeTypes].join('::')
-            })})
-        } else if (['canvas', 'webgl'].indexOf(pair.key) !== -1) {
-          pairs.push({key: pair.key, value: pair.value.join('~')})
-        } else if (['sessionStorage', 'localStorage', 'indexedDb', 'addBehavior', 'openDatabase'].indexOf(pair.key) !== -1) {
-          if (pair.value) {
-            pairs.push({key: pair.key, value: 1})
+            })
+          })
+        } else if (['canvas', 'webgl'].indexOf(component.key) !== -1) {
+          newComponents.push({ key: component.key, value: component.value.join('~') })
+        } else if (['sessionStorage', 'localStorage', 'indexedDb', 'addBehavior', 'openDatabase'].indexOf(component.key) !== -1) {
+          if (component.value) {
+            newComponents.push({ key: component.key, value: 1 })
           } else {
             // skip
             continue
           }
         } else {
-          if (pair.value) {
-            pairs.push(pair.value.join ? {key: pair.key, value: pair.value.join(';')} : pair)
+          if (component.value) {
+            newComponents.push(component.value.join ? { key: component.key, value: component.value.join(';') } : component)
           } else {
-            pairs.push({key: pair.key, value: pair.value})
+            newComponents.push({ key: component.key, value: component.value })
           }
         }
       }
-      console.log(map(pairs, function (pair) { return pair.value }).join('~~~'))
-      var murmur = x64hash128(map(pairs, function (pair) { return pair.value }).join('~~~'), 31)
-      callback(murmur, pairs)
+      var murmur = x64hash128(map(newComponents, function (component) { return component.value }).join('~~~'), 31)
+      callback(murmur, newComponents)
     })
   }
 
-  Fingerprint2.NOT_AVAILABLE = 'not available'
-  Fingerprint2.ERROR = 'error'
-  Fingerprint2.EXCLUDED = 'excluded'
   Fingerprint2.x64hash128 = x64hash128
-  Fingerprint2.VERSION = '2.0.0'
+  Fingerprint2.VERSION = '2.1.0'
   return Fingerprint2
 })
