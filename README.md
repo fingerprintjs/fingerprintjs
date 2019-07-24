@@ -20,7 +20,7 @@
 </p>
 <p align="center">
   <h3>
-  <a href="https://fingerprintjs.com/pro.html">Try FPJS PRO - 99.5% identification accuracy</a>
+  <a href="https://fpjs.io">Try FPJS PRO - 99.5% identification accuracy</a>
   </h3>
 </p>
 
