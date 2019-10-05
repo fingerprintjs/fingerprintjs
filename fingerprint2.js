@@ -1044,6 +1044,7 @@
     } catch (e) { /* squelch */ }
 
     if (!gl.getShaderPrecisionFormat) {
+      loseWebglContext(gl)
       return result
     }
 
@@ -1061,6 +1062,7 @@
         })
       })
     })
+    loseWebglContext(gl)
     return result
   }
   var getWebglVendorAndRenderer = function () {
@@ -1068,7 +1070,9 @@
     try {
       var glContext = getWebglCanvas()
       var extensionDebugRendererInfo = glContext.getExtension('WEBGL_debug_renderer_info')
-      return glContext.getParameter(extensionDebugRendererInfo.UNMASKED_VENDOR_WEBGL) + '~' + glContext.getParameter(extensionDebugRendererInfo.UNMASKED_RENDERER_WEBGL)
+      var params = glContext.getParameter(extensionDebugRendererInfo.UNMASKED_VENDOR_WEBGL) + '~' + glContext.getParameter(extensionDebugRendererInfo.UNMASKED_RENDERER_WEBGL)
+      loseWebglContext(glContext)
+      return params
     } catch (e) {
       return null
     }
@@ -1230,7 +1234,9 @@
     }
 
     var glContext = getWebglCanvas()
-    return !!window.WebGLRenderingContext && !!glContext
+    var isSupported = !!window.WebGLRenderingContext && !!glContext
+    loseWebglContext(glContext)
+    return isSupported
   }
   var isIE = function () {
     if (navigator.appName === 'Microsoft Internet Explorer') {
@@ -1270,6 +1276,12 @@
     } catch (e) { /* squelch */ }
     if (!gl) { gl = null }
     return gl
+  }
+  var loseWebglContext = function (context) {
+    var loseContextExtension = context.getExtension("WEBGL_lose_context")
+    if(loseContextExtension != null) {
+      loseContextExtension.loseContext()
+    }
   }
 
   var components = [
