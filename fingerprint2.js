@@ -320,8 +320,7 @@
       done(devices.map(function (device) {
         return 'id=' + device.deviceId + ';gid=' + device.groupId + ';' + device.kind + ';' + device.label
       }))
-    })
-      .catch(function (error) {
+    })['catch'](function (error) {
         done(error)
       })
   }

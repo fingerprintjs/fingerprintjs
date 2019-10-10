@@ -12,6 +12,7 @@ cache:
 install:
   - yarn
 script:
+  - ./custom-lint.sh
   - yarn lint
   - yarn gulp
   - yarn test

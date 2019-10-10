@@ -10,6 +10,7 @@ gulp.task('minify', function () {
       .src('fingerprint2.js')
       .pipe(rename({suffix: '.min'}))
       .pipe(uglify({
+        ie8: true,
         compress: {
           global_defs: {}
         },
