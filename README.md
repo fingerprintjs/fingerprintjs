@@ -1,8 +1,4 @@
-<p align="center">
-  <a href="https://fingerprintjs.com">
-    <img  src="https://fingerprintjs.com/img/logo-raster.png" alt="FPJS logo">
-  </a>
-</p>
+
 <p align="center">
   <a href="https://travis-ci.org/Valve/fingerprintjs2">
     <img src="https://img.shields.io/travis/Valve/fingerprintjs2.svg?style=flat-square" alt="build status">
@@ -20,7 +16,7 @@
 </p>
 <p align="center">
   <h3>
-  <a href="https://fpjs.io">Try FPJS PRO - 99.5% identification accuracy</a>
+  <a href="https://fingerprintjs.com/demo">Try FPJS PRO Demo - 99.5% identification accuracy</a>
   </h3>
 </p>
 
