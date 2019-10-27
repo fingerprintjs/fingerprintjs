@@ -15,6 +15,10 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+/*
+* This software contains code from open-source projects:
+* MurmurHash3 by Karan Lyons (https://github.com/karanlyons/murmurHash3.js)
+* /
 /* global define */
 (function (name, context, definition) {
   'use strict'

@@ -333,3 +333,9 @@ https://player.vimeo.com/video/151208427
 [<img alt="Valve" src="https://avatars1.githubusercontent.com/u/27387?v=4&s=117" width="117">](https://github.com/Valve)[<img alt="jonashaag" src="https://avatars1.githubusercontent.com/u/175722?v=4&s=117" width="117">](https://github.com/jonashaag)[<img alt="antoinevastel" src="https://avatars1.githubusercontent.com/u/5827148?v=4&s=117" width="117">](https://github.com/antoinevastel)[<img alt="S-anasol" src="https://avatars2.githubusercontent.com/u/1709666?v=4&s=117" width="117">](https://github.com/S-anasol)[<img alt="unDemian" src="https://avatars1.githubusercontent.com/u/2129455?v=4&s=117" width="117">](https://github.com/unDemian)
 
 [<img alt="nuschk" src="https://avatars1.githubusercontent.com/u/5167117?v=4&s=117" width="117">](https://github.com/nuschk)[<img alt="hiuny" src="https://avatars2.githubusercontent.com/u/2697067?v=4&s=117" width="117">](https://github.com/hiuny)[<img alt="wkdtjsgur100" src="https://avatars2.githubusercontent.com/u/17163958?v=4&s=117" width="117">](https://github.com/wkdtjsgur100)[<img alt="msp" src="https://avatars1.githubusercontent.com/u/15280?v=4&s=117" width="117">](https://github.com/msp)[<img alt="ProcrastinatorCp" src="https://avatars3.githubusercontent.com/u/29228904?v=4&s=117" width="117">](https://github.com/ProcrastinatorCp)
+
+## Open-Source
+
+This software contains code from open-source projects:
+
+* MurmurHash3 by Karan Lyons (https://github.com/karanlyons/murmurHash3.js)
