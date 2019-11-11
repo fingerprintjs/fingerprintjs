@@ -290,7 +290,7 @@ function (done, options) {
 
 Unit tests are in `specs/specs.js`
 
-`npm test` to launch the tests, it requires phanomjs install
+`npm test` to launch the tests, it requires phantomjs install
 
 To run the tests in the browser, launch `spec_runner.html`
 
