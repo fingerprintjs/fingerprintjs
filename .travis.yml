@@ -1,10 +1,11 @@
 language: node_js
 node_js:
-  - 10
-dist: trusty # needs Ubuntu Trusty
+  - 12
+dist: bionic # needs Ubuntu Bionic
 sudo: required
 addons:
-  chrome: stable # have Travis install Chrome stable.
+  chrome: latest 
+  firefox: latest
 cache:
   yarn: true
   directories:
@@ -15,4 +16,5 @@ script:
   - ./custom-lint.sh
   - yarn lint
   - yarn gulp
-  - yarn test
+  - yarn test:chrome
+  # - yarn test:firefox

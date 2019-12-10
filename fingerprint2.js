@@ -18,13 +18,22 @@
 /*
 * This software contains code from open-source projects:
 * MurmurHash3 by Karan Lyons (https://github.com/karanlyons/murmurHash3.js)
-* /
+*/
+
 /* global define */
 (function (name, context, definition) {
   'use strict'
   if (typeof window !== 'undefined' && typeof define === 'function' && define.amd) { define(definition) } else if (typeof module !== 'undefined' && module.exports) { module.exports = definition() } else if (context.exports) { context.exports = definition() } else { context[name] = definition() }
 })('Fingerprint2', this, function () {
   'use strict'
+
+  // detect if object is array
+  // only implement if no native implementation is available
+  if (typeof Array.isArray === 'undefined') {
+    Array.isArray = function (obj) {
+      return Object.prototype.toString.call(obj) === '[object Array]'
+    }
+  };
 
   /// MurmurHash3 related functions
 
@@ -325,8 +334,8 @@
         return 'id=' + device.deviceId + ';gid=' + device.groupId + ';' + device.kind + ';' + device.label
       }))
     })['catch'](function (error) {
-        done(error)
-      })
+      done(error)
+    })
   }
 
   var isEnumerateDevicesSupported = function () {
@@ -1165,9 +1174,9 @@
     } else if ((platform.indexOf('mac') >= 0 || platform.indexOf('ipad') >= 0 || platform.indexOf('ipod') >= 0 || platform.indexOf('iphone') >= 0) && os !== 'Mac' && os !== 'iOS') {
       return true
     } else if (platform.indexOf('arm') >= 0 && os === 'Windows Phone') {
-    	return false;
+      return false
     } else if (platform.indexOf('pike') >= 0 && userAgent.indexOf('opera mini') >= 0) {
-    	return false;
+      return false
     } else {
       var platformIsOther = platform.indexOf('win') < 0 &&
         platform.indexOf('linux') < 0 &&
@@ -1189,11 +1198,11 @@
     // we extract the browser from the user agent (respect the order of the tests)
     var browser
     if (userAgent.indexOf('edge/') >= 0 || userAgent.indexOf('iemobile/') >= 0) {
-    	// Unreliable, different versions use EdgeHTML, Webkit, Blink, etc.
-    	return false;
+      // Unreliable, different versions use EdgeHTML, Webkit, Blink, etc.
+      return false
     } else if (userAgent.indexOf('opera mini') >= 0) {
-    	// Unreliable, different modes use Presto, WebView, Webkit, etc.
-    	return false;
+      // Unreliable, different modes use Presto, WebView, Webkit, etc.
+      return false
     } else if (userAgent.indexOf('firefox/') >= 0) {
       browser = 'Firefox'
     } else if (userAgent.indexOf('opera/') >= 0 || userAgent.indexOf(' opr/') >= 0) {
@@ -1201,11 +1210,11 @@
     } else if (userAgent.indexOf('chrome/') >= 0) {
       browser = 'Chrome'
     } else if (userAgent.indexOf('safari/') >= 0) {
-    	if (userAgent.indexOf('android 1.') >= 0 || userAgent.indexOf('android 2.') >= 0 || userAgent.indexOf('android 3.') >= 0 || userAgent.indexOf('android 4.') >= 0) {
-	      browser = 'AOSP'
-    	} else {
-	      browser = 'Safari'
-    	}
+      if (userAgent.indexOf('android 1.') >= 0 || userAgent.indexOf('android 2.') >= 0 || userAgent.indexOf('android 3.') >= 0 || userAgent.indexOf('android 4.') >= 0) {
+        browser = 'AOSP'
+      } else {
+        browser = 'Safari'
+      }
     } else if (userAgent.indexOf('trident/') >= 0) {
       browser = 'Internet Explorer'
     } else {
@@ -1427,7 +1436,9 @@
               return [p[0], p[1], mimeTypes].join('::')
             })
           })
-        } else if (['canvas', 'webgl'].indexOf(component.key) !== -1) {
+        } else if (['canvas', 'webgl'].indexOf(component.key) !== -1 && Array.isArray(component.value)) {
+          // sometimes WebGL returns error in headless browsers (during CI testing for example)
+          // so we need to join only if the values are array
           newComponents.push({ key: component.key, value: component.value.join('~') })
         } else if (['sessionStorage', 'localStorage', 'indexedDb', 'addBehavior', 'openDatabase'].indexOf(component.key) !== -1) {
           if (component.value) {

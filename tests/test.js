@@ -283,7 +283,8 @@ describe('Fingerprint2', () => {
             gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
           } catch (e) { /* squelch */ }
           if (gl == null) {
-            done()
+            // gl won't be available in FF headless
+            return done()
           }
           let item = (name, descr, attr1, attr2, attr3) => {
             let fmt = gl.getShaderPrecisionFormat(attr1, attr2)[attr3]

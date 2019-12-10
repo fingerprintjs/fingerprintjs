@@ -290,9 +290,19 @@ function (done, options) {
 
 Unit tests are in `specs/specs.js`
 
-`npm test` to launch the tests, it requires phantomjs install
+To run tests in various browser configurations:
 
-To run the tests in the browser, launch `spec_runner.html`
+`yarn test:chrome` to launch the tests in Google Chrome (headless mode), it requires a Google Chrome.
+`yarn test:chrome:incognito` to launch the tests in Google Chrome (headed, incognito mode), it requires a Google Chrome.
+`yarn test:firefox` to launch the tests in FireFox (headless mode), it requires a Firefox.
+`yarn test:firefox:incognito`
+`yarn test:safari`
+
+To run all configurations (requires Chrome, Firefox and Safari installed), run:
+
+`yarn test:all`
+
+To run the tests in the browser manually, open the `spec_runner.html` page in your browser.
 
 
 ## Other

@@ -6,9 +6,22 @@ module.exports = function (config) {
     port: 9876,  // karma web server port
     colors: true,
     logLevel: config.LOG_INFO,
-    browsers: ['ChromeHeadless'],
+    browsers: ['ChromeHeadlessNoSandbox', 'ChromeIncognito', 'FirefoxHeadless', 'FirefoxIncognito', 'Safari'],
+    customLaunchers: {
+      ChromeHeadlessNoSandbox: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox']
+      },
+      ChromeIncognito: {
+        base: 'Chrome',
+        flags: ['-incognito', '--window-size=600,600']
+      },
+      FirefoxIncognito: {
+        base: 'Firefox',
+        flags: ['--private-window', '-width=600']
+      }
+    },
     autoWatch: false,
-    // singleRun: false, // Karma captures browsers, runs the tests and exits
     concurrency: Infinity
   })
 }
