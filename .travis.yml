@@ -15,4 +15,5 @@ script:
   - ./custom-lint.sh
   - yarn lint
   - yarn gulp
-  - yarn test
+  - yarn test:chrome
+  - yarn test:firefox

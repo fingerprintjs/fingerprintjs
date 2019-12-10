@@ -26,6 +26,14 @@
 })('Fingerprint2', this, function () {
   'use strict'
 
+  // detect if object is array
+  // only implement if no native implementation is available
+  if (typeof Array.isArray === 'undefined') {
+    Array.isArray = function(obj) {
+      return Object.prototype.toString.call(obj) === '[object Array]';
+    }
+  };
+
   /// MurmurHash3 related functions
 
   //
@@ -1427,7 +1435,9 @@
               return [p[0], p[1], mimeTypes].join('::')
             })
           })
-        } else if (['canvas', 'webgl'].indexOf(component.key) !== -1) {
+        } else if (['canvas', 'webgl'].indexOf(component.key) !== -1 && Array.isArray(component.value)) {
+          // sometimes WebGL returns error in headless browsers (during CI testing for example)
+          // so we need to join only if the values are array
           newComponents.push({ key: component.key, value: component.value.join('~') })
         } else if (['sessionStorage', 'localStorage', 'indexedDb', 'addBehavior', 'openDatabase'].indexOf(component.key) !== -1) {
           if (component.value) {
