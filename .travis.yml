@@ -1,10 +1,11 @@
 language: node_js
 node_js:
-  - 10
-dist: trusty # needs Ubuntu Trusty
+  - 12
+dist: bionic # needs Ubuntu Bionic
 sudo: required
 addons:
   chrome: stable # have Travis install Chrome stable.
+  firefox: stable
 cache:
   yarn: true
   directories:
