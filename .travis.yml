@@ -17,4 +17,4 @@ script:
   - yarn lint
   - yarn gulp
   - yarn test:chrome
-  - yarn test:firefox
+  # - yarn test:firefox
