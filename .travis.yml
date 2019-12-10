@@ -4,8 +4,8 @@ node_js:
 dist: bionic # needs Ubuntu Bionic
 sudo: required
 addons:
-  chrome: stable # have Travis install Chrome stable.
-  firefox: stable
+  chrome: latest 
+  firefox: latest
 cache:
   yarn: true
   directories:
@@ -17,3 +17,4 @@ script:
   - yarn lint
   - yarn gulp
   - yarn test:chrome
+  - yarn test:firefox
