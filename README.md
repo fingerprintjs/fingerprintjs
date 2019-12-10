@@ -112,7 +112,7 @@ To use Flash font enumeration, make sure you have swfobject available. If you do
 
 Arrays of extra components to include.
 
-```
+```js
 var options = {
     extraComponents : [
         {key: 'customKey', getData: function (done, options) {
@@ -145,7 +145,7 @@ Fingerprint2.get({
 
 An object of with components keys to exclude. Empty object to include everything. By default most of the components are included (please see the source code for details).
 
-```
+```js
 var options = {
     excludes: {userAgent: true, language: true}
 }
@@ -190,7 +190,7 @@ Fingerprint2.getV18(options, function (result, components) {
 
 `Fingerprint2.get` is now a static function. It replaces `new Fingerprint2().get`. It will not hash the result by default anymore.
 
-```
+```js
 var options = {}
 Fingerprint2.get(options, function (components) {
   // components is array of {key: 'foo', value: 'component value'}
@@ -207,7 +207,7 @@ Fingerprint2.getPromise(options).then(function (components) {
 
 Fingerprint2 ships with the murmur hash function that you may use to create a hash fingerprint:
 
-```
+```js
 Fingerprint2.get(options, function (components) {
     var values = components.map(function (component) { return component.value })
     var murmur = Fingerprint2.x64hash128(values.join(''), 31)
@@ -220,7 +220,7 @@ Fingerprint2.get(options, function (components) {
 Before exclusion was done by putting an individual excludes like `excludeTouchSupport: true` in the options.
 
 To exclude a component now, put its key inside the excludes object in options
-```
+```js
 var options = {excludes: {touchSupport: true}}
 ```
 
@@ -229,7 +229,7 @@ var options = {excludes: {touchSupport: true}}
 `options.customEntropyFunction` and `customKey` have been replaced with a extension friendly, stable alternative. The new contract allows for async sources as well. See below for component definition. `options.extraComponents` should contain an array with custom components.
 
 
-```
+```js
 var options = {
     extraComponents : [
         {key: 'customKey', getData: function (done, options) {
@@ -253,7 +253,7 @@ Fingerprint2.x64hash128 static function is now exposed
 
 ### Error constants are exposed and configurable
 
-```
+```js
 Fingerprint2.NOT_AVAILABLE = 'not available'
 Fingerprint2.ERROR = 'error'
 Fingerprint2.EXCLUDED = 'excluded'
@@ -268,7 +268,7 @@ audioTimeout is an option, default 1000ms
 ### Component
 
 A components is an object with at least key and getData keys, example:
-```
+```js
 {key: 'userAgent', getData: UserAgent, pauseBefore: false}
 ```
 getData value is the components function.
@@ -280,7 +280,7 @@ It must call done exactly once with a value that can be cast to a String.
 It must wrap all unreachable code (setTimeout, requestAnimationFrame, etc) in its own try catch,
 it should use catch as an opportunity to give a unique value to `done`
 
-```
+```js
 function (done, options) {
   done(navigator.userAgent)
 }
