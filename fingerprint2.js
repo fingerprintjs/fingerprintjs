@@ -243,6 +243,7 @@
   }
 
   var defaultOptions = {
+    synchronous: false, // Use fingerprint in synchronous mode and automatically skip audio
     preprocessor: null,
     audio: {
       timeout: 1000,
@@ -344,7 +345,7 @@
   // Inspired by and based on https://github.com/cozylife/audio-fingerprint
   var audioKey = function (done, options) {
     var audioOptions = options.audio
-    if (audioOptions.excludeIOS11 && navigator.userAgent.match(/OS 11.+Version\/11.+Safari/)) {
+    if ((audioOptions.excludeIOS11 && navigator.userAgent.match(/OS 11.+Version\/11.+Safari/)) || defaultOptions.synchronous) {
       // See comment for excludeUserAgent and https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
       return done(options.EXCLUDED)
     }
@@ -1360,6 +1361,7 @@
     }
     extendSoft(options, defaultOptions)
     options.components = options.extraComponents.concat(components)
+    defaultOptions.synchronous = options.synchronous;
 
     var keys = {
       data: [],
@@ -1387,9 +1389,11 @@
 
       if (!alreadyWaited && component.pauseBefore) {
         i -= 1
-        setTimeout(function () {
-          chainComponents(true)
-        }, 1)
+        if (defaultOptions.synchronous) chainComponents(true);
+        else
+          setTimeout(function () {
+            chainComponents(true);
+          }, 1);
         return
       }
 

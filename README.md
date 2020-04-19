@@ -65,6 +65,15 @@ You choose which components to include in the fingerprint, and configure some ot
 var options = {fonts: {extendedJsFonts: true}, excludes: {userAgent: true}}
 ```
 
+**Note 4: Synchronous Mode**
+
+For using the library in synchronous mode, you have to add synchronous option. consider that, this will automatically skip audio checking.
+
+```js
+var options = {synchronous: true}
+```
+
+
 For the default options, please see the source code (look for `var defaultOptions = {`).
 
 ### `fonts.extendedJsFonts`
