@@ -30,9 +30,9 @@
   } else if (enableModule && context.exports) {
     context.exports = definition()
   } else { context[name] = definition() }
-})((window && window.FingerprintConfig) ? window.FingerprintConfig.name : 'Fingerprint2',
-  (window && window.FingerprintConfig) ? window.FingerprintConfig.context : this,
-  (window && window.FingerprintConfig) ? window.FingerprintConfig.enableModule : true,
+})((typeof window !== 'undefined' && window.FingerprintConfig) ? window.FingerprintConfig.name : 'Fingerprint2',
+  (typeof window !== 'undefined' && window.FingerprintConfig) ? window.FingerprintConfig.context : this,
+  (typeof window !== 'undefined' && window.FingerprintConfig) ? window.FingerprintConfig.enableModule : true,
   function () {
     'use strict'
 
