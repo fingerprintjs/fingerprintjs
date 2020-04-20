@@ -67,6 +67,13 @@ var options = {fonts: {extendedJsFonts: true}, excludes: {userAgent: true}}
 
 For the default options, please see the source code (look for `var defaultOptions = {`).
 
+### initialization options
+before loading the Fingerprint JS you might want to controll the name of the created object, scope, and whether to use local Module for loading (if available)
+```js
+window.FingerprintConfig = { name: 'MyFingerprintCustomName', context: window, enableModule: false };
+```
+the initialization process will use these params when creating the Fingerprint object
+
 ### `fonts.extendedJsFonts`
 
 By default, JS font detection will only detect up to 65 installed fonts. If you want to improve the font detection, you can pass `extendedJsFonts: true` option. This will increase the number of detectable fonts to ~500.
