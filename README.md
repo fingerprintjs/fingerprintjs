@@ -68,11 +68,14 @@ var options = {fonts: {extendedJsFonts: true}, excludes: {userAgent: true}}
 For the default options, please see the source code (look for `var defaultOptions = {`).
 
 ### initialization options
-before loading the Fingerprint JS you might want to controll the name of the created object, scope, and whether to use local Module for loading (if available)
+before loading the Fingerprint JS you might want to control the name, scope, and whether to use local Module for loading (if available)
 ```js
 window.FingerprintConfig = { name: 'MyFingerprintCustomName', context: window, enableModule: false };
 ```
-the initialization process will use these params when creating the Fingerprint object
+the initialization process will use these params when creating the Fingerprint object, the default config is 
+```js
+window.FingerprintConfig = { name: 'Fingerprint2', context: this, enableModule: true };
+```
 
 ### `fonts.extendedJsFonts`
 
