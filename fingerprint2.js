@@ -849,6 +849,15 @@
     if (navigator.hardwareConcurrency) {
       return navigator.hardwareConcurrency
     }
+
+    // Disabled in Safari behind the ENABLE_NAVIGATOR_HWCONCURRENCY build option.
+    var isSafari = navigator.userAgent && /^((?!Chrome|Android).)*Safari/i.test(navigator.userAgent);
+    if (isSafari) {
+      // WebKit browsers clamp the maximum value returned to 2 on iOS devices and 8 on all others.
+      var isIOS = navigator.platform && /iPad|iPhone|iPod|MacIntel/i.test(navigator.platform);
+      return isIOS ? 2 : 8;
+    }
+
     return options.NOT_AVAILABLE
   }
   var getNavigatorCpuClass = function (options) {
