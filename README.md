@@ -155,7 +155,7 @@ var options = {
 }
 ```
 
-To see a list of possible excludes, please see the source code (look for `var components = [`).
+To see a list of possible excludes, [please see the source code.](https://github.com/fingerprintjs/fingerprintjs2/blob/577f251d18e3204b1420c45c50845f86d83cc946/fingerprint2.js#L1314)
 
 ### Constants
 
