@@ -65,7 +65,7 @@ You choose which components to include in the fingerprint, and configure some ot
 var options = {fonts: {extendedJsFonts: true}, excludes: {userAgent: true}}
 ```
 
-For the default options, please see the source code (look for `var defaultOptions = {`).
+For the default options, [please see the source code.](https://github.com/fingerprintjs/fingerprintjs2/blob/577f251d18e3204b1420c45c50845f86d83cc946/fingerprint2.js#L245)
 
 ### `fonts.extendedJsFonts`
 
