@@ -269,6 +269,8 @@
     excludes: {
       // Unreliable on Windows, see https://github.com/Valve/fingerprintjs2/issues/375
       'enumerateDevices': true,
+      // Only a few browsers (such as Chrome, Edge) support this property, but the results are different for HTTPS and HTTP website.
+      'deviceMemory':true,
       // devicePixelRatio depends on browser zoom, and it's impossible to detect browser zoom
       'pixelRatio': true,
       // DNT depends on incognito mode for some browsers (Chrome) and it's impossible to detect incognito mode
