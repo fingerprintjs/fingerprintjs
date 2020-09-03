@@ -1,0 +1,18 @@
+# Reference on this file: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+name: Lint and Test
+on: [push, pull_request]
+jobs:
+  test:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Install Node packages
+        run: yarn install
+      - name: Build
+        run: yarn gulp
+      - name: Lint
+        run: yarn lint && ./custom-lint.sh
+      - name: Test in Chrome
+        run: yarn test:chrome
