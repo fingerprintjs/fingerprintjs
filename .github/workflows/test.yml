@@ -3,8 +3,12 @@ name: Lint and Test
 on: [push, pull_request]
 jobs:
   test:
-    name: Lint and Test
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-18.04', 'macos-10.15']
+    name: Lint and Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@master
@@ -16,3 +20,14 @@ jobs:
         run: yarn lint && ./custom-lint.sh
       - name: Test in Chrome
         run: yarn test:chrome
+      - name: Test in Chrome in Incognito
+        if: "!startsWith(matrix.os, 'ubuntu')" # Incognito can't be headless and Ubuntu can't start a headful browser
+        run: yarn test:chrome:incognito
+      - name: Test in Firefox
+        run: yarn test:firefox
+      - name: Test in Firefox in Private Browsing
+        if: "!startsWith(matrix.os, 'ubuntu')" # Private Browsing can't be headless and Ubuntu can't start a headful browser
+        run: yarn test:firefox:incognito
+      - name: Test in Safari
+        if: startsWith(matrix.os, 'macos')
+        run: yarn test:safari

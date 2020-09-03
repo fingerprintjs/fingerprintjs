@@ -385,6 +385,7 @@ describe('Fingerprint2', () => {
             configurable: true
           });
           Object.defineProperty(navigator, "platform", { value: "iPhone", configurable: true });
+          Object.defineProperty(navigator, "oscpu", { value: undefined, configurable: true });
           Fingerprint2.get((components) => {
             expect(getComponent(components, "hasLiedOs")).toEqual(false)
             done();
@@ -396,6 +397,7 @@ describe('Fingerprint2', () => {
             configurable: true
           });
           Object.defineProperty(navigator, "platform", { value: "iPad", configurable: true });
+          Object.defineProperty(navigator, "oscpu", { value: undefined, configurable: true });
           Fingerprint2.get((components) => {
             expect(getComponent(components, "hasLiedOs")).toEqual(false)
             done();
