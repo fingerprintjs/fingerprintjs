@@ -1,0 +1,30 @@
+# Reference on this file: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+name: Lint and Test
+on: [push, pull_request]
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-18.04', 'macos-10.15', 'windows-2019']
+    name: Lint and Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Install Node packages
+        run: yarn install
+      - name: Build
+        run: yarn gulp
+      - name: Lint
+        run: yarn lint && ./custom-lint.sh
+      - name: Test in Chrome
+        run: yarn test:chrome
+      - name: Test in Chrome in Incognito
+        if: "!startsWith(matrix.os, 'ubuntu')" # Incognito can't be headless and Ubuntu can't start a headful browser
+        run: yarn test:chrome:incognito
+      - name: Test in Firefox
+        run: yarn test:firefox
+      - name: Test in Firefox in Private Browsing
+        if: "!startsWith(matrix.os, 'ubuntu')" # Private Browsing can't be headless and Ubuntu can't start a headful browser
+        run: yarn test:firefox:incognito

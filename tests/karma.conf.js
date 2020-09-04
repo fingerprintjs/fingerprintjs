@@ -6,12 +6,8 @@ module.exports = function (config) {
     port: 9876,  // karma web server port
     colors: true,
     logLevel: config.LOG_INFO,
-    browsers: ['ChromeHeadlessNoSandbox', 'ChromeIncognito', 'FirefoxHeadless', 'FirefoxIncognito', 'Safari'],
+    browsers: ['ChromeHeadless', 'ChromeIncognito', 'FirefoxHeadless', 'FirefoxIncognito', 'Safari'],
     customLaunchers: {
-      ChromeHeadlessNoSandbox: {
-        base: 'ChromeHeadless',
-        flags: ['--no-sandbox']
-      },
       ChromeIncognito: {
         base: 'Chrome',
         flags: ['-incognito', '--window-size=600,600']

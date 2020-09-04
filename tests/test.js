@@ -10,6 +10,10 @@ const getComponent = (components, key) => {
   throw new Error('Component not found: ' + key)
 }
 
+// When the first fingerprint is taken in Chrome in GitHub Actions, it can take more than 10s to run
+// while the default Jasmine timeout is 5s. This is a warm-up to make the other fingerprint calculations run fast.
+Fingerprint2.get({ excludes: {} }, () => {})
+
 describe('Fingerprint2', () => {
   describe('FP2', () => {
     it('.get should be available', () => {
@@ -78,7 +82,7 @@ describe('Fingerprint2', () => {
               expect(components.some(({ key, _value }) => excludeKey === key)).toBeFalsy()
               done()
             })
-          })
+          }, 10000) // Such fingerprints can take much time in Chrome in GitHub Actions to complete
         })
       })
 
@@ -385,6 +389,7 @@ describe('Fingerprint2', () => {
             configurable: true
           });
           Object.defineProperty(navigator, "platform", { value: "iPhone", configurable: true });
+          Object.defineProperty(navigator, "oscpu", { value: undefined, configurable: true });
           Fingerprint2.get((components) => {
             expect(getComponent(components, "hasLiedOs")).toEqual(false)
             done();
@@ -396,6 +401,7 @@ describe('Fingerprint2', () => {
             configurable: true
           });
           Object.defineProperty(navigator, "platform", { value: "iPad", configurable: true });
+          Object.defineProperty(navigator, "oscpu", { value: undefined, configurable: true });
           Fingerprint2.get((components) => {
             expect(getComponent(components, "hasLiedOs")).toEqual(false)
             done();
