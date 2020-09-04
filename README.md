@@ -1,16 +1,16 @@
 
 <p align="center">
-  <a href="https://travis-ci.org/Valve/fingerprintjs2">
-    <img src="https://img.shields.io/travis/Valve/fingerprintjs2.svg?style=flat-square" alt="build status">
+  <a href="https://github.com/fingerprintjs/fingerprintjs2/actions?workflow=Lint+and+Test">
+    <img src="https://github.com/fingerprintjs/fingerprintjs2/workflows/Lint%20and%20Test/badge.svg" alt="Build status">
   </a>
   <a href="https://gitter.im/Valve/fingerprintjs2">
-    <img src="https://badges.gitter.im/Valve/fingerprintjs2.svg" alt="gitter chat">
+    <img src="https://badges.gitter.im/Valve/fingerprintjs2.svg" alt="Gitter chat">
   </a>
   <a href="https://www.npmjs.com/package/fingerprintjs2">
-    <img src="https://img.shields.io/npm/dt/fingerprintjs2.svg?style=flat-square" alt="total downloads from NPM">
+    <img src="https://img.shields.io/npm/dt/fingerprintjs2.svg" alt="Total downloads from NPM">
   </a>
   <a href="https://www.npmjs.com/package/fingerprintjs2">
-    <img src="https://img.shields.io/npm/v/fingerprintjs2.svg?style=flat-square" alt="Current NPM version">
+    <img src="https://img.shields.io/npm/v/fingerprintjs2.svg" alt="Current NPM version">
   </a>
   <br/>
 </p>
