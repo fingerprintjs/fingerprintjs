@@ -466,8 +466,7 @@
     done(hasIndexedDB(options))
   }
   var addBehaviorKey = function (done) {
-    // body might not be defined at this point or removed programmatically
-    done(!!(document.body && document.body.addBehavior))
+    done(!!window.HTMLElement.prototype.addBehavior)
   }
   var openDatabaseKey = function (done) {
     done(!!window.openDatabase)
