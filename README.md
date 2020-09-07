@@ -94,6 +94,9 @@ Specifies the path to the FontList.swf (flash fonts)
 
 ### `screen.detectScreenOrientation` (default: true)
 
+To ensure consistent fingerprints when users rotate their mobile devices.
+Otherwise, screen resolution will change when the device is rotated.
+
 ### `plugins.sortPluginsFor` (default: `[/palemoon/i]`)
 
 Some browsers randomise plugin order. You can give a list of user agent regexes for which plugins should be sorted.
