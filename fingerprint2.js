@@ -466,8 +466,8 @@
     done(hasIndexedDB(options))
   }
   var addBehaviorKey = function (done) {
-    // body might not be defined at this point or removed programmatically
-    done(!!(document.body && document.body.addBehavior))
+    // IE8 doesn't have window.HTMLElement and IE9+ doesn't have addBehavior in window.Element
+    done(!!(window.HTMLElement || window.Element).prototype.addBehavior)
   }
   var openDatabaseKey = function (done) {
     done(!!window.openDatabase)
