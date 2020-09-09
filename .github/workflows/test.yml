@@ -28,3 +28,9 @@ jobs:
       - name: Test in Firefox in Private Browsing
         if: "!startsWith(matrix.os, 'ubuntu')" # Private Browsing can't be headless and Ubuntu can't start a headful browser
         run: yarn test:firefox:incognito
+      - name: Test in Internet Explorer 10
+        if: "startsWith(matrix.os, 'windows')"
+        run: yarn test:ie10
+      - name: Test in Internet Explorer 11
+        if: "startsWith(matrix.os, 'windows')"
+        run: yarn test:ie11

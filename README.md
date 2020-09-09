@@ -305,9 +305,10 @@ To run tests in various browser configurations:
 `yarn test:firefox:incognito`
 `yarn test:safari`
 
-To run all configurations (requires Chrome, Firefox and Safari installed), run:
+To run all configurations (requires Chrome, Firefox and Safari/IE installed), run:
 
-`yarn test:all`
+- `yarn test:all:windows` on Windows
+- `yarn test:all:mac` on macOS
 
 To run the tests in the browser manually, open the `spec_runner.html` page in your browser.
 
