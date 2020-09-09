@@ -423,6 +423,18 @@ describe('Fingerprint2', () => {
           });
         });
       });
+
+      describe("timezone", () => {
+        it("doesn't return undefined", (done) => {
+          // This test checks handling browser features, not the algorithm itself. So it should be run on different
+          // browsers to ensure that there is no error.
+          // There were issues in IE11: https://github.com/fingerprintjs/fingerprintjs2/issues/481
+          Fingerprint2.get((components) => {
+            expect(getComponent(components, "timezone")).toBeString()
+            done();
+          });
+        })
+      })
     });
   });
 });

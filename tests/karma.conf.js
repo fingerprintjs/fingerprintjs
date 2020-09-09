@@ -15,6 +15,10 @@ module.exports = function (config) {
       FirefoxIncognito: {
         base: 'Firefox',
         flags: ['--private-window', '-width=600']
+      },
+      IE10: {
+        base: 'IE',
+        'x-ua-compatible': 'IE=EmulateIE10'
       }
     },
     autoWatch: false,
