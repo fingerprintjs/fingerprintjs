@@ -14,11 +14,10 @@
   </a>
   <br/>
 </p>
-<p align="center">
-  <h3>
+
+<h3 align="center">
   <a href="https://fingerprintjs.com/demo">Try Fingerprint.js PRO Demo - 99.5% identification accuracy</a>
-  </h3>
-</p>
+</h3>
 
 
 ## Installation

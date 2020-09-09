@@ -274,7 +274,10 @@
       // DNT depends on incognito mode for some browsers (Chrome) and it's impossible to detect incognito mode
       'doNotTrack': true,
       // uses js fonts already
-      'fontsFlash': true
+      'fontsFlash': true,
+      // Extensions (including AdBlock) are disabled by default in Incognito mod of Chrome and Firefox
+      // See https://github.com/fingerprintjs/fingerprintjs2/issues/405
+      'adBlock': true
     },
     NOT_AVAILABLE: 'not available',
     ERROR: 'error',
