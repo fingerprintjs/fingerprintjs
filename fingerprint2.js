@@ -336,7 +336,7 @@
       done(devices.map(function (device) {
         return 'id=' + device.deviceId + ';gid=' + device.groupId + ';' + device.kind + ';' + device.label
       }))
-    })['catch'](function (error) {
+    }).catch(function (error) {
       done(error)
     })
   }
@@ -841,6 +841,11 @@
     }
   }
   var hasIndexedDB = function (options) {
+    // IE and Edge don't allow accessing indexedDB in private mode, therefore IE and Edge will have different
+    // fingerprints in normal and private modes.
+    if (isIEOrOldEdge()) {
+      return options.EXCLUDED
+    }
     try {
       return !!window.indexedDB
     } catch (e) {
@@ -1274,6 +1279,10 @@
       return true
     }
     return false
+  }
+  var isIEOrOldEdge = function () {
+    // The properties are checked to be in IE 10, IE 11 and Edge 18 and not to be in other browsers
+    return ('msWriteProfilerMark' in window) + ('msLaunchUri' in navigator) + ('msSaveBlob' in navigator) >= 2
   }
   var hasSwfObjectLoaded = function () {
     return typeof window.swfobject !== 'undefined'
