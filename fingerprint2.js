@@ -1,6 +1,6 @@
 /*
-* Fingerprintjs2 2.1.2 - Modern & flexible browser fingerprint library v2
-* https://github.com/Valve/fingerprintjs2
+* Fingerprintjs2 2.1.3 - Modern & flexible browser fingerprint library v2
+* https://github.com/fingerprintjs/fingerprintjs
 * Copyright (c) 2020 Valentin Vasilyev (valentin@fingerprintjs.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
 *
@@ -267,7 +267,7 @@
     },
     extraComponents: [],
     excludes: {
-      // Unreliable on Windows, see https://github.com/Valve/fingerprintjs2/issues/375
+      // Unreliable on Windows, see https://github.com/fingerprintjs/fingerprintjs/issues/375
       'enumerateDevices': true,
       // devicePixelRatio depends on browser zoom, and it's impossible to detect browser zoom
       'pixelRatio': true,
@@ -276,7 +276,7 @@
       // uses js fonts already
       'fontsFlash': true,
       // Extensions (including AdBlock) are disabled by default in Incognito mod of Chrome and Firefox
-      // See https://github.com/fingerprintjs/fingerprintjs2/issues/405
+      // See https://github.com/fingerprintjs/fingerprintjs/issues/405
       'adBlock': true
     },
     NOT_AVAILABLE: 'not available',
@@ -384,7 +384,7 @@
     context.startRendering()
 
     var audioTimeoutId = setTimeout(function () {
-      console.warn('Audio fingerprint timed out. Please report bug at https://github.com/Valve/fingerprintjs2 with your user agent: "' + navigator.userAgent + '".')
+      console.warn('Audio fingerprint timed out. Please report bug at https://github.com/fingerprintjs/fingerprintjs with your user agent: "' + navigator.userAgent + '".')
       context.oncomplete = function () { }
       context = null
       return done('audioTimeout')
@@ -926,7 +926,7 @@
     ctx.fillStyle = '#f60'
     ctx.fillRect(125, 1, 62, 20)
     ctx.fillStyle = '#069'
-    // https://github.com/Valve/fingerprintjs2/issues/66
+    // https://github.com/fingerprintjs/fingerprintjs/issues/66
     if (options.dontUseFakeFontInCanvas) {
       ctx.font = '11pt Arial'
     } else {
@@ -1359,7 +1359,7 @@
   ]
 
   var Fingerprint2 = function (options) {
-    throw new Error("'new Fingerprint()' is deprecated, see https://github.com/Valve/fingerprintjs2#upgrade-guide-from-182-to-200")
+    throw new Error("'new Fingerprint()' is deprecated, see https://github.com/fingerprintjs/fingerprintjs#upgrade-guide-from-182-to-200")
   }
 
   Fingerprint2.get = function (options, callback) {
@@ -1472,6 +1472,6 @@
   }
 
   Fingerprint2.x64hash128 = x64hash128
-  Fingerprint2.VERSION = '2.1.2'
+  Fingerprint2.VERSION = '2.1.3'
   return Fingerprint2
 })

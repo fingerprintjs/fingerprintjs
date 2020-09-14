@@ -10,7 +10,7 @@ BUG REPORTS NOT USING THE TEMPLATE ARE SUBJECT TO BEING CLOSED WITHOUT COMMMENT.
 
 ### Scenario
 
-- Did you check https://github.com/Valve/fingerprintjs2/wiki/Stable-components?
+- Did you check https://github.com/fingerprintjs/fingerprintjs/wiki/Stable-components?
 - What causes the fingerprint to change?
 - What device and browser are you using?
 - What version of fingerprintjs are you using? (Bug reports not applicable to fingerprintjs master are subject to be closed without comment.)

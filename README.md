@@ -6,10 +6,10 @@
   <a href="https://gitter.im/Valve/fingerprintjs2">
     <img src="https://badges.gitter.im/Valve/fingerprintjs2.svg" alt="Gitter chat">
   </a>
-  <a href="https://www.npmjs.com/package/fingerprintjs2">
+  <a href="https://www.npmjs.com/package/@fingerprintjs/fingerprintjs">
     <img src="https://img.shields.io/npm/dt/fingerprintjs2.svg" alt="Total downloads from NPM">
   </a>
-  <a href="https://www.npmjs.com/package/fingerprintjs2">
+  <a href="https://www.npmjs.com/package/@fingerprintjs/fingerprintjs">
     <img src="https://img.shields.io/npm/v/fingerprintjs2.svg" alt="Current NPM version">
   </a>
   <br/>
@@ -22,10 +22,10 @@
 
 ## Installation
 
-- CDN: `//cdn.jsdelivr.net/npm/fingerprintjs2@<VERSION>/dist/fingerprint2.min.js` or `https://cdnjs.com/libraries/fingerprintjs2`
+- CDN: `//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@2/dist/fingerprint2.min.js` or `//unpkg.com/@fingerprintjs/fingerprintjs@2/dist/fingerprint2.min.js`
 - Bower: `bower install fingerprintjs2`
-- NPM: `npm install fingerprintjs2`
-- Yarn: `yarn add fingerprintjs2`
+- NPM: `npm install @fingerprintjs/fingerprintjs`
+- Yarn: `yarn add @fingerprintjs/fingerprintjs`
 
 
 ## Usage
@@ -343,7 +343,7 @@ https://player.vimeo.com/video/151208427
 
 #### License: MIT or Apache, whichever you prefer
 
-[npm-link]: https://www.npmjs.com/package/fingerprintjs2
+[npm-link]: https://www.npmjs.com/package/@fingerprintjs/fingerprintjs
 
 ## Contributors
 

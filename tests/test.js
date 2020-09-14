@@ -383,7 +383,7 @@ describe('Fingerprint2', () => {
 
       describe("hasLiedOS", () => {
         it("works for iPhone", (done) => {
-          // checks https://github.com/Valve/fingerprintjs2/issues/447
+          // checks https://github.com/fingerprintjs/fingerprintjs/issues/447
           Object.defineProperty(navigator, "userAgent", {
             value: "Mozilla/5.0 (iPhone; CPU iPhone OS 12_1_4 like Mac OS X) AppleWebKit/605.1.15",
             configurable: true
@@ -428,7 +428,7 @@ describe('Fingerprint2', () => {
         it("doesn't return undefined", (done) => {
           // This test checks handling browser features, not the algorithm itself. So it should be run on different
           // browsers to ensure that there is no error.
-          // There were issues in IE11: https://github.com/fingerprintjs/fingerprintjs2/issues/481
+          // There were issues in IE11: https://github.com/fingerprintjs/fingerprintjs/issues/481
           Fingerprint2.get((components) => {
             expect(getComponent(components, "timezone")).toBeString()
             done();
