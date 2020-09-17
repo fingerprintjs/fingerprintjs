@@ -10,7 +10,7 @@
     <img src="https://img.shields.io/npm/dt/fingerprintjs2.svg" alt="Total downloads from NPM">
   </a>
   <a href="https://www.npmjs.com/package/@fingerprintjs/fingerprintjs">
-    <img src="https://img.shields.io/npm/v/fingerprintjs2.svg" alt="Current NPM version">
+    <img src="https://img.shields.io/npm/v/@fingerprintjs/fingerprintjs.svg" alt="Current NPM version">
   </a>
   <br/>
 </p>
