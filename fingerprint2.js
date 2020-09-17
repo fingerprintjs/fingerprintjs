@@ -1,5 +1,5 @@
 /*
-* Fingerprintjs2 2.1.3 - Modern & flexible browser fingerprint library v2
+* Fingerprintjs2 2.1.4 - Modern & flexible browser fingerprint library v2
 * https://github.com/fingerprintjs/fingerprintjs
 * Copyright (c) 2020 Valentin Vasilyev (valentin@fingerprintjs.com)
 * Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
@@ -1472,6 +1472,6 @@
   }
 
   Fingerprint2.x64hash128 = x64hash128
-  Fingerprint2.VERSION = '2.1.3'
+  Fingerprint2.VERSION = '2.1.4'
   return Fingerprint2
 })
