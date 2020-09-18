@@ -16,7 +16,7 @@
     "fingerprinting",
     "privacy"
   ],
-  "author": "Valentin Vasilyev",
+  "author": "FingerprintJS, Inc (https://fingerprintjs.com)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/fingerprintjs/fingerprintjs/issues"
