@@ -1,0 +1,140 @@
+.splide {
+  margin-bottom: 8rem;
+
+  &__arrows {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    width: 100%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+  }
+
+  &__arrow {
+    pointer-events: all;
+    cursor: pointer;
+    opacity: v('extra-faded');
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &--prev {
+      svg {
+        transform: scaleX(-1);
+      }
+    }
+
+    svg {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+
+  &__pagination {
+    position: absolute;
+    bottom: -8rem;
+    left: 0;
+    display: flex;
+    padding: 2rem 0;
+    width: 100%;
+    z-index: 10;
+
+    li {
+      + li {
+        margin-left: 1rem;
+      }
+    }
+
+    .splide__pagination__page {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 1rem;
+      border: 2px solid v('brand-water');
+      @include transition((opacity));
+      cursor: pointer;
+
+      &:hover {
+        opacity: v('faded');
+      }
+
+      &.is-active {
+        background-color: v('brand-water');
+      }
+    }
+  }
+}
+
+.splide--live-demo {
+  visibility: visible;
+  margin-bottom: 0;
+
+  @media screen and (max-width: 640px) {
+    margin-bottom: 8rem;
+  }
+
+  .splide__track {
+    overflow: visible;
+  }
+}
+
+.splide--trusted-by {
+  margin-bottom: 0;
+
+  @media screen and (max-width: 768px) {
+    margin-bottom: 8rem;
+  }
+
+  .splide__slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      opacity: v('faded');
+      width: unset;
+      height: unset;
+    }
+  }
+
+  .splide__pagination {
+    display: none;
+
+    @media screen and (max-width: 768px) {
+      display: flex;
+    }
+  }
+}
+
+// Pro Tools
+.splide--pro-tools {
+  visibility: visible;
+
+  .splide__list {
+    @media screen and (min-width: 641px) {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      @include gap(3rem);
+      width: 100%;
+    }
+  }
+
+  .splide__track {
+    overflow: visible;
+  }
+
+  .splide__slide {
+    @media screen and (min-width: 641px) {
+      margin-bottom: 0;
+    }
+  }
+}

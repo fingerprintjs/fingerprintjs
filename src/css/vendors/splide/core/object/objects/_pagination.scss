@@ -1,0 +1,22 @@
+.splide {
+  &__pagination {
+    display: inline-flex;
+    align-items: center;
+    width: 95%;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0;
+
+    li {
+      list-style-type: none;
+      display: inline-block;
+      line-height: 1;
+      margin: 0;
+    }
+
+    &__page {
+      &.is-active {
+      }
+    }
+  }
+}

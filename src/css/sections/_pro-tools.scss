@@ -1,0 +1,134 @@
+.section--pro-tools {
+  background-color: v('off-white');
+
+  position: relative;
+  overflow: hidden;
+
+  &:before,
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    background-repeat: no-repeat;
+    z-index: -1;
+  }
+
+  &:before {
+    background-image: url('../img/fpjs-04.png');
+    background-size: 100%;
+    padding-top: (1242 / 1949) * 100%;
+    width: 800px;
+    height: auto;
+    top: 48%;
+    left: 25%;
+
+    @media screen and (max-width: 2560px) {
+      left: 10%;
+    }
+    @media screen and (max-width: 1920px) {
+      left: 0;
+    }
+
+    @media screen and (max-width: 768px) {
+      width: 500px;
+      top: 70%;
+    }
+  }
+
+  &:after {
+    background-image: url('../img/fpjs-03.png');
+    background-size: 100%;
+    padding-top: (1507 / 4020) * 100%;
+    width: 1200px;
+    height: auto;
+    top: 10%;
+    right: 15%;
+
+    @media screen and (max-width: 2560px) {
+      top: 15%;
+      right: 0%;
+    }
+    @media screen and (max-width: 1920px) {
+      right: -10%;
+    }
+    @media screen and (max-width: 768px) {
+      right: -40%;
+      width: 1500px;
+    }
+    @media screen and (max-width: 640px) {
+      right: 0%;
+      width: 200%;
+      height: 500px;
+    }
+  }
+
+  .container {
+    position: relative;
+    z-index: 20;
+
+    @media screen and (max-width: 640px) {
+      padding: 0;
+    }
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 5rem;
+  }
+
+  .section__title {
+    font-weight: v(light);
+    font-size: 5rem;
+
+    @media screen and (max-width: 425px) {
+      font-size: 3rem;
+    }
+  }
+
+  .pro-tools-item {
+    padding: 3rem 3rem 6rem 3rem;
+    border-radius: 1rem;
+    box-shadow: 0 1rem 3rem 0 adjust-color(c('brand-water'), $alpha: -0.8);
+    position: relative;
+    background-color: v('white');
+    // margin-bottom: 3rem;
+
+    &:hover {
+      .pro-tools-item__link {
+        color: v('brand-water');
+      }
+    }
+
+    &__icon {
+      width: 6rem;
+      height: 6rem;
+      fill: v('brand-water');
+      margin-bottom: 2rem;
+    }
+
+    &__title {
+      font-size: 2.5rem;
+      color: v('brand-water');
+      opacity: v('faded');
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    &__description {
+      color: v('brand-water');
+      line-height: 1.333;
+      font-size: 1.75rem;
+      margin-bottom: 2rem;
+    }
+
+    &__link {
+      font-size: 1.75rem;
+      font-weight: v(semi);
+      color: v('brand-fire');
+      position: absolute;
+      bottom: 3rem;
+      left: 3rem;
+      @include transition((color));
+    }
+  }
+}

@@ -1,0 +1,21 @@
+.splide {
+  $root: &;
+
+  &--nav {
+    > #{$root}__track {
+      > #{$root}__list {
+        > #{$root}__slide {
+          border: 3px solid transparent;
+
+          &.is-active {
+            border-color: black;
+          }
+
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{{#extend "html/template"}}
+{{#content 'title'}}
+<title>{{site.title}}</title>
+{{/content}}
+{{#content "body"}}
+{{> partials/header }}
+{{> sections/live-demo }}
+{{> sections/developer-friendly }}
+{{> sections/flexible-api }}
+{{> sections/trusted-by }}
+{{> sections/use-cases }}
+{{> sections/billing }}
+{{> sections/pro-tools }}
+{{> sections/stay-protected }}
+{{> partials/footer }}
+{{/content}}
+{{/extend}}

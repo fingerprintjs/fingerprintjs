@@ -1,0 +1,17 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  id="Layer_1"
+  x="0"
+  y="0"
+  version="1.1"
+  viewBox="0 0 42 42"
+  xml:space="preserve"
+  width="42"
+  height="42"
+  fill="#0d102b"
+>
+  <path d="M21 14c-3.9 0-7 3.1-7 7s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7" />
+  <path
+    d="M21 0a21 21 0 100 42 21 21 0 000-42zm0 35c-7.7 0-14-6.3-14-14S13.3 7 21 7s14 6.3 14 14-6.3 14-14 14z"
+  />
+</svg>

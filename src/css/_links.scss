@@ -1,0 +1,27 @@
+a {
+  text-decoration: none;
+  color: inherit;
+
+  &.link {
+    position: relative;
+    font-weight: v('semi');
+
+    &:before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: currentColor;
+      opacity: 1;
+      @include transition((opacity));
+    }
+
+    &:hover {
+      &:before {
+        opacity: 0;
+      }
+    }
+  }
+}

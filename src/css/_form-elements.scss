@@ -1,0 +1,58 @@
+input {
+  &[type='text'],
+  &[type='email'] {
+    -webkit-appearance: none;
+    border: 0;
+    background: none;
+    font-family: v(ff-sans);
+    font-size: 2rem;
+    min-width: 100px;
+  }
+
+  &:focus {
+    outline: none;
+    border: 0;
+  }
+
+  &::placeholder {
+    color: v('brand-water');
+    opacity: v('extra-faded');
+  }
+}
+
+.field {
+  --height: 6rem;
+  height: v('height');
+
+  &-with-button {
+    display: flex;
+    align-items: stretch;
+
+    .label {
+      flex: 1;
+      background-color: v(white);
+      border-radius: 1rem 0 0 1rem;
+      border: solid 1px adjust-color(c('brand-water'), $alpha: -0.5);
+      border-right: none;
+      // box-shadow: inset 0 0 0 1px adjust-color(c('brand-water'), $alpha: -0.5);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      min-width: 100px;
+
+      @media screen and (max-width: 425px) {
+        padding: 0 1rem;
+      }
+    }
+
+    .submit {
+      flex: 0 0 auto;
+      --height: var(--height);
+      border-radius: 0 1rem 1rem 0;
+
+      @media screen and (max-width: 425px) {
+        padding: 0 2rem;
+      }
+    }
+  }
+}

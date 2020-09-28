@@ -1,0 +1,9 @@
+.splide {
+  &__progress {
+    &__bar {
+      width: 0;
+      height: $progress-bar-height;
+      background: #ccc;
+    }
+  }
+}

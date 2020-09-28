@@ -1,0 +1,106 @@
+.section--flexible-api {
+  background-color: adjust-color(c('brand-water'), $lightness: 15%);
+  background-image: url('../img/flexible-api-background.svg');
+  background-repeat: no-repeat;
+  background-position: -10% 240%;
+  color: v('white');
+  overflow-x: hidden;
+  padding-top: 7rem;
+
+  @media screen and (max-width: 640px) {
+    padding-top: 3.5rem;
+  }
+
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    // @include gap(7rem);
+
+    > * + * {
+      @media screen and (min-width: 1025px) {
+        margin-right: 7rem;
+      }
+    }
+
+    @media screen and (max-width: 1024px) {
+      display: block;
+    }
+  }
+
+  .section-content {
+    order: -1;
+    max-width: 50%;
+
+    @media screen and (max-width: 1024px) {
+      margin-top: 4rem;
+      max-width: 100%;
+    }
+  }
+
+  .window {
+    + .window {
+      margin-top: 3rem;
+    }
+  }
+
+  .section__title {
+    font-size: 5rem;
+    font-weight: v(bold);
+    margin-bottom: 3rem;
+
+    @media screen and (max-width: 425px) {
+      font-size: 3rem;
+    }
+  }
+
+  .tools-integrations {
+    display: flex;
+    align-items: flex-start;
+    // @include gap(2rem);
+
+    > * + * {
+      margin-top: 2rem;
+
+      @media screen and (min-width: 641px) {
+        margin-top: 0;
+        margin-left: 2rem;
+      }
+    }
+
+    @media screen and (max-width: 640px) {
+      flex-wrap: wrap;
+      // @include gap(4rem);
+    }
+  }
+
+  .tools-integrations-item {
+    display: block;
+    // width: Max(100%, 250px);
+
+    &__icon-container {
+      background-color: adjust-color(c('brand-water'), $saturation: -10%, $lightness: 25%);
+      text-align: center;
+      padding: 2rem;
+      border-radius: 1rem;
+      margin-bottom: 3rem;
+      @include transition((background-color));
+    }
+
+    &__icon {
+      width: 7rem;
+      height: 7rem;
+      fill: v('white');
+    }
+
+    &__title {
+      font-size: 2.25rem;
+      margin-bottom: 2rem;
+    }
+
+    &__description {
+      opacity: v('muted');
+      font-size: 1.75rem;
+    }
+  }
+}

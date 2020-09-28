@@ -1,0 +1,28 @@
+.grid {
+  --gap: 32px;
+  display: grid;
+  grid-gap: v('gap');
+
+  @for $i from 1 to 11 {
+    &-col-#{$i} {
+      // grid-template-columns: repeat(auto-fill, minmax(auto, 1fr));
+      grid-template-columns: repeat(
+        auto-fill,
+        minmax(calc(1200px / (#{$i} + 1)), 1fr)
+      );
+    }
+  }
+
+  &--main {
+    --gap: #{grid(6)};
+    grid-template-columns: 4fr 1fr 4fr;
+
+    @media screen and (max-width: 640px) {
+      display: block;
+
+      > * + * {
+        margin-top: grid(4);
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+.section--stay-protected {
+  // background-color: v('off-white');
+
+  .section-header {
+    text-align: center;
+  }
+
+  .section__title {
+    font-weight: v(light);
+
+    @media screen and (max-width: 425px) {
+      font-size: 3rem;
+    }
+  }
+
+  .section__subtitle {
+    margin: 2rem 0 4rem 0;
+    font-weight: v(semi);
+    opacity: v('faded');
+  }
+
+  .form--get-started {
+    max-width: 50%;
+    margin: 0 auto;
+
+    @media screen and (max-width: 768px) {
+      max-width: 80vw;
+    }
+
+    .form-description {
+      justify-content: center;
+
+      @media screen and (max-width: 425px) {
+        justify-content: flex-start;
+      }
+    }
+  }
+}

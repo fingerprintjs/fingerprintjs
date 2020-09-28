@@ -1,0 +1,25 @@
+.splide {
+  $root: &;
+
+  &--fade {
+    > #{$root}__track {
+      > #{$root}__list {
+        display: block;
+
+        > #{$root}__slide {
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: 0;
+          opacity: 0;
+
+          &.is-active {
+            position: relative;
+            z-index: 1;
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+}

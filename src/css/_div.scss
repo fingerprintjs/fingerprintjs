@@ -1,0 +1,21 @@
+.div {
+  --div-color: white;
+  --div-dash-size: 25px;
+  width: 100%;
+  height: 2px;
+
+  &--solid {
+    background: v('div-color');
+  }
+
+  &--dashed {
+    background: linear-gradient(
+      to right,
+      var(--div-color) 50%,
+      var(--transparent) 0%
+    );
+    background-position: bottom;
+    background-size: 2rem 1px;
+    background-repeat: repeat-x;
+  }
+}

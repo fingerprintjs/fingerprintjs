@@ -1,0 +1,19 @@
+.splide {
+  &__spinner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+
+    display: inline-block;
+    width: $spinner-size;
+    height: $spinner-size;
+    border-radius: 50%;
+    border: 2px solid #999;
+    border-left-color: transparent;
+
+    animation: splide-loading 1s infinite linear;
+  }
+}

@@ -1,0 +1,27 @@
+.splide {
+  $root: &;
+
+  &--rtl {
+    > #{$root}__track > #{$root}__arrows, > #{$root}__arrows {
+      #{$root}__arrow {
+        &--prev {
+          right: 1em;
+          left: auto;
+
+          svg {
+            transform: scaleX( 1 );
+          }
+        }
+
+        &--next {
+          left: 1em;
+          right: auto;
+
+          svg {
+            transform: scaleX( -1 );
+          }
+        }
+      }
+    }
+  }
+}

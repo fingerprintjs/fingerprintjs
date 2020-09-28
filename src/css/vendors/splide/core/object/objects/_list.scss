@@ -1,0 +1,16 @@
+.splide {
+  $root: &;
+
+  &__list {
+    margin: 0!important;
+    padding: 0!important;
+    width: max-content;
+    will-change: transform;
+  }
+
+  &.is-active {
+    #{$root}__list {
+      display: flex;
+    }
+  }
+}

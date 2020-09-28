@@ -1,0 +1,51 @@
+.section--developer-friendly {
+  background-color: adjust-color(c('brand-water'), $lightness: 15%);
+  position: relative;
+  --div-color: #{adjust-color(c('brand-water'), $lightness: 25%, $saturation: -25%)};
+  --div-dash-size: 25px;
+  padding-bottom: 7rem;
+
+  @media screen and (max-width: 640px) {
+    padding-bottom: 3.5rem;
+  }
+
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    // @include gap(2rem);
+    position: relative;
+
+    > * + * {
+      @media screen and (min-width: 1025px) {
+        margin-left: 2rem;
+      }
+    }
+
+    @media screen and (max-width: 1024px) {
+      display: block;
+    }
+  }
+
+  .section-content {
+    @media screen and (max-width: 1024px) {
+      margin-top: 4rem;
+    }
+  }
+
+  .section__title {
+    font-size: 5rem;
+    font-weight: v(bold);
+    color: v('white');
+    margin-bottom: 3rem;
+
+    @media screen and (max-width: 425px) {
+      font-size: 3rem;
+    }
+  }
+
+  .section__description {
+    color: v('white');
+    opacity: v('muted');
+  }
+}

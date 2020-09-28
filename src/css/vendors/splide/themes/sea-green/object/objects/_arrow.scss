@@ -1,0 +1,57 @@
+.splide {
+  $root: &;
+
+  &__arrow {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    transform: translateY( -50% );
+    border: none;
+    padding: 0;
+    background: transparent;
+
+    svg {
+      width: $arrow-size;
+      height: $arrow-size;
+      fill: $main-color;
+      transition: fill .2s linear;
+    }
+
+    &:hover {
+      cursor: pointer;
+      svg {
+        fill: $light-main-color;
+      }
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &--prev {
+      left: 1em;
+
+      svg {
+        transform: scaleX( -1 );
+      }
+    }
+
+    &--next {
+      right: 1em;
+    }
+  }
+
+  &__slider {
+    > #{$root}__arrows {
+      #{$root}__arrow {
+        &--prev {
+          left: -2.5em;
+        }
+
+        &--next {
+          right: -2.5em;
+        }
+      }
+    }
+  }
+}

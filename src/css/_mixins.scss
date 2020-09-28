@@ -1,0 +1,208 @@
+// Grid multiplier
+@function grid($multiply) {
+  @return calc(var(--grid-base) * #{$multiply});
+}
+
+// Get CSS Var
+@function v($name, $fallback: null) {
+  @if ($fallback) {
+    @return var(--#{$name}, #{$fallback});
+  } @else {
+    @return var(--#{$name});
+  }
+}
+
+// Get SCSS Color Var
+@function c($name, $theme: null) {
+  @if $theme {
+    @if map-has-key($theme, $name) {
+      @return map-get($theme, $name);
+    }
+  } @else {
+    @if map-has-key($colors, $name) {
+      @return map-get($colors, $name);
+    } @else if map-has-key($brand-colors, $name) {
+      @return map-get($brand-colors, $name);
+    }
+  }
+
+  @return null;
+}
+
+/*========================================
+=            Transition mixin            =
+=========================================*/
+@mixin transition($p, $d: var(--t-normal), $e: ease) {
+  @include transition-duration($d);
+  @include transition-property($p);
+  @include transition-timing-function($e);
+}
+
+@mixin transition-duration($d...) {
+  transition-duration: $d;
+}
+@mixin transition-property($p...) {
+  transition-property: $p;
+}
+@mixin transition-timing-function($e...) {
+  transition-timing-function: $e;
+}
+
+/*=====  End of Transition mixin  ======*/
+
+/*=============================================
+=            Force 3D Acceleration            =
+=============================================*/
+
+@mixin accelerate($name) {
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform: translateZ(0);
+  will-change: $name;
+}
+
+/*=====  End of Force 3D Acceleration  ======*/
+
+/*======================================
+=            Truncate Lines            =
+=======================================*/
+
+@mixin max-lines($lines, $lh: var(--lineHeight)) {
+  max-height: calc(#{$lh} * #{$lines});
+  overflow: hidden;
+}
+
+/*=====  End of Truncate Lines  ======*/
+
+/*=============================================
+=            Truncate Single Line            =
+=============================================*/
+
+@mixin truncate($width: 100px) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: $width;
+}
+
+/*=====  End of Truncate Single Line  ======*/
+
+/*========================================
+=            Fluid Typography            =
+========================================*/
+
+@function strip-unit($value) {
+  @return $value / ($value * 0 + 1);
+}
+
+@mixin fluid-type($min-vw, $max-vw, $min-font-size, $max-font-size) {
+  $u1: unit($min-vw);
+  $u2: unit($max-vw);
+  $u3: unit($min-font-size);
+  $u4: unit($max-font-size);
+
+  @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 {
+    & {
+      font-size: $min-font-size;
+      @media screen and (min-width: $min-vw) {
+        font-size: calc(
+          #{$min-font-size} + #{strip-unit($max-font-size - $min-font-size)} *
+            ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)})
+        );
+      }
+
+      @media screen and (min-width: $max-vw) {
+        font-size: $max-font-size;
+      }
+    }
+  }
+}
+
+/*=====  End of Fluid Typography  ======*/
+
+/*==================================
+=            Font-Style            =
+===================================*/
+
+@mixin style($fsz: inherit, $lh: inherit, $fw: inherit, $fs: normal) {
+  font-size: $fsz;
+  font-style: $fs;
+  font-weight: $fw;
+  line-height: $lh;
+}
+
+/*=====  End of Font-Style  ======*/
+
+/*=============================================
+=            Aspect Ratio Box            =
+=============================================*/
+
+@mixin ar($w: 16, $h: 9, $hasChild: false) {
+  position: relative;
+
+  &:before {
+    display: block;
+    content: '';
+    width: 100%;
+    padding-top: ($h / $w) * 100%;
+  }
+
+  @if ($hasChild) {
+    > * {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+/*=====  End of Aspect Ratio Box  ======*/
+
+/*======================================
+=            SCROLLABLE BOX            =
+=======================================*/
+
+@mixin scrollbox($height: 500px, $scollbarSize: 20px, $padding...) {
+  height: $height;
+  overflow: hidden;
+
+  > * {
+    box-sizing: content-box;
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+    padding: #{$padding};
+    // padding-right: $scollbarSize;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+
+    &::-webkit-scrollbar {
+      display: none; /* Chrome, Safari and Opera */
+    }
+  }
+}
+
+/*=====  End of SCROLLABLE BOX  ======*/
+
+/*======================================
+=            GAP FOR FLEXBOX           =
+=======================================*/
+
+@mixin gap($gap: 8px) {
+  --gap: #{$gap};
+  gap: var(--gap);
+
+  @supports not (gap: 1px) {
+    flex-wrap: wrap;
+    margin: calc(-1 * var(--gap)) 0 0 calc(-1 * var(--gap));
+    width: calc(100% + var(--gap));
+
+    > * {
+      margin: var(--gap) 0 0 var(--gap);
+    }
+  }
+}
+
+/*=====  End of GAP FOR FLEXBOX  ======*/

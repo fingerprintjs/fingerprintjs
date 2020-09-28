@@ -1,0 +1,42 @@
+// @use "sass:color" as *;
+// @use "./mixins" as *;
+
+@import './variables';
+@import './mixins';
+
+@import './vendors/normalize.scss';
+@import './vendors/code-theme';
+@import './vendors/tippy';
+
+@import './vendors/splide/core/splide-core.scss';
+
+// @import './vendors/gliders';
+@import './vendors/sliders';
+
+@import './generic-styles';
+@import './typography';
+@import './form-elements';
+@import './forms';
+@import './grid';
+// @import './container';
+@import './header';
+@import './buttons';
+@import './links';
+@import './div';
+@import './nav';
+
+@import './sections/sections';
+@import './sections/live-demo';
+@import './sections/trusted-by';
+@import './sections/use-cases';
+@import './sections/developer-friendly';
+@import './sections/flexible-api';
+@import './sections/billing';
+@import './sections/pro-tools';
+@import './sections/stay-protected';
+
+@import './footer';
+@import './window';
+@import './slider';
+@import './live';
+@import './live-mobile';

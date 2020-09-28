@@ -1,0 +1,25 @@
+.splide {
+  $root: &;
+
+  &--nav {
+    > #{$root}__track {
+      > #{$root}__list {
+        > #{$root}__slide {
+          border: 3px solid white;
+          cursor: pointer;
+          opacity: .7;
+          border-radius: 4px;
+
+          &.is-active {
+            border-color: $main-color;
+            opacity: 1;
+          }
+
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+    }
+  }
+}

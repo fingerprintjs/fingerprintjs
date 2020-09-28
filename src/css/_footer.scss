@@ -1,0 +1,28 @@
+.footer {
+  background-color: v('brand-water');
+  color: v('white');
+  padding: 10rem 0 5rem 0;
+
+  @media screen and (max-width: 640px) {
+    padding: 40px 0;
+  }
+
+  .copyrights {
+    margin-top: 5rem;
+    font-size: 1.75rem;
+    opacity: v('faded');
+    text-align: right;
+
+    @media screen and (max-width: 640px) {
+      text-align: left;
+    }
+
+    a {
+      @include transition((opacity));
+
+      &:hover {
+        opacity: v('extra-faded');
+      }
+    }
+  }
+}

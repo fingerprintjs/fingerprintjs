@@ -1,0 +1,126 @@
+.nav--footer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  // @include gap(4rem);
+
+  // > * + * {
+  //   margin-left: 4rem;
+  // }
+  .menu {
+    margin-right: 4rem;
+
+    &--docs {
+      @media screen and (max-width: 647px) {
+        margin-top: 4rem;
+      }
+    }
+
+    @media screen and (max-width: 647px) {
+      margin-right: 0;
+    }
+  }
+
+  .menu-wrapper {
+    display: flex;
+    margin-right: 24px;
+    @media screen and (max-width: 931px) {
+      margin-bottom: 40px;
+    }
+    > div {
+      flex: 1;
+      &:first-child {
+        padding-right: 40px;
+      }
+    }
+  }
+
+  .contact {
+    @media screen and (max-width: 931px) {
+      margin-right: 0;
+    }
+  }
+
+  .contact,
+  .menu {
+    font-size: 1.75rem;
+
+    &__title {
+      @extend .h3;
+      margin-bottom: 1.5rem;
+    }
+
+    &__link {
+      display: block;
+      padding: 0.5rem 0;
+      @include transition((opacity));
+
+      opacity: 0.8;
+
+      &:hover {
+        opacity: v('extra-faded');
+      }
+
+      + .menu__link {
+        margin-top: 0.5rem;
+      }
+    }
+  }
+
+  .contact {
+    &__address {
+      font-style: normal;
+      margin-bottom: 5rem;
+
+      a {
+        @extend .link;
+      }
+    }
+
+    .contact-social {
+      display: flex;
+      align-items: flex-end;
+      // @include gap(2rem);
+
+      > * + * {
+        margin-left: 2rem;
+      }
+
+      > span {
+        height: 28px;
+      }
+
+      .social {
+        &-links {
+          display: flex;
+          align-items: center;
+          // @include gap();
+          margin-top: 1rem;
+
+          > * + * {
+            margin-left: 1rem;
+          }
+
+          &__link {
+            a {
+              display: inline-block;
+            }
+
+            &:hover {
+              svg {
+                opacity: 1;
+              }
+            }
+          }
+
+          svg {
+            width: 3.5rem;
+            height: 3.5rem;
+            fill: v('white');
+            opacity: v('muted');
+            @include transition((opacity));
+          }
+        }
+      }
+    }
+  }
+}

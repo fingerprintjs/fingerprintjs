@@ -1,0 +1,17 @@
+// Main color.
+$main-color: #20b2aa;
+
+// Lighter main color.
+$light-main-color: lighten( $main-color, 20% );
+
+// Arrow SVG size.
+$arrow-size: 2.5em !default;
+
+// Pagination indicator width.
+$indicator-width: 20px !default;
+
+// Pagination indicator height.
+$indicator-height: 5px !default;
+
+// Height of a progress bar.
+$progress-bar-height: 3px !default;

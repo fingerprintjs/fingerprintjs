@@ -1,0 +1,37 @@
+.splide {
+  &__pagination {
+    position: absolute;
+    z-index: 1;
+    bottom: .5em;
+    left: 50%;
+    transform: translateX( -50% );
+    padding: 0;
+
+    &__page {
+      display: inline-block;
+      width: $dot-size;
+      height: $dot-size;
+      background: #ccc;
+      border-radius: 50%;
+      margin: 3px;
+      padding: 0;
+      transition: transform .2s linear;
+      border: none;
+      opacity: .7;
+
+      &.is-active {
+        transform: scale( 1.4 );
+        background: white;
+      }
+
+      &:hover {
+        cursor: pointer;
+        opacity: .9;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}

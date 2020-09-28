@@ -1,0 +1,15 @@
+.splide {
+  $root: &;
+
+  &--ttb {
+    > #{$root}__track {
+      > #{$root}__list {
+        display: block;
+      }
+    }
+
+    > #{$root}__pagination {
+      width: auto;
+    }
+  }
+}

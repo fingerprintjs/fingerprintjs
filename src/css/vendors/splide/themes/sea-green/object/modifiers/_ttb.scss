@@ -1,0 +1,43 @@
+.splide {
+  $root: &;
+
+  &--ttb {
+    > #{$root}__track > #{$root}__arrows, > #{$root}__arrows {
+      #{$root}__arrow {
+        left: 50%;
+        transform: translate( -50%, 0 );
+
+        &--prev {
+          top: 1em;
+
+          svg {
+            transform: rotateZ( -90deg );
+          }
+        }
+
+        &--next {
+          top: auto;
+          bottom: 1em;
+
+          svg {
+            transform: rotateZ( 90deg );
+          }
+        }
+      }
+    }
+
+    > #{$root}__pagination {
+      display: flex;
+      flex-direction: column;
+      bottom: 50%;
+      left: auto;
+      right: 1em;
+      transform: translate( 0, 50% );
+
+      #{$root}__pagination__page {
+        width: $indicator-height;
+        height: $indicator-width;
+      }
+    }
+  }
+}

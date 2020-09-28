@@ -1,0 +1,35 @@
+.splide {
+  &__pagination {
+    position: absolute;
+    z-index: 1;
+    bottom: 1em;
+    left: 50%;
+    transform: translateX( -50% );
+    padding: 0;
+
+    &__page {
+      display: inline-block;
+      width: $indicator-width;
+      height: $indicator-height;
+      background: #ccc;
+      border-radius: $indicator-height / 2;
+      margin: 3px;
+      padding: 0;
+      transition: all .2s linear;
+      border: none;
+
+      &.is-active {
+        background: $main-color;
+      }
+
+      &:hover {
+        cursor: pointer;
+        background: $light-main-color;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}

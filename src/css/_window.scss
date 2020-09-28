@@ -1,0 +1,60 @@
+.window {
+  border-radius: 1rem;
+  background-color: hsla(222, 13%, 18%, 1);
+  // min-width: 30vw;
+  overflow: hidden;
+  box-shadow: 0 0 20px adjust-color(c('black'), $alpha: -0.8);
+
+  &-header {
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: hsla(217, 13%, 15%, 1);
+    padding: 0 2rem;
+    // @include gap(0.675rem);
+
+    > * + * {
+      margin-left: 0.675rem;
+    }
+
+    &__btn {
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+
+      &--close {
+        background-color: v('error');
+      }
+
+      &--minimize {
+        background-color: v('warning');
+      }
+
+      &--expand {
+        background-color: v('success');
+      }
+    }
+  }
+
+  &-content {
+    position: relative;
+
+    &:after {
+      content: '';
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      height: 100%;
+      right: 0;
+      width: 2rem;
+      background-image: linear-gradient(to right, hsla(222, 13%, 18%, 0), hsla(222, 13%, 18%, 1));
+    }
+  }
+
+  &-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem 3rem 2rem 3rem;
+  }
+}

@@ -1,0 +1,41 @@
+<section class='section section--trusted-by'>
+  <div class='container'>
+    <header class='section-header'>
+      <h2 class='section__title'>
+        <strong>
+          FingerPrintJS
+        </strong>
+        is utilized from huge companies to
+                innovative startups
+      </h2>
+    </header>
+    <div class='section-content splide splide--trusted-by'>
+      <div class='splide__track'>
+        <div class='logo-bar splide__list'>
+          {{#each site.trusted_logos}}
+            <div class='splide__slide'>
+              <img
+                class='logo-bar__logo'
+                src="img/company-logos/{{this}}.svg"
+              />
+            </div>
+          {{/each}}
+        </div>
+      </div>
+      {{! <div class='glide__bullets' data-glide-el='controls[nav]'>
+      </div>
+      <div class='glide__arrows' data-glide-el='controls'>
+        <button class='glide__arrow glide__arrow--left' data-glide-dir='<'>
+          <svg class='prev' viewBox='0 0 13.2 16.8'>
+            <use xlink:href='#chevron-left'></use>
+          </svg>
+        </button>
+        <button class='glide__arrow glide__arrow--right' data-glide-dir='>'>
+          <svg class='next' viewBox='0 0 13.2 16.8'>
+            <use xlink:href='#chevron-right'></use>
+          </svg>
+        </button>
+      </div> }}
+    </div>
+  </div>
+</section>

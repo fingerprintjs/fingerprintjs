@@ -1,0 +1,135 @@
+.live-demo--mobile {
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: v('white');
+  font-size: 1.75rem;
+  box-shadow: 0 20px 50px 0 adjust-color(c('brand-water'), $alpha: -0.9);
+  margin-right: 2rem;
+
+  .live-demo {
+    width: 100%;
+
+    &__title {
+      font-size: 2rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    &__header {
+      color: v('white');
+      background-color: v('brand-water');
+      height: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      > * + * {
+        margin-left: 1rem;
+      }
+
+      .btn {
+        opacity: v('faded');
+
+        svg {
+          fill: v('white');
+          margin-left: 0;
+        }
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .visit {
+    padding: 2rem 3rem;
+
+    > * + * {
+      margin-top: 2rem;
+    }
+
+    svg {
+      width: 2rem;
+      height: 2rem;
+      fill: v('brand-fire');
+    }
+
+    &__bot,
+    &__ip,
+    &__incognito,
+    &__browser,
+    &__location {
+      display: flex;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    &__label {
+      font-weight: v('bold');
+      font-family: v('ff-mono');
+      flex: 1 0 50%;
+    }
+
+    &__value {
+      flex: 1 0 50%;
+    }
+
+    // ID
+    &__id {
+      .visit__value {
+        font-weight: v('bold');
+        color: v('brand-fire');
+        font-size: 2rem;
+      }
+    }
+
+    // Location
+    &__location {
+      display: block;
+
+      .visit__value {
+        @include ar(1, 1);
+        background-color: v('off-white');
+        border-radius: 1rem;
+        margin-top: 1.5rem;
+      }
+    }
+  }
+}
+
+.incognito {
+  .live-demo--mobile {
+    background-color: v('brand-water');
+
+    .live-demo {
+      width: 100%;
+
+      &__title {
+        font-size: 2rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+      }
+
+      &__header {
+        color: v('white');
+        border-bottom: 1px solid adjust-color(c('white'), $alpha: -0.9);
+      }
+    }
+
+    .visit {
+      color: v('white');
+
+      // Location
+      &__location {
+        .visit__value {
+          background-color: adjust-color(c('white'), $alpha: -0.9);
+        }
+      }
+    }
+  }
+}

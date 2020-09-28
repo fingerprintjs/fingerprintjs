@@ -1,0 +1,44 @@
+.splide {
+  &__arrow {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    transform: translateY( -50% );
+    width: $arrow-button-size;
+    height: $arrow-button-size;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: 0;
+    opacity: .7;
+    background: #ccc;
+
+    svg {
+      width: $arrow-size;
+      height: $arrow-size;
+    }
+
+    &:hover {
+      cursor: pointer;
+      opacity: .9;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &--prev {
+      left: 1em;
+
+      svg {
+        transform: scaleX( -1 );
+      }
+    }
+
+    &--next {
+      right: 1em;
+    }
+  }
+}

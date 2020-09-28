@@ -1,0 +1,14 @@
+// Main color.
+$main-color: #00bfff;
+
+// Lighter main color.
+$light-main-color: lighten( $main-color, 20% );
+
+// Arrow SVG size.
+$arrow-size: 2.5em !default;
+
+// Dots indicator size.
+$dot-size: 10px !default;
+
+// Height of a progress bar.
+$progress-bar-height: 3px !default;

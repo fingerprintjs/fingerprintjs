@@ -1,0 +1,68 @@
+{
+  "title": "FingerPrintJS | Browser Fingerprinting API",
+  "trusted_logos": [
+    "ebay",
+    "target",
+    "us-bank",
+    "booking",
+    "ameritrade",
+    "dell",
+    "agoda"
+  ],
+  "footer_links": [
+    {
+      "title": "Solutions",
+      "links": [
+        {
+          "title": "Browser Fingerprinting",
+          "url": "#"
+        },
+        {
+          "title": "Anonymous User Identification",
+          "url": "#"
+        },
+        {
+          "title": "Bot Detection",
+          "url": "#"
+        },
+        {
+          "title": "Incognito Mode Detection",
+          "url": "#"
+        },
+        {
+          "title": "Geolocation",
+          "url": "#"
+        },
+        {
+          "title": "API & Webhooks",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "title": "Docs",
+      "links": [
+        {
+          "title": "Pro vs Free Version",
+          "url": "#"
+        },
+        {
+          "title": "Regions",
+          "url": "#"
+        },
+        {
+          "title": "Best Practices",
+          "url": "#"
+        },
+        {
+          "title": "Integrations",
+          "url": "#"
+        },
+        {
+          "title": "Legal",
+          "url": "#"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+.section {
+  padding: 14rem 0;
+  z-index: v(z-sections);
+
+  @media screen and (max-width: 1024px) {
+    padding: 7rem 0;
+  }
+
+  &-header,
+  &-content {
+    flex: 1;
+  }
+}

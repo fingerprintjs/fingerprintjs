@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" class="incognito">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {{#block "title"}}{{/block}}
+  {{!-- <title>FingerPrintJS | Browser Fingerprinting API</title> --}}
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Work+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet" />
+  {{#block "head"}}{{/block}}
+  <% for (var css in htmlWebpackPlugin.files.css) { %>
+  <link href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
+  <% } %>
+  <style>
+    .container {
+      --contentWidth: 920px;
+      padding: 0 max(3rem, 50vw - var(--contentWidth) / 2);
+    }
+  
+    .container--large {
+      --contentWidth: 1232px;
+    }
+  </style>
+</head>
+
+<body class="{{bodyclass}}">
+  {{> partials/SVGSprite }}
+  {{#block "body"}}{{/block}}
+</body>
+
+{{#block "scripts"}}{{/block}}
+
+<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+<script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
+<% } %>
+
+<% if (htmlWebpackPlugin.options.devServer) { %>
+<script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
+<% } %>
+
+</html>

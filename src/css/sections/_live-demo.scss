@@ -1,0 +1,109 @@
+.section--live-demo {
+  min-height: 50vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  @media screen and (max-width: 1024px) {
+    display: block;
+    min-height: unset;
+  }
+
+  .container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    @include gap(5rem);
+
+    > * + * {
+      @media screen and (max-width: 1024px) {
+        margin-top: 5rem;
+        margin-left: 0rem;
+      }
+    }
+
+    @media screen and (max-width: 1024px) {
+      display: flex;
+      flex-flow: column nowrap;
+      gap: 0;
+    }
+
+    @media screen and (max-width: 640px) {
+      padding: 0;
+    }
+  }
+
+  .splide--live-demo {
+    display: none;
+
+    @media screen and (max-width: 640px) {
+      display: block;
+    }
+  }
+
+  .section-content {
+    min-width: 600px;
+    z-index: 0;
+
+    @media screen and (max-width: 1024px) {
+      max-width: 100%;
+      min-width: unset;
+      width: 100%;
+    }
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: -10%;
+      right: -35%;
+      width: 100%;
+      height: 120%;
+      background-image: url('../img/fpjs-02.png');
+      background-repeat: no-repeat;
+      background-position: 100% 50%;
+      background-size: contain;
+      z-index: -1;
+      pointer-events: none;
+
+      @media screen and (max-width: 2560px) {
+        right: -40%;
+      }
+      @media screen and (max-width: 1920px) {
+        right: -30%;
+        top: -20%;
+        height: 140%;
+      }
+      @media screen and (max-width: 1024px) {
+        right: unset;
+        left: -50%;
+        top: unset;
+        bottom: -50%;
+        width: 200%;
+        height: 200%;
+        background-position: center 65%;
+      }
+    }
+  }
+
+  .section-header {
+    position: relative;
+    z-index: 1;
+    max-width: 50rem;
+
+    @media screen and (max-width: 640px) {
+      padding: 0 3rem;
+    }
+  }
+
+  .section__title {
+    @media screen and (max-width: 425px) {
+      font-size: 4rem;
+    }
+  }
+
+  .section__description {
+    font-size: 3rem;
+    margin: 3rem 0 5rem 0;
+  }
+}

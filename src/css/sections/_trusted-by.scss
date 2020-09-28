@@ -1,0 +1,13 @@
+.section--trusted-by {
+  padding: 6rem 0;
+
+  .section-header {
+    max-width: 60ch;
+    margin-bottom: 5rem;
+  }
+
+  .section__title {
+    font-weight: v('normal');
+    opacity: v('faded');
+  }
+}
