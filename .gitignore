@@ -1,6 +1,10 @@
-node_modules/
-.idea/
-fingerprintjs2.iml
-*.log
-package-lock.json
-dist/
+.DS_Store
+npm-debug.log
+lib
+node_modules
+.cache
+dist
+generated
+build
+.env
+.now

@@ -1,70 +1,53 @@
 {
-  "name": "@fingerprintjs/fingerprintjs",
-  "version": "2.1.4",
-  "description": "Modern & flexible browser fingerprinting library",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fingerprintjs/fingerprintjs.git"
-  },
-  "keywords": [
-    "fraud",
-    "fraud-detection",
-    "fraud-prevention",
-    "browser",
-    "identification",
-    "fingerprint",
-    "fingerprinting",
-    "privacy"
-  ],
-  "author": "FingerprintJS, Inc (https://fingerprintjs.com)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/fingerprintjs/fingerprintjs/issues"
-  },
-  "homepage": "https://github.com/fingerprintjs/fingerprintjs",
-  "main": "fingerprint2.js",
-  "files": [
-    "dist",
-    "flash"
-  ],
-  "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/preset-env": "^7.11.5",
-    "gulp": "^4.0.0",
-    "gulp-header-license": "^1.0.9",
-    "gulp-rename": "^1.4.0",
-    "gulp-uglify": "^3.0.1",
-    "gulp-util": "^3.0.8",
-    "jasmine-expect": "^4.0.1",
-    "karma": "^5.2.1",
-    "karma-babel-preprocessor": "^8.0.1",
-    "karma-chrome-launcher": "^3.1.0",
-    "karma-firefox-launcher": "^1.3.0",
-    "karma-ie-launcher": "^1.0.0",
-    "karma-jasmine": "^4.0.1",
-    "karma-jasmine-matchers": "^4.0.1",
-    "karma-safari-applescript-launcher": "^0.1.0",
-    "standard": "^10.0.3"
-  },
+  "name": "fingerprintjs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "høly devs",
   "scripts": {
-    "test:chrome": "karma start --single-run --browsers ChromeHeadless tests/karma.conf.js",
-    "test:chrome:incognito": "karma start --single-run --browsers ChromeIncognito tests/karma.conf.js",
-    "test:firefox": "karma start --single-run --browsers FirefoxHeadless tests/karma.conf.js",
-    "test:firefox:incognito": "karma start --single-run --browsers FirefoxIncognito tests/karma.conf.js",
-    "test:safari": "karma start --single-run --browsers Safari tests/karma.conf.js",
-    "test:ie10": "karma start --single-run --browsers IE10 tests/karma.conf.js",
-    "test:ie11": "karma start --single-run --browsers IE tests/karma.conf.js",
-    "test:chrome:debug": "karma start --single-run false --browsers Chrome tests/karma.conf.js",
-    "test:firefox:debug": "karma start --single-run false --browsers Firefox tests/karma.conf.js",
-    "test:all:mac": "yarn run test:chrome && yarn run test:chrome:incognito && yarn run test:firefox && yarn run test:firefox:incognito && yarn run test:safari",
-    "test:all:windows": "yarn run test:chrome && yarn run test:chrome:incognito && yarn run test:firefox && yarn run test:firefox:incognito && yarn run test:ie10 && yarn run test:ie11",
-    "gulp": "gulp",
-    "lint": "standard --fix"
+    "start": "NODE_ENV=development webpack-dev-server",
+    "prestart": "npm run clean",
+    "build": "webpack --mode=production",
+    "prebuild": "npm run clean",
+    "clean": "rimraf build generated",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "standard": {
-    "ignore": [
-      "specs/lib",
-      "specs/phantomjs-testrunner.js"
-    ]
+  "license": "MIT",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "IE 11"
+  ],
+  "dependencies": {
+    "@splidejs/splide": "^2.4.14",
+    "jquery-slim": "^3.0.0",
+    "prismjs": "^1.21.0",
+    "tippy.js": "^6.2.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "babel-eslint": "^10.0.3",
+    "babel-loader": "^8.0.6",
+    "copy-webpack-plugin": "^5.1.1",
+    "css-loader": "^3.4.2",
+    "cssnano": "^4.1.10",
+    "dotenv-webpack": "^3.0.0",
+    "eslint": "^6.8.0",
+    "file-loader": "^5.0.2",
+    "handlebars": "^4.7.3",
+    "handlebars-layouts": "^3.1.4",
+    "handlebars-webpack-plugin": "https://github.com/mitchheddles/handlebars-webpack-plugin#478592b",
+    "html-webpack-plugin": "^3.2.0",
+    "ignore-loader": "^0.1.2",
+    "imagemin-webpack-plugin": "^2.4.2",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-sass": "^4.13.1",
+    "postcss-loader": "^3.0.0",
+    "postcss-preset-env": "^6.7.0",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.1.3",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.3"
   }
 }

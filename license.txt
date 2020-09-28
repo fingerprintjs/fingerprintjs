@@ -1,2 +1,0 @@
-// FingerprintJS - Copyright (c) FingerprintJS, Inc, ${YEAR} (https://fingerprintjs.com)
-// Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
