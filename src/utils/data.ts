@@ -3,7 +3,7 @@
  */
 
 /**
- * Does the same as Array.prototype.includes but has advances typing
+ * Does the same as Array.prototype.includes but has better typing
  */
 export function includes<THaystack>(
   haystack: ArrayLike<THaystack>,
@@ -25,4 +25,28 @@ export function excludes<THaystack, TNeedle>(
   needle: TNeedle,
 ): needle is Exclude<TNeedle, THaystack> {
   return !includes(haystack, needle)
+}
+
+/**
+ * Be careful, NaN can return
+ */
+export function toInt(value: unknown): number {
+  if (typeof value === 'number') {
+    return value | 0
+  }
+  return parseInt(value as string)
+}
+
+/**
+ * Be careful, NaN can return
+ */
+export function toFloat(value: unknown): number {
+  if (typeof value === 'number') {
+    return value
+  }
+  return parseFloat(value as string)
+}
+
+export function countTruthy(values: unknown[]): number {
+  return values.reduce<number>((sum, value) => sum + (value ? 1 : 0), 0)
 }

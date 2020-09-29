@@ -1,62 +1,68 @@
+import { version } from '../package.json' // todo: Check that nothing else from package.json gets into the bundles
 import { requestIdleCallbackIfAvailable } from './utils/async'
 import { x64hash128 } from './utils/hashing'
-import collectComponents, { DefaultComponents, GenericComponentDict } from './sources'
-
-/**
- * Options for getting fingerprint
- */
-export interface GetOptions {
-  /**
-   * Whether to print debug messages to the console.
-   * Will be required to ease investigations of problems both in the core and in the pro agent.
-   */
-  debug?: boolean
-}
+import getBuiltinComponents, { BuiltinComponents, UnknownComponents } from './sources'
 
 /**
  * Options for Fingerprint class loading
  */
-export interface LoadOptions extends Partial<GetOptions> {
+export interface LoadOptions {
   /**
    * When browser doesn't support `requestIdleCallback` a `setTimeout` will be used. This number is only for Safari and
    * old Edge, because Chrome/Blink based browsers support `requestIdleCallback`. The value is in milliseconds.
    * @default 50
    */
-  loadDelay?: number
+  delayFallback?: number
 }
 
+/**
+ * Options for getting visitor identifier
+ */
+export interface GetOptions {
+  /**
+   * Whether to print debug messages to the console.
+   * Required to ease investigations of problems.
+   */
+  debug?: boolean
+}
+
+/**
+ * Result of getting a visitor identifier
+ */
 export interface GetResult {
   /**
-   * The fingerprint that identifies the browser
+   * The visitor identifier
    */
   visitorId: string
   /**
-   * List of components that form the fingerprint.
-   * For debug only.
+   * List of components that has formed the visitor identifier.
    *
-   * Actually it will be required for the pro agent.
+   * Warning! The type of this property is specific but out of Semantic Versioning, i.e. may have incompatible changes
+   * within a major version. If you want to avoid breaking changes, treat the property as having type
+   * `UnknownComponents` that is more generic but guarantees backward compatibility within a major version.
    */
-  components: DefaultComponents
+  components: BuiltinComponents
 }
 
-export function componentsToCanonicalString(components: GenericComponentDict) {
-  return Object.keys(components).reduce((result, componentKey) => {
+export function componentsToCanonicalString(components: UnknownComponents) {
+  let result = ''
+  for (const componentKey of Object.keys(components)) {
     const component = components[componentKey]
     const value = component.error ? 'error' : JSON.stringify(component.value)
-    return `${result.replace(/([:|\\])/g, '\\\\$1')}${componentKey}:${value}|`
-  }, '')
+    result += `${result ? '|' : ''}${componentKey.replace(/([:|\\])/g, '\\$1')}:${value}`
+  }
+  return result
 }
 
-export function componentsToDebugString(components: GenericComponentDict) {
+export function componentsToDebugString(components: UnknownComponents) {
   return JSON.stringify(
     components,
     (_key, value) => {
-      // todo: Check if errors look good in reports
       if (value instanceof Error) {
         return {
           ...value,
           message: value.message,
-          stack: value.stack,
+          stack: value.stack?.split('\n'),
         }
       }
       return value
@@ -65,49 +71,61 @@ export function componentsToDebugString(components: GenericComponentDict) {
   )
 }
 
+/**
+ * Makes a GetResult implementation that calculates the visitor id hash on demand.
+ * Designed for optimisation.
+ */
+function makeLazyGetResult<T extends UnknownComponents>(components: T) {
+  let visitorIdCache: string | undefined
+
+  // A plain class isn't used because its getters and setters aren't enumerable.
+  return {
+    components,
+    get visitorId(): string {
+      if (visitorIdCache === undefined) {
+        visitorIdCache = x64hash128(componentsToCanonicalString(this.components))
+      }
+      return visitorIdCache
+    },
+    set visitorId(visitorId: string) {
+      visitorIdCache = visitorId
+    },
+  }
+}
+
 export default class Fingerprint {
-  #defaultOptions: Readonly<Partial<GetOptions>>
-
-  private constructor(defaultOptions: Readonly<Partial<GetOptions>>) {
-    // A config check will be here
-    this.#defaultOptions = defaultOptions
-  }
-
   /**
-   * Builds an instance of `FP` (client agent) and waits a delay required for a proper operation.
+   * Blocks creating without `load()`.
+   * The block gives more freedom for future non-breaking updates.
    */
-  public static async load({
-    loadDelay = 50,
-    ...defaultOptions
-  }: Readonly<LoadOptions> = {}): Promise<Fingerprint> {
-    const fp = new Fingerprint(defaultOptions)
-    await requestIdleCallbackIfAvailable(loadDelay)
-    return fp
+  private constructor() {}
+
+  /**
+   * Builds an instance of Fingerprint class and waits a delay required for a proper operation.
+   */
+  public static async load({ delayFallback = 50 }: Readonly<LoadOptions> = {}): Promise<Fingerprint> {
+    await requestIdleCallbackIfAvailable(delayFallback)
+    return new Fingerprint()
   }
 
   /**
-   * Gets a fingerprint
+   * Gets the visitor identifier
    */
   public async get(options: Readonly<GetOptions> = {}): Promise<GetResult> {
-    const finalOptions = { ...this.#defaultOptions, ...options }
-    const components = await collectComponents()
-    const fingerprint = x64hash128(componentsToCanonicalString(components))
+    const components = await getBuiltinComponents()
+    const result = makeLazyGetResult(components)
 
-    if (finalOptions.debug) {
-      console.log(`
-Copy the text below to get the debug data:
+    if (options.debug) {
+      console.log(`Copy the text below to get the debug data:
 
 \`\`\`
-options: ${JSON.stringify(finalOptions, undefined, 2)}
-visitorId: ${fingerprint}
+version: ${version}
+getOptions: ${JSON.stringify(options, undefined, 2)}
+visitorId: ${result.visitorId}
 components: ${componentsToDebugString(components)}
-\`\`\`
-      `)
+\`\`\``)
     }
 
-    return {
-      visitorId: fingerprint,
-      components,
-    }
+    return result
   }
 }

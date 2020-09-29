@@ -9,9 +9,9 @@ export interface PluginData {
   mimeTypes: PluginMimeTypeData[]
 }
 
-export default function getPlugins(): PluginData[] {
+export default function getPlugins(): PluginData[] | undefined {
   if (!navigator.plugins) {
-    return []
+    return undefined
   }
 
   const plugins: PluginData[] = []
