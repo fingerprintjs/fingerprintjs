@@ -11,7 +11,7 @@ export default async function getAudioFingerprint(): Promise<number> {
     return -1
   }
 
-  let AudioContext = w.OfflineAudioContext || w.webkitOfflineAudioContext
+  const AudioContext = w.OfflineAudioContext || w.webkitOfflineAudioContext
 
   if (!AudioContext) {
     return -2
@@ -48,7 +48,7 @@ export default async function getAudioFingerprint(): Promise<number> {
       resolve(-3)
     }, 1000)
 
-    context.oncomplete = function (event) {
+    context.oncomplete = (event) => {
       let afp
       try {
         clearTimeout(audioTimeoutId)

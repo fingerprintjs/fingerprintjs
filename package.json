@@ -1,4 +1,6 @@
 {
+  "name": "@fingerprintjs/fingerprintjs",
+  "version": "3.0.0-dev",
   "devDependencies": {
     "typescript": "^4.0.2"
   }
