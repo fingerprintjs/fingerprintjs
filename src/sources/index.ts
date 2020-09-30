@@ -4,7 +4,7 @@ import getFonts from './fonts'
 import getPlugins from './plugins'
 import getCanvasFingerprint from './canvas'
 import getTouchSupport from './touch_support'
-import getOsCpu from './os_cpu';
+import getOsCpu from './os_cpu'
 import getLanguages from './languages'
 import getColorDepth from './color_depth'
 import getDeviceMemory from './device_memory'

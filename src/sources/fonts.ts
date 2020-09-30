@@ -1,3 +1,5 @@
+const d = document
+
 // a font will be compared against all the three default fonts.
 // and if it doesn't match all 3 then that font is not available.
 const baseFonts = ['monospace', 'sans-serif', 'serif'] as const
@@ -82,20 +84,20 @@ const testSize = '48px'
 
 // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
 export default function getFonts(): string[] {
-  const h = document.body
+  const h = d.body
 
   // div to load spans for the base fonts
-  const baseFontsDiv = document.createElement('div')
+  const baseFontsDiv = d.createElement('div')
 
   // div to load spans for the fonts to detect
-  const fontsDiv = document.createElement('div')
+  const fontsDiv = d.createElement('div')
 
   const defaultWidth: Partial<Record<string, number>> = {}
   const defaultHeight: Partial<Record<string, number>> = {}
 
   // creates a span where the fonts will be loaded
   const createSpan = () => {
-    const s = document.createElement('span')
+    const s = d.createElement('span')
 
     Object.assign(
       s.style,
