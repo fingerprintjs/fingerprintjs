@@ -44,6 +44,16 @@ export interface GetResult {
   components: BuiltinComponents
 }
 
+/**
+ * Agent object that can get visitor identifier
+ */
+export interface Agent {
+  /**
+   * Gets the visitor identifier
+   */
+  get(options?: Readonly<GetOptions>): Promise<GetResult>
+}
+
 export function componentsToCanonicalString(components: UnknownComponents) {
   let result = ''
   for (const componentKey of Object.keys(components)) {
@@ -93,23 +103,13 @@ function makeLazyGetResult<T extends UnknownComponents>(components: T) {
   }
 }
 
-export default class Fingerprint {
+/**
+ * The class isn't exported to not expose the constructor.
+ * The hiding gives more freedom for future non-breaking updates.
+ */
+class OpenAgent implements Agent {
   /**
-   * Blocks creating without `load()`.
-   * The block gives more freedom for future non-breaking updates.
-   */
-  private constructor() {}
-
-  /**
-   * Builds an instance of Fingerprint class and waits a delay required for a proper operation.
-   */
-  public static async load({ delayFallback = 50 }: Readonly<LoadOptions> = {}): Promise<Fingerprint> {
-    await requestIdleCallbackIfAvailable(delayFallback)
-    return new Fingerprint()
-  }
-
-  /**
-   * Gets the visitor identifier
+   * @inheritDoc
    */
   public async get(options: Readonly<GetOptions> = {}): Promise<GetResult> {
     const components = await getBuiltinComponents()
@@ -128,4 +128,12 @@ components: ${componentsToDebugString(components)}
 
     return result
   }
+}
+
+/**
+ * Builds an instance of Agent and waits a delay required for a proper operation.
+ */
+export async function load({ delayFallback = 50 }: Readonly<LoadOptions> = {}): Promise<Agent> {
+  await requestIdleCallbackIfAvailable(delayFallback)
+  return new OpenAgent()
 }

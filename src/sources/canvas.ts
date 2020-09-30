@@ -1,25 +1,22 @@
-let canvas: HTMLCanvasElement
-let context: CanvasRenderingContext2D
-
-function init() {
-  canvas = document.createElement('canvas')
+function makeCanvasContext() {
+  const canvas = document.createElement('canvas')
   canvas.width = 240
   canvas.height = 140
   canvas.style.display = 'inline'
-  const maybeContext = canvas.getContext('2d')
-  if (maybeContext) {
-    context = maybeContext
-  }
+  return [canvas, canvas.getContext('2d')] as const
 }
 
-function save() {
-  // TODO: look into: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob
-  return canvas.toDataURL()
-}
-
-function isSupported() {
+function isSupported(
+  canvas: HTMLCanvasElement,
+  context?: CanvasRenderingContext2D | null,
+): context is CanvasRenderingContext2D {
   // TODO: look into: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob
   return !!(context && canvas.toDataURL)
+}
+
+function save(canvas: HTMLCanvasElement) {
+  // TODO: look into: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob
+  return canvas.toDataURL()
 }
 
 export interface CanvasFingerprint {
@@ -29,8 +26,8 @@ export interface CanvasFingerprint {
 
 // https://www.browserleaks.com/canvas#how-does-it-work
 export default function getCanvasFingerprint(): CanvasFingerprint {
-  init()
-  if (!isSupported()) {
+  const [canvas, context] = makeCanvasContext()
+  if (!isSupported(canvas, context)) {
     return { winding: false, data: '' }
   }
 
@@ -39,7 +36,7 @@ export default function getCanvasFingerprint(): CanvasFingerprint {
   // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/winding.js
   context.rect(0, 0, 10, 10)
   context.rect(2, 2, 6, 6)
-  const winding = context.isPointInPath(5, 5, 'evenodd')
+  const winding = !context.isPointInPath(5, 5, 'evenodd')
 
   context.textBaseline = 'alphabetic'
   context.fillStyle = '#f60'
@@ -51,10 +48,11 @@ export default function getCanvasFingerprint(): CanvasFingerprint {
   // the choice of emojis has a gigantic impact on rendering performance (especially in FF)
   // some newer emojis cause it to slow down 50-200 times
   // context.fillText("Cw爨m fjordbank \ud83d\ude03 gly", 2, 15)
-  context.fillText('Cwm fjordbank \ud83d\ude03 gly', 2, 15)
+  const printedText = 'Cwm fjordbank \ud83d\ude03 gly'
+  context.fillText(printedText, 2, 15)
   context.fillStyle = 'rgba(102, 204, 0, 0.2)'
   context.font = '18pt Arial'
-  context.fillText('Cwm fjordbank \ud83d\ude03 gly', 4, 45)
+  context.fillText(printedText, 4, 45)
 
   // canvas blending
   // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
@@ -85,6 +83,6 @@ export default function getCanvasFingerprint(): CanvasFingerprint {
 
   return {
     winding,
-    data: save()
+    data: save(canvas)
   }
 }

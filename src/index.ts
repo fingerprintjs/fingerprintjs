@@ -1,5 +1,12 @@
-export { default as Fingerprint, LoadOptions, GetOptions, GetResult, componentsToCanonicalString, componentsToDebugString } from './fingerprint'
-export * from './fingerprint'
+export {
+  load,
+  Agent,
+  LoadOptions,
+  GetOptions,
+  GetResult,
+  componentsToCanonicalString,
+  componentsToDebugString,
+} from './agent'
 export { Component, UnknownComponents, BuiltinComponents } from './sources'
 export { x64hash128 as getHash } from './utils/hashing'
 

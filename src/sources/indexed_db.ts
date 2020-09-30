@@ -1,4 +1,4 @@
-import { isIEOrOldEdge } from '..';
+import { isIEOrOldEdge } from '../utils/browser'
 
 export default function getIndexedDB(): boolean | undefined {
   // IE and Edge don't allow accessing indexedDB in private mode, therefore IE and Edge will have different
