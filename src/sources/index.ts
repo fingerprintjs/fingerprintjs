@@ -104,7 +104,10 @@ export type Component<T> = ({
 export type UnknownComponents = Record<string, Component<unknown>>
 
 /**
- * Converts an entropy source list type to a corresponding component list type
+ * Converts an entropy source list type to a corresponding component list type.
+ *
+ * Warning for package users:
+ * This type is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export type SourcesToComponents<TSources extends UnknownSources<any>> = {
   [K in keyof TSources]: Component<SourceValue<TSources[K]>>
@@ -122,6 +125,9 @@ export type BuiltinComponents = SourcesToComponents<typeof sources>
 
 /**
  * Gets a components list from the given list of entropy sources.
+ *
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export async function getComponents<TSourceOptions, TSources extends UnknownSources<TSourceOptions>, TExclude extends string>(
   sources: TSources,

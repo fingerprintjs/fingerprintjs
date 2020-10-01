@@ -9,7 +9,10 @@ const n = navigator
 const d = document
 
 /**
- * Checks whether the browser is Internet Explorer or pre-Chromium Edge without using user-agent
+ * Checks whether the browser is Internet Explorer or pre-Chromium Edge without using user-agent.
+ *
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function isIEOrOldEdge(): boolean {
   // The properties are checked to be in IE 10, IE 11 and Edge 18 and not to be in other browsers
@@ -21,7 +24,10 @@ export function isIEOrOldEdge(): boolean {
 }
 
 /**
- * Checks whether the browser is based on Chromium without using user-agent
+ * Checks whether the browser is based on Chromium without using user-agent.
+ *
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function isChromium(): boolean {
   // Based on research in September 2020
@@ -52,12 +58,21 @@ export function isWebKit(): boolean {
   ]) >= 4
 }
 
+/**
+ * Checks whether the WebKit browser is a desktop Safari.
+ *
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
+ */
 export function isDesktopSafari(): boolean {
   return 'safari' in w
 }
 
 /**
- * Checks whether the browser is based on Gecko (Firefox engine) without using user-agent
+ * Checks whether the browser is based on Gecko (Firefox engine) without using user-agent.
+ *
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function isGecko(): boolean {
   // Based on research in September 2020

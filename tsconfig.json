@@ -1,10 +1,8 @@
 {
   "compilerOptions": {
-    "outDir": "dist/",
     "module": "esnext",
     "moduleResolution": "node",
     "target": "es6",
-    "declaration": true,
     "removeComments": false,
     "resolveJsonModule": true,
     "noErrorTruncation": true,
