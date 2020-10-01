@@ -1,4 +1,4 @@
-import { version } from '../package.json' // todo: Check that nothing else from package.json gets into the bundles
+import { version } from '../package.json'
 import { requestIdleCallbackIfAvailable } from './utils/async'
 import { x64hash128 } from './utils/hashing'
 import getBuiltinComponents, { BuiltinComponents, UnknownComponents } from './sources'
