@@ -5,6 +5,7 @@
     "target": "es6",
     "removeComments": false,
     "resolveJsonModule": true,
+    "importHelpers": true,
     "noErrorTruncation": true,
     "strict": true,
     "noUnusedLocals": true,

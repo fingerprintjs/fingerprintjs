@@ -134,6 +134,9 @@ components: ${componentsToDebugString(components)}
  * Builds an instance of Agent and waits a delay required for a proper operation.
  */
 export async function load({ delayFallback = 50 }: Readonly<LoadOptions> = {}): Promise<Agent> {
+  // A delay is required to ensure consistent entropy components.
+  // See https://github.com/fingerprintjs/fingerprintjs/issues/254
+  // and https://github.com/fingerprintjs/fingerprintjs/issues/307
   await requestIdleCallbackIfAvailable(delayFallback)
   return new OpenAgent()
 }
