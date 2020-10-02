@@ -1,5 +1,9 @@
+# Project products
+/dist/
+/node_modules/
+/playground/dist/
+
+# Random excess stuff
 .DS_Store
 .idea/
 .vscode/
-/dist/
-/node_modules/

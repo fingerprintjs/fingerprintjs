@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title><%= htmlWebpackPlugin.options.title %></title>
+  <style>
+    html, body {
+      display: flex;
+      min-height: 100%;
+      flex: 1;
+    }
+    body {
+      color: #333;
+      font-family: sans-serif;
+      padding: 0;
+    }
+    main {
+      margin: auto;
+      max-width: 800px;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      margin: 0 0 1.3em;
+      color: #393e9e;
+    }
+    .visitorIdHeader {
+      font-size: 16px;
+      color: #999;
+    }
+    .visitorId {
+      font-size: 24px;
+      font-weight: 500;
+      font-family: monospace;
+      word-break: break-all;
+    }
+    .visitorId.loading {
+      opacity: 0.3;
+      font-family: inherit;
+    }
+    .hint {
+      font-size: 14px;
+      margin-top: 2em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>FingerprintJS</h1>
+    <div class="visitorIdHeader">Visitor ID:</div>
+    <div class="visitorId loading">Getting the visitor ID...</div>
+    <div class="hint">See the browser console for debug data.</div>
+  </main>
+</body>
+</html>

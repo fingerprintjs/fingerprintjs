@@ -33,12 +33,7 @@ const commonOutput = {
   name: 'FingerprintJS',
 }
 
-const commonTerser = terserPlugin({
-  format: {
-    comments: false,
-  },
-  safari10: true,
-})
+const commonTerser = terserPlugin(require('./terser.config.js'))
 
 module.exports = [
   // Browser bundles. They have all the dependencies included for convenience.

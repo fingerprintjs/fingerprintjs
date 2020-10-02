@@ -47,13 +47,34 @@ Using undocumented features is at you own risk.
 
 ## Contribution
 
-### How to build
+### Development playground
 
 ```bash
 # Make sure you have Yarn installed
 yarn install
+yarn playground:start # Add '--port 8765' to change the server port
+```
+
+Then open http://localhost:8080 in a browser.
+It's reloaded every time the source code is changed.
+
+To build the playground distribution code (e.g. to upload to a static server), run:
+
+```bash
+yarn playground:build
+```
+
+The result will appear at `playground/dist`.
+
+### How to build
+
+To build the distribution files of the library, run:
+
+```bash
 yarn build
 ```
+
+The files will appear at `dist`.
 
 ### How to publish
 
