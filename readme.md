@@ -18,6 +18,9 @@ Work in progress, stay tuned.
 ></script>
 ```
 
+A simple way to start but not recommended because AdBlock and similar browser extensions often block this URL.
+You should at least upload the script to your server.
+
 ### Webpack/Rollup/Browserify
 
 ```bash
@@ -56,7 +59,9 @@ yarn build
 
 1. Bump the version. Changing the number in [package.json](package.json) is enough.
 2. Build the project.
-3. Run
+3. See what's will get into the NPM package, make sure it contains the distributive files and no excess files.
+    To see, run `yarn pack`, an archive will appear nearby, open it with any archive browser.
+4. Run
     ```bash
     yarn publish --access public # Add '--tag beta' (without the quotes) if you release a beta version
     ```

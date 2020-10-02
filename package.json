@@ -10,7 +10,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "rimraf dist && rollup -c"
+    "build": "rimraf dist && rollup -c",
+    "build:watch": "yarn build --watch"
   },
   "dependencies": {
     "tslib": "^2.0.1"
