@@ -16,7 +16,8 @@
     "playground:build": "cd playground && webpack --mode production",
     "test:karma": "karma start karma.config.js --single-run",
     "test:chrome": "yarn run test:karma --browsers ChromeHeadless",
-    "test:firefox": "yarn run test:karma --browsers FirefoxHeadless"
+    "test:firefox": "yarn run test:karma --browsers FirefoxHeadless",
+    "test:browserstack": "yarn run test:karma --browsers BS_Edge18,BS_Windows10_Chrome85,BS_iOS10_Safari"
   },
   "dependencies": {
     "tslib": "^2.0.1"
@@ -29,6 +30,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "html-webpack-plugin": "^4.5.0",
     "karma": "^5.2.3",
+    "karma-browserstack-launcher": "^1.6.0",
     "karma-chrome-launcher": "^3.1.0",
     "karma-firefox-launcher": "^1.3.0",
     "karma-jasmine": "^4.0.1",

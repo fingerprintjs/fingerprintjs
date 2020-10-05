@@ -76,6 +76,25 @@ yarn build
 
 The files will appear at `dist`.
 
+### How to test
+
+There are automatic tests.
+They are run by [Jasmine](https://jasmine.github.io) in real browsers using [Karma](https://karma-runner.github.io).
+
+To run the tests in a browser on your machine, run:
+```bash
+yarn test:chrome
+# or
+yarn test:firefox
+```
+
+To run the tests in browsers on [BrowserStack](https://www.browserstack.com), get a BrowserStack access key and run:
+```bash
+# For Linux, macOS and built-in Linux on Windows
+BROWSERSTACK_USERNAME=your-username BROWSERSTACK_ACCESS_KEY=your-key yarn test:browserstack
+```
+Or make a PR to this repository, the test will run in BrowserStack automatically.
+
 ### How to publish
 
 1. Bump the version. Changing the number in [package.json](package.json) is enough.

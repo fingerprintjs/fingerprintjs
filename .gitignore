@@ -1,7 +1,11 @@
-# Project products
+# Project artifacts
 /dist/
 /node_modules/
 /playground/dist/
+
+# Project logs and reports
+/browserstack.err
+/local.log
 
 # Random excess stuff
 .DS_Store
