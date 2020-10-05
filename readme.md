@@ -33,7 +33,7 @@ import * as FPJS from '@fingerprintjs/fingerprintjs';
 (async () => {
   const fpjs = await FPJS.load();
   const { visitorId } = await fpjs.get();
-  console.log(visitorId)
+  console.log(visitorId);
 })();
 ```
 
