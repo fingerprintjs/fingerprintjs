@@ -17,7 +17,7 @@
     "test:karma": "karma start karma.config.js --single-run",
     "test:chrome": "yarn run test:karma --browsers ChromeHeadless",
     "test:firefox": "yarn run test:karma --browsers FirefoxHeadless",
-    "test:browserstack": "yarn run test:karma --browsers BS_Edge18,BS_Windows10_Chrome85,BS_iOS10_Safari"
+    "test:browserstack": "yarn run test:karma --browsers BS_Edge18,BS_Windows10_Edge85,BS_Windows10_Chrome85,BS_iOS10_Safari"
   },
   "dependencies": {
     "tslib": "^2.0.1"
@@ -27,6 +27,7 @@
     "@rollup/plugin-node-resolve": "^9.0.0",
     "@rollup/plugin-typescript": "^6.0.0",
     "@types/jasmine": "^3.5.14",
+    "@types/ua-parser-js": "^0.7.33",
     "clean-webpack-plugin": "^3.0.0",
     "html-webpack-plugin": "^4.5.0",
     "karma": "^5.2.3",
@@ -43,6 +44,7 @@
     "terser-webpack-plugin": "^4.2.2",
     "ts-loader": "^8.0.4",
     "typescript": "^4.0.3",
+    "ua-parser-js": "^0.7.22",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"

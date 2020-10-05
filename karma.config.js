@@ -3,6 +3,7 @@
 // The keys are arbitrary values.
 const browserstackBrowsers = {
   Edge18: { os: 'Windows', os_version: '10', browser: 'Edge', browser_version: '18.0' },
+  Windows10_Edge85: { os: 'Windows', os_version: '10', browser: 'Edge', browser_version: '85.0' },
   Windows10_Chrome85: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: '85.0' },
   iOS10_Safari: { device: 'iPhone 7', os: 'iOS', os_version: '10', browser: 'Safari' },
 }
@@ -12,7 +13,6 @@ module.exports = (config) => {
   for (const [key, data] of Object.entries(browserstackBrowsers)) {
     customLaunchers[`BS_${key}`] = {
       base: 'BrowserStack',
-      'browserstack.video': false,
       ...data,
     }
   }
@@ -21,6 +21,7 @@ module.exports = (config) => {
     frameworks: ['jasmine', 'karma-typescript'],
     files: [
       'src/**/*.ts',
+      'tests/**/*.ts',
     ],
     preprocessors: {
       '**/*.ts': 'karma-typescript',
@@ -32,6 +33,7 @@ module.exports = (config) => {
       project: 'FingerprintJS',
       build: process.env.GITHUB_RUN_ID, // GitHub Actions will add this value. More on the environment variables:
       // https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables#default-environment-variables
+      video: false,
     },
     browsers: ['ChromeHeadless', 'FirefoxHeadless', ...Object.keys(customLaunchers)],
     customLaunchers,
