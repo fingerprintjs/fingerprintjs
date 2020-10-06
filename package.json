@@ -17,7 +17,7 @@
     "test:karma": "karma start karma.config.js --single-run",
     "test:chrome": "yarn run test:karma --browsers ChromeHeadless",
     "test:firefox": "yarn run test:karma --browsers FirefoxHeadless",
-    "test:browserstack": "yarn run test:karma --browsers BS_Edge18,BS_Windows10_Edge85,BS_Windows10_Chrome85,BS_iOS10_Safari"
+    "test:browserstack": "yarn run test:karma --browsers BS_Edge18,BS_Windows10_Edge85,BS_Windows10_Chrome85,Windows10_Firefox81,BS_iOS10_Safari"
   },
   "dependencies": {
     "tslib": "^2.0.1"
