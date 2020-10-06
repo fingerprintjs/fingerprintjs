@@ -2,7 +2,7 @@ const makeLocalConfig = require('./karma.local.config')
 
 // The shapes of these objects are taken from:
 // https://github.com/SeleniumHQ/selenium/tree/d8ddb4d83972df0f565ef65264bcb733e7a94584/javascript/node/selenium-webdriver
-// It doesn't work, trying to work it out with BrowserStack support.
+// It doesn't work, trying to work it out with BrowserStack support. Todo: solve it with the support.
 const chromeIncognitoCapabilities = {
   'goog:chromeOptions': {
     args: ['--incognito'],
@@ -37,13 +37,14 @@ const browserstackBrowsers = {
   OSXCatalina_FirefoxLatest: { os: 'OS X', os_version: 'Catalina', browser: 'Firefox', browser_version: 'latest' },
   // OSXCatalina_FirefoxLatest_Incognito: { os: 'OS X', os_version: 'Catalina', browser: 'Firefox', browser_version: 'latest', ...firefoxIncognitoCapabilities },
   OSXCatalina_EdgeLatest: { os: 'OS X', os_version: 'Catalina', browser: 'Edge', browser_version: 'latest' },
+  // Android don't start and hang infinitely, the issue is addressed to BrowserStack support. Todo: solve it with the support.
+  // Android10_Google85: { device: 'Google Pixel 3', os: 'Android', os_version: '10', browser: 'Chrome', browser_version: '85.0' },
+  // Android10_Samsung12: { device: 'Samsung Galaxy S20', os: 'Android', os_version: '10', browser: 'Samsung', browser_version: '12.0' },
   iOS10_Safari: { device: 'iPhone 7', os: 'iOS', os_version: '10', browser: 'Safari' },
   iOS11_Safari: { device: 'iPhone 8 Plus', os: 'iOS', os_version: '11', browser: 'Safari' },
   iOS12_Safari: { device: 'iPhone XS', os: 'iOS', os_version: '12', browser: 'Safari' },
   iOS13_Safari: { device: 'iPhone 11 Pro', os: 'iOS', os_version: '13', browser: 'Safari' },
   iOS14_Safari: { device: 'iPhone 11', os: 'iOS', os_version: '14', browser: 'Safari' },
-  Android10_Google85: { device: 'Google Pixel 3', os: 'Android', os_version: '10', browser: 'Chrome', browser_version: '85.0' },
-  Android10_Samsung12: { device: 'Samsung Galaxy S20', os: 'Android', os_version: '10', browser: 'Samsung', browser_version: '12.0' },
 }
 
 module.exports = (config) => {
