@@ -81,7 +81,7 @@ The files will appear at `dist`.
 There are automatic tests.
 They are run by [Jasmine](https://jasmine.github.io) in real browsers using [Karma](https://karma-runner.github.io).
 
-To run the tests in a browser on your machine, run:
+To run the tests in a browser on your machine, build the project and run:
 ```bash
 yarn test:local:chrome
 # or

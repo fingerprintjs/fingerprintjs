@@ -5,6 +5,7 @@ module.exports = (config) => {
     files: [
       'src/**/*.ts',
       'tests/**/*.ts',
+      'dist/fp.min.js',
     ],
     preprocessors: {
       '**/*.ts': 'karma-typescript',
