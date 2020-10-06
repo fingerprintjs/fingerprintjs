@@ -83,9 +83,9 @@ They are run by [Jasmine](https://jasmine.github.io) in real browsers using [Kar
 
 To run the tests in a browser on your machine, run:
 ```bash
-yarn test:chrome
+yarn test:local:chrome
 # or
-yarn test:firefox
+yarn test:local:firefox
 ```
 
 To run the tests in browsers on [BrowserStack](https://www.browserstack.com), get a BrowserStack access key and run:

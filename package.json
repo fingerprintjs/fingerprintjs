@@ -14,10 +14,10 @@
     "build:watch": "yarn build --watch",
     "playground:start": "cd playground && webpack-dev-server --mode development",
     "playground:build": "cd playground && webpack --mode production",
-    "test:karma": "karma start karma.config.js --single-run",
-    "test:chrome": "yarn run test:karma --browsers ChromeHeadless",
-    "test:firefox": "yarn run test:karma --browsers FirefoxHeadless",
-    "test:browserstack": "yarn run test:karma --browsers BS_Edge18,BS_Windows10_Edge85,BS_Windows10_Chrome85,Windows10_Firefox81,BS_iOS10_Safari"
+    "test:local": "karma start tests/karma.local.config.js --single-run",
+    "test:local:chrome": "yarn run test:local --browsers ChromeHeadless",
+    "test:local:firefox": "yarn run test:local --browsers FirefoxHeadless",
+    "test:browserstack": "karma start tests/karma.browserstack.config.js --single-run"
   },
   "dependencies": {
     "tslib": "^2.0.1"
