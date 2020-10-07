@@ -10,7 +10,7 @@ module.exports = (config) => {
     preprocessors: {
       '**/*.ts': 'karma-typescript',
     },
-    reporters: ['progress', 'karma-typescript'],
+    reporters: ['spec', 'summary'],
     browsers: ['ChromeHeadless', 'FirefoxHeadless'],
 
     karmaTypescriptConfig: {
@@ -19,7 +19,17 @@ module.exports = (config) => {
         module: 'commonjs',
         sourceMap: true,
       },
-      reports: {}, // Disables the code coverage reports
+    },
+
+    specReporter: {
+      suppressErrorSummary: true,
+      suppressPassed: true,
+      suppressSkipped: true,
+      // todo: Suppress the summary completely when https://github.com/mlex/karma-spec-reporter/issues/83 is solved
+    },
+
+    summaryReporter: {
+      show: 'skipped', // To know that some tests are skipped exactly where they are supposed to be skipped
     },
   })
 }

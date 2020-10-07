@@ -20,5 +20,5 @@ describe('Integration', () => {
     expect(result).toBeInstanceOf(Object)
     expect(typeof result.visitorId).toBe('string')
     expect(result.components).toBeInstanceOf(Object)
-  })
+  }, 10000) // Such tests can take too much time to complete on BrowserStack
 })

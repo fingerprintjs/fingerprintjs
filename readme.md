@@ -95,10 +95,13 @@ BROWSERSTACK_USERNAME=your-username BROWSERSTACK_ACCESS_KEY=your-key yarn test:b
 ```
 Or make a PR to this repository, the test will run in BrowserStack automatically.
 
+Unit test files are located right next to individual module files that they check.
+Integration tests are located in the `tests` directory.
+
 ### How to publish
 
 1. Bump the version. Changing the number in [package.json](package.json) is enough.
-2. Build the project.
+2. Build and test the project.
 3. See what's will get into the NPM package, make sure it contains the distributive files and no excess files.
     To see, run `yarn pack`, an archive will appear nearby, open it with any archive browser.
 4. Run

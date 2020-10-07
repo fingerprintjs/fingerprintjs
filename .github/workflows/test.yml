@@ -1,0 +1,26 @@
+# Reference on this file: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+name: Test
+on:
+  push:
+      branches:
+        - master
+        - v3 # todo: Remove when v3 is merged into master
+  pull_request:
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Install Node packages
+        run: yarn install
+      - name: Build
+        run: yarn build
+      - name: Test on BrowserStack
+        env:
+          # This is in plaintext on purpose. It has no privileged access to anything (this is a free account)
+          # and it allows us to run browserstack tests against PRs.
+          BROWSERSTACK_USERNAME: github13kRcPC
+          BROWSERSTACK_ACCESS_KEY: jwzxfCyPrV1m9qapGi5M
+        run: yarn test:browserstack
