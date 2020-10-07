@@ -12,7 +12,9 @@ describe('Agent', () => {
     expect(expectedComponents.length).toBeGreaterThan(10) // To check the test itself
     expect(Object.keys(result.components).sort()).toEqual(expectedComponents)
     for (const componentName of expectedComponents) {
-      expect(result.components[componentName].error).withContext(`${componentName} error`).toBeUndefined()
+      expect(result.components[componentName].error)
+        .withContext(`Unexpected error in the "${componentName}" component`)
+        .toBeUndefined()
     }
   })
 })

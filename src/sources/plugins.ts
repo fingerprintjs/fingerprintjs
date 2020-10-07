@@ -16,7 +16,9 @@ export default function getPlugins(): PluginData[] | undefined {
 
   const plugins: PluginData[] = []
 
-  for (const plugin of navigator.plugins) {
+  // Safari 10 doesn't support iterating navigator.plugins with for...of
+  for (let i = 0; i < navigator.plugins.length; ++i) {
+    const plugin = navigator.plugins[i]
     if (!plugin) {
       continue
     }

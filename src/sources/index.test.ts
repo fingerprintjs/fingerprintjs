@@ -25,8 +25,8 @@ describe('Sources', () => {
     it('measures duration', async () => {
       const sources = {
         instant: () => true,
-        delayedResult: () => new Promise((resolve) => setTimeout(resolve, 5)),
-        delayedError: () => new Promise((_resolve, reject) => setTimeout(() => reject('test'), 5)),
+        delayedResult: () => new Promise((resolve) => setTimeout(resolve, 10)),
+        delayedError: () => new Promise((_resolve, reject) => setTimeout(() => reject('test'), 10)),
       }
       const components = await getComponents(sources, undefined, [])
       expect(components.instant.duration).toBeLessThanOrEqual(1)
