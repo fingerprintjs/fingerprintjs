@@ -1,7 +1,7 @@
 import { isEdgeHTML } from '../../tests/utils'
 import getIndexedDB from './indexed_db'
 
-describe('Source', () => {
+describe('Sources', () => {
   describe('indexedDB', () => {
     it('returns boolean everywhere except Edge', () => {
       if (isEdgeHTML()) {

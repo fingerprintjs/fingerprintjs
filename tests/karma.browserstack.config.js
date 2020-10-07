@@ -47,6 +47,10 @@ const browserstackBrowsers = {
   iOS14_Safari: { device: 'iPhone 11', os: 'iOS', os_version: '14', browser: 'Safari' },
 }
 
+function makeBuildNumber() {
+  return `No CI ${Math.floor(Math.random() * 1e10)}`
+}
+
 module.exports = (config) => {
   makeLocalConfig(config)
 
@@ -63,7 +67,9 @@ module.exports = (config) => {
     reporters: [...config.reporters, 'BrowserStack'],
     browserStack: {
       project: 'FingerprintJS',
-      build: process.env.GITHUB_RUN_ID, // GitHub Actions will add this value. More on the environment variables:
+      build: process.env.GITHUB_RUN_ID || makeBuildNumber(),
+      // A build number is required to group testing sessions in the BrowserStack UI.
+      // GitHub Actions will add a value for GITHUB_RUN_ID. More on the environment variables:
       // https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables#default-environment-variables
     },
     browsers: Object.keys(customLaunchers),
