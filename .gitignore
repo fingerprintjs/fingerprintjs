@@ -3,7 +3,7 @@
 /node_modules/
 /playground/dist/
 
-# Project logs and reports
+# Unwanted BrowserStack logs: https://github.com/karma-runner/karma-browserstack-launcher/issues/181
 /browserstack.err
 /local.log
 

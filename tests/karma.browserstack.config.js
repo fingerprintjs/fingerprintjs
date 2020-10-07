@@ -52,7 +52,7 @@ module.exports = (config) => {
 
   const customLaunchers = {}
   for (const [key, data] of Object.entries(browserstackBrowsers)) {
-    customLaunchers[`BS_${key}`] = {
+    customLaunchers[key] = {
       base: 'BrowserStack',
       name: key.replace(/_/g, ' '),
       ...data,
@@ -62,8 +62,6 @@ module.exports = (config) => {
   config.set({
     reporters: [...config.reporters, 'BrowserStack'],
     browserStack: {
-      username: process.env.BROWSERSTACK_USERNAME,
-      accessKey: process.env.BROWSERSTACK_ACCESS_KEY,
       project: 'FingerprintJS',
       build: process.env.GITHUB_RUN_ID, // GitHub Actions will add this value. More on the environment variables:
       // https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables#default-environment-variables
