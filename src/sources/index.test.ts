@@ -29,9 +29,9 @@ describe('Sources', () => {
         delayedError: () => new Promise((_resolve, reject) => setTimeout(() => reject('test'), 10)),
       }
       const components = await getComponents(sources, undefined, [])
-      expect(components.instant.duration).toBeLessThanOrEqual(1)
-      expect(components.delayedResult.duration).toBeGreaterThanOrEqual(5)
-      expect(components.delayedError.duration).toBeGreaterThanOrEqual(5)
+      expect(components.instant.duration).toBeLessThan(5)
+      expect(components.delayedResult.duration).toBeGreaterThan(5)
+      expect(components.delayedError.duration).toBeGreaterThan(5)
     })
 
     it('excludes', async () => {

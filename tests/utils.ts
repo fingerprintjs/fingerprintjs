@@ -14,3 +14,35 @@ import { UAParser } from 'ua-parser-js'
 export function isEdgeHTML() {
   return new UAParser().getEngine().name === 'EdgeHTML'
 }
+
+/**
+ * Sets new property values to the object and reverts the properties when the action is complete
+ */
+export async function withMockProperties<T>(
+  object: object,
+  mockProperties: Record<string, PropertyDescriptor>,
+  action: () => Promise<T> | T
+): Promise<T> {
+  const originalProperties: Record<string, PropertyDescriptor | undefined> = {}
+
+  for (const property of Object.keys(mockProperties)) {
+    originalProperties[property] = Object.getOwnPropertyDescriptor(object, property)
+    Object.defineProperty(object, property, {
+      ...mockProperties[property],
+      configurable: true, // Must be configurable, otherwise won't be able to revert
+    })
+  }
+
+  try {
+    return await action()
+  } finally {
+    for (const property of Object.keys(originalProperties)) {
+      const propertyDescriptor = originalProperties[property]
+      if (propertyDescriptor === undefined) {
+        delete (object as any)[property]
+      } else {
+        Object.defineProperty(object, property, propertyDescriptor)
+      }
+    }
+  }
+}
