@@ -16,30 +16,31 @@ const firefoxIncognitoCapabilities = {
   },
 }
 
-// You can find values for any supported browsers in the interactive form at
-// https://www.browserstack.com/docs/automate/javascript-testing/configure-test-run-options
-// The keys are arbitrary values.
+/* You can find values for any supported browsers in the interactive form at
+ * https://www.browserstack.com/docs/automate/javascript-testing/configure-test-run-options
+ * The keys are arbitrary values.
+ *
+ * Only Chrome is supported on Android, only Safari is supported on iOS: https://www.browserstack.com/question/659
+ */
 const browserstackBrowsers = {
   Edge18: { os: 'Windows', os_version: '10', browser: 'Edge', browser_version: '18.0' },
-  Windows10_EdgeLatest: { os: 'Windows', os_version: '10', browser: 'Edge', browser_version: 'latest' },
+  Windows10_EdgeLatest: { os: 'Windows', os_version: '10', browser: 'Edge' },
   Windows10_Chrome84: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: '84.0' },
   // Windows10_Chrome84_Incognito: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: '84.0', ...chromeIncognitoCapabilities },
-  Windows10_ChromeLatest: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: 'latest' },
-  // Windows10_ChromeLatest_Incognito: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: 'latest', ...chromeIncognitoCapabilities },
+  Windows10_ChromeLatest: { os: 'Windows', os_version: '10', browser: 'Chrome' },
+  // Windows10_ChromeLatest_Incognito: { os: 'Windows', os_version: '10', browser: 'Chrome', ...chromeIncognitoCapabilities },
   Windows10_Firefox80: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: '80.0' },
   // Windows10_Firefox80_Incognito: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: '80.0', ...firefoxIncognitoCapabilities },
-  Windows10_FirefoxLatest: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: 'latest' },
-  // Windows10_FirefoxLatest_Incognito: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: 'latest', ...firefoxIncognitoCapabilities },
+  Windows10_FirefoxLatest: { os: 'Windows', os_version: '10', browser: 'Firefox' },
+  // Windows10_FirefoxLatest_Incognito: { os: 'Windows', os_version: '10', browser: 'Firefox', ...firefoxIncognitoCapabilities },
   OSXMojave_Safari12: { os: 'OS X', os_version: 'Mojave', browser: 'Safari', browser_version: '12.1' },
   OSXCatalina_Safari13: { os: 'OS X', os_version: 'Catalina', browser: 'Safari', browser_version: '13.1' },
-  OSXCatalina_ChromeLatest: { os: 'OS X', os_version: 'Catalina', browser: 'Chrome', browser_version: 'latest' },
-  // OSXCatalina_ChromeLatest_Incognito: { os: 'OS X', os_version: 'Catalina', browser: 'Chrome', browser_version: 'latest', ...chromeIncognitoCapabilities },
-  OSXCatalina_FirefoxLatest: { os: 'OS X', os_version: 'Catalina', browser: 'Firefox', browser_version: 'latest' },
-  // OSXCatalina_FirefoxLatest_Incognito: { os: 'OS X', os_version: 'Catalina', browser: 'Firefox', browser_version: 'latest', ...firefoxIncognitoCapabilities },
-  OSXCatalina_EdgeLatest: { os: 'OS X', os_version: 'Catalina', browser: 'Edge', browser_version: 'latest' },
-  // Android don't start and hang infinitely, the issue is addressed to BrowserStack support. Todo: solve it with the support.
-  // Android10_Google85: { device: 'Google Pixel 3', os: 'Android', os_version: '10', browser: 'Chrome', browser_version: '85.0' },
-  // Android10_Samsung12: { device: 'Samsung Galaxy S20', os: 'Android', os_version: '10', browser: 'Samsung', browser_version: '12.0' },
+  OSXCatalina_ChromeLatest: { os: 'OS X', os_version: 'Catalina', browser: 'Chrome' },
+  // OSXCatalina_ChromeLatest_Incognito: { os: 'OS X', os_version: 'Catalina', browser: 'Chrome', ...chromeIncognitoCapabilities },
+  OSXCatalina_FirefoxLatest: { os: 'OS X', os_version: 'Catalina', browser: 'Firefox' },
+  // OSXCatalina_FirefoxLatest_Incognito: { os: 'OS X', os_version: 'Catalina', browser: 'Firefox', ...firefoxIncognitoCapabilities },
+  OSXCatalina_EdgeLatest: { os: 'OS X', os_version: 'Catalina', browser: 'Edge' },
+  Android10_ChromeLatest: { device: 'Google Pixel 3', os: 'Android', os_version: '10.0', browser: 'Chrome' },
   iOS10_Safari: { device: 'iPhone 7', os: 'iOS', os_version: '10', browser: 'Safari' },
   iOS11_Safari: { device: 'iPhone 8 Plus', os: 'iOS', os_version: '11', browser: 'Safari' },
   iOS12_Safari: { device: 'iPhone XS', os: 'iOS', os_version: '12', browser: 'Safari' },

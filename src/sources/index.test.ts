@@ -25,13 +25,13 @@ describe('Sources', () => {
     it('measures duration', async () => {
       const sources = {
         instant: () => true,
-        delayedResult: () => new Promise((resolve) => setTimeout(resolve, 10)),
-        delayedError: () => new Promise((_resolve, reject) => setTimeout(() => reject('test'), 10)),
+        delayedResult: () => new Promise((resolve) => setTimeout(resolve, 50)),
+        delayedError: () => new Promise((_resolve, reject) => setTimeout(() => reject('test'), 50)),
       }
       const components = await getComponents(sources, undefined, [])
-      expect(components.instant.duration).toBeLessThan(5)
-      expect(components.delayedResult.duration).toBeGreaterThan(5)
-      expect(components.delayedError.duration).toBeGreaterThan(5)
+      expect(components.instant.duration).toBeLessThan(25)
+      expect(components.delayedResult.duration).toBeGreaterThan(25)
+      expect(components.delayedError.duration).toBeGreaterThan(25)
     })
 
     it('excludes', async () => {
