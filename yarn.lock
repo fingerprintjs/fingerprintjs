@@ -3262,10 +3262,10 @@ karma-spec-reporter@^0.0.32:
   dependencies:
     colors "^1.1.2"
 
-karma-summary-reporter@^1.8.0:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/karma-summary-reporter/-/karma-summary-reporter-1.8.0.tgz#bf2c66a223fbe9999dc09e5911c50f0df75ff725"
-  integrity sha512-M+xYhdCp2mZN89tr/Ux53btmIMgOUIx5ELlNWI/L3q3vnV38wKXubdhyhLjFS8lrWqSGLQsPEoJpJCkHFUvuRA==
+karma-summary-reporter@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/karma-summary-reporter/-/karma-summary-reporter-1.9.0.tgz#e0c2f97bbd0af5faed7ff5e37cf5b2dd10ff8306"
+  integrity sha512-aQ+GcHsj7bYR00mJTC/jSrVYt9GdmWv9JN1MtLSICOnfPaVBHFcFMPDdCkvb/ZIB2pb+VYwtRH+DjQ0yrTqfvQ==
   dependencies:
     chalk "^1.1.3 || 2.x"
 

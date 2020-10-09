@@ -15,8 +15,6 @@
     "playground:start": "cd playground && webpack-dev-server --mode development",
     "playground:build": "cd playground && webpack --mode production",
     "test:local": "karma start tests/karma.local.config.js --single-run",
-    "test:local:chrome": "yarn run test:local --browsers ChromeHeadless",
-    "test:local:firefox": "yarn run test:local --browsers FirefoxHeadless",
     "test:browserstack": "karma start tests/karma.browserstack.config.js --single-run"
   },
   "dependencies": {
@@ -36,7 +34,7 @@
     "karma-firefox-launcher": "^1.3.0",
     "karma-jasmine": "^4.0.1",
     "karma-spec-reporter": "^0.0.32",
-    "karma-summary-reporter": "^1.8.0",
+    "karma-summary-reporter": "^1.9.0",
     "karma-typescript": "^5.2.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.28.2",

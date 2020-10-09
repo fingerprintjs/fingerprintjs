@@ -16,7 +16,8 @@ const firefoxIncognitoCapabilities = {
   },
 }
 
-/* You can find values for any supported browsers in the interactive form at
+/*
+ * You can find values for any supported browsers in the interactive form at
  * https://www.browserstack.com/docs/automate/javascript-testing/configure-test-run-options
  * The keys are arbitrary values.
  *
