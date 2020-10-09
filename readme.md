@@ -76,7 +76,7 @@ Upgrade to [Pro version](https://fingerprintjs.com) to get 99.5% accuracy of ide
   </a>
 </p>
 
-| | Open source version | Pro version |
+| | Open Source version | Pro version |
 |-----|-------|-------|
 | Browser identification | Basic | Advanced |
 | Anonymous user identification | ❌ | ✅ |
@@ -160,7 +160,7 @@ API:
 
 - `FingerprintJS.getHash(value: string): string`
 
-- `FingerprintJS.componentsToCanonicalString(components: object): string`
+- `FingerprintJS.componentsToDebugString(components: object): string`
 
     Converts a dictionary of components (described above) to a human-friendly text.
 
@@ -174,42 +174,4 @@ Using undocumented features is at you own risk.
 
 ## Contribution
 
-### Development playground
-
-```bash
-# Make sure you have Yarn installed
-yarn install
-yarn playground:start # Add '--port 8765' to change the server port
-```
-
-Then open http://localhost:8080 in a browser.
-It's reloaded every time the source code is changed.
-
-To build the playground distribution code (e.g. to upload to a static server), run:
-
-```bash
-yarn playground:build
-```
-
-The result will appear at `playground/dist`.
-
-### How to build
-
-To build the distribution files of the library, run:
-
-```bash
-yarn build
-```
-
-The files will appear at `dist`.
-
-### How to publish
-
-1. Bump the version. Changing the number in [package.json](package.json) is enough.
-2. Build the project.
-3. See what's will get into the NPM package, make sure it contains the distributive files and no excess files.
-    To see, run `yarn pack`, an archive will appear nearby, open it with any archive browser.
-4. Run
-    ```bash
-    yarn publish --access public # Add '--tag beta' (without the quotes) if you release a beta version
-    ```
+See the [contribution guidelines](contributing.md) to know how to start a playground, test and build.
