@@ -34,7 +34,7 @@
   }
 </script>
 <script
-  async src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3.0.0-beta.2/dist/fp.min.js"
+  async src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
   onload="FingerprintJS.load().then(onFingerprintJSLoad)"
 ></script>
 ```
@@ -51,11 +51,11 @@ yarn add @fingerprintjs/fingerprintjs
 ```
 
 ```js
-import * as FPJS from '@fingerprintjs/fingerprintjs';
+import * as FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 (async () => {
   // It's good to call this when the application starts
-  const fpAgent = await FPJS.load();
+  const fpAgent = await FingerprintJS.load();
 
   // The FingerprintJS agent is ready. Get a visitor identifier when you'd like to.
   const result = await fpAgent.get();
@@ -102,7 +102,7 @@ Pro result example:
   "os": "Mac OS X",
   "osVersion": "10.15.6",
   "device": "Other",
-  "ipLocation": { /* ... */ }
+  "ipLocation": {/* ... */}
 }
 ```
 
@@ -111,6 +111,58 @@ Pro result example:
 ⏱ [How to upgrade from Open Source to Pro in 30 seconds]()
 
 📗 [FingerprintJS Pro documentation](https://dev.fingerprintjs.com)
+
+## Open version reference
+
+The library is shipped in various formats:
+
+- Plain JS
+    ```html
+    <script
+      async src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
+      onload="/* ... */"
+    ></script>
+    ```
+- UMD
+    ```js
+    require(['https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.umd.min'], FingerprintJS => {/* ... */});
+    ```
+- EcmaScript module
+    ```js
+    import * as FingerprintJS from '@fingerprintjs/fingerprintjs';
+    ```
+- CommonJS
+    ```js
+    const FingerprintJS = require('@fingerprintjs/fingerprintjs');
+    ```
+
+API:
+
+- `FingerprintJS.load({ delayFallback?: number }): Promise<Agent>`
+
+    Builds an instance of Agent and waits a delay required for a proper operation.
+    `delayFallback` is duration (ms) of the fallback for browsers that don't support [requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback).
+
+- `agent.get({ debug?: boolean }): Promise<{ visitorId: string, components: {/* ... */} }>`
+
+    Gets the visitor identifier.
+    `debug: true` prints debug messages to the console.
+    `visitorId` is the visitor identifier.
+    `components` is a dictionary of components that have formed the identifier;
+    each value is an object like `{ value: any, duration: number }` in case of success
+    and `{ error: object, duration: number }` in case of an unexpected error during getting the component.
+
+- `FingerprintJS.componentsToCanonicalString(components: object): string`
+
+    Converts a dictionary of components (described above) to a canonical string,
+    that can be passed to `getHash` to get a short identifier string.
+    Designed for extending the library with your own components.
+
+- `FingerprintJS.getHash(value: string): string`
+
+- `FingerprintJS.componentsToCanonicalString(components: object): string`
+
+    Converts a dictionary of components (described above) to a human-friendly text.
 
 ## Version policy
 
