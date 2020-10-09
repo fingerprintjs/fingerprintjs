@@ -1,15 +1,36 @@
-# FingerprintJS
-
-Work in progress, stay tuned.
+<p align="center">
+  <a href="https://fingerprintjs.com">
+    <img src="resources/logo.svg" alt="FingerprintJS" width="300px" />
+  </a>
+</p>
+<p align="center">
+  Browser fingerprinting solution
+</p>
+<p align="center">
+  <a href="https://github.com/fingerprintjs/fingerprintjs/actions?workflow=Test">
+    <img src="https://github.com/fingerprintjs/fingerprintjs/workflows/Test/badge.svg" alt="Build status">
+  </a>
+  <a href="https://www.npmjs.com/package/@fingerprintjs/fingerprintjs">
+    <img src="https://img.shields.io/npm/dt/fingerprintjs2.svg" alt="Total downloads from NPM">
+  </a>
+  <a href="https://www.npmjs.com/package/@fingerprintjs/fingerprintjs">
+    <img src="https://img.shields.io/npm/v/@fingerprintjs/fingerprintjs.svg" alt="Current NPM version">
+  </a>
+</p>
 
 ## Quick start
 
-### In browser
+### Install from CDN
 
 ```html
 <script>
-  function onFingerprintJSLoad(fp) {
-    fp.get().then(({ visitorId }) => console.log(visitorId));
+  function onFingerprintJSLoad(fpAgent) {
+    // The FingerprintJS agent is ready. Get a visitor identifier when you'd like to.
+    fpAgent.get().then(result => {
+      // This is the visitor identifier:
+      const visitorId = result.visitorId;
+      console.log(visitorId);
+    });
   }
 </script>
 <script
@@ -18,24 +39,78 @@ Work in progress, stay tuned.
 ></script>
 ```
 
-A simple way to start but not recommended because AdBlock and similar browser extensions often block this URL.
-You should at least upload the script to your server.
+This is a simple way to start but not recommended because AdBlock and other browser extensions can block the script.
+You should at least upload the script file to your server.
 
-### Webpack/Rollup/Browserify
+### Or from NPM and use with Webpack/Rollup/Browserify
 
 ```bash
 npm i @fingerprintjs/fingerprintjs
+# or
+yarn add @fingerprintjs/fingerprintjs
 ```
 
 ```js
 import * as FPJS from '@fingerprintjs/fingerprintjs';
 
 (async () => {
-  const fpjs = await FPJS.load();
-  const { visitorId } = await fpjs.get();
-  console.log(visitorId)
+  // It's good to call this when the application starts
+  const fpAgent = await FPJS.load();
+
+  // The FingerprintJS agent is ready. Get a visitor identifier when you'd like to.
+  const result = await fpAgent.get();
+
+  // This is the visitor identifier:
+  const visitorId = result.visitorId;
+  console.log(visitorId);
 })();
 ```
+
+## Pro version
+
+Upgrade to [Pro version](https://fingerprintjs.com) to get 99.5% accuracy of identification.
+
+<p align="center">
+  <a href="https://fingerprintjs.com">
+    <img src="resources/pro_screenshot.png" alt="Pro screenshot" width="697px" />
+  </a>
+</p>
+
+| | Open source version | Pro version |
+|-----|-------|-------|
+| Browser identification | Basic | Advanced |
+| Anonymous user identification | ❌ | ✅ |
+| Bot detection | ❌ | ✅ |
+| Incognito / Private mode detection | ❌ | ✅ |
+| Geolocation | ❌ | ✅ |
+| Security | ❌ | ✅ |
+| Server API | ❌ | ✅ |
+| Webhooks | ❌ | ✅ |
+
+Pro result example:
+
+```js
+{
+  "requestId": "HFMlljrzKEiZmhUNDx7Z",
+  "visitorId": "kHqPGWS1Mj18sZFsP8Wl",
+  "visitorFound": true,
+  "incognito": false,
+  "bot": undefined,
+  "ip": "192.65.67.131",
+  "browserName": "Chrome",
+  "browserVersion": "85.0.4183",
+  "os": "Mac OS X",
+  "osVersion": "10.15.6",
+  "device": "Other",
+  "ipLocation": { /* ... */ }
+}
+```
+
+🍿 [Live demo](https://fingerprintjs.com/demo)
+
+⏱ [How to upgrade from Open Source to Pro in 30 seconds]()
+
+📗 [FingerprintJS Pro documentation](https://dev.fingerprintjs.com)
 
 ## Version policy
 
