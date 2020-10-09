@@ -172,6 +172,12 @@ but tries to keep them same as much as reasonable.
 The documented JS API follows [Semantic Versioning](https://semver.org).
 Using undocumented features is at you own risk.
 
+## Browser support
+
+```bash
+npx browserslist "> 1% in us"
+```
+
 ## Contribution
 
 See the [contribution guidelines](contributing.md) to know how to start a playground, test and build.
