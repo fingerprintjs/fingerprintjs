@@ -85,3 +85,17 @@ export function isGecko(): boolean {
     'CanvasCaptureMediaStream' in w,
   ]) >= 4
 }
+
+/**
+ * Checks whether the browser is based on Chromium version ≥86 without using user-agent.
+ * Doesn't checks that the browser is based on Chromium, there is a separate function for this.
+ */
+export function isChromium86OrNewer(): boolean {
+  // Checked in Chrome 85 vs Chrome 86 both on desktop and Android
+  return countTruthy([
+    !('MediaSettingsRange' in w),
+    !('PhotoCapabilities' in w),
+    'RTCEncodedAudioFrame' in w,
+    ('' + w.Intl) === '[object Intl]',
+  ]) >= 2
+}
