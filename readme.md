@@ -141,7 +141,7 @@ The library is shipped in various formats:
     ```
 - UMD
     ```js
-    require(['https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.umd.min'], FingerprintJS => {/* ... */});
+    require(['https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.umd.min.js'], (FingerprintJS) => {/* ... */});
     ```
 - EcmaScript module
     ```js
