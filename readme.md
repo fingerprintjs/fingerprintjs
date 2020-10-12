@@ -15,8 +15,8 @@
   </a>
 </p>
 
-Makes a website visitor identifier from browser fingerprint.
-Unlike cookies and local storage, fingerprint stays the same in incognito/private mode and after browser data purge.
+Makes a website visitor identifier from a browser fingerprint.
+Unlike cookies and local storage, fingerprint stays the same in incognito/private mode and even when browser data is purged.
 
 ## Quick start
 
@@ -158,7 +158,7 @@ The library is shipped in various formats:
 
     Builds an instance of Agent and waits a delay required for a proper operation.
     `delayFallback` is an optional parameter that sets duration (milliseconds) of the fallback for browsers that don't support [requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback);
-    it has a good default which isn't recommended to change.
+    it has a good default value which we don't recommend to change.
 
 - `agent.get({ debug?: boolean }): Promise<{ visitorId: string, components: {/* ... */} }>`
 
@@ -171,12 +171,17 @@ The library is shipped in various formats:
 
 - `FingerprintJS.hashComponents(components: object): string`
 
-    Converts a dictionary of components (described above) to a short hash string a.k.a. a visitor identifier.
+    Converts a dictionary of components (described above) into a short hash string a.k.a. a visitor identifier.
     Designed for extending the library with your own components.
 
 - `FingerprintJS.componentsToDebugString(components: object): string`
 
-    Converts a dictionary of components (described above) to a human-friendly text.
+    Converts a dictionary of components (described above) into human-friendly format.
+
+## Migration from v2
+
+- [Migration guide](https://github.com/fingerprintjs/fingerprintjs/releases/tag/v3.0.0)
+- [V2 documentation](https://github.com/fingerprintjs/fingerprintjs/tree/v2)
 
 ## Version policy
 
