@@ -88,7 +88,7 @@ export function isGecko(): boolean {
 
 /**
  * Checks whether the browser is based on Chromium version ≥86 without using user-agent.
- * Doesn't checks that the browser is based on Chromium, there is a separate function for this.
+ * It doesn't check that the browser is based on Chromium, there is a separate function for this.
  */
 export function isChromium86OrNewer(): boolean {
   // Checked in Chrome 85 vs Chrome 86 both on desktop and Android
