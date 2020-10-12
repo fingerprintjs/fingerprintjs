@@ -1,7 +1,7 @@
-import * as FPJS from '../src'
+import FingerprintJS from '../src'
 
 async function getVisitorId() {
-  const fp = await FPJS.load()
+  const fp = await FingerprintJS.load()
   const result = await fp.get({ debug: true })
   return result.visitorId
 }

@@ -54,7 +54,7 @@ export interface Agent {
   get(options?: Readonly<GetOptions>): Promise<GetResult>
 }
 
-export function componentsToCanonicalString(components: UnknownComponents) {
+function componentsToCanonicalString(components: UnknownComponents) {
   let result = ''
   for (const componentKey of Object.keys(components)) {
     const component = components[componentKey]
@@ -64,7 +64,7 @@ export function componentsToCanonicalString(components: UnknownComponents) {
   return result
 }
 
-export function componentsToDebugString(components: UnknownComponents) {
+export function componentsToDebugString(components: UnknownComponents): string {
   return JSON.stringify(
     components,
     (_key, value) => {
@@ -81,6 +81,10 @@ export function componentsToDebugString(components: UnknownComponents) {
   )
 }
 
+export function hashComponents(components: UnknownComponents): string {
+  return x64hash128(componentsToCanonicalString(components))
+}
+
 /**
  * Makes a GetResult implementation that calculates the visitor id hash on demand.
  * Designed for optimisation.
@@ -93,7 +97,7 @@ function makeLazyGetResult<T extends UnknownComponents>(components: T) {
     components,
     get visitorId(): string {
       if (visitorIdCache === undefined) {
-        visitorIdCache = x64hash128(componentsToCanonicalString(this.components))
+        visitorIdCache = hashComponents(this.components)
       }
       return visitorIdCache
     },
