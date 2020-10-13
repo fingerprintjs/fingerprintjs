@@ -13,7 +13,9 @@
     "build": "rimraf dist && rollup -c",
     "build:watch": "yarn build --watch",
     "playground:start": "cd playground && webpack-dev-server --mode development",
-    "playground:build": "cd playground && webpack --mode production"
+    "playground:build": "cd playground && webpack --mode production",
+    "test:local": "karma start tests/karma.local.config.js --single-run",
+    "test:browserstack": "karma start tests/karma.browserstack.config.js --single-run"
   },
   "dependencies": {
     "tslib": "^2.0.1"
@@ -22,8 +24,18 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "@rollup/plugin-typescript": "^6.0.0",
+    "@types/jasmine": "^3.5.14",
+    "@types/ua-parser-js": "^0.7.33",
     "clean-webpack-plugin": "^3.0.0",
     "html-webpack-plugin": "^4.5.0",
+    "karma": "^5.2.3",
+    "karma-browserstack-launcher": "^1.6.0",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-firefox-launcher": "^1.3.0",
+    "karma-jasmine": "^4.0.1",
+    "karma-spec-reporter": "^0.0.32",
+    "karma-summary-reporter": "^1.9.0",
+    "karma-typescript": "^5.2.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.28.2",
     "rollup-plugin-dts": "^1.4.13",
@@ -32,6 +44,7 @@
     "terser-webpack-plugin": "^4.2.2",
     "ts-loader": "^8.0.4",
     "typescript": "^4.0.3",
+    "ua-parser-js": "^0.7.22",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"

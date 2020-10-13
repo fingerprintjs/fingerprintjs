@@ -148,7 +148,7 @@ export async function getComponents<TSourceOptions, TSources extends UnknownSour
     try {
       result = { value: await sources[sourceKey](sourceOptions) }
     } catch (error) {
-      result = { error: 'message' in error ? error : { message: error } }
+      result = error && typeof error === 'object' && 'message' in error ? { error } : { error: { message: error } }
     }
 
     nextTimestamp = Date.now()
