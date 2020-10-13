@@ -33,7 +33,7 @@ import * as FPJS from '@fingerprintjs/fingerprintjs';
 (async () => {
   const fpjs = await FPJS.load();
   const { visitorId } = await fpjs.get();
-  console.log(visitorId)
+  console.log(visitorId);
 })();
 ```
 
@@ -76,10 +76,36 @@ yarn build
 
 The files will appear at `dist`.
 
+### How to test
+
+There are automatic tests.
+They are run by [Jasmine](https://jasmine.github.io) in real browsers using [Karma](https://karma-runner.github.io).
+
+To run the tests in a browser on your machine, build the project and run:
+```bash
+yarn test:local --browsers ChromeHeadless
+# or to run in Firefox
+yarn test:local --browsers FirefoxHeadless
+# or to run in both
+yarn test:local
+```
+
+To run the tests in browsers on [BrowserStack](https://www.browserstack.com), get a BrowserStack access key and run:
+```bash
+# For Linux, macOS and WSL (Linux on Windows)
+BROWSERSTACK_USERNAME=your-username BROWSERSTACK_ACCESS_KEY=your-key yarn test:browserstack
+```
+Or make a PR to this repository, the test will run in BrowserStack automatically.
+BrowserStack sessions are unstable, so a session can fail for no reason;
+restart the testing when you see no clear errors related to the tests.
+
+Unit test files are located right next to individual module files that they check.
+Integration tests are located in the `tests` directory.
+
 ### How to publish
 
 1. Bump the version. Changing the number in [package.json](package.json) is enough.
-2. Build the project.
+2. Build and test the project.
 3. See what's will get into the NPM package, make sure it contains the distributive files and no excess files.
     To see, run `yarn pack`, an archive will appear nearby, open it with any archive browser.
 4. Run

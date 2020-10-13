@@ -11,5 +11,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts"
+  ]
 }

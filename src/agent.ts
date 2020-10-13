@@ -104,10 +104,10 @@ function makeLazyGetResult<T extends UnknownComponents>(components: T) {
 }
 
 /**
- * The class isn't exported to not expose the constructor.
+ * The class isn't exported from the index file to not expose the constructor.
  * The hiding gives more freedom for future non-breaking updates.
  */
-class OpenAgent implements Agent {
+export class OpenAgent implements Agent {
   /**
    * @inheritDoc
    */
