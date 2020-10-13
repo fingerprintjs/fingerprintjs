@@ -12,6 +12,7 @@ module.exports = (config) => {
     },
     reporters: ['spec', 'summary'],
     browsers: ['ChromeHeadless', 'FirefoxHeadless'],
+    concurrency: 3,
 
     karmaTypescriptConfig: {
       compilerOptions: {

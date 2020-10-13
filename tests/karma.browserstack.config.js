@@ -67,6 +67,10 @@ module.exports = (config) => {
 
   config.set({
     reporters: [...config.reporters, 'BrowserStack'],
+    browsers: Object.keys(customLaunchers),
+    customLaunchers,
+    concurrency: 5,
+
     browserStack: {
       project: 'FingerprintJS',
       build: process.env.GITHUB_RUN_ID || makeBuildNumber(),
@@ -74,7 +78,5 @@ module.exports = (config) => {
       // GitHub Actions will add a value for GITHUB_RUN_ID. More on the environment variables:
       // https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables#default-environment-variables
     },
-    browsers: Object.keys(customLaunchers),
-    customLaunchers,
   })
 }
