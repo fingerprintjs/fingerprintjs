@@ -9,7 +9,9 @@ describe('Sources', () => {
         throwsErrorString: () => { throw 'baz' },
         success2: () => 'baq',
       }
+
       const components = await getComponents(sources, undefined, [])
+
       expect(Object.keys(components).sort()).toEqual(['success1', 'success2', 'throwsErrorObject', 'throwsErrorString'])
       expect(components.success1.error).toBeUndefined()
       expect(components.success1.value).toBe('foo')
@@ -28,7 +30,9 @@ describe('Sources', () => {
         delayedResult: () => new Promise((resolve) => setTimeout(resolve, 50)),
         delayedError: () => new Promise((_resolve, reject) => setTimeout(() => reject('test'), 50)),
       }
+
       const components = await getComponents(sources, undefined, [])
+
       expect(components.instant.duration).toBeLessThan(25)
       expect(components.delayedResult.duration).toBeGreaterThan(25)
       expect(components.delayedError.duration).toBeGreaterThan(25)
@@ -39,7 +43,9 @@ describe('Sources', () => {
         toBe: () => true,
         notToBe: () => false,
       }
+
       const components = await getComponents(sources, undefined, ['notToBe'])
+
       expect(Object.keys(components)).toEqual(['toBe'])
       expect(components.toBe.value).toBe(true)
     })
