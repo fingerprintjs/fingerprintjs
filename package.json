@@ -1,6 +1,6 @@
 {
   "name": "@fingerprintjs/fingerprintjs",
-  "version": "3.0.0-beta.2",
+  "version": "3.0.0-beta.3",
   "license": "MIT",
   "main": "dist/fp.cjs.js",
   "module": "dist/fp.esm.js",
