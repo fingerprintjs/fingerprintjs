@@ -68,7 +68,7 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 📕 [Full documentation](#open-source-version-reference)
 
-## Upgrade to [Pro version](https://fingerprintjs.com) to get 99.5% accuracy of identification
+## Upgrade to [Pro version](https://fingerprintjs.com) to get 99.5% identification accuracy
 
 <p align="center">
   <a href="https://fingerprintjs.com">
