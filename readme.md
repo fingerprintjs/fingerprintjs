@@ -1,114 +1,202 @@
-# FingerprintJS
+<p align="center">
+  <a href="https://fingerprintjs.com">
+    <img src="resources/logo.svg" alt="FingerprintJS" width="300px" />
+  </a>
+</p>
+<p align="center">
+  <a href="https://github.com/fingerprintjs/fingerprintjs/actions?workflow=Test">
+    <img src="https://github.com/fingerprintjs/fingerprintjs/workflows/Test/badge.svg" alt="Build status">
+  </a>
+  <a href="https://www.npmjs.com/package/@fingerprintjs/fingerprintjs">
+    <img src="https://img.shields.io/npm/dt/fingerprintjs2.svg" alt="Total downloads from NPM">
+  </a>
+  <a href="https://www.npmjs.com/package/@fingerprintjs/fingerprintjs">
+    <img src="https://img.shields.io/npm/v/@fingerprintjs/fingerprintjs.svg" alt="Current NPM version">
+  </a>
+</p>
 
-Work in progress, stay tuned.
+Makes a website visitor identifier from a browser fingerprint.
+Unlike cookies and local storage, fingerprint stays the same in incognito/private mode and even when browser data is purged.
 
 ## Quick start
 
-### In browser
+### Install from CDN
 
 ```html
 <script>
-  function onFingerprintJSLoad(fp) {
-    fp.get().then(({ visitorId }) => console.log(visitorId));
+  function onFingerprintJSLoad(fpAgent) {
+    // The FingerprintJS agent is ready. Get a visitor identifier when you'd like to.
+    fpAgent.get().then(result => {
+      // This is the visitor identifier:
+      const visitorId = result.visitorId;
+      console.log(visitorId);
+    });
   }
 </script>
 <script
-  async src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3.0.0-beta.2/dist/fp.min.js"
+  async src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
   onload="FingerprintJS.load().then(onFingerprintJSLoad)"
 ></script>
 ```
 
-A simple way to start but not recommended because AdBlock and similar browser extensions often block this URL.
-You should at least upload the script to your server.
+We recommend to upload [the JS script](https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js)
+to your server because AdBlock and other browser extensions can block the public script URL.
 
-### Webpack/Rollup/Browserify
+### Alternatively you can install from NPM to use with Webpack/Rollup/Browserify
 
 ```bash
 npm i @fingerprintjs/fingerprintjs
+# or
+yarn add @fingerprintjs/fingerprintjs
 ```
 
 ```js
-import * as FPJS from '@fingerprintjs/fingerprintjs';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 (async () => {
-  const fpjs = await FPJS.load();
-  const { visitorId } = await fpjs.get();
+  // We recommend to call `load` at application startup.
+  const fpAgent = await FingerprintJS.load();
+
+  // The FingerprintJS agent is ready. Get a visitor identifier when you'd like to.
+  const result = await fpAgent.get();
+
+  // This is the visitor identifier:
+  const visitorId = result.visitorId;
   console.log(visitorId);
 })();
 ```
 
+📕 [Full documentation](#open-source-version-reference)
+
+## Upgrade to [Pro version](https://fingerprintjs.com) to get 99.5% identification accuracy
+
+<p align="center">
+  <a href="https://fingerprintjs.com">
+    <img src="resources/pro_screenshot.png" alt="Pro screenshot" width="697px" />
+  </a>
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <!-- The <img>s are to make the table take the full width -->
+      <th align="center"><img width="350" height="0"> <p>Open Source version</p></th>
+      <th align="center"><img width="350" height="0"> <p>Pro version</p></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Identification accuracy</td><td align="center">60%</td><td align="center">99.5%</td></tr>
+    <tr><td>Bot detection</td><td align="center">❌</td><td align="center">✅</td></tr>
+    <tr><td>Incognito / Private mode detection</td><td align="center">❌</td><td align="center">✅</td></tr>
+    <tr><td>Geolocation</td><td align="center">❌</td><td align="center">✅</td></tr>
+    <tr><td>Security</td><td align="center">❌</td><td align="center">✅</td></tr>
+    <tr><td>Server API</td><td align="center">❌</td><td align="center">✅</td></tr>
+    <tr><td>Webhooks</td><td align="center">❌</td><td align="center">✅</td></tr>
+  </tbody>
+</table>
+
+Pro result example:
+
+```js
+{
+  "requestId": "HFMlljrzKEiZmhUNDx7Z",
+  "visitorId": "kHqPGWS1Mj18sZFsP8Wl",
+  "visitorFound": true,
+  "incognito": false,
+  "bot": { "probability": 0.96 },
+  "browserName": "Chrome",
+  "browserVersion": "85.0.4183",
+  "os": "Mac OS X",
+  "osVersion": "10.15.6",
+  "device": "Other",
+  "ip": "192.65.67.131",
+  "ipLocation": {
+    "accuracyRadius": 100,
+    "latitude": 37.409657,
+    "longitude": -121.965467
+    // ...
+  }
+}
+```
+
+🍿 [Live demo](https://fingerprintjs.com/demo)
+
+⏱ [How to upgrade from Open Source to Pro in 30 seconds]()
+
+📕 [FingerprintJS Pro documentation](https://dev.fingerprintjs.com)
+
+## Open-source version reference
+
+### Installation
+
+The library is shipped in various formats:
+
+- Global variable
+    ```html
+    <script
+      async src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
+      onload="/* FingerprintJS... */"
+    ></script>
+    ```
+- UMD
+    ```js
+    require(['https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.umd.min.js'], (FingerprintJS) => {/* ... */});
+    ```
+- EcmaScript module
+    ```js
+    import FingerprintJS from '@fingerprintjs/fingerprintjs';
+    ```
+- CommonJS
+    ```js
+    const FingerprintJS = require('@fingerprintjs/fingerprintjs');
+    ```
+
+### API
+
+- `FingerprintJS.load({ delayFallback?: number }): Promise<Agent>`
+
+    Builds an instance of Agent and waits a delay required for a proper operation.
+    `delayFallback` is an optional parameter that sets duration (milliseconds) of the fallback for browsers that don't support [requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback);
+    it has a good default value which we don't recommend to change.
+
+- `agent.get({ debug?: boolean }): Promise<{ visitorId: string, components: {/* ... */} }>`
+
+    Gets the visitor identifier.
+    `debug: true` prints debug messages to the console.
+    `visitorId` is the visitor identifier.
+    `components` is a dictionary of components that have formed the identifier;
+    each value is an object like `{ value: any, duration: number }` in case of success
+    and `{ error: object, duration: number }` in case of an unexpected error during getting the component.
+
+- `FingerprintJS.hashComponents(components: object): string`
+
+    Converts a dictionary of components (described above) into a short hash string a.k.a. a visitor identifier.
+    Designed for extending the library with your own components.
+
+- `FingerprintJS.componentsToDebugString(components: object): string`
+
+    Converts a dictionary of components (described above) into human-friendly format.
+
+## Migration from v2
+
+- [Migration guide](https://github.com/fingerprintjs/fingerprintjs/releases/tag/v3.0.0)
+- [V2 documentation](https://github.com/fingerprintjs/fingerprintjs/tree/v2)
+
 ## Version policy
 
-The library doesn't promise same visitor identifier between any versions
-but tries to keep them same as much as reasonable.
+The library doesn't guarantee the same visitor identifier between versions,
+but will try to keep them the same as much as possible.
 
 The documented JS API follows [Semantic Versioning](https://semver.org).
-Using undocumented features is at you own risk.
+Use undocumented features at your own risk.
+
+## Browser support
+
+```bash
+npx browserslist "> 1% in us"
+```
 
 ## Contribution
 
-### Development playground
-
-```bash
-# Make sure you have Yarn installed
-yarn install
-yarn playground:start # Add '--port 8765' to change the server port
-```
-
-Then open http://localhost:8080 in a browser.
-It's reloaded every time the source code is changed.
-
-To build the playground distribution code (e.g. to upload to a static server), run:
-
-```bash
-yarn playground:build
-```
-
-The result will appear at `playground/dist`.
-
-### How to build
-
-To build the distribution files of the library, run:
-
-```bash
-yarn build
-```
-
-The files will appear at `dist`.
-
-### How to test
-
-There are automatic tests.
-They are run by [Jasmine](https://jasmine.github.io) in real browsers using [Karma](https://karma-runner.github.io).
-
-To run the tests in a browser on your machine, build the project and run:
-```bash
-yarn test:local --browsers ChromeHeadless
-# or to run in Firefox
-yarn test:local --browsers FirefoxHeadless
-# or to run in both
-yarn test:local
-```
-
-To run the tests in browsers on [BrowserStack](https://www.browserstack.com), get a BrowserStack access key and run:
-```bash
-# For Linux, macOS and WSL (Linux on Windows)
-BROWSERSTACK_USERNAME=your-username BROWSERSTACK_ACCESS_KEY=your-key yarn test:browserstack
-```
-Or make a PR to this repository, the test will run in BrowserStack automatically.
-BrowserStack sessions are unstable, so a session can fail for no reason;
-restart the testing when you see no clear errors related to the tests.
-
-Unit test files are located right next to individual module files that they check.
-Integration tests are located in the `tests` directory.
-
-### How to publish
-
-1. Bump the version. Changing the number in [package.json](package.json) is enough.
-2. Build and test the project.
-3. See what's will get into the NPM package, make sure it contains the distributive files and no excess files.
-    To see, run `yarn pack`, an archive will appear nearby, open it with any archive browser.
-4. Run
-    ```bash
-    yarn publish --access public # Add '--tag beta' (without the quotes) if you release a beta version
-    ```
+See the [contribution guidelines](contributing.md) to learn how to start a playground, test and build.
