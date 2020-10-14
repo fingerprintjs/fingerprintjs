@@ -31,6 +31,7 @@ const commonInput = {
 
 const commonOutput = {
   name: 'FingerprintJS',
+  exports: 'named',
 }
 
 const commonTerser = terserPlugin(require('./terser.config.js'))

@@ -24,7 +24,8 @@ export {
   UnknownComponents,
   BuiltinComponents,
 }
-// The default export should contain all the public exported values
+// The default export is a syntax sugar (`import * as FP from '...' → import FP from '...'`).
+// It should contain all the public exported values.
 export default { load, hashComponents, componentsToDebugString }
 
 // The exports below are for private usage. They may change unexpectedly. Use them at your own risk.

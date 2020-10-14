@@ -57,6 +57,8 @@ BROWSERSTACK_USERNAME=your-username BROWSERSTACK_ACCESS_KEY=your-key yarn test:b
 Or make a PR to this repository, the test will run in BrowserStack automatically.
 BrowserStack sessions are unstable, so a session can fail for no reason;
 restart the testing when you see no clear errors related to the tests.
+If you run the test command multiple times in parallel, BrowserStack will loses access to the Karma server
+(for some reason), that will cause the tests to hang infinitely, so try to run a single testing at once.
 
 Unit test files are located right next to individual module files that they check.
 Integration tests are located in the `tests` directory.
