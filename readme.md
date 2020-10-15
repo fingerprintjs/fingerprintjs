@@ -122,7 +122,7 @@ Pro result example:
 
 🍿 [Live demo](https://fingerprintjs.com/demo)
 
-⏱ [How to upgrade from Open Source to Pro in 30 seconds]()
+⏱ [How to upgrade from Open Source to Pro in 30 seconds](https://dev.fingerprintjs.com/v3/docs/migrating-to-v3#from-open-source-v3)
 
 📕 [FingerprintJS Pro documentation](https://dev.fingerprintjs.com)
 
@@ -134,16 +134,22 @@ The library is shipped in various formats:
 
 - Global variable
     ```html
+    <script>
+      function initFingerprintJS() {
+        // ...
+      }
+    </script>
     <script
-      async src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
-      onload="/* FingerprintJS... */"
+      async
+      src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
+      onload="initFingerprintJS()"
     ></script>
     ```
 - UMD
     ```js
     require(['https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.umd.min.js'], (FingerprintJS) => {/* ... */});
     ```
-- EcmaScript module
+- ECMAScript module
     ```js
     import FingerprintJS from '@fingerprintjs/fingerprintjs';
     ```
@@ -178,9 +184,9 @@ The library is shipped in various formats:
 
     Converts a dictionary of components (described above) into human-friendly format.
 
-## Migration from v2
+## Migrating from v2
 
-- [Migration guide](https://github.com/fingerprintjs/fingerprintjs/releases/tag/v3.0.0)
+- [Migration guide](migrating-v2-v3.md)
 - [V2 documentation](https://github.com/fingerprintjs/fingerprintjs/tree/v2)
 
 ## Version policy
