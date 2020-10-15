@@ -24,8 +24,8 @@
 
 - CDN: `//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@2/dist/fingerprint2.min.js` or `//unpkg.com/@fingerprintjs/fingerprintjs@2/dist/fingerprint2.min.js`
 - Bower: `bower install fingerprintjs2`
-- NPM: `npm install @fingerprintjs/fingerprintjs`
-- Yarn: `yarn add @fingerprintjs/fingerprintjs`
+- NPM: `npm install @fingerprintjs/fingerprintjs@^2`
+- Yarn: `yarn add @fingerprintjs/fingerprintjs@^2`
 
 
 ## Usage
