@@ -1,6 +1,13 @@
-node_modules/
+# Project artifacts
+/dist/
+/node_modules/
+/playground/dist/
+
+# Unwanted BrowserStack logs: https://github.com/karma-runner/karma-browserstack-launcher/issues/181
+/browserstack.err
+/local.log
+
+# Random excess stuff
+.DS_Store
 .idea/
-fingerprintjs2.iml
-*.log
-package-lock.json
-dist/
+.vscode/

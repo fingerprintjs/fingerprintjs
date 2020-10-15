@@ -1,11 +1,7 @@
 {
   "name": "@fingerprintjs/fingerprintjs",
-  "version": "2.1.4",
   "description": "Modern & flexible browser fingerprinting library",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fingerprintjs/fingerprintjs.git"
-  },
+  "version": "3.0.0-beta.3",
   "keywords": [
     "fraud",
     "fraud-detection",
@@ -18,53 +14,59 @@
   ],
   "author": "FingerprintJS, Inc (https://fingerprintjs.com)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fingerprintjs/fingerprintjs.git"
+  },
   "bugs": {
     "url": "https://github.com/fingerprintjs/fingerprintjs/issues"
   },
   "homepage": "https://github.com/fingerprintjs/fingerprintjs",
-  "main": "fingerprint2.js",
+  "main": "dist/fp.cjs.js",
+  "module": "dist/fp.esm.js",
+  "types": "dist/fp.d.ts",
+  "sideEffects": false,
   "files": [
-    "dist",
-    "flash"
+    "dist"
   ],
+  "scripts": {
+    "build": "rimraf dist && rollup -c",
+    "build:watch": "yarn build --watch",
+    "playground:start": "cd playground && webpack-dev-server --mode development",
+    "playground:build": "cd playground && webpack --mode production",
+    "test:local": "karma start tests/karma.local.config.js --single-run",
+    "test:browserstack": "karma start tests/karma.browserstack.config.js --single-run"
+  },
+  "dependencies": {
+    "tslib": "^2.0.1"
+  },
   "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/preset-env": "^7.11.5",
-    "gulp": "^4.0.0",
-    "gulp-header-license": "^1.0.9",
-    "gulp-rename": "^1.4.0",
-    "gulp-uglify": "^3.0.1",
-    "gulp-util": "^3.0.8",
-    "jasmine-expect": "^4.0.1",
-    "karma": "^5.2.1",
-    "karma-babel-preprocessor": "^8.0.1",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-typescript": "^6.0.0",
+    "@types/jasmine": "^3.5.14",
+    "@types/ua-parser-js": "^0.7.33",
+    "clean-webpack-plugin": "^3.0.0",
+    "html-webpack-plugin": "^4.5.0",
+    "karma": "^5.2.3",
+    "karma-browserstack-launcher": "^1.6.0",
     "karma-chrome-launcher": "^3.1.0",
     "karma-firefox-launcher": "^1.3.0",
-    "karma-ie-launcher": "^1.0.0",
     "karma-jasmine": "^4.0.1",
-    "karma-jasmine-matchers": "^4.0.1",
-    "karma-safari-applescript-launcher": "^0.1.0",
-    "standard": "^10.0.3"
-  },
-  "scripts": {
-    "test:chrome": "karma start --single-run --browsers ChromeHeadless tests/karma.conf.js",
-    "test:chrome:incognito": "karma start --single-run --browsers ChromeIncognito tests/karma.conf.js",
-    "test:firefox": "karma start --single-run --browsers FirefoxHeadless tests/karma.conf.js",
-    "test:firefox:incognito": "karma start --single-run --browsers FirefoxIncognito tests/karma.conf.js",
-    "test:safari": "karma start --single-run --browsers Safari tests/karma.conf.js",
-    "test:ie10": "karma start --single-run --browsers IE10 tests/karma.conf.js",
-    "test:ie11": "karma start --single-run --browsers IE tests/karma.conf.js",
-    "test:chrome:debug": "karma start --single-run false --browsers Chrome tests/karma.conf.js",
-    "test:firefox:debug": "karma start --single-run false --browsers Firefox tests/karma.conf.js",
-    "test:all:mac": "yarn run test:chrome && yarn run test:chrome:incognito && yarn run test:firefox && yarn run test:firefox:incognito && yarn run test:safari",
-    "test:all:windows": "yarn run test:chrome && yarn run test:chrome:incognito && yarn run test:firefox && yarn run test:firefox:incognito && yarn run test:ie10 && yarn run test:ie11",
-    "gulp": "gulp",
-    "lint": "standard --fix"
-  },
-  "standard": {
-    "ignore": [
-      "specs/lib",
-      "specs/phantomjs-testrunner.js"
-    ]
+    "karma-spec-reporter": "^0.0.32",
+    "karma-summary-reporter": "^1.9.0",
+    "karma-typescript": "^5.2.0",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.28.2",
+    "rollup-plugin-dts": "^1.4.13",
+    "rollup-plugin-license": "^2.2.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "terser-webpack-plugin": "^4.2.2",
+    "ts-loader": "^8.0.4",
+    "typescript": "^4.0.3",
+    "ua-parser-js": "^0.7.22",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   }
 }

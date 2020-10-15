@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "es6",
+    "removeComments": false,
+    "resolveJsonModule": true,
+    "importHelpers": true,
+    "noErrorTruncation": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true
+  },
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts"
+  ]
+}

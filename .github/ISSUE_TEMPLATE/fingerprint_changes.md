@@ -5,17 +5,16 @@ about: Collected fingerprints change unexpectedly
 ---
 
 <!--
-BUG REPORTS NOT USING THE TEMPLATE ARE SUBJECT TO BEING CLOSED WITHOUT COMMMENT.
+BUG REPORTS NOT USING THE TEMPLATE ARE SUBJECT TO BEING CLOSED WITHOUT COMMENT.
 -->
 
 ### Scenario
 
-- Did you check https://github.com/fingerprintjs/fingerprintjs/wiki/Stable-components?
 - What causes the fingerprint to change?
 - What device and browser are you using?
-- What version of fingerprintjs are you using? (Bug reports not applicable to fingerprintjs master are subject to be closed without comment.)
+- What version of fingerprintjs are you using? (Bug reports not applicable to fingerprintjs master are subject to be closed without comment)
 
 ### Fingerprint data
 
-Provide the FULL DATA of both/all fingerprints using this jsfiddle https://jsfiddle.net/L2gLq4rg/85/.
+Run `fp.get({ debug: true ))` and copy all debug messages from the browser console for both/all fingerprints involved.
 Alternatively, provide a jsfiddle that reproduces the bug.
