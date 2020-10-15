@@ -4,7 +4,6 @@ on:
   push:
       branches:
         - master
-        - v3 # todo: Remove when v3 is merged into master
   pull_request:
 jobs:
   test:

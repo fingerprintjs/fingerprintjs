@@ -1,7 +1,27 @@
 {
   "name": "@fingerprintjs/fingerprintjs",
+  "description": "Modern & flexible browser fingerprinting library",
   "version": "3.0.0-beta.3",
+  "keywords": [
+    "fraud",
+    "fraud-detection",
+    "fraud-prevention",
+    "browser",
+    "identification",
+    "fingerprint",
+    "fingerprinting",
+    "privacy"
+  ],
+  "author": "FingerprintJS, Inc (https://fingerprintjs.com)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fingerprintjs/fingerprintjs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fingerprintjs/fingerprintjs/issues"
+  },
+  "homepage": "https://github.com/fingerprintjs/fingerprintjs",
   "main": "dist/fp.cjs.js",
   "module": "dist/fp.esm.js",
   "types": "dist/fp.d.ts",
