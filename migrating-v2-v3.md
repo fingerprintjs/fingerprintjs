@@ -19,9 +19,9 @@ Bower support is dropped, choose another installation method.
 Update the package version:
 
 ```bash
-npm install @fingerprintjs/fingerprintjs@^3
+npm install @fingerprintjs/fingerprintjs
 # or
-yarn add @fingerprintjs/fingerprintjs@^3
+yarn add @fingerprintjs/fingerprintjs
 ```
 
 Remove the type declaration package.
