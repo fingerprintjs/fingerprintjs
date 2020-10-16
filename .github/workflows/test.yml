@@ -4,6 +4,7 @@ on:
   push:
       branches:
         - master
+        - feature/incognito-testing
   pull_request:
 jobs:
   test:
