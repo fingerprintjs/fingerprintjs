@@ -44,7 +44,7 @@ The agent has a `get` method that you will use instead of calling `Fingerprint2.
 - requestIdleCallback(() => {
 + FingerprintJS.load().then(fp => {
 -   Fingerprint2.get().then(result => {
-+   fp.get(result => {
++   fp.get().then(result => {
       // Handle the result
     })
   })
