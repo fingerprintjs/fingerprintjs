@@ -39,7 +39,7 @@ export async function withMockProperties<T>(
     for (const property of Object.keys(originalProperties)) {
       const propertyDescriptor = originalProperties[property]
       if (propertyDescriptor === undefined) {
-        delete (object as any)[property]
+        delete (object as Record<string, any>)[property]
       } else {
         Object.defineProperty(object, property, propertyDescriptor)
       }

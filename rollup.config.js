@@ -1,11 +1,12 @@
-const path = require('path')
-const jsonPlugin = require('@rollup/plugin-json')
-const nodeResolvePlugin = require('@rollup/plugin-node-resolve').nodeResolve
-const typescriptPlugin = require('@rollup/plugin-typescript')
-const terserPlugin = require('rollup-plugin-terser').terser
-const dtsPlugin = require('rollup-plugin-dts').default
-const licensePlugin = require('rollup-plugin-license')
-const { dependencies } = require('./package.json')
+import * as path from 'path'
+import jsonPlugin from '@rollup/plugin-json'
+import { nodeResolve as nodeResolvePlugin } from '@rollup/plugin-node-resolve'
+import typescriptPlugin from '@rollup/plugin-typescript'
+import { terser as terserPlugin } from 'rollup-plugin-terser'
+import dtsPlugin from 'rollup-plugin-dts'
+import licensePlugin from 'rollup-plugin-license'
+import { dependencies } from './package.json'
+import terserOptions from './terser.config'
 
 const outputDirectory = 'dist'
 
@@ -34,9 +35,9 @@ const commonOutput = {
   exports: 'named',
 }
 
-const commonTerser = terserPlugin(require('./terser.config.js'))
+const commonTerser = terserPlugin(terserOptions)
 
-module.exports = [
+export default [
   // Browser bundles. They have all the dependencies included for convenience.
   {
     ...commonInput,
