@@ -25,6 +25,22 @@ yarn playground:build
 
 The result will appear at `playground/dist`.
 
+### Code style
+
+The code style is controlled by [ESLint](https://eslint.org) and [Prettier](https://prettier.io).
+Run to check that the code style is ok:
+
+```bash
+yarn lint
+```
+
+You aren't required to run the check manually, the CI will do it.
+Run to fix code style mistakes (not all mistakes can be fixed automatically):
+
+```bash
+yarn lint:fix
+```
+
 ### How to build
 
 To build the distribution files of the library, run:

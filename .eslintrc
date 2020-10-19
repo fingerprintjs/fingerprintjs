@@ -1,0 +1,35 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "prettier"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "prettier"
+  ],
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "plugins": [
+        "@typescript-eslint",
+        "prettier"
+      ],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier"
+      ]
+    }
+  ],
+  "rules": {
+    "no-console": "warn",
+    "prettier/prettier": "error",
+    "max-len": ["error", { "code": 120, "ignoreUrls": true }]
+  }
+}
