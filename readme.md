@@ -24,18 +24,22 @@ Unlike cookies and local storage, fingerprint stays the same in incognito/privat
 
 ```html
 <script>
-  function onFingerprintJSLoad(fpAgent) {
-    // The FingerprintJS agent is ready. Get a visitor identifier when you'd like to.
-    fpAgent.get().then(result => {
-      // This is the visitor identifier:
-      const visitorId = result.visitorId;
-      console.log(visitorId);
+  function initFingerprintJS() {
+    FingerprintJS.load().then(fp => {
+      // The FingerprintJS agent is ready.
+      // Get a visitor identifier when you'd like to.
+      fp.get().then(result => {
+        // This is the visitor identifier:
+        const visitorId = result.visitorId;
+        console.log(visitorId);
+      });
     });
   }
 </script>
 <script
-  async src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
-  onload="FingerprintJS.load().then(onFingerprintJSLoad)"
+  async
+  src="//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
+  onload="initFingerprintJS()"
 ></script>
 ```
 
@@ -55,10 +59,11 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 (async () => {
   // We recommend to call `load` at application startup.
-  const fpAgent = await FingerprintJS.load();
+  const fp = await FingerprintJS.load();
 
-  // The FingerprintJS agent is ready. Get a visitor identifier when you'd like to.
-  const result = await fpAgent.get();
+  // The FingerprintJS agent is ready.
+  // Get a visitor identifier when you'd like to.
+  const result = await fp.get();
 
   // This is the visitor identifier:
   const visitorId = result.visitorId;
@@ -141,13 +146,16 @@ The library is shipped in various formats:
     </script>
     <script
       async
-      src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
+      src="//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
       onload="initFingerprintJS()"
     ></script>
     ```
 - UMD
     ```js
-    require(['https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.umd.min.js'], (FingerprintJS) => {/* ... */});
+    require(
+      ['//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.umd.min.js'],
+      (FingerprintJS) => {/* ... */}
+    );
     ```
 - ECMAScript module
     ```js
