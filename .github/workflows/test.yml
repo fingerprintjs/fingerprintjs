@@ -1,5 +1,5 @@
 # Reference on this file: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
-name: Test
+name: Lint and test
 on:
   push:
       branches:
@@ -7,7 +7,7 @@ on:
   pull_request:
 jobs:
   test:
-    name: Test
+    name: Lint and test
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -15,6 +15,8 @@ jobs:
         uses: actions/checkout@master
       - name: Install Node packages
         run: yarn install
+      - name: Lint
+        run: yarn lint
       - name: Build
         run: yarn build
       - name: Test on BrowserStack
