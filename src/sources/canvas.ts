@@ -83,6 +83,6 @@ export default function getCanvasFingerprint(): CanvasFingerprint {
 
   return {
     winding,
-    data: save(canvas)
+    data: save(canvas),
   }
 }

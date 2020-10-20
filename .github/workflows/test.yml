@@ -1,5 +1,5 @@
 # Reference on this file: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
-name: Test
+name: Lint and test
 on:
   push:
       branches:
@@ -7,16 +7,21 @@ on:
   pull_request:
 jobs:
   test:
-    name: Test
+    name: Lint and test
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      # TypeScript types are checked during building and testing so there is no need for a separate step for the check
       - name: Checkout
         uses: actions/checkout@master
       - name: Install Node packages
         run: yarn install
+      - name: Lint
+        run: yarn lint
       - name: Build
         run: yarn build
+      - name: Check the distributive TypeScript declarations
+        run: yarn test:dts
       - name: Test on BrowserStack
         env:
           # This is in plaintext on purpose. It has no privileged access to anything (this is a free account)

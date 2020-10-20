@@ -77,7 +77,7 @@ export function componentsToDebugString(components: UnknownComponents): string {
       }
       return value
     },
-    2
+    2,
   )
 }
 
@@ -120,6 +120,8 @@ export class OpenAgent implements Agent {
     const result = makeLazyGetResult(components)
 
     if (options.debug) {
+      // console.log is ok here because it's under a debug clause
+      // eslint-disable-next-line no-console
       console.log(`Copy the text below to get the debug data:
 
 \`\`\`

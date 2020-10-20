@@ -5,10 +5,7 @@
 /**
  * Does the same as Array.prototype.includes but has better typing
  */
-export function includes<THaystack>(
-  haystack: ArrayLike<THaystack>,
-  needle: unknown,
-): needle is THaystack {
+export function includes<THaystack>(haystack: ArrayLike<THaystack>, needle: unknown): needle is THaystack {
   for (let i = 0, l = haystack.length; i < l; ++i) {
     if (haystack[i] === needle) {
       return true

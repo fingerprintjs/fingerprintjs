@@ -9,7 +9,7 @@
 function x64Add(m: number[], n: number[]) {
   m = [m[0] >>> 16, m[0] & 0xffff, m[1] >>> 16, m[1] & 0xffff]
   n = [n[0] >>> 16, n[0] & 0xffff, n[1] >>> 16, n[1] & 0xffff]
-  var o = [0, 0, 0, 0]
+  const o = [0, 0, 0, 0]
   o[3] += m[3] + n[3]
   o[2] += o[3] >>> 16
   o[3] &= 0xffff
@@ -31,7 +31,7 @@ function x64Add(m: number[], n: number[]) {
 function x64Multiply(m: number[], n: number[]) {
   m = [m[0] >>> 16, m[0] & 0xffff, m[1] >>> 16, m[1] & 0xffff]
   n = [n[0] >>> 16, n[0] & 0xffff, n[1] >>> 16, n[1] & 0xffff]
-  var o = [0, 0, 0, 0]
+  const o = [0, 0, 0, 0]
   o[3] += m[3] * n[3]
   o[2] += o[3] >>> 16
   o[3] &= 0xffff
@@ -112,18 +112,19 @@ function x64Fmix(h: number[]) {
 // Given a string and an optional seed as an int, returns a 128 bit
 // hash using the x64 flavor of MurmurHash3, as an unsigned hex.
 //
-export function x64hash128(key: string, seed?: number) {
+export function x64hash128(key: string, seed?: number): string {
   key = key || ''
   seed = seed || 0
-  var remainder = key.length % 16
-  var bytes = key.length - remainder
-  var h1 = [0, seed]
-  var h2 = [0, seed]
-  var k1 = [0, 0]
-  var k2 = [0, 0]
-  var c1 = [0x87c37b91, 0x114253d5]
-  var c2 = [0x4cf5ad43, 0x2745937f]
-  for (var i = 0; i < bytes; i = i + 16) {
+  const remainder = key.length % 16
+  const bytes = key.length - remainder
+  let h1 = [0, seed]
+  let h2 = [0, seed]
+  let k1 = [0, 0]
+  let k2 = [0, 0]
+  const c1 = [0x87c37b91, 0x114253d5]
+  const c2 = [0x4cf5ad43, 0x2745937f]
+  let i: number
+  for (i = 0; i < bytes; i = i + 16) {
     k1 = [
       (key.charCodeAt(i + 4) & 0xff) |
         ((key.charCodeAt(i + 5) & 0xff) << 8) |

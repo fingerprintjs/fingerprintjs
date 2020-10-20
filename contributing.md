@@ -25,6 +25,22 @@ yarn playground:build
 
 The result will appear at `playground/dist`.
 
+### Code style
+
+The code style is controlled by [ESLint](https://eslint.org) and [Prettier](https://prettier.io).
+Run to check that the code style is ok:
+
+```bash
+yarn lint
+```
+
+You aren't required to run the check manually, the CI will do it.
+Run to fix code style mistakes (not all mistakes can be fixed automatically):
+
+```bash
+yarn lint:fix
+```
+
 ### How to build
 
 To build the distribution files of the library, run:
@@ -62,6 +78,12 @@ If you run the test command multiple times in parallel, BrowserStack will lose a
 
 Unit test files are located right next to individual module files that they check.
 Integration tests are located in the `tests` directory.
+
+To check the distributive TypeScript declarations, build the project and run:
+
+```bash
+yarn test:dts
+```
 
 ### How to publish
 

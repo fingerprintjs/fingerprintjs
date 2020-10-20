@@ -3,11 +3,13 @@ const makeLocalConfig = require('./karma.local.config')
 // The shapes of these objects are taken from:
 // https://github.com/SeleniumHQ/selenium/tree/d8ddb4d83972df0f565ef65264bcb733e7a94584/javascript/node/selenium-webdriver
 // It doesn't work, trying to work it out with BrowserStack support. Todo: solve it with the support.
+// eslint-disable-next-line no-unused-vars
 const chromeIncognitoCapabilities = {
   'goog:chromeOptions': {
     args: ['--incognito'],
   },
 }
+// eslint-disable-next-line no-unused-vars
 const firefoxIncognitoCapabilities = {
   'moz:firefoxOptions': {
     prefs: {
@@ -23,6 +25,8 @@ const firefoxIncognitoCapabilities = {
  *
  * Only Chrome is supported on Android, only Safari is supported on iOS: https://www.browserstack.com/question/659
  */
+/* eslint-disable max-len */
+// prettier-ignore
 const browserstackBrowsers = {
   Edge18: { os: 'Windows', os_version: '10', browser: 'Edge', browser_version: '18.0' },
   Windows10_EdgeLatest: { os: 'Windows', os_version: '10', browser: 'Edge', browser_version: 'latest-beta' },
@@ -48,6 +52,7 @@ const browserstackBrowsers = {
   iOS13_Safari: { device: 'iPhone 11 Pro', os: 'iOS', os_version: '13', browser: 'Safari' },
   iOS14_Safari: { device: 'iPhone 11', os: 'iOS', os_version: '14', browser: 'Safari' },
 }
+/* eslint-enable max-len */
 
 function makeBuildNumber() {
   return `No CI ${Math.floor(Math.random() * 1e10)}`

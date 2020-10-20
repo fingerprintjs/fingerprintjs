@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { excludes } from '../utils/data'
 import getAudioFingerprint from './audio'
 import getFonts from './fonts'
@@ -86,16 +87,19 @@ export type SourceValue<TSource extends Source<any, any>> = TSource extends Sour
 /**
  * Result of getting entropy data from a source
  */
-export type Component<T> = ({
-  value: T,
-  error?: undefined,
-} | {
-  value?: undefined,
-  // The property type must by truthy
-  // so that an expression like `if (!component.error)` tells TypeScript that `component.value` is defined
-  error: Error | { message: unknown },
-}) & {
-  duration: number,
+export type Component<T> = (
+  | {
+      value: T
+      error?: undefined
+    }
+  | {
+      value?: undefined
+      // The property type must by truthy
+      // so that an expression like `if (!component.error)` tells TypeScript that `component.value` is defined
+      error: Error | { message: unknown }
+    }
+) & {
+  duration: number
 }
 
 /**
@@ -129,7 +133,11 @@ export type BuiltinComponents = SourcesToComponents<typeof sources>
  * Warning for package users:
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
-export async function getComponents<TSourceOptions, TSources extends UnknownSources<TSourceOptions>, TExclude extends string>(
+export async function getComponents<
+  TSourceOptions,
+  TSources extends UnknownSources<TSourceOptions>,
+  TExclude extends string
+>(
   sources: TSources,
   sourceOptions: TSourceOptions,
   excludeSources: readonly TExclude[],
@@ -143,7 +151,6 @@ export async function getComponents<TSourceOptions, TSources extends UnknownSour
     }
 
     let result: Pick<Component<unknown>, 'value' | 'error'>
-    let nextTimestamp
 
     try {
       result = { value: await sources[sourceKey](sourceOptions) }
@@ -151,8 +158,8 @@ export async function getComponents<TSourceOptions, TSources extends UnknownSour
       result = error && typeof error === 'object' && 'message' in error ? { error } : { error: { message: error } }
     }
 
-    nextTimestamp = Date.now()
-    components[sourceKey] = {...result, duration: nextTimestamp - timestamp} as Component<any> // TypeScript has beaten me here
+    const nextTimestamp = Date.now()
+    components[sourceKey] = { ...result, duration: nextTimestamp - timestamp } as Component<any> // TypeScript has beaten me here
     timestamp = nextTimestamp
   }
 
