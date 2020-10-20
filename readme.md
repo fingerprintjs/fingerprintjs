@@ -194,7 +194,7 @@ The library is shipped in various formats:
 
 ## Migrating from v2
 
-- [Migration guide](migrating-v2-v3.md)
+- [Migration guide](migrating_v2_v3.md)
 - [V2 documentation](https://github.com/fingerprintjs/fingerprintjs/tree/v2)
 
 ## Version policy
