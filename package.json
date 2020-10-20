@@ -37,7 +37,8 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore .",
     "lint:fix": "yarn lint --fix",
     "test:local": "karma start tests/karma.local.config.js --single-run",
-    "test:browserstack": "karma start tests/karma.browserstack.config.js --single-run"
+    "test:browserstack": "karma start tests/karma.browserstack.config.js --single-run",
+    "test:dts": "tsc --noEmit dist/fp.d.ts"
   },
   "dependencies": {
     "tslib": "^2.0.1"

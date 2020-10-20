@@ -79,6 +79,12 @@ If you run the test command multiple times in parallel, BrowserStack will lose a
 Unit test files are located right next to individual module files that they check.
 Integration tests are located in the `tests` directory.
 
+To check the distributive TypeScript declarations, build the project and run:
+
+```bash
+yarn test:dts
+```
+
 ### How to publish
 
 This section is for repository maintainers.
