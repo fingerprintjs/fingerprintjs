@@ -76,3 +76,4 @@ This section is for repository maintainers.
     yarn publish --access public # Add '--tag beta' (without the quotes) if you release a beta version
     ```
 5. Push the changes to the repository, and a version tag like `v1.3.4` to the commit.
+6. Describe the version changes at the [releases section](https://github.com/fingerprintjs/fingerprintjs/releases).
