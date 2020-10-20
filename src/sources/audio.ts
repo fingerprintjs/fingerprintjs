@@ -1,6 +1,10 @@
 const n = navigator
 const w = window
 
+function isAudioParam(value: unknown): value is AudioParam {
+  return value && typeof (value as AudioParam).setValueAtTime === 'function'
+}
+
 // Inspired by and based on https://github.com/cozylife/audio-fingerprint
 export default async function getAudioFingerprint(): Promise<number> {
   // On iOS 11, audio context can only be used in response to user interaction.
@@ -24,7 +28,7 @@ export default async function getAudioFingerprint(): Promise<number> {
   oscillator.frequency.setValueAtTime(10000, context.currentTime)
 
   const compressor = context.createDynamicsCompressor()
-  for (const [param, value] of [
+  for (const [name, value] of [
     ['threshold', -50],
     ['knee', 40],
     ['ratio', 12],
@@ -32,8 +36,9 @@ export default async function getAudioFingerprint(): Promise<number> {
     ['attack', 0],
     ['release', 0.25],
   ] as const) {
-    if (typeof (compressor[param] as AudioParam).setValueAtTime === 'function') {
-      (compressor[param] as AudioParam).setValueAtTime(value, context.currentTime)
+    const param = compressor[name]
+    if (isAudioParam(param)) {
+      param.setValueAtTime(value, context.currentTime)
     }
   }
 
@@ -44,7 +49,7 @@ export default async function getAudioFingerprint(): Promise<number> {
 
   return new Promise<number>((resolve) => {
     const audioTimeoutId = setTimeout(() => {
-      context.oncomplete = () => {}
+      context.oncomplete = null
       resolve(-3)
     }, 1000)
 

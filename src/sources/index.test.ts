@@ -5,8 +5,12 @@ describe('Sources', () => {
     it('handles errors', async () => {
       const sources = {
         success1: () => 'foo',
-        throwsErrorObject: () => { throw new Error('bar') },
-        throwsErrorString: () => { throw 'baz' },
+        throwsErrorObject: () => {
+          throw new Error('bar')
+        },
+        throwsErrorString: () => {
+          throw 'baz'
+        },
         success2: () => 'baq',
       }
 
@@ -19,7 +23,7 @@ describe('Sources', () => {
       expect(components.success2.value).toBe('baq')
       expect(components.throwsErrorObject.value).toBeUndefined()
       expect(components.throwsErrorObject.error).toBeInstanceOf(Error)
-      expect(components.throwsErrorObject.error!.message).toBe('bar')
+      expect(components.throwsErrorObject.error!.message).toBe('bar') // eslint-disable-line @typescript-eslint/no-non-null-assertion
       expect(components.throwsErrorString.value).toBeUndefined()
       expect(components.throwsErrorString.error).toEqual({ message: 'baz' })
     })

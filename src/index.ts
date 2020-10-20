@@ -1,13 +1,5 @@
 import { x64hash128 } from './utils/hashing'
-import {
-  load,
-  Agent,
-  LoadOptions,
-  GetOptions,
-  GetResult,
-  hashComponents,
-  componentsToDebugString,
-} from './agent'
+import { load, Agent, LoadOptions, GetOptions, GetResult, hashComponents, componentsToDebugString } from './agent'
 import { getComponents, Component, UnknownComponents, BuiltinComponents, SourcesToComponents } from './sources'
 import { isIEOrOldEdge, isChromium, isGecko, isDesktopSafari } from './utils/browser'
 

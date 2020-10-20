@@ -156,10 +156,11 @@ export default function getFonts(): string[] {
 
   // checks if a font is available
   const isFontAvailable = (fontSpans: HTMLElement[]) => {
-    return baseFonts.some(((baseFont, baseFontIndex) => (
-      fontSpans[baseFontIndex].offsetWidth !== defaultWidth[baseFont] ||
-      fontSpans[baseFontIndex].offsetHeight !== defaultHeight[baseFont]
-    )))
+    return baseFonts.some(
+      (baseFont, baseFontIndex) =>
+        fontSpans[baseFontIndex].offsetWidth !== defaultWidth[baseFont] ||
+        fontSpans[baseFontIndex].offsetHeight !== defaultHeight[baseFont],
+    )
   }
 
   // create spans for base fonts

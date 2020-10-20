@@ -11,7 +11,7 @@ import { UAParser } from 'ua-parser-js'
  * otherwise we can't distinguish incognito browsers from regular browsers, Brave from Chrome, etc.
  */
 
-export function isEdgeHTML() {
+export function isEdgeHTML(): boolean {
   return new UAParser().getEngine().name === 'EdgeHTML'
 }
 
@@ -19,9 +19,9 @@ export function isEdgeHTML() {
  * Sets new property values to the object and reverts the properties when the action is complete
  */
 export async function withMockProperties<T>(
-  object: object,
+  object: Record<never, never>,
   mockProperties: Record<string, PropertyDescriptor>,
-  action: () => Promise<T> | T
+  action: () => Promise<T> | T,
 ): Promise<T> {
   const originalProperties: Record<string, PropertyDescriptor | undefined> = {}
 
@@ -39,7 +39,7 @@ export async function withMockProperties<T>(
     for (const property of Object.keys(originalProperties)) {
       const propertyDescriptor = originalProperties[property]
       if (propertyDescriptor === undefined) {
-        delete (object as Record<string, any>)[property]
+        delete (object as Record<keyof never, never>)[property]
       } else {
         Object.defineProperty(object, property, propertyDescriptor)
       }

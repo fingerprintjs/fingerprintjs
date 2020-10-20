@@ -6,8 +6,11 @@ async function getVisitorId() {
   return result.visitorId
 }
 
-(async () => {
-  const display = document.querySelector('.visitorId')!
+async function startPlayground() {
+  const display = document.querySelector('.visitorId')
+  if (!display) {
+    throw new Error("The display element isn't found in the HTML code")
+  }
   try {
     const visitorId = await getVisitorId()
     display.textContent = visitorId
@@ -16,4 +19,6 @@ async function getVisitorId() {
     display.textContent = 'Unexpected error'
     throw error
   }
-})()
+}
+
+startPlayground()

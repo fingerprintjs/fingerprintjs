@@ -16,11 +16,7 @@ const d = document
  */
 export function isIEOrOldEdge(): boolean {
   // The properties are checked to be in IE 10, IE 11 and Edge 18 and not to be in other browsers
-  return countTruthy([
-    'msWriteProfilerMark' in w,
-    'msLaunchUri' in n,
-    'msSaveBlob' in n,
-  ]) >= 2
+  return countTruthy(['msWriteProfilerMark' in w, 'msLaunchUri' in n, 'msSaveBlob' in n]) >= 2
 }
 
 /**
@@ -31,15 +27,17 @@ export function isIEOrOldEdge(): boolean {
  */
 export function isChromium(): boolean {
   // Based on research in September 2020
-  return countTruthy([
-    'userActivation' in n,
-    'mediaSession' in n,
-    n.vendor.indexOf('Google') === 0,
-    'BackgroundFetchManager' in w,
-    'BatteryManager' in w,
-    'webkitMediaStream' in w,
-    'webkitSpeechGrammar' in w,
-  ]) >= 5
+  return (
+    countTruthy([
+      'userActivation' in n,
+      'mediaSession' in n,
+      n.vendor.indexOf('Google') === 0,
+      'BackgroundFetchManager' in w,
+      'BatteryManager' in w,
+      'webkitMediaStream' in w,
+      'webkitSpeechGrammar' in w,
+    ]) >= 5
+  )
 }
 
 /**
@@ -48,14 +46,16 @@ export function isChromium(): boolean {
  */
 export function isWebKit(): boolean {
   // Based on research in September 2020
-  return countTruthy([
-    'ApplePayError' in w,
-    'CSSPrimitiveValue' in w,
-    'Counter' in w,
-    n.vendor.indexOf('Apple') === 0,
-    'getStorageUpdates' in n,
-    'WebKitMediaKeys' in w,
-  ]) >= 4
+  return (
+    countTruthy([
+      'ApplePayError' in w,
+      'CSSPrimitiveValue' in w,
+      'Counter' in w,
+      n.vendor.indexOf('Apple') === 0,
+      'getStorageUpdates' in n,
+      'WebKitMediaKeys' in w,
+    ]) >= 4
+  )
 }
 
 /**
@@ -76,14 +76,16 @@ export function isDesktopSafari(): boolean {
  */
 export function isGecko(): boolean {
   // Based on research in September 2020
-  return countTruthy([
-    'buildID' in n,
-    d.documentElement?.style && 'MozAppearance' in d.documentElement.style,
-    'MediaRecorderErrorEvent' in w,
-    'mozInnerScreenX' in w,
-    'CSSMozDocumentRule' in w,
-    'CanvasCaptureMediaStream' in w,
-  ]) >= 4
+  return (
+    countTruthy([
+      'buildID' in n,
+      d.documentElement?.style && 'MozAppearance' in d.documentElement.style,
+      'MediaRecorderErrorEvent' in w,
+      'mozInnerScreenX' in w,
+      'CSSMozDocumentRule' in w,
+      'CanvasCaptureMediaStream' in w,
+    ]) >= 4
+  )
 }
 
 /**
@@ -92,10 +94,12 @@ export function isGecko(): boolean {
  */
 export function isChromium86OrNewer(): boolean {
   // Checked in Chrome 85 vs Chrome 86 both on desktop and Android
-  return countTruthy([
-    !('MediaSettingsRange' in w),
-    !('PhotoCapabilities' in w),
-    'RTCEncodedAudioFrame' in w,
-    ('' + w.Intl) === '[object Intl]',
-  ]) >= 2
+  return (
+    countTruthy([
+      !('MediaSettingsRange' in w),
+      !('PhotoCapabilities' in w),
+      'RTCEncodedAudioFrame' in w,
+      '' + w.Intl === '[object Intl]',
+    ]) >= 2
+  )
 }

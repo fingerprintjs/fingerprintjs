@@ -26,7 +26,7 @@ module.exports = (env, { mode = 'development' }) => ({
   },
   devtool: mode === 'development' ? 'inline-source-map' : 'source-map',
   devServer: {
-    host: '0.0.0.0'
+    host: '0.0.0.0',
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -34,5 +34,5 @@ module.exports = (env, { mode = 'development' }) => ({
       template: './index.html',
       title: `FingerprintJS ${mode === 'development' ? 'Playground' : 'Demo'}`,
     }),
-  ]
+  ],
 })
