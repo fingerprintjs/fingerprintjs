@@ -4,12 +4,14 @@
   "version": "3.0.0",
   "keywords": [
     "fraud",
-    "fraud-detection",
-    "fraud-prevention",
+    "fraud detection",
+    "fraud prevention",
     "browser",
     "identification",
     "fingerprint",
     "fingerprinting",
+    "browser fingerprint",
+    "device fingerprint",
     "privacy"
   ],
   "author": "FingerprintJS, Inc (https://fingerprintjs.com)",
