@@ -17,5 +17,5 @@ BUG REPORTS NOT USING THE TEMPLATE ARE SUBJECT TO BEING CLOSED WITHOUT COMMMENT.
 
 ### Fingerprint data
 
-Provide the FULL DATA of both/all fingerprints using this jsfiddle https://jsfiddle.net/L2gLq4rg/85/.
-Alternatively, provide a jsfiddle that reproduces the bug.
+Provide the FULL DATA of both/all fingerprints using this code sandbox https://jlryy.csb.app/.
+Alternatively, provide a page that reproduces the bug.
