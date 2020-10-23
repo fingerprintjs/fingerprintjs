@@ -43,9 +43,6 @@ Unlike cookies and local storage, fingerprint stays the same in incognito/privat
 ></script>
 ```
 
-We recommend to upload [the JS script](https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js)
-to your server because AdBlock and other browser extensions can block the public script URL.
-
 ### Alternatively you can install from NPM to use with Webpack/Rollup/Browserify
 
 ```bash
