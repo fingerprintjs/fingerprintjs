@@ -14,7 +14,7 @@ export default function getLanguages(): string[][] {
     // Starting from Chromium 86, there is only a single value in `navigator.language` in Incognito mode:
     // the value of `navigator.language`. Therefore the value is ignored in this browser.
     if (!(isChromium() && isChromium86OrNewer())) {
-      result.push(n.languages)
+      result.push(n.languages as string[])
     }
   } else if (typeof n.languages === 'string') {
     const languages = n.languages as string
