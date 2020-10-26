@@ -1,11 +1,18 @@
 const d = document
 
-// a font will be compared against all the three default fonts.
-// and if it doesn't match all 3 then that font is not available.
+// We use m or w because these two characters take up the maximum width.
+// And we use a LLi so that the same matching fonts can get separated.
+const testString = 'mmMwWLliI0O&1'
+
+// We test using 48px font size, we may use any size. I guess larger the better.
+const testSize = '48px'
+
+// A font will be compared against all the three default fonts.
+// And if it doesn't match all 3 then that font is not available.
 const baseFonts = ['monospace', 'sans-serif', 'serif'] as const
 
 const fontList = [
-  // this is android-specific font from "Roboto" family
+  // This is android-specific font from "Roboto" family
   'sans-serif-thin',
   'ARNO PRO',
   'Agency FB',
@@ -60,7 +67,8 @@ const fontList = [
   'ZWAdobeF',
 ] as const
 
-const fontResetStyles = {
+const fontSpanStyle = {
+  // CSS font reset to reset external styles
   fontStyle: 'normal',
   fontWeight: 'normal',
   letterSpacing: 'normal',
@@ -73,14 +81,13 @@ const fontResetStyles = {
   whiteSpace: 'normal',
   wordBreak: 'normal',
   wordSpacing: 'normal',
+
+  // We need this css as in some weird browser this span elements shows up for a microSec which creates
+  // a bad user experience
+  position: 'absolute',
+  left: '-9999px',
+  fontSize: testSize,
 }
-
-// we use m or w because these two characters take up the maximum width.
-// And we use a LLi so that the same matching fonts can get separated
-const testString = 'mmMwWLliI0O&1'
-
-// we test using 48px font size, we may use any size. I guess larger the better.
-const testSize = '48px'
 
 // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
 export default function getFonts(): string[] {
@@ -97,28 +104,14 @@ export default function getFonts(): string[] {
 
   // creates a span where the fonts will be loaded
   const createSpan = () => {
-    const s = d.createElement('span')
+    const span = d.createElement('span')
+    span.textContent = testString
 
-    Object.assign(
-      s.style,
+    for (const prop of Object.keys(fontSpanStyle) as Array<keyof typeof fontSpanStyle>) {
+      span.style[prop] = fontSpanStyle[prop]
+    }
 
-      // css font reset to reset external styles
-      fontResetStyles,
-
-      /*
-       * We need this css as in some weird browser this
-       * span elements shows up for a microSec which creates a
-       * bad user experience
-       */
-      {
-        position: 'absolute',
-        left: '-9999px',
-        fontSize: testSize,
-      },
-    )
-
-    s.textContent = testString
-    return s
+    return span
   }
 
   // creates a span and load the font to detect and a base font for fallback

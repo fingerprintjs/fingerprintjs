@@ -10,10 +10,11 @@ describe('Sources', () => {
       expect(typeof touchSupport.touchStart).toBe('boolean')
     })
 
+    // Some browsers return a string value for `maxTouchPoints`.
+    // This test checks that it's fetched as a number regardless.
     it('handles fake values', async () => {
-      // Some browsers return a string value for `maxTouchPoints`.
-      // This test checks that it's fetched as a number regardless.
-      await withMockProperties(navigator, { maxTouchPoints: { value: '5' } }, () => {
+      // Configuring the mock property as `{ value: '5' }` doesn't work in old browsers.
+      await withMockProperties(navigator, { maxTouchPoints: { get: () => '5' } }, () => {
         const touchSupport = getTouchSupport()
         expect(touchSupport.maxTouchPoints).toBe(5)
       })

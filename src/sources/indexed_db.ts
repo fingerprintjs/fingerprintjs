@@ -1,9 +1,9 @@
-import { isIEOrOldEdge } from '../utils/browser'
+import { isEdgeHTML, isTrident } from '../utils/browser'
 
 export default function getIndexedDB(): boolean | undefined {
   // IE and Edge don't allow accessing indexedDB in private mode, therefore IE and Edge will have different
   // visitor identifier in normal and private modes.
-  if (isIEOrOldEdge()) {
+  if (isTrident() || isEdgeHTML()) {
     return undefined
   }
   try {

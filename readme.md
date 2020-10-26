@@ -205,7 +205,7 @@ Use undocumented features at your own risk.
 ## Browser support
 
 ```bash
-npx browserslist "> 1% in us"
+npx browserslist "cover 95% in us, not IE < 10"
 ```
 
 ## Contribution

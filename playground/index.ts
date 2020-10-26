@@ -1,3 +1,4 @@
+import 'promise-polyfill'
 import FingerprintJS from '../src'
 
 async function getVisitorId() {
