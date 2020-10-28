@@ -95,6 +95,7 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
     <tr><td>Security</td><td align="center">❌</td><td align="center">✅</td></tr>
     <tr><td>Server API</td><td align="center">❌</td><td align="center">✅</td></tr>
     <tr><td>Webhooks</td><td align="center">❌</td><td align="center">✅</td></tr>
+    <tr><td>Stable identifier between versions</td><td align="center">❌</td><td align="center">✅</td></tr>
   </tbody>
 </table>
 
@@ -196,8 +197,9 @@ The library is shipped in various formats:
 
 ## Version policy
 
-The library doesn't guarantee the same visitor identifier between versions,
-but will try to keep them the same as much as possible.
+The OSS version doesn't guarantee the same visitor identifier between versions,
+but will try to keep them the same as much as possible. 
+To get identifiers that remain stable up to 1 year, please consider [upgrading to pro.](https://dashboard.fingerprintjs.com)
 
 The documented JS API follows [Semantic Versioning](https://semver.org).
 Use undocumented features at your own risk.
