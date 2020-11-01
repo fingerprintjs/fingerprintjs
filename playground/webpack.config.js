@@ -11,13 +11,20 @@ module.exports = (env, { mode = 'development' }) => ({
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.tsx?$/i,
         loader: 'ts-loader',
         exclude: /node_modules/,
         options: {
           compilerOptions: {
             sourceMap: true,
           },
+        },
+      },
+      {
+        test: /\.(jpe?g|png|svg)$/i,
+        loader: 'file-loader',
+        options: {
+          outputPath: 'assets',
         },
       },
     ],

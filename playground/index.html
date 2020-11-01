@@ -23,8 +23,10 @@
       text-align: center;
     }
     h1 {
-      margin: 0 0 1.3em;
-      color: #393e9e;
+      margin: 0 0 0.7em;
+    }
+    h1 > img {
+      width: 300px;
     }
     .visitorIdHeader {
       font-size: 16px;
@@ -49,7 +51,9 @@
 </head>
 <body>
   <main>
-    <h1>FingerprintJS</h1>
+    <h1>
+      <img src="<%= require('../resources/logo.svg').default %>" alt="FingerprintJS">
+    </h1>
     <div class="visitorIdHeader">Visitor ID:</div>
     <div class="visitorId loading">Getting the visitor ID...</div>
     <div class="hint">See the browser console for debug data.</div>
