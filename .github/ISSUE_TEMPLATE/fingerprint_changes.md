@@ -16,5 +16,5 @@ BUG REPORTS NOT USING THE TEMPLATE ARE SUBJECT TO BEING CLOSED WITHOUT COMMENT.
 
 ### Fingerprint data
 
-Run `fp.get({ debug: true ))` and copy all debug messages from the browser console for both/all fingerprints involved.
-Alternatively, provide a jsfiddle that reproduces the bug.
+Provide the FULL DATA of both/all fingerprints using this page: https://fingerprintjs.github.io/fingerprintjs/.
+Alternatively, provide a JSFiddle that reproduces the bug.
