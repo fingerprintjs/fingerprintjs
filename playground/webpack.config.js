@@ -25,6 +25,7 @@ module.exports = (env, { mode = 'development' }) => ({
         loader: 'file-loader',
         options: {
           outputPath: 'assets',
+          name: '[name].[ext]?[contenthash]',
         },
       },
     ],
@@ -37,6 +38,9 @@ module.exports = (env, { mode = 'development' }) => ({
     ],
   },
   devtool: mode === 'development' ? 'inline-source-map' : 'source-map',
+  output: {
+    filename: '[name].js?[contenthash]',
+  },
   devServer: {
     host: '0.0.0.0',
   },
