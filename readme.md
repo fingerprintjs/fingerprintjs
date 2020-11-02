@@ -140,7 +140,7 @@ The library is shipped in various formats:
     ```html
     <script>
       function initFingerprintJS() {
-        // ...
+        // Start loading FingerprintJS here
       }
     </script>
     <script
@@ -153,16 +153,36 @@ The library is shipped in various formats:
     ```js
     require(
       ['//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.umd.min.js'],
-      (FingerprintJS) => {/* ... */}
+      (FingerprintJS) => {
+        // Start loading FingerprintJS here
+      }
     );
     ```
 - ECMAScript module
+    ```bash
+    # Install the package first:
+    npm i @fingerprintjs/fingerprintjs
+    # or
+    yarn add @fingerprintjs/fingerprintjs
+    ```
+
     ```js
     import FingerprintJS from '@fingerprintjs/fingerprintjs';
+
+    // Start loading FingerprintJS here
     ```
 - CommonJS
+    ```bash
+    # Install the package first:
+    npm i @fingerprintjs/fingerprintjs
+    # or
+    yarn add @fingerprintjs/fingerprintjs
+    ```
+
     ```js
     const FingerprintJS = require('@fingerprintjs/fingerprintjs');
+
+    // Start loading FingerprintJS here
     ```
 
 ### API
@@ -193,7 +213,7 @@ The library is shipped in various formats:
 
 ## Migrating from v2
 
-- [Migration guide](migrating_v2_v3.md)
+- [Migration guide](docs/migrating_v2_v3.md)
 - [V2 documentation](https://github.com/fingerprintjs/fingerprintjs/tree/v2)
 
 ## Version policy
@@ -208,8 +228,10 @@ Use undocumented features at your own risk.
 ## Browser support
 
 ```bash
-npx browserslist "> 1% in us"
+npx browserslist "cover 95% in us, not IE < 10"
 ```
+
+See more details and learn how to run the library in old browsers in the [documentation article](docs/browser_support.md).
 
 ## Contribution
 

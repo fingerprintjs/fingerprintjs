@@ -1,3 +1,4 @@
+import 'promise-polyfill/src/polyfill'
 import * as FingerprintJS from '../src'
 
 async function getVisitorData() {
@@ -91,7 +92,7 @@ async function share(text: string) {
     alert(`Sharing is unavailable.
 
 Sharing is available in mobile browsers and only on HTTPS websites. ${
-      isSecureContext
+      location.protocol === 'https'
         ? 'Use a mobile device or the Copy button instead.'
         : `Open https://${location.host}${location.pathname}${location.search} instead.`
     }`)

@@ -28,17 +28,19 @@ const firefoxIncognitoCapabilities = {
 /* eslint-disable max-len */
 // prettier-ignore
 const browserstackBrowsers = {
+  IE11: { os: 'Windows', os_version: '7', browser: 'IE', browser_version: '11.0' },
   Edge18: { os: 'Windows', os_version: '10', browser: 'Edge', browser_version: '18.0' },
   Windows10_EdgeLatest: { os: 'Windows', os_version: '10', browser: 'Edge', browser_version: 'latest-beta' },
-  Windows10_Chrome84: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: '84.0' },
-  // Windows10_Chrome84_Incognito: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: '84.0', ...chromeIncognitoCapabilities },
+  Windows10_Chrome42: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: '42.0' },
+  // Windows10_Chrome42_Incognito: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: '42.0', ...chromeIncognitoCapabilities },
   Windows10_ChromeLatest: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: 'latest-beta' },
   // Windows10_ChromeLatest_Incognito: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: 'latest-beta, ...chromeIncognitoCapabilities },
-  Windows10_Firefox80: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: '80.0' },
-  // Windows10_Firefox80_Incognito: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: '80.0', ...firefoxIncognitoCapabilities },
+  Windows10_Firefox48: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: '48.0' },
+  // Windows10_Firefox48_Incognito: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: '48.0', ...firefoxIncognitoCapabilities },
   Windows10_FirefoxLatest: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: 'latest-beta' },
   // Windows10_FirefoxLatest_Incognito: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: 'latest-beta, ...firefoxIncognitoCapabilities },
-  OSXMojave_Safari12: { os: 'OS X', os_version: 'Mojave', browser: 'Safari', browser_version: '12.1' },
+  OSXElCapitan_Safari9: { os: 'OS X', os_version: 'El Capitan', browser: 'Safari', browser_version: '9.1' }, // BrowserStack can't run Safari 9 on iOS automatically. This is an equivalent.
+  OSXHighSierra_Safari11: { os: 'OS X', os_version: 'High Sierra', browser: 'Safari', browser_version: '11.1' },
   OSXCatalina_Safari13: { os: 'OS X', os_version: 'Catalina', browser: 'Safari', browser_version: '13.1' },
   OSXCatalina_ChromeLatest: { os: 'OS X', os_version: 'Catalina', browser: 'Chrome', browser_version: 'latest-beta' },
   // OSXCatalina_ChromeLatest_Incognito: { os: 'OS X', os_version: 'Catalina', browser: 'Chrome', browser_version: 'latest-beta, ...chromeIncognitoCapabilities },
