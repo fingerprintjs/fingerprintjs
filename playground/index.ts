@@ -63,7 +63,7 @@ function initializeDebugButtons(debugText: string) {
   }
 
   const shareButton = document.querySelector('#debugShare')
-  if (shareButton instanceof HTMLButtonElement && canShare()) {
+  if (shareButton instanceof HTMLButtonElement) {
     shareButton.disabled = false
     shareButton.addEventListener('click', async (event) => {
       event.preventDefault()
@@ -86,11 +86,17 @@ function copy(text: string) {
   document.body.removeChild(textarea)
 }
 
-function canShare() {
-  return !!navigator.share
-}
-
 async function share(text: string) {
+  if (!navigator.share) {
+    alert(`Sharing is unavailable.
+
+Sharing is available in mobile browsers and only on HTTPS websites. ${
+      isSecureContext
+        ? 'Use a mobile device or the Copy button instead.'
+        : `Open https://${location.host}${location.pathname}${location.search} instead.`
+    }`)
+    return
+  }
   try {
     await navigator.share({ text })
   } catch {
