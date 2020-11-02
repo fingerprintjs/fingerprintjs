@@ -6,57 +6,142 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title><%= htmlWebpackPlugin.options.title %></title>
   <style>
-    html, body {
+    /* The full-height solution for IE 11 is taken from https://gist.github.com/palicko/26b327cd2198e52c25b13485b4dd02bc */
+    html {
       display: flex;
-      min-height: 100%;
-      flex: 1;
     }
     body {
-      color: #333;
-      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      min-height: 100vh;
       padding: 0;
+      margin: 0;
+      font-family: sans-serif;
     }
-    main {
-      margin: auto;
-      max-width: 800px;
-      padding: 20px;
+    .content {
+      flex: 1;
+      width: 100%;
+      max-width: 60em;
+      box-sizing: border-box;
+      margin: 0 auto;
+      padding: 1.25em;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      flex: none;
+      margin-bottom: 1.2vh;
+    }
+    header img {
+      height: 5vh;
+      max-width: 100%;
+    }
+    button {
+      border: none;
+      background: #f04405;
+      color: #fff;
+      font: inherit;
+      font-size: 88%;
+      font-weight: 600;
+      line-height: 1.2;
+      border-radius: 0.57em;
+      cursor: pointer;
+      margin: 0;
+      padding: 0.85em 1.7em;
       text-align: center;
+      outline: none;
+      transition: all 0.25s ease-out;
     }
-    h1 {
-      margin: 0 0 0.7em;
+    button:hover {
+      background: #8c2703;
     }
-    h1 > img {
-      width: 300px;
+    button:active {
+      background: #cd3f10;
     }
-    .visitorIdHeader {
-      font-size: 16px;
-      color: #999;
+    button:disabled {
+      cursor: not-allowed;
+      background: #e9987c;
     }
-    .visitorId {
-      font-size: 24px;
-      font-weight: 500;
+    .buttons {
+      flex: none;
+    }
+    .buttons button {
+      margin: 0 0.8em 0.8em 0;
+    }
+    .outputHolder {
+      flex: 1;
+      min-height: 4em;
+      position: relative;
+      /* Without this property, the .output content prevents clicking the buttons in Safari for some reason */
+      overflow: hidden;
+    }
+    .output {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      background: #282c34;
+      box-shadow: 0 0 1.25em rgba(0, 0, 0, 0.2);
+      border-radius: 0.7em;
+      padding: 1em 1.25em;
+      color: #abb2bf;
+      overflow: auto;
+    }
+    .output pre {
+      padding: 0;
+      margin: 0;
+      font-size: 123%;
       font-family: monospace;
+      white-space: pre-wrap;
       word-break: break-all;
     }
-    .visitorId.loading {
-      opacity: 0.3;
-      font-family: inherit;
+    .output pre.big {
+      font-size: 200%;
     }
-    .hint {
-      font-size: 14px;
+    .output pre.small {
+      font-size: 100%;
+    }
+    .output .heading {
+      font-size: 75%;
+      margin-bottom: 0.5em;
+      color: #c1a081;
+    }
+    .output .heading:not(:first-child) {
       margin-top: 2em;
-      color: #555;
+    }
+
+    @media (max-width: 768px), (max-height: 568px) {
+      .content {
+        padding: 1em;
+      }
+      button {
+        padding: 0.7em 1em;
+      }
+      .output {
+        padding: 0.75em 1em;
+      }
     }
   </style>
 </head>
 <body>
-  <main>
-    <h1>
-      <img src="<%= require('../resources/logo.svg').default %>" alt="FingerprintJS">
-    </h1>
-    <div class="visitorIdHeader">Visitor ID:</div>
-    <div class="visitorId loading">Getting the visitor ID...</div>
-    <div class="hint">See the browser console for debug data.</div>
-  </main>
+  <div class="content">
+    <header>
+      <a href="<%= require('../package.json').homepage %>">
+        <img src="<%= require('../resources/logo.svg').default %>" alt="FingerprintJS">
+      </a>
+    </header>
+    <div class="buttons">
+      <button disabled id="debugCopy">Copy Debug Data</button>
+      <button disabled id="debugShare">Share Debug Data</button>
+    </div>
+    <div class="outputHolder">
+      <section class="output">
+        <div class="heading">Getting the visitor identifier...</div>
+      </section>
+    </div>
+  </div>
 </body>
 </html>
