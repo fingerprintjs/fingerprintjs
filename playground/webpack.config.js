@@ -21,7 +21,7 @@ module.exports = (env, { mode = 'development' }) => ({
         },
       },
       {
-        test: /\.(jpe?g|png|svg)$/i,
+        test: /\.(jpe?g|png|svg|ico)$/i,
         loader: 'file-loader',
         options: {
           outputPath: 'assets',
