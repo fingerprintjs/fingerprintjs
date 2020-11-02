@@ -11,8 +11,36 @@ import { UAParser } from 'ua-parser-js'
  * otherwise we can't distinguish incognito browsers from regular browsers, Brave from Chrome, etc.
  */
 
+export function isTrident(): boolean {
+  return new UAParser().getEngine().name === 'Trident'
+}
+
 export function isEdgeHTML(): boolean {
   return new UAParser().getEngine().name === 'EdgeHTML'
+}
+
+export function isChromium(): boolean {
+  return new UAParser().getEngine().name === 'Blink'
+}
+
+export function isGecko(): boolean {
+  return new UAParser().getEngine().name === 'Gecko'
+}
+
+export function isWebKit(): boolean {
+  return new UAParser().getEngine().name === 'WebKit'
+}
+
+export function isMobile(): boolean {
+  return new UAParser().getDevice().type === 'mobile'
+}
+
+export function getBrowserEngineMajorVersion(): number | undefined {
+  const version = new UAParser().getEngine().version
+  if (version === undefined) {
+    return undefined
+  }
+  return parseInt(version.split('.')[0])
 }
 
 /**

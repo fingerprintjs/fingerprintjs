@@ -8,6 +8,11 @@ const d = document
  * @see https://github.com/Modernizr/Modernizr/blob/master/feature-detects/cookies.js Taken from here
  */
 export default function areCookiesEnabled(): boolean {
+  // Taken from here: https://github.com/Modernizr/Modernizr/blob/master/feature-detects/cookies.js
+  // navigator.cookieEnabled cannot detect custom or nuanced cookie blocking configurations. For example, when blocking
+  // cookies via the Advanced Privacy Settings in IE9, it always returns true. And there have been issues in the past
+  // with site-specific exceptions. Don't rely on it.
+
   // try..catch because some in situations `document.cookie` is exposed but throws a
   // SecurityError if you try to access it; e.g. documents created from data URIs
   // or in sandboxed iframes (depending on flags/context)

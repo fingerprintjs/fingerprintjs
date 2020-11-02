@@ -1,3 +1,5 @@
+import { isTrident } from '../utils/browser'
+
 export interface PluginMimeTypeData {
   type: string
   suffixes: string
@@ -10,6 +12,9 @@ export interface PluginData {
 }
 
 export default function getPlugins(): PluginData[] | undefined {
+  if (isTrident()) {
+    return []
+  }
   if (!navigator.plugins) {
     return undefined
   }
@@ -24,7 +29,8 @@ export default function getPlugins(): PluginData[] | undefined {
     }
 
     const mimeTypes: PluginMimeTypeData[] = []
-    for (const mimeType of plugin) {
+    for (let j = 0; j < plugin.length; ++j) {
+      const mimeType = plugin[j]
       mimeTypes.push({
         type: mimeType.type,
         suffixes: mimeType.suffixes,

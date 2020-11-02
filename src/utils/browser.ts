@@ -9,14 +9,36 @@ const n = navigator
 const d = document
 
 /**
- * Checks whether the browser is Internet Explorer or pre-Chromium Edge without using user-agent.
+ * Checks whether the browser is based on Trident (the Internet Explorer engine) without using user-agent.
  *
  * Warning for package users:
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
-export function isIEOrOldEdge(): boolean {
-  // The properties are checked to be in IE 10, IE 11 and Edge 18 and not to be in other browsers
-  return countTruthy(['msWriteProfilerMark' in w, 'msLaunchUri' in n, 'msSaveBlob' in n]) >= 2
+export function isTrident(): boolean {
+  // The properties are checked to be in IE 10, IE 11 and not to be in other browsers in October 2020
+  return (
+    countTruthy([
+      'MSCSSMatrix' in w,
+      'msSetImmediate' in w,
+      'msIndexedDB' in w,
+      'msMaxTouchPoints' in n,
+      'msPointerEnabled' in n,
+    ]) >= 4
+  )
+}
+
+/**
+ * Checks whether the browser is based on EdgeHTML (the pre-Chromium Edge engine) without using user-agent.
+ *
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
+ */
+export function isEdgeHTML(): boolean {
+  // Based on research in October 2020
+  return (
+    countTruthy(['msWriteProfilerMark' in w, 'MSStream' in w, 'msLaunchUri' in n, 'msSaveBlob' in n]) >= 3 &&
+    !isTrident()
+  )
 }
 
 /**
@@ -26,13 +48,13 @@ export function isIEOrOldEdge(): boolean {
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function isChromium(): boolean {
-  // Based on research in September 2020
+  // Based on research in October 2020. Tested to detect Chromium 42-86.
   return (
     countTruthy([
-      'userActivation' in n,
-      'mediaSession' in n,
+      'webkitPersistentStorage' in n,
+      'webkitTemporaryStorage' in n,
       n.vendor.indexOf('Google') === 0,
-      'BackgroundFetchManager' in w,
+      'webkitResolveLocalFileSystemURL' in w,
       'BatteryManager' in w,
       'webkitMediaStream' in w,
       'webkitSpeechGrammar' in w,
@@ -43,6 +65,9 @@ export function isChromium(): boolean {
 /**
  * Checks whether the browser is based on mobile or desktop Safari without using user-agent.
  * All iOS browsers use WebKit (the Safari engine).
+ *
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function isWebKit(): boolean {
   // Based on research in September 2020
@@ -97,9 +122,9 @@ export function isChromium86OrNewer(): boolean {
   return (
     countTruthy([
       !('MediaSettingsRange' in w),
-      !('PhotoCapabilities' in w),
       'RTCEncodedAudioFrame' in w,
       '' + w.Intl === '[object Intl]',
-    ]) >= 2
+      '' + w.Reflect === '[object Reflect]',
+    ]) >= 3
   )
 }
