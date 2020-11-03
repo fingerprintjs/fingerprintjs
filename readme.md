@@ -16,8 +16,7 @@
 </p>
 
 Makes a website visitor identifier from a browser fingerprint.
-Unlike cookies and local storage, fingerprint stays the same in incognito/private mode and even when browser data is purged.
-See [a demo](https://fingerprintjs.github.io/fingerprintjs/).
+Unlike cookies and local storage, fingerprint stays the same in incognito/private mode and even when browser data is purged.[Demo](https://fingerprintjs.github.io/fingerprintjs/).
 
 ## Quick start
 
