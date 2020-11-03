@@ -57,7 +57,7 @@ function initializeDebugButtons(debugText: string) {
   const copyButton = document.querySelector('#debugCopy')
   if (copyButton instanceof HTMLButtonElement) {
     copyButton.disabled = false
-    copyButton.addEventListener('click', async (event) => {
+    copyButton.addEventListener('click', (event) => {
       event.preventDefault()
       copy(debugText)
     })
@@ -66,7 +66,7 @@ function initializeDebugButtons(debugText: string) {
   const shareButton = document.querySelector('#debugShare')
   if (shareButton instanceof HTMLButtonElement) {
     shareButton.disabled = false
-    shareButton.addEventListener('click', async (event) => {
+    shareButton.addEventListener('click', (event) => {
       event.preventDefault()
       share(debugText)
     })
@@ -82,7 +82,7 @@ function copy(text: string) {
   try {
     document.execCommand('copy')
   } catch {
-    // Do nothing in case of a share abort
+    // Do nothing in case of a copying error
   }
   document.body.removeChild(textarea)
 }
@@ -92,7 +92,7 @@ async function share(text: string) {
     alert(`Sharing is unavailable.
 
 Sharing is available in mobile browsers and only on HTTPS websites. ${
-      location.protocol === 'https'
+      location.protocol === 'https:'
         ? 'Use a mobile device or the Copy button instead.'
         : `Open https://${location.host}${location.pathname}${location.search} instead.`
     }`)
