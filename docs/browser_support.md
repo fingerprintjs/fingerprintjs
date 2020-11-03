@@ -13,18 +13,18 @@ At the moment, the browsers are:
 - **Edge** 18 and 85+
 - **Chrome** 42+
 - **Firefox** 48+
-- **Safari for desktop** 11.1+
-- **Safari for mobile** 9.3+
+- **Desktop Safari** 11.1+
+- **Mobile Safari** 9.3+
 - **Samsung Internet** 11.1+
 - **Android Browser** 4.1+ (see the section below)
 
-Other browsers may work, but we don't guarantee the correct operation.
+Other browsers will probably also work, but we don't guarantee it.
 
 ## Old browsers requirements
 
 Very old browsers like Internet Explorer 11 and Android Browser 4.1
 require a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) polyfill to work.
-Add any Promise polyfill you like before loading the FingerprintJS agent.
+Add a Promise polyfill before loading the FingerprintJS agent.
 Examples for various installation methods:
 
 - Global variable
