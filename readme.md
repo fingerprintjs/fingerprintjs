@@ -17,6 +17,7 @@
 
 Makes a website visitor identifier from a browser fingerprint.
 Unlike cookies and local storage, fingerprint stays the same in incognito/private mode and even when browser data is purged.
+See [a demo](https://fingerprintjs.github.io/fingerprintjs/).
 
 ## Quick start
 
@@ -218,7 +219,7 @@ The library is shipped in various formats:
 ## Version policy
 
 The OSS version doesn't guarantee the same visitor identifier between versions,
-but will try to keep them the same as much as possible. 
+but will try to keep them the same as much as possible.
 To get identifiers that remain stable up to 1 year, please consider [upgrading to pro.](https://dashboard.fingerprintjs.com)
 
 The documented JS API follows [Semantic Versioning](https://semver.org).

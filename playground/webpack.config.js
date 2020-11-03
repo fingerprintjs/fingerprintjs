@@ -11,13 +11,21 @@ module.exports = (env, { mode = 'development' }) => ({
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.tsx?$/i,
         loader: 'ts-loader',
         exclude: /node_modules/,
         options: {
           compilerOptions: {
             sourceMap: true,
           },
+        },
+      },
+      {
+        test: /\.(jpe?g|png|svg|ico)$/i,
+        loader: 'file-loader',
+        options: {
+          outputPath: 'assets',
+          name: '[name].[ext]?[contenthash]',
         },
       },
     ],
@@ -30,6 +38,9 @@ module.exports = (env, { mode = 'development' }) => ({
     ],
   },
   devtool: mode === 'development' ? 'inline-source-map' : 'source-map',
+  output: {
+    filename: '[name].js?[contenthash]',
+  },
   devServer: {
     host: '0.0.0.0',
   },
