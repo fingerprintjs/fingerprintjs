@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master
+      - feature/556-playground # todo: Remove before merging to master
 jobs:
   publish:
     name: Publish the demo

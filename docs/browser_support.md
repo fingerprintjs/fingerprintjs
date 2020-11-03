@@ -3,7 +3,7 @@
 The library supports all popular browsers.
 We use the following terminal command to decide which browsers to support:
 
-```
+```bash
 npx browserslist "cover 95% in us, not IE < 10"
 ```
 
@@ -23,7 +23,7 @@ Other browsers may work, but we don't guarantee the correct operation.
 ## Old browsers requirements
 
 Very old browsers like Internet Explorer 11 and Android Browser 4.1
-require a [Promise]([Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)) polyfill to work.
+require a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) polyfill to work.
 Add any Promise polyfill you like before loading the FingerprintJS agent.
 Examples for various installation methods:
 
