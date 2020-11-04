@@ -4,9 +4,12 @@
 name: Lint and test
 on:
   push:
-      branches:
-        - master
+    branches:
+      - master
   pull_request:
+    paths-ignore:
+      - '**.md'
+      - playground/**
 jobs:
   test:
     name: Lint and test

@@ -55,6 +55,8 @@ The files will appear at `dist`.
 
 There are automatic tests.
 They are run by [Jasmine](https://jasmine.github.io) in real browsers using [Karma](https://karma-runner.github.io).
+Unit test files are located right next to individual module files that they check.
+Integration tests are located in the `tests` directory.
 
 To run the tests in a browser on your machine, build the project and run:
 ```bash
@@ -70,14 +72,13 @@ To run the tests in browsers on [BrowserStack](https://www.browserstack.com), ge
 # For Linux, macOS and WSL (Linux on Windows)
 BROWSERSTACK_USERNAME=your-username BROWSERSTACK_ACCESS_KEY=your-key yarn test:browserstack
 ```
-Or make a PR to this repository, the test will run in BrowserStack automatically.
+Alternatively, make a PR to this repository, the test will run on BrowserStack automatically.
+But the test won't run when the PR is made from a fork repository, in this case a member will run the tests manually.
+
 BrowserStack sessions are unstable, so a session can fail for no reason;
 restart the testing when you see no clear errors related to the tests.
 If you run the test command multiple times in parallel, BrowserStack will lose access to the Karma server
 (for some reason), that will cause the tests to hang infinitely, so try to run a single testing at once.
-
-Unit test files are located right next to individual module files that they check.
-Integration tests are located in the `tests` directory.
 
 To check the distributive TypeScript declarations, build the project and run:
 
