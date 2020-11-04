@@ -1,4 +1,6 @@
 # Reference on this file: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+# You need to add BrowserStack access keys in order for the tests to work. Get a BrowserStack automate account, then go
+# to the repository settings, the Secrets page and add secrets: BROWSERSTACK_USERNAME, BROWSERSTACK_ACCESS_KEY.
 name: Lint and test
 on:
   push:
@@ -24,8 +26,6 @@ jobs:
         run: yarn test:dts
       - name: Test on BrowserStack
         env:
-          # This is in plaintext on purpose. It has no privileged access to anything (this is a free account)
-          # and it allows us to run browserstack tests against PRs.
-          BROWSERSTACK_USERNAME: github13kRcPC
-          BROWSERSTACK_ACCESS_KEY: jwzxfCyPrV1m9qapGi5M
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
         run: yarn test:browserstack
