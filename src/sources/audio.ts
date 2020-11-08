@@ -58,11 +58,13 @@ async function tryGetAudioFingerprint(AudioContext: typeof OfflineAudioContext) 
   oscillator.start(0)
 
   try {
-    const audioBuffer = await renderAudio(context)
-    return audioBuffer
-      .getChannelData(0)
-      .slice(4500, 5000)
-      .reduce((acc, val) => acc + Math.abs(val), 0)
+    const buffer = await renderAudio(context)
+    const signal = buffer.getChannelData(0)
+    let fingerprint = 0
+    for (let i = 4500; i < 5000; ++i) {
+      fingerprint += Math.abs(signal[i])
+    }
+    return fingerprint
   } catch (error) {
     return error.name === timeoutErrorName ? -3 : -4
   } finally {
