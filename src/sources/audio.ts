@@ -1,5 +1,6 @@
 const n = navigator
 const w = window
+const d = document
 
 const enum InnerErrorName {
   Timeout = 'timeout',
@@ -11,7 +12,7 @@ export default async function getAudioFingerprint(): Promise<number> {
   // On iOS 11, audio context can only be used in response to user interaction.
   // We require users to explicitly enable audio fingerprinting on iOS 11.
   // See https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
-  if (n.userAgent.match(/OS 11.+Version\/11.+Safari/)) {
+  if (doesCurrentBrowserSuspendAudioContext()) {
     // See comment for excludeUserAgent and https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
     return -1
   }
@@ -63,35 +64,46 @@ export default async function getAudioFingerprint(): Promise<number> {
   return getHash(buffer.getChannelData(0))
 }
 
+/**
+ * Checks if the current browser is known to always suspend audio context
+ */
+function doesCurrentBrowserSuspendAudioContext() {
+  // todo: Find a way to detect iOS Safari 12+ without using user-agent
+  const matches = n.userAgent.match(/OS (\d+).+Version\/(\d+).+Safari/)
+  return !!matches && matches[1] === matches[2] && parseInt(matches[1]) < 12
+}
+
 function isAudioParam(value: unknown): value is AudioParam {
   return value && typeof (value as AudioParam).setValueAtTime === 'function'
 }
 
 function renderAudio(context: OfflineAudioContext) {
-  const resumeTriesMaxCount = 5
-  const resumeTryBaseDelay = 500
+  const resumeTriesMaxCount = 3
+  const resumeRetryDelay = 500
   const runningTimeout = 1000
 
   return new Promise<AudioBuffer>((resolve, reject) => {
     context.oncomplete = (event) => resolve(event.renderedBuffer)
 
-    let resumeTryDelay = 0
-    let resumeTriesCount = 0
+    let resumeTriesLeft = resumeTriesMaxCount
 
     const tryResume = () => {
-      console.log(`Resuming audio context try #${resumeTriesCount + 1}`)
       context.startRendering()
 
-      if (context.state === 'suspended') {
-        resumeTryDelay += resumeTryBaseDelay
-        resumeTriesCount++
-        if (resumeTriesCount < resumeTriesMaxCount) {
-          setTimeout(tryResume, resumeTryDelay)
-        } else {
-          reject(makeInnerError(InnerErrorName.Suspended))
-        }
-      } else if (context.state === 'running') {
-        setTimeout(() => reject(makeInnerError(InnerErrorName.Timeout)), runningTimeout)
+      switch (context.state) {
+        case 'running':
+          setTimeout(() => reject(makeInnerError(InnerErrorName.Timeout)), runningTimeout)
+          break
+        case 'suspended':
+          if (d.visibilityState !== 'hidden') {
+            resumeTriesLeft--
+          }
+          if (resumeTriesLeft > 0) {
+            setTimeout(tryResume, resumeRetryDelay)
+          } else {
+            reject(makeInnerError(InnerErrorName.Suspended))
+          }
+          break
       }
     }
 
