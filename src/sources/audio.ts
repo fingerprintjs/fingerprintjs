@@ -1,7 +1,10 @@
 const n = navigator
 const w = window
 
-const timeoutErrorName = 'timeout'
+const enum InnerErrorName {
+  Timeout = 'timeout',
+  Suspended = 'suspended',
+}
 
 // Inspired by and based on https://github.com/cozylife/audio-fingerprint
 export default async function getAudioFingerprint(): Promise<number> {
@@ -19,19 +22,6 @@ export default async function getAudioFingerprint(): Promise<number> {
     return -2
   }
 
-  let result = 0
-  for (let i = 0; i < 5; ++i) {
-    console.log(`Getting an audio fingerprint, try #${i + 1}`)
-    result = await tryGetAudioFingerprint(AudioContext)
-    console.log(`Try #${i + 1} result:`, result)
-    if (result > 0) {
-      break
-    }
-  }
-  return result
-}
-
-async function tryGetAudioFingerprint(AudioContext: typeof OfflineAudioContext) {
   const context = new AudioContext(1, 44100, 44100)
 
   const oscillator = context.createOscillator()
@@ -61,7 +51,7 @@ async function tryGetAudioFingerprint(AudioContext: typeof OfflineAudioContext) 
   try {
     buffer = await renderAudio(context)
   } catch (error) {
-    if (error.name === timeoutErrorName) {
+    if (error.name === InnerErrorName.Timeout || error.name === InnerErrorName.Suspended) {
       return -3
     }
     throw error
@@ -70,37 +60,55 @@ async function tryGetAudioFingerprint(AudioContext: typeof OfflineAudioContext) 
     compressor.disconnect()
   }
 
-  const signal = buffer.getChannelData(0)
-  let fingerprint = 0
-  for (let i = 4500; i < 5000; ++i) {
-    fingerprint += Math.abs(signal[i])
-  }
-  return fingerprint
+  return getHash(buffer.getChannelData(0))
 }
 
 function isAudioParam(value: unknown): value is AudioParam {
   return value && typeof (value as AudioParam).setValueAtTime === 'function'
 }
 
-function renderAudio(context: OfflineAudioContext, timeoutMs = 1000) {
+function renderAudio(context: OfflineAudioContext) {
+  const resumeTriesMaxCount = 5
+  const resumeTryBaseDelay = 500
+  const runningTimeout = 1000
+
   return new Promise<AudioBuffer>((resolve, reject) => {
-    console.log('Before timeout', context.state)
+    context.oncomplete = (event) => resolve(event.renderedBuffer)
 
-    const audioTimeoutId = setTimeout(() => {
-      context.oncomplete = null
-      const error = new Error(timeoutErrorName)
-      error.name = timeoutErrorName
-      reject(error)
-    }, timeoutMs)
+    let resumeTryDelay = 0
+    let resumeTriesCount = 0
 
-    context.oncomplete = (event) => {
-      clearTimeout(audioTimeoutId)
-      resolve(event.renderedBuffer)
+    const tryResume = () => {
+      console.log(`Resuming audio context try #${resumeTriesCount + 1}`)
+      context.startRendering()
+
+      if (context.state === 'suspended') {
+        resumeTryDelay += resumeTryBaseDelay
+        resumeTriesCount++
+        if (resumeTriesCount < resumeTriesMaxCount) {
+          setTimeout(tryResume, resumeTryDelay)
+        } else {
+          reject(makeInnerError(InnerErrorName.Suspended))
+        }
+      } else if (context.state === 'running') {
+        setTimeout(() => reject(makeInnerError(InnerErrorName.Timeout)), runningTimeout)
+      }
     }
 
-    context.startRendering()
-    console.log('After startRendering', context.state)
-
-    setTimeout(() => console.log('After timeout', context.state), 500)
+    tryResume()
   })
+}
+
+function getHash(signal: ArrayLike<number>): number {
+  let hash = 0
+  for (let i = 4500; i < 5000; ++i) {
+    hash += Math.abs(signal[i])
+  }
+  return hash
+}
+
+function makeInnerError(name: InnerErrorName) {
+  const error = new Error(name)
+  error.name = name
+  return error
 }
