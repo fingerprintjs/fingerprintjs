@@ -57,20 +57,25 @@ async function tryGetAudioFingerprint(AudioContext: typeof OfflineAudioContext) 
   compressor.connect(context.destination)
   oscillator.start(0)
 
+  let buffer: AudioBuffer
   try {
-    const buffer = await renderAudio(context)
-    const signal = buffer.getChannelData(0)
-    let fingerprint = 0
-    for (let i = 4500; i < 5000; ++i) {
-      fingerprint += Math.abs(signal[i])
-    }
-    return fingerprint
+    buffer = await renderAudio(context)
   } catch (error) {
-    return error.name === timeoutErrorName ? -3 : -4
+    if (error.name === timeoutErrorName) {
+      return -3
+    }
+    throw error
   } finally {
     oscillator.disconnect()
     compressor.disconnect()
   }
+
+  const signal = buffer.getChannelData(0)
+  let fingerprint = 0
+  for (let i = 4500; i < 5000; ++i) {
+    fingerprint += Math.abs(signal[i])
+  }
+  return fingerprint
 }
 
 function isAudioParam(value: unknown): value is AudioParam {
