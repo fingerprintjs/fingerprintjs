@@ -1,9 +1,7 @@
 const n = navigator
 const w = window
 
-function isAudioParam(value: unknown): value is AudioParam {
-  return value && typeof (value as AudioParam).setValueAtTime === 'function'
-}
+const timeoutErrorName = 'timeout'
 
 // Inspired by and based on https://github.com/cozylife/audio-fingerprint
 export default async function getAudioFingerprint(): Promise<number> {
@@ -21,6 +19,19 @@ export default async function getAudioFingerprint(): Promise<number> {
     return -2
   }
 
+  let result = 0
+  for (let i = 0; i < 5; ++i) {
+    console.log(`Getting an audio fingerprint, try #${i + 1}`)
+    result = await tryGetAudioFingerprint(AudioContext)
+    console.log(`Try #${i + 1} result:`, result)
+    if (result > 0) {
+      break
+    }
+  }
+  return result
+}
+
+async function tryGetAudioFingerprint(AudioContext: typeof OfflineAudioContext) {
   const context = new AudioContext(1, 44100, 44100)
 
   const oscillator = context.createOscillator()
@@ -45,29 +56,44 @@ export default async function getAudioFingerprint(): Promise<number> {
   oscillator.connect(compressor)
   compressor.connect(context.destination)
   oscillator.start(0)
-  context.startRendering()
 
-  return new Promise<number>((resolve) => {
+  try {
+    const audioBuffer = await renderAudio(context)
+    return audioBuffer
+      .getChannelData(0)
+      .slice(4500, 5000)
+      .reduce((acc, val) => acc + Math.abs(val), 0)
+  } catch (error) {
+    return error.name === timeoutErrorName ? -3 : -4
+  } finally {
+    oscillator.disconnect()
+    compressor.disconnect()
+  }
+}
+
+function isAudioParam(value: unknown): value is AudioParam {
+  return value && typeof (value as AudioParam).setValueAtTime === 'function'
+}
+
+function renderAudio(context: OfflineAudioContext, timeoutMs = 1000) {
+  return new Promise<AudioBuffer>((resolve, reject) => {
+    console.log('Before timeout', context.state)
+
     const audioTimeoutId = setTimeout(() => {
       context.oncomplete = null
-      resolve(-3)
-    }, 1000)
+      const error = new Error(timeoutErrorName)
+      error.name = timeoutErrorName
+      reject(error)
+    }, timeoutMs)
 
     context.oncomplete = (event) => {
-      let afp
-      try {
-        clearTimeout(audioTimeoutId)
-        afp = event.renderedBuffer
-          .getChannelData(0)
-          .slice(4500, 5000)
-          .reduce((acc, val) => acc + Math.abs(val), 0)
-        oscillator.disconnect()
-        compressor.disconnect()
-      } catch (error) {
-        resolve(-4)
-        return
-      }
-      resolve(afp)
+      clearTimeout(audioTimeoutId)
+      resolve(event.renderedBuffer)
     }
+
+    context.startRendering()
+    console.log('After startRendering', context.state)
+
+    setTimeout(() => console.log('After timeout', context.state), 500)
   })
 }
