@@ -1,4 +1,5 @@
-const n = navigator
+import { isDesktopSafari, isWebKit, isWebKit606OrNewer } from '../utils/browser'
+
 const w = window
 const d = document
 
@@ -60,9 +61,7 @@ export default async function getAudioFingerprint(): Promise<number> {
  * Checks if the current browser is known to always suspend audio context
  */
 function doesCurrentBrowserSuspendAudioContext() {
-  // todo: Find a way to detect iOS Safari 12+ without using user-agent
-  const matches = n.userAgent.match(/OS (\d+).+Version\/(\d+).+Safari/)
-  return !!matches && matches[1] === matches[2] && parseInt(matches[1]) < 12
+  return isWebKit() && !isDesktopSafari() && !isWebKit606OrNewer()
 }
 
 function setAudioParam(context: BaseAudioContext, param: unknown, value: number) {
@@ -99,8 +98,8 @@ function renderAudio(context: OfflineAudioContext) {
           // The audio context can reject starting until the tab is in foreground. Long fingerprint duration
           // in background isn't a problem, therefore the retry attempts don't count in background. It can lead to
           // a situation when a fingerprint takes very long time to take and finishes successfully. FYI, the audio
-          // context can be suspended when `document.visibilityState === 'visible'` and start running after a retry.
-          if (d.visibilityState !== 'hidden') {
+          // context can be suspended when `document.hidden === false` and start running after a retry.
+          if (!d.hidden) {
             resumeTriesLeft--
           }
           if (resumeTriesLeft > 0) {
