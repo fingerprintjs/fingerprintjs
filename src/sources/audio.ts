@@ -9,16 +9,15 @@ const enum InnerErrorName {
 
 // Inspired by and based on https://github.com/cozylife/audio-fingerprint
 export default async function getAudioFingerprint(): Promise<number> {
-  // On iOS 11, audio context can only be used in response to user interaction.
-  // We require users to explicitly enable audio fingerprinting on iOS 11.
-  // See https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
+  // In some browsers, audio context always stays suspended unless the context is started in response to a user action
+  // (e.g. a click or a tap). It prevents audio fingerprint from being taken at an arbitrary moment of time.
+  // Such browsers are old and unpopular, so the audio fingerprinting is just skipped in them.
+  // See a similar case explanation at https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
   if (doesCurrentBrowserSuspendAudioContext()) {
-    // See comment for excludeUserAgent and https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
     return -1
   }
 
   const AudioContext = w.OfflineAudioContext || w.webkitOfflineAudioContext
-
   if (!AudioContext) {
     return -2
   }
@@ -27,22 +26,15 @@ export default async function getAudioFingerprint(): Promise<number> {
 
   const oscillator = context.createOscillator()
   oscillator.type = 'triangle'
-  oscillator.frequency.setValueAtTime(10000, context.currentTime)
+  setAudioParam(context, oscillator.frequency, 10000)
 
   const compressor = context.createDynamicsCompressor()
-  for (const [name, value] of [
-    ['threshold', -50],
-    ['knee', 40],
-    ['ratio', 12],
-    ['reduction', -20],
-    ['attack', 0],
-    ['release', 0.25],
-  ] as const) {
-    const param = compressor[name]
-    if (isAudioParam(param)) {
-      param.setValueAtTime(value, context.currentTime)
-    }
-  }
+  setAudioParam(context, compressor.threshold, -50)
+  setAudioParam(context, compressor.knee, 40)
+  setAudioParam(context, compressor.ratio, 12)
+  setAudioParam(context, compressor.reduction, -20)
+  setAudioParam(context, compressor.attack, 0)
+  setAudioParam(context, compressor.release, 0.25)
 
   oscillator.connect(compressor)
   compressor.connect(context.destination)
@@ -73,8 +65,13 @@ function doesCurrentBrowserSuspendAudioContext() {
   return !!matches && matches[1] === matches[2] && parseInt(matches[1]) < 12
 }
 
-function isAudioParam(value: unknown): value is AudioParam {
-  return value && typeof (value as AudioParam).setValueAtTime === 'function'
+function setAudioParam(context: BaseAudioContext, param: unknown, value: number) {
+  const isAudioParam = (value: unknown): value is AudioParam =>
+    value && typeof (value as AudioParam).setValueAtTime === 'function'
+
+  if (isAudioParam(param)) {
+    param.setValueAtTime(value, context.currentTime)
+  }
 }
 
 function renderAudio(context: OfflineAudioContext) {
@@ -94,7 +91,15 @@ function renderAudio(context: OfflineAudioContext) {
         case 'running':
           setTimeout(() => reject(makeInnerError(InnerErrorName.Timeout)), runningTimeout)
           break
+
+        // Sometimes the audio context doesn't start after calling `startRendering` (in addition to the cases where
+        // audio context doesn't start at all). A known case is starting an audio context when the browser tab is in
+        // background on iPhone. Retries usually help in this case.
         case 'suspended':
+          // The audio context can reject starting until the tab is in foreground. Long fingerprint duration
+          // in background isn't a problem, therefore the retry attempts don't count in background. It can lead to
+          // a situation when a fingerprint takes very long time to take and finishes successfully. FYI, the audio
+          // context can be suspended when `document.visibilityState === 'visible'` and start running after a retry.
           if (d.visibilityState !== 'hidden') {
             resumeTriesLeft--
           }
