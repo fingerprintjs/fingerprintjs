@@ -97,8 +97,8 @@ function renderAudio(context: OfflineAudioContext) {
         case 'suspended':
           // The audio context can reject starting until the tab is in foreground. Long fingerprint duration
           // in background isn't a problem, therefore the retry attempts don't count in background. It can lead to
-          // a situation when a fingerprint takes very long time to take and finishes successfully. FYI, the audio
-          // context can be suspended when `document.hidden === false` and start running after a retry.
+          // a situation when a fingerprint takes very long time and finishes successfully. FYI, the audio context
+          // can be suspended when `document.hidden === false` and start running after a retry.
           if (!d.hidden) {
             resumeTriesLeft--
           }

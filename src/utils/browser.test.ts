@@ -27,10 +27,6 @@ describe('Browser utilities', () => {
       if (!utils.isWebKit()) {
         pending('The case is for WebKit only')
       }
-      if (!utils.isMobile()) {
-        pending("Desktop Safari on BrowserStack Automate doesn't have `window.safari` for some reason")
-        // We've tested manually that desktop Safaris 9–14 do have `window.safari`
-      }
       expect(browser.isDesktopSafari()).toBe(!utils.isMobile())
     })
 
@@ -41,7 +37,7 @@ describe('Browser utilities', () => {
       expect(browser.isChromium86OrNewer()).toBe((utils.getBrowserEngineMajorVersion() ?? 0) >= 86)
     })
 
-    // WebKit has stopped telling it's real version in the user-agent string since version 605.1.15,
+    // WebKit has stopped telling its real version in the user-agent string since version 605.1.15,
     // therefore the browser version has to be checked instead of the engine version.
     it('detects Safari 12+', () => {
       if (!utils.isSafari()) {

@@ -90,7 +90,14 @@ export function isWebKit(): boolean {
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function isDesktopSafari(): boolean {
-  return 'safari' in w
+  return (
+    countTruthy([
+      'safari' in w, // Always false in BrowserStack Automate
+      !('DeviceMotionEvent' in w),
+      !('ongestureend' in w),
+      !('standalone' in n),
+    ]) >= 3
+  )
 }
 
 /**
