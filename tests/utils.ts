@@ -39,7 +39,8 @@ export function isMobile(): boolean {
  * Probably you should use `isWebKit` instead
  */
 export function isSafari(): boolean {
-  return new UAParser().getBrowser().name === 'Safari'
+  const browserName = new UAParser().getBrowser().name
+  return browserName === 'Safari' || browserName === 'Mobile Safari'
 }
 
 /**

@@ -47,7 +47,7 @@ describe('Browser utilities', () => {
       if (!utils.isSafari()) {
         pending('The case is for Safari only')
       }
-      expect(browser.isWebKit606OrNewer()).toBe((utils.getBrowserMajorVersion() ?? 0) >= 606)
+      expect(browser.isWebKit606OrNewer()).toBe((utils.getBrowserMajorVersion() ?? 0) >= 12)
     })
   })
 })
