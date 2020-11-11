@@ -35,7 +35,7 @@ import areCookiesEnabled from './cookies_enabled'
  * this package.
  */
 export const sources = {
-  // Expected errors and default values must be handled inside the functions
+  // Expected errors and default values must be handled inside the functions. Unexpected errors must be thrown.
   osCpu: getOsCpu,
   languages: getLanguages,
   colorDepth: getColorDepth,

@@ -35,6 +35,25 @@ export function isMobile(): boolean {
   return new UAParser().getDevice().type === 'mobile'
 }
 
+/**
+ * Probably you should use `isWebKit` instead
+ */
+export function isSafari(): boolean {
+  const browserName = new UAParser().getBrowser().name
+  return browserName === 'Safari' || browserName === 'Mobile Safari'
+}
+
+/**
+ * Probably you should use `getBrowserEngineMajorVersion` instead
+ */
+export function getBrowserMajorVersion(): number | undefined {
+  const version = new UAParser().getBrowser().version
+  if (version === undefined) {
+    return undefined
+  }
+  return parseInt(version.split('.')[0])
+}
+
 export function getBrowserEngineMajorVersion(): number | undefined {
   const version = new UAParser().getEngine().version
   if (version === undefined) {
