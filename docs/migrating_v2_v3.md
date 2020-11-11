@@ -95,7 +95,7 @@ console.log(result)
 
 Version 3 has no options for customization, it provides a good built-in setup.
 Nevertheless, you can exclude components and add custom components manually.
-Use a provided hash function to achieve this:
+Use the provided hash function to achieve this:
 
 ```js
 const result = await fp.get()
@@ -110,6 +110,6 @@ const extendedComponents = {
   bar: { value: await getBarComponent() },
 }
 
-// Make a visitor identifier from you custom list of components
+// Make a visitor identifier from your custom list of components
 const visitorId = FingerprintJS.hashComponents(extendedComponents)
 ```

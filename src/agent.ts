@@ -126,6 +126,7 @@ export class OpenAgent implements Agent {
 
 \`\`\`
 version: ${version}
+userAgent: ${navigator.userAgent}
 getOptions: ${JSON.stringify(options, undefined, 2)}
 visitorId: ${result.visitorId}
 components: ${componentsToDebugString(components)}

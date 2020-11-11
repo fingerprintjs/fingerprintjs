@@ -233,6 +233,6 @@ npx browserslist "cover 95% in us, not IE < 10"
 
 See more details and learn how to run the library in old browsers in the [documentation article](docs/browser_support.md).
 
-## Contribution
+## Contributing
 
-See the [contribution guidelines](contributing.md) to learn how to start a playground, test and build.
+See the [contributing guidelines](contributing.md) to learn how to start a playground, test and build.

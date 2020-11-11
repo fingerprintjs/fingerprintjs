@@ -12,18 +12,25 @@ async function startPlayground() {
     throw new Error("The output element isn't found in the HTML code")
   }
 
+  const startTime = Date.now()
+
   try {
-    const startTime = Date.now()
     const { visitorId, components } = await getVisitorData()
+    const totalTime = Date.now() - startTime
     output.innerHTML = ''
-    addOutputSection(output, 'Visitor identifier:', visitorId, 'big')
-    addOutputSection(output, 'Time took to get the identifier:', `${Date.now() - startTime}ms`)
-    addOutputSection(output, 'Entropy components:', FingerprintJS.componentsToDebugString(components), 'small')
-    initializeDebugButtons(`${visitorId}:
+    addOutputSection(output, 'Visitor identifier:', visitorId, 'giant')
+    addOutputSection(output, 'Time took to get the identifier:', `${totalTime}ms`, 'big')
+    addOutputSection(output, 'User agent:', navigator.userAgent)
+    addOutputSection(output, 'Entropy components:', FingerprintJS.componentsToDebugString(components))
+
+    initializeDebugButtons(`Visitor identifier: \`${visitorId}\`
+User agent: \`${navigator.userAgent}\`
+Entropy components:
 \`\`\`
 ${FingerprintJS.componentsToDebugString(components)}
 \`\`\``)
   } catch (error) {
+    const totalTime = Date.now() - startTime
     const errorData = {
       message: error.message,
       stack: error.stack.split('\n'),
@@ -31,15 +38,20 @@ ${FingerprintJS.componentsToDebugString(components)}
     }
     output.innerHTML = ''
     addOutputSection(output, 'Unexpected error:', JSON.stringify(errorData, null, 2))
+    addOutputSection(output, 'Time passed before the error:', `${totalTime}ms`, 'big')
+    addOutputSection(output, 'User agent:', navigator.userAgent)
+
     initializeDebugButtons(`Unexpected error:\n
 \`\`\`
 ${JSON.stringify(errorData, null, 2)}
-\`\`\``)
+\`\`\`
+Time passed before the error: ${totalTime}ms
+User agent: \`${navigator.userAgent}\``)
     throw error
   }
 }
 
-function addOutputSection(output: Node, header: string, content: string, size?: 'small' | 'big') {
+function addOutputSection(output: Node, header: string, content: string, size?: 'big' | 'giant') {
   const headerElement = document.createElement('div')
   headerElement.classList.add('heading')
   headerElement.textContent = header
