@@ -100,19 +100,33 @@ const u8a = Uint8Array
 const validate = (bytes: number[]) => wa.validate(u8a.of(...magicBytes, ...versionBytes, ...bytes))
 
 export interface WasmSupport {
+  /** Typed function references and closures (pre-proposal) */
   functionReferences: boolean
+  /** Instantiates a module directly from a streamed underlying source */
   streaming: boolean
+  /** Type Reflection (--experimental-wasm-type-reflection) */
   typeReflection: boolean
+  /** BigInt to WebAssembly i64 integration (--experimental-wasm-bigint) */
   bigInt: boolean
+  /** Bulk memory operations (--experimental-wasm-bulk-memory) */
   bulkMemory: boolean
+  /** exception handling (--experimental-wasm-eh) */
   exceptions: boolean
+  /** Multi values (--experimental-wasm-mv) */
   multiValue: boolean
+  /** Import & export of mutable global (--experimental-wasm-mut-global) */
   mutableGlobal: boolean
+  /** Basic reference types "externref" (--experimental-wasm-reftypes) */
   referenceTypes: boolean
+  /** Non-trapping float-to-int conversions (--experimental-wasm-sat-f2i-conversions) */
   saturateConversions: boolean
+  /** Zero and sign extensions (--experimental-wasm-se) */
   signExtensions: boolean
+  /** SIMD (--experimental-wasm-simd) */
   simd: boolean
+  /** Tail call optiminations (--experimental-wasm-return-call) */
   tailCall: boolean
+  /** Threads and atomics (--experimental-wasm-threads) */
   threads: boolean
 }
 
