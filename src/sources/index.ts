@@ -26,6 +26,7 @@ import getEmptyEvalLength from './empty_eval_length'
 import getErrorFF from './error_ff'
 import getVendor from './vendor'
 import getChrome from './chrome'
+import getWasmSupport from './wasm_support'
 import areCookiesEnabled from './cookies_enabled'
 
 /**
@@ -65,6 +66,7 @@ export const sources = {
   vendor: getVendor,
   chrome: getChrome,
   cookiesEnabled: areCookiesEnabled,
+  wasmSupport: getWasmSupport,
 }
 
 /**
