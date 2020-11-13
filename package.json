@@ -1,6 +1,6 @@
 {
   "name": "@fingerprintjs/fingerprintjs",
-  "description": "Modern & flexible browser fingerprinting library",
+  "description": "Browser fingerprinting library with the highest accuracy and stability",
   "version": "3.0.3",
   "keywords": [
     "fraud",

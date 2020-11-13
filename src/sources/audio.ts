@@ -3,6 +3,15 @@ import { isDesktopSafari, isWebKit, isWebKit606OrNewer } from '../utils/browser'
 const w = window
 const d = document
 
+const enum SpecialFingerprint {
+  /** Making a fingerprint is skipped because the browser is known to always suspend audio context */
+  KnownToSuspend = -1,
+  /** The browser doesn't support audio context */
+  NotSupported = -2,
+  /** An unexpected timeout has happened */
+  Timeout = -3,
+}
+
 const enum InnerErrorName {
   Timeout = 'timeout',
   Suspended = 'suspended',
@@ -10,17 +19,17 @@ const enum InnerErrorName {
 
 // Inspired by and based on https://github.com/cozylife/audio-fingerprint
 export default async function getAudioFingerprint(): Promise<number> {
+  const AudioContext = w.OfflineAudioContext || w.webkitOfflineAudioContext
+  if (!AudioContext) {
+    return SpecialFingerprint.NotSupported
+  }
+
   // In some browsers, audio context always stays suspended unless the context is started in response to a user action
   // (e.g. a click or a tap). It prevents audio fingerprint from being taken at an arbitrary moment of time.
   // Such browsers are old and unpopular, so the audio fingerprinting is just skipped in them.
   // See a similar case explanation at https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
   if (doesCurrentBrowserSuspendAudioContext()) {
-    return -1
-  }
-
-  const AudioContext = w.OfflineAudioContext || w.webkitOfflineAudioContext
-  if (!AudioContext) {
-    return -2
+    return SpecialFingerprint.KnownToSuspend
   }
 
   const context = new AudioContext(1, 44100, 44100)
@@ -46,7 +55,7 @@ export default async function getAudioFingerprint(): Promise<number> {
     buffer = await renderAudio(context)
   } catch (error) {
     if (error.name === InnerErrorName.Timeout || error.name === InnerErrorName.Suspended) {
-      return -3
+      return SpecialFingerprint.Timeout
     }
     throw error
   } finally {
