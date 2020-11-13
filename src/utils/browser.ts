@@ -137,6 +137,42 @@ export function isChromium86OrNewer(): boolean {
 }
 
 /**
+ * Checks whether the browser is based on Chromium version ≥84 without using user-agent.
+ * It doesn't check that the browser is based on Chromium, there is a separate function for this.
+ */
+export function isChromium84OrNewer(): boolean {
+  // Checked in Chrome 83 vs Chrome 84 on Windows
+  return (
+    countTruthy(['AnimationPlaybackEvent' in w, 'CSSAnimation' in w, 'FinalizationRegistry' in w, 'WeakRef' in w]) >= 3
+  )
+}
+
+/**
+ * Checks whether the browser is based on Chromium version ≥79 without using user-agent.
+ * It doesn't check that the browser is based on Chromium, there is a separate function for this.
+ */
+export function isChromium79OrNewer(): boolean {
+  // Checked in Chrome 78 vs Chrome 79 on Windows
+  return countTruthy(['Geolocation' in w, /focus/.test('' + w.focus), /postMessage/.test('' + w.postMessage)]) >= 2
+}
+
+/**
+ * Checks whether the browser is based on Chromium version ≥57 without using user-agent.
+ * It doesn't check that the browser is based on Chromium, there is a separate function for this.
+ */
+export function isChromium57OrNewer(): boolean {
+  // Checked in Chrome 56 vs Chrome 57 on Windows
+  return (
+    countTruthy([
+      'FontFaceSetLoadEvent' in w,
+      'PerformanceNavigationTiming' in w,
+      'WebAssembly' in w,
+      'ongotpointercapture' in w,
+    ]) >= 3
+  )
+}
+
+/**
  * Checks whether the browser is based on WebKit version ≥606 (Safari ≥12) without using user-agent.
  * It doesn't check that the browser is based on WebKit, there is a separate function for this.
  *
@@ -152,4 +188,30 @@ export function isWebKit606OrNewer(): boolean {
       'ontransitioncancel' in w,
     ]) >= 3
   )
+}
+
+/**
+ * Checks whether the browser runs on desktop Windows.
+ */
+export function isWindows(): boolean {
+  // Known navigator.platform values: Win16, Win32, Win64, WinCE. The complex regular expression is just in case.
+  return /^win(dows)?($|\d|\s|ce)/i.test(n.platform)
+}
+
+/**
+ * Checks whether the browser runs on macOS.
+ */
+export function isMacOS(): boolean {
+  // todo: Check the regular expression on an ARM Mac: https://stackoverflow.com/q/64853342/1118709
+  if (!/^mac/i.test(n.platform)) {
+    return false
+  }
+
+  // iOS tampers the navigator.platform value when desktop mode is on (which is default on iPad).
+  // So we need to check that it's really a desktop.
+  if (isWebKit() && !isDesktopSafari()) {
+    return false
+  }
+
+  return true
 }
