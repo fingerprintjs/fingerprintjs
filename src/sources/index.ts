@@ -10,7 +10,7 @@ import getLanguages from './languages'
 import getColorDepth from './color_depth'
 import getDeviceMemory from './device_memory'
 import getScreenResolution from './screen_resolution'
-import getAvailableScreenResolution from './available_screen_resolution'
+import getAvailableScreenPosition from './available_screen_resolution'
 import getHardwareConcurrency from './hardware_concurrency'
 import getTimezoneOffset from './timezone_offset'
 import getTimezone from './timezone'
@@ -41,7 +41,7 @@ export const sources = {
   colorDepth: getColorDepth,
   deviceMemory: getDeviceMemory,
   screenResolution: getScreenResolution,
-  availableScreenResolution: getAvailableScreenResolution,
+  availableScreenPosition: getAvailableScreenPosition,
   hardwareConcurrency: getHardwareConcurrency,
   timezoneOffset: getTimezoneOffset,
   timezone: getTimezone,
@@ -50,7 +50,6 @@ export const sources = {
   indexedDB: getIndexedDB,
   openDatabase: getOpenDatabase,
   cpuClass: getCpuClass,
-  // Maybe it should be excluded: https://github.com/fingerprintjs/fingerprintjs/issues/514#issuecomment-688754892
   platform: getPlatform,
   plugins: getPlugins,
   canvas: getCanvasFingerprint,

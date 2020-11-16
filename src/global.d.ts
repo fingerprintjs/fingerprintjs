@@ -21,3 +21,8 @@ interface Navigator {
   deviceMemory?: number
   cpuClass?: string
 }
+
+interface Screen {
+  availLeft?: number
+  availTop?: number
+}

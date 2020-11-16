@@ -44,6 +44,10 @@ export function toFloat(value: unknown): number {
   return parseFloat(value as string)
 }
 
+export function replaceNaN<T, U>(value: T, replacement: U): T | U {
+  return typeof value === 'number' && isNaN(value) ? replacement : value
+}
+
 export function countTruthy(values: unknown[]): number {
   return values.reduce<number>((sum, value) => sum + (value ? 1 : 0), 0)
 }
