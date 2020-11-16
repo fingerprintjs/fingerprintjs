@@ -51,3 +51,14 @@ export function replaceNaN<T, U>(value: T, replacement: U): T | U {
 export function countTruthy(values: unknown[]): number {
   return values.reduce<number>((sum, value) => sum + (value ? 1 : 0), 0)
 }
+
+export function round(value: number, base = 1): number {
+  if (Math.abs(base) >= 1) {
+    return Math.round(value / base) * base
+  } else {
+    // Sometimes when a number is multiplied by a small number, precision is lost,
+    // for example 1234 * 0.0001 === 0.12340000000000001, and it's more precise divide: 1234 / (1 / 0.0001) === 0.1234.
+    const counterBase = 1 / base
+    return Math.round(value * counterBase) / counterBase
+  }
+}

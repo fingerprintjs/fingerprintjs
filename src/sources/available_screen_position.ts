@@ -1,27 +1,28 @@
-import { replaceNaN, toFloat } from '../utils/data'
+import { replaceNaN, round, toFloat } from '../utils/data'
 import * as browser from '../utils/browser'
 
 type Position = [left: number | null, top: number | null, width: number | null, height: number | null]
+
+const roundingPrecision = 10
 
 export default function getAvailableScreenPosition(): Position | undefined {
   if (!isUseful()) {
     return undefined
   }
 
-  const s = screen
-
   // Some browsers return screen resolution as strings, e.g. "1200", instead of a number, e.g. 1200.
   // I suspect it's done by certain plugins that randomize browser properties to prevent fingerprinting.
-  return [
-    replaceNaN(toFloat(s.availLeft), null),
-    replaceNaN(toFloat(s.availTop), null),
-    replaceNaN(toFloat(s.availWidth), null),
-    replaceNaN(toFloat(s.availHeight), null),
-  ]
+  //
+  // Sometimes the resolution changes a bit for unknown reason, e.g. 1900x1440 → 1900x1439,
+  // the rounding is used to mitigate this difference.
+  const prepareValue = (value: unknown) => replaceNaN(round(toFloat(value), roundingPrecision), null)
+  const s = screen
+
+  return [prepareValue(s.availLeft), prepareValue(s.availTop), prepareValue(s.availWidth), prepareValue(s.availHeight)]
 }
 
 /**
- * Checks whether the current browser is know to have stable and informative available screen resolution. "Stable" means
+ * Checks whether the current browser is known to have stable and informative available screen resolution. "Stable" means
  * that it doesn't change when the browser goes fullscreen (including via `requestFullscreen` and a UI button) or the
  * device is rotated. "Not informative" means that it's always equal to the screen size.
  *

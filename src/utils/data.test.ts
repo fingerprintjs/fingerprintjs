@@ -1,4 +1,4 @@
-import { toFloat, toInt } from './data'
+import { round, toFloat, toInt } from './data'
 
 describe('Data utilities', () => {
   it('converts to integer', () => {
@@ -23,5 +23,17 @@ describe('Data utilities', () => {
     expect(toFloat('-273')).toBe(-273)
     expect(toFloat('-1.5')).toBe(-1.5)
     expect(toFloat('foo')).toBeNaN()
+  })
+
+  it('rounds', () => {
+    expect(round(7.9)).toBe(8)
+    expect(round(29847.23, 10)).toBe(29850)
+    expect(round(0.1234321, 0.0001)).toBe(0.1234)
+    expect(round(-234.65, 2)).toBe(-234)
+    expect(round(4.2, -5)).toBe(5)
+    expect(round(-36.6, -1)).toBe(-37)
+    expect(round(NaN)).toBeNaN()
+    expect(round(NaN, 10)).toBeNaN()
+    expect(round(1.5, NaN)).toBeNaN()
   })
 })
