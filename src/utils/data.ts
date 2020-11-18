@@ -28,9 +28,6 @@ export function excludes<THaystack, TNeedle>(
  * Be careful, NaN can return
  */
 export function toInt(value: unknown): number {
-  if (typeof value === 'number') {
-    return value | 0
-  }
   return parseInt(value as string)
 }
 
@@ -38,9 +35,6 @@ export function toInt(value: unknown): number {
  * Be careful, NaN can return
  */
 export function toFloat(value: unknown): number {
-  if (typeof value === 'number') {
-    return value
-  }
   return parseFloat(value as string)
 }
 
