@@ -90,7 +90,6 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
   </thead>
   <tbody>
     <tr><td>Identification accuracy</td><td align="center">60%</td><td align="center">99.5%</td></tr>
-    <tr><td>Bot detection</td><td align="center">❌</td><td align="center">✅</td></tr>
     <tr><td>Incognito / Private mode detection</td><td align="center">❌</td><td align="center">✅</td></tr>
     <tr><td>Geolocation</td><td align="center">❌</td><td align="center">✅</td></tr>
     <tr><td>Security</td><td align="center">❌</td><td align="center">✅</td></tr>
@@ -108,7 +107,6 @@ Pro result example:
   "visitorId": "kHqPGWS1Mj18sZFsP8Wl",
   "visitorFound": true,
   "incognito": false,
-  "bot": { "probability": 0.96 },
   "browserName": "Chrome",
   "browserVersion": "85.0.4183",
   "os": "Mac OS X",
