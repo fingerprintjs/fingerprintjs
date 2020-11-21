@@ -62,18 +62,6 @@ export function getBrowserEngineMajorVersion(): number | undefined {
   return parseInt(version.split('.')[0])
 }
 
-export function isWindows(): boolean {
-  return new UAParser().getOS().name === 'Windows'
-}
-
-/**
- * Warning: iOS Safari changes the user agent to pretend macOS in desktop mode (switched on by default on iPad),
- * so ua-parser may tell that an iOS device is macOS in some cases.
- */
-export function isMacOS(): boolean {
-  return new UAParser().getOS().name === 'Mac OS'
-}
-
 /**
  * Sets new property values to the object and reverts the properties when the action is complete
  */

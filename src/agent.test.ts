@@ -1,5 +1,7 @@
-import { OpenAgent } from './agent'
+import { withMockProperties } from '../tests/utils'
+import { Agent, OpenAgent } from './agent'
 import { sources } from './sources'
+import { resetScreenFrameWatch } from './sources/screen_frame'
 
 describe('Agent', () => {
   it('collects all components without unexpected errors and makes visitorId', async () => {
@@ -16,5 +18,42 @@ describe('Agent', () => {
         .withContext(`Unexpected error in the "${componentName}" component`)
         .toBeUndefined()
     }
+  })
+
+  it('watches screen frame before calling `get()`', async () => {
+    resetScreenFrameWatch()
+    let agent: Agent
+
+    await withMockProperties(
+      screen,
+      {
+        width: { get: () => 1200 },
+        height: { get: () => 800 },
+        availWidth: { get: () => 1100 },
+        availHeight: { get: () => 760 },
+        availLeft: { get: () => 100 },
+        availTop: { get: () => 0 },
+      },
+      async () => {
+        agent = new OpenAgent()
+      },
+    )
+
+    // Emulates turning on UI fullscreen in Chrome on macOS
+    await withMockProperties(
+      screen,
+      {
+        width: { get: () => 1200 },
+        height: { get: () => 800 },
+        availWidth: { get: () => 1200 },
+        availHeight: { get: () => 800 },
+        availLeft: { get: () => 0 },
+        availTop: { get: () => 0 },
+      },
+      async () => {
+        const result = await agent.get()
+        expect(result.components.screenFrame.value).toEqual([0, 0, 40, 100])
+      },
+    )
   })
 })

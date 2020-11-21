@@ -2,6 +2,7 @@ import { version } from '../package.json'
 import { requestIdleCallbackIfAvailable } from './utils/async'
 import { x64hash128 } from './utils/hashing'
 import getBuiltinComponents, { BuiltinComponents, UnknownComponents } from './sources'
+import { watchScreenFrame } from './sources/screen_frame'
 
 /**
  * Options for Fingerprint class loading
@@ -112,6 +113,10 @@ function makeLazyGetResult<T extends UnknownComponents>(components: T) {
  * The hiding gives more freedom for future non-breaking updates.
  */
 export class OpenAgent implements Agent {
+  constructor() {
+    watchScreenFrame()
+  }
+
   /**
    * @inheritDoc
    */
