@@ -48,22 +48,24 @@ export function resetScreenFrameWatch(): void {
 }
 
 export async function getScreenFrame(): Promise<FrameSize> {
-  const frameSize = getCurrentScreenFrame()
+  let frameSize = getCurrentScreenFrame()
+
+  if (isFrameSizeNull(frameSize)) {
+    if (screenFrameBackup) {
+      return [...screenFrameBackup]
+    }
+
+    if (getFullscreenElement()) {
+      // Some browsers set the screen frame to zero when programmatic fullscreen is on.
+      // There is a chance of getting a non-zero frame after exiting the fullscreen.
+      // See more on this at https://github.com/fingerprintjs/fingerprintjs/issues/568
+      await exitFullscreen()
+      frameSize = getCurrentScreenFrame()
+    }
+  }
 
   if (!isFrameSizeNull(frameSize)) {
-    return frameSize
-  }
-
-  if (screenFrameBackup) {
-    return [...screenFrameBackup]
-  }
-
-  if (getFullscreenElement()) {
-    // Some browsers set the screen frame to zero when programmatic fullscreen is on.
-    // There is a chance of getting a non-zero frame after exiting the fullscreen.
-    // See more on this at https://github.com/fingerprintjs/fingerprintjs/issues/568
-    await exitFullscreen()
-    return getCurrentScreenFrame()
+    screenFrameBackup = frameSize
   }
 
   return frameSize

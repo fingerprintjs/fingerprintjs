@@ -121,7 +121,7 @@ describe('Sources', () => {
             availTop: { get: () => 0 },
           },
           async () => {
-            // The screen frame has become null again, `getScreenFrame` shall returned the remembered non-null frame
+            // The screen frame has become null again, `getScreenFrame` shall return the remembered non-null frame
             jasmine.clock().tick(screenFrame.screenFrameCheckInterval)
             const frame = await screenFrame.getScreenFrame()
             expect(frame).toEqual([30, 30, 50, 10])
@@ -139,7 +139,25 @@ describe('Sources', () => {
             availTop: { get: () => 10 },
           },
           async () => {
-            // The screen frame has become non-null, `getScreenFrame` shall return the new size
+            // The screen frame has become non-null, `getScreenFrame` shall return the new size and remember it
+            jasmine.clock().tick(screenFrame.screenFrameCheckInterval)
+            const frame = await screenFrame.getScreenFrame()
+            expect(frame).toEqual([10, 10, 70, 30])
+          },
+        )
+
+        await withMockProperties(
+          screen,
+          {
+            width: { get: () => 640 },
+            height: { get: () => 480 },
+            availWidth: { get: () => 640 },
+            availHeight: { get: () => 480 },
+            availLeft: { get: () => 0 },
+            availTop: { get: () => 0 },
+          },
+          async () => {
+            // The screen frame has become null again, `getScreenFrame` shall return the new non-null frame
             jasmine.clock().tick(screenFrame.screenFrameCheckInterval)
             const frame = await screenFrame.getScreenFrame()
             expect(frame).toEqual([10, 10, 70, 30])
