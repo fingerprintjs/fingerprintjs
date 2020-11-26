@@ -50,7 +50,6 @@ export const sources = {
   indexedDB: getIndexedDB,
   openDatabase: getOpenDatabase,
   cpuClass: getCpuClass,
-  // Maybe it should be excluded: https://github.com/fingerprintjs/fingerprintjs/issues/514#issuecomment-688754892
   platform: getPlatform,
   plugins: getPlugins,
   canvas: getCanvasFingerprint,
