@@ -1,6 +1,7 @@
 import { version } from '../package.json'
 import { requestIdleCallbackIfAvailable } from './utils/async'
 import { x64hash128 } from './utils/hashing'
+import { errorToObject } from './utils/misc'
 import getBuiltinComponents, { BuiltinComponents, UnknownComponents } from './sources'
 
 /**
@@ -69,11 +70,7 @@ export function componentsToDebugString(components: UnknownComponents): string {
     components,
     (_key, value) => {
       if (value instanceof Error) {
-        return {
-          ...value,
-          message: value.message,
-          stack: value.stack?.split('\n'),
-        }
+        return errorToObject(value)
       }
       return value
     },
