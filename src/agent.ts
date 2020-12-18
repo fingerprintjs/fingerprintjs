@@ -144,6 +144,8 @@ export async function load({ delayFallback = 50 }: Readonly<LoadOptions> = {}): 
   // A delay is required to ensure consistent entropy components.
   // See https://github.com/fingerprintjs/fingerprintjs/issues/254
   // and https://github.com/fingerprintjs/fingerprintjs/issues/307
-  await requestIdleCallbackIfAvailable(delayFallback)
+  // and https://github.com/fingerprintjs/fingerprintjs/commit/945633e7c5f67ae38eb0fea37349712f0e669b18
+  // A proper deadline is unknown. Let it be twice the fallback timeout so that both cases have the same average time.
+  await requestIdleCallbackIfAvailable(delayFallback, delayFallback * 2)
   return new OpenAgent()
 }
