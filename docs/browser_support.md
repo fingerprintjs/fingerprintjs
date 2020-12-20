@@ -81,3 +81,12 @@ Examples for various installation methods:
 
       // Start loading FingerprintJS here
     ```
+## Syntax for Old browsers
+
+Older browsers like IE11 do not support arrow functions (=>). To support older browsers, it should be used in the following form
+```diff
+- FingerprintJS.load().then(fp => {
++ FingerprintJS.load().then(function (fp) {
+-fp.get().then(result => {
++ fp.get().then(function (result) {
+```
