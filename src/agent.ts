@@ -1,6 +1,7 @@
 import { version } from '../package.json'
 import { requestIdleCallbackIfAvailable } from './utils/async'
 import { x64hash128 } from './utils/hashing'
+import { errorToObject } from './utils/misc'
 import getBuiltinComponents, { BuiltinComponents, UnknownComponents } from './sources'
 import { watchScreenFrame } from './sources/screen_frame'
 
@@ -70,11 +71,7 @@ export function componentsToDebugString(components: UnknownComponents): string {
     components,
     (_key, value) => {
       if (value instanceof Error) {
-        return {
-          ...value,
-          message: value.message,
-          stack: value.stack?.split('\n'),
-        }
+        return errorToObject(value)
       }
       return value
     },
@@ -149,6 +146,8 @@ export async function load({ delayFallback = 50 }: Readonly<LoadOptions> = {}): 
   // A delay is required to ensure consistent entropy components.
   // See https://github.com/fingerprintjs/fingerprintjs/issues/254
   // and https://github.com/fingerprintjs/fingerprintjs/issues/307
-  await requestIdleCallbackIfAvailable(delayFallback)
+  // and https://github.com/fingerprintjs/fingerprintjs/commit/945633e7c5f67ae38eb0fea37349712f0e669b18
+  // A proper deadline is unknown. Let it be twice the fallback timeout so that both cases have the same average time.
+  await requestIdleCallbackIfAvailable(delayFallback, delayFallback * 2)
   return new OpenAgent()
 }

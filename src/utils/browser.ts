@@ -1,7 +1,7 @@
 import { countTruthy } from './data'
 
 /*
- * Functions to help with browser features
+ * Functions to help with features that vary through browsers
  */
 
 const w = window
@@ -92,7 +92,7 @@ export function isWebKit(): boolean {
 export function isDesktopSafari(): boolean {
   return (
     countTruthy([
-      'safari' in w, // Always false in BrowserStack Automate
+      'safari' in w, // Always false in Karma and BrowserStack Automate
       !('DeviceMotionEvent' in w),
       !('ongestureend' in w),
       !('standalone' in n),

@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://fingerprintjs.com">
-    <img src="resources/logo.svg" alt="FingerprintJS" width="300px" />
+    <img src="resources/logo.svg" alt="FingerprintJS" width="312px" />
   </a>
 </p>
 <p align="center">
