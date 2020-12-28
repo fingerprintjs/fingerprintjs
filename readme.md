@@ -26,15 +26,17 @@ Unlike cookies and local storage, fingerprint stays the same in incognito/privat
 ```html
 <script>
   function initFingerprintJS() {
-    FingerprintJS.load().then(fp => {
-      // The FingerprintJS agent is ready.
-      // Get a visitor identifier when you'd like to.
-      fp.get().then(result => {
+    // We recommend to call `load` at application startup.
+    const fpPromise = FingerprintJS.load()
+
+    // Get a visitor identifier when you need it.
+    fpPromise
+      .then(fp => fp.get)
+      .then(result => {
         // This is the visitor identifier:
         const visitorId = result.visitorId;
         console.log(visitorId);
       });
-    });
   }
 </script>
 <script
@@ -57,10 +59,10 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 (async () => {
   // We recommend to call `load` at application startup.
-  const fp = await FingerprintJS.load();
+  const fpPromise = FingerprintJS.load();
 
-  // The FingerprintJS agent is ready.
-  // Get a visitor identifier when you'd like to.
+  // Get a visitor identifier when you need it.
+  const fp = await fpPromise
   const result = await fp.get();
 
   // This is the visitor identifier:
@@ -188,12 +190,14 @@ The library is shipped in various formats:
 - `FingerprintJS.load({ delayFallback?: number }): Promise<Agent>`
 
     Builds an instance of Agent and waits a delay required for a proper operation.
+    We recommend calling it as soon as possible.
     `delayFallback` is an optional parameter that sets duration (milliseconds) of the fallback for browsers that don't support [requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback);
     it has a good default value which we don't recommend to change.
 
 - `agent.get({ debug?: boolean }): Promise<{ visitorId: string, components: {/* ... */} }>`
 
     Gets the visitor identifier.
+    We recommend calling it later, when you really need the identifier, to increase the chance of getting an accurate identifier.
     `debug: true` prints debug messages to the console.
     `visitorId` is the visitor identifier.
     `components` is a dictionary of components that have formed the identifier;

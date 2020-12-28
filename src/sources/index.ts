@@ -10,7 +10,7 @@ import getLanguages from './languages'
 import getColorDepth from './color_depth'
 import getDeviceMemory from './device_memory'
 import getScreenResolution from './screen_resolution'
-import getAvailableScreenResolution from './available_screen_resolution'
+import { getRoundedScreenFrame } from './screen_frame'
 import getHardwareConcurrency from './hardware_concurrency'
 import getTimezoneOffset from './timezone_offset'
 import getTimezone from './timezone'
@@ -41,7 +41,7 @@ export const sources = {
   colorDepth: getColorDepth,
   deviceMemory: getDeviceMemory,
   screenResolution: getScreenResolution,
-  availableScreenResolution: getAvailableScreenResolution,
+  screenFrame: getRoundedScreenFrame,
   hardwareConcurrency: getHardwareConcurrency,
   timezoneOffset: getTimezoneOffset,
   timezone: getTimezone,

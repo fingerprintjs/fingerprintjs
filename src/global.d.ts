@@ -21,3 +21,18 @@ interface Navigator {
   deviceMemory?: number
   cpuClass?: string
 }
+
+interface Document {
+  msFullscreenElement?: typeof document.fullscreenElement
+  mozFullScreenElement?: typeof document.fullscreenElement
+  webkitFullscreenElement?: typeof document.fullscreenElement
+
+  msExitFullscreen?: typeof document.exitFullscreen
+  mozCancelFullScreen?: typeof document.exitFullscreen
+  webkitExitFullscreen?: typeof document.exitFullscreen
+}
+
+interface Screen {
+  availLeft?: number
+  availTop?: number
+}
