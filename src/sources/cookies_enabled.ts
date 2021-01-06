@@ -18,10 +18,10 @@ export default function areCookiesEnabled(): boolean {
   // or in sandboxed iframes (depending on flags/context)
   try {
     // Create cookie
-    d.cookie = 'cookietest=1'
+    d.cookie = 'cookietest=1; SameSite=Strict; Secure;'
     const result = d.cookie.indexOf('cookietest=') !== -1
     // Delete cookie
-    d.cookie = 'cookietest=1; expires=Thu, 01-Jan-1970 00:00:01 GMT'
+    d.cookie = 'cookietest=1; SameSite=Strict; Secure; expires=Thu, 01-Jan-1970 00:00:01 GMT'
     return result
   } catch (e) {
     return false
