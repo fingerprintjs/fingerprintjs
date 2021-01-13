@@ -53,7 +53,6 @@ export const sources = {
   platform: getPlatform,
   plugins: getPlugins,
   canvas: getCanvasFingerprint,
-  // adBlock: isAdblockUsed, // https://github.com/fingerprintjs/fingerprintjs/issues/405
   touchSupport: getTouchSupport,
   fonts: getFonts,
   audio: getAudioFingerprint,
