@@ -12,7 +12,6 @@ import getDeviceMemory from './device_memory'
 import getScreenResolution from './screen_resolution'
 import { getRoundedScreenFrame } from './screen_frame'
 import getHardwareConcurrency from './hardware_concurrency'
-import getTimezoneOffset from './timezone_offset'
 import getTimezone from './timezone'
 import getSessionStorage from './session_storage'
 import getLocalStorage from './location_storage'
@@ -43,7 +42,6 @@ export const sources = {
   screenResolution: getScreenResolution,
   screenFrame: getRoundedScreenFrame,
   hardwareConcurrency: getHardwareConcurrency,
-  timezoneOffset: getTimezoneOffset,
   timezone: getTimezone,
   sessionStorage: getSessionStorage,
   localStorage: getLocalStorage,
