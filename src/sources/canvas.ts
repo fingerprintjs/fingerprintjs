@@ -42,19 +42,19 @@ export default function getCanvasFingerprint(): CanvasFingerprint {
   context.fillStyle = '#f60'
   context.fillRect(125, 1, 62, 20)
   context.fillStyle = '#069'
-  // https://github.com/Valve/fingerprintjs2/issues/66
-  // this can affect FP generation when applying different CSS on different websites
-  context.font = '11pt no-real-font-123'
-  // the choice of emojis has a gigantic impact on rendering performance (especially in FF)
-  // some newer emojis cause it to slow down 50-200 times
-  // context.fillText("Cw爨m fjordbank \ud83d\ude03 gly", 2, 15)
-  const printedText = 'Cwm fjordbank \ud83d\ude03 gly'
+  // It's important to use explicit built-in fonts in order to exclude the affect of font preferences
+  // (there is a separate entropy source for them).
+  context.font = '11pt "Times New Roman"'
+  // The choice of emojis has a gigantic impact on rendering performance (especially in FF)
+  // Some newer emojis cause it to slow down 50-200 times
+  // There must be no text to the right of the emoji, see https://github.com/fingerprintjs/fingerprintjs/issues/574
+  const printedText = 'Cwm fjordbank gly \ud83d\ude03'
   context.fillText(printedText, 2, 15)
   context.fillStyle = 'rgba(102, 204, 0, 0.2)'
   context.font = '18pt Arial'
   context.fillText(printedText, 4, 45)
 
-  // canvas blending
+  // Canvas blending
   // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
   // http://jsfiddle.net/NDYV8/16/
   context.globalCompositeOperation = 'multiply'
@@ -74,7 +74,8 @@ export default function getCanvasFingerprint(): CanvasFingerprint {
   context.closePath()
   context.fill()
   context.fillStyle = 'rgb(255,0,255)'
-  // canvas winding
+
+  // Canvas winding
   // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
   // http://jsfiddle.net/NDYV8/19/
   context.arc(75, 75, 75, 0, Math.PI * 2, true)
