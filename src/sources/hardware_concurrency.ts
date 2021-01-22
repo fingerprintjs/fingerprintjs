@@ -1,11 +1,6 @@
-import { toInt } from '../utils/data'
+import { replaceNaN, toInt } from '../utils/data'
 
-export default function getHardwareConcurrency(): number {
-  try {
-    // sometimes hardware concurrency is a string
-    const concurrency = toInt(navigator.hardwareConcurrency)
-    return isNaN(concurrency) ? 1 : concurrency
-  } catch (e) {
-    return 1
-  }
+export default function getHardwareConcurrency(): number | undefined {
+  // sometimes hardware concurrency is a string
+  return replaceNaN(toInt(navigator.hardwareConcurrency), undefined)
 }
