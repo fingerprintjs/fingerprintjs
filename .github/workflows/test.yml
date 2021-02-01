@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - master
+      - next-sources # todo: Delete when the branch is removed
   pull_request:
     paths-ignore:
       - '**.md'
