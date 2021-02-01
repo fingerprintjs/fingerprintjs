@@ -101,7 +101,7 @@ Use the provided hash function to achieve this:
 const result = await fp.get()
 
 // Exclude a couple components
-const { languages, audio, ...components } = result
+const { languages, audio, ...components } = result.components
 
 // Add a few custom components
 const extendedComponents = {
