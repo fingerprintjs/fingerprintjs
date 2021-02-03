@@ -19,7 +19,6 @@ import getIndexedDB from './indexed_db'
 import getOpenDatabase from './open_database'
 import getCpuClass from './cpu_class'
 import getPlatform from './platform'
-import getPluginsSupport from './plugins_support'
 import getProductSub from './product_sub'
 import getEmptyEvalLength from './empty_eval_length'
 import getErrorFF from './error_ff'
@@ -54,7 +53,6 @@ export const sources = {
   touchSupport: getTouchSupport,
   fonts: getFonts,
   audio: getAudioFingerprint,
-  pluginsSupport: getPluginsSupport,
   productSub: getProductSub,
   emptyEvalLength: getEmptyEvalLength,
   errorFF: getErrorFF,

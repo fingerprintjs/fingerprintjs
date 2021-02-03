@@ -1,5 +1,3 @@
-import { isTrident } from '../utils/browser'
-
 export interface PluginMimeTypeData {
   type: string
   suffixes: string
@@ -12,18 +10,17 @@ export interface PluginData {
 }
 
 export default function getPlugins(): PluginData[] | undefined {
-  if (isTrident()) {
-    return []
-  }
-  if (!navigator.plugins) {
+  const rawPlugins = navigator.plugins
+
+  if (!rawPlugins) {
     return undefined
   }
 
   const plugins: PluginData[] = []
 
   // Safari 10 doesn't support iterating navigator.plugins with for...of
-  for (let i = 0; i < navigator.plugins.length; ++i) {
-    const plugin = navigator.plugins[i]
+  for (let i = 0; i < rawPlugins.length; ++i) {
+    const plugin = rawPlugins[i]
     if (!plugin) {
       continue
     }
