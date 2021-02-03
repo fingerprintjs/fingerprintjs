@@ -128,7 +128,7 @@ Pro result example:
 
 📕 [FingerprintJS Pro documentation](https://dev.fingerprintjs.com)
 
-💪 [Tutorial: use FingerprintJS Pro to prevent multiple signups](https://www.youtube.com/watch?v=jWX9P5_jZn8)
+▶️ [Video: use FingerprintJS Pro to prevent multiple signups](https://www.youtube.com/watch?v=jWX9P5_jZn8)
 
 ## Open-source version reference
 
