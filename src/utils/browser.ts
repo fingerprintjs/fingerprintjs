@@ -155,6 +155,29 @@ export function isWebKit606OrNewer(): boolean {
 }
 
 /**
+ * Checks whether the device is an iPad.
+ * It doesn't check that the engine is WebKit and that the WebKit isn't desktop.
+ */
+export function isIPad(): boolean {
+  // todo: Check in other iOS browsers
+  // Before iOS 13
+  if (n.platform === 'iPad') {
+    return true
+  }
+
+  const s = screen
+  const screenRatio = s.width / s.height
+
+  return (
+    countTruthy([
+      'MediaSource' in w, // Since iOS 13
+      !!Element.prototype.webkitRequestFullscreen, // Since iOS 12
+      screenRatio > 2 / 3 && screenRatio < 3 / 2,
+    ]) >= 2
+  )
+}
+
+/**
  * Warning for package users:
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
