@@ -38,5 +38,5 @@ interface Screen {
 }
 
 interface Element {
-  webkitRequestFullscreen?: Element['requestFullscreen']
+  webkitRequestFullscreen?: typeof Element.prototype.requestFullscreen
 }
