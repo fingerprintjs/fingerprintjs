@@ -36,3 +36,7 @@ interface Screen {
   availLeft?: number
   availTop?: number
 }
+
+interface Element {
+  webkitRequestFullscreen?: typeof Element.prototype.requestFullscreen
+}
