@@ -1,5 +1,3 @@
-const d = document
-
 // We use m or w because these two characters take up the maximum width.
 // And we use a LLi so that the same matching fonts can get separated.
 const testString = 'mmMwWLliI0O&1'
@@ -91,7 +89,8 @@ const fontSpanStyle = {
 
 // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
 export default function getFonts(): string[] {
-  const h = d.body
+  const d = document
+  const holder = d.body
 
   // div to load spans for the base fonts
   const baseFontsDiv = d.createElement('div')
@@ -160,7 +159,7 @@ export default function getFonts(): string[] {
   const baseFontsSpans = initializeBaseFontsSpans()
 
   // add the spans to the DOM
-  h.appendChild(baseFontsDiv)
+  holder.appendChild(baseFontsDiv)
 
   // get the default width for the three base fonts
   for (let index = 0, length = baseFonts.length; index < length; index++) {
@@ -172,7 +171,7 @@ export default function getFonts(): string[] {
   const fontsSpans = initializeFontsSpans()
 
   // add all the spans to the DOM
-  h.appendChild(fontsDiv)
+  holder.appendChild(fontsDiv)
 
   // check available fonts
   const available: string[] = []
@@ -183,7 +182,7 @@ export default function getFonts(): string[] {
   }
 
   // remove spans from DOM
-  h.removeChild(fontsDiv)
-  h.removeChild(baseFontsDiv)
+  holder.removeChild(fontsDiv)
+  holder.removeChild(baseFontsDiv)
   return available
 }

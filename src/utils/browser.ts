@@ -4,10 +4,6 @@ import { countTruthy } from './data'
  * Functions to help with features that vary through browsers
  */
 
-const w = window
-const n = navigator
-const d = document
-
 /**
  * Checks whether the browser is based on Trident (the Internet Explorer engine) without using user-agent.
  *
@@ -15,6 +11,9 @@ const d = document
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function isTrident(): boolean {
+  const w = window
+  const n = navigator
+
   // The properties are checked to be in IE 10, IE 11 and not to be in other browsers in October 2020
   return (
     countTruthy([
@@ -35,6 +34,9 @@ export function isTrident(): boolean {
  */
 export function isEdgeHTML(): boolean {
   // Based on research in October 2020
+  const w = window
+  const n = navigator
+
   return (
     countTruthy(['msWriteProfilerMark' in w, 'MSStream' in w, 'msLaunchUri' in n, 'msSaveBlob' in n]) >= 3 &&
     !isTrident()
@@ -49,6 +51,9 @@ export function isEdgeHTML(): boolean {
  */
 export function isChromium(): boolean {
   // Based on research in October 2020. Tested to detect Chromium 42-86.
+  const w = window
+  const n = navigator
+
   return (
     countTruthy([
       'webkitPersistentStorage' in n,
@@ -71,6 +76,9 @@ export function isChromium(): boolean {
  */
 export function isWebKit(): boolean {
   // Based on research in September 2020
+  const w = window
+  const n = navigator
+
   return (
     countTruthy([
       'ApplePayError' in w,
@@ -90,12 +98,14 @@ export function isWebKit(): boolean {
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function isDesktopSafari(): boolean {
+  const w = window
+
   return (
     countTruthy([
       'safari' in w, // Always false in Karma and BrowserStack Automate
       !('DeviceMotionEvent' in w),
       !('ongestureend' in w),
-      !('standalone' in n),
+      !('standalone' in navigator),
     ]) >= 3
   )
 }
@@ -107,11 +117,13 @@ export function isDesktopSafari(): boolean {
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function isGecko(): boolean {
+  const w = window
+
   // Based on research in September 2020
   return (
     countTruthy([
-      'buildID' in n,
-      d.documentElement?.style && 'MozAppearance' in d.documentElement.style,
+      'buildID' in navigator,
+      'MozAppearance' in (document.documentElement?.style ?? {}),
       'MediaRecorderErrorEvent' in w,
       'mozInnerScreenX' in w,
       'CSSMozDocumentRule' in w,
@@ -126,6 +138,8 @@ export function isGecko(): boolean {
  */
 export function isChromium86OrNewer(): boolean {
   // Checked in Chrome 85 vs Chrome 86 both on desktop and Android
+  const w = window
+
   return (
     countTruthy([
       !('MediaSettingsRange' in w),
@@ -144,6 +158,8 @@ export function isChromium86OrNewer(): boolean {
  */
 export function isWebKit606OrNewer(): boolean {
   // Checked in Safari 9–14
+  const w = window
+
   return (
     countTruthy([
       'DOMRectList' in w,
