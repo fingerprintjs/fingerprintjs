@@ -1,8 +1,7 @@
 import { isChromium, isChromium86OrNewer } from '../utils/browser'
 
-const n = navigator
-
 export default function getLanguages(): string[][] {
+  const n = navigator
   const result: string[][] = []
 
   const language = n.language || n.userLanguage || n.browserLanguage || n.systemLanguage

@@ -1,8 +1,5 @@
 import { isDesktopSafari, isWebKit, isWebKit606OrNewer } from '../utils/browser'
 
-const w = window
-const d = document
-
 const enum SpecialFingerprint {
   /** Making a fingerprint is skipped because the browser is known to always suspend audio context */
   KnownToSuspend = -1,
@@ -19,6 +16,7 @@ const enum InnerErrorName {
 
 // Inspired by and based on https://github.com/cozylife/audio-fingerprint
 export default async function getAudioFingerprint(): Promise<number> {
+  const w = window
   const AudioContext = w.OfflineAudioContext || w.webkitOfflineAudioContext
   if (!AudioContext) {
     return SpecialFingerprint.NotSupported
@@ -108,7 +106,7 @@ function renderAudio(context: OfflineAudioContext) {
           // in background isn't a problem, therefore the retry attempts don't count in background. It can lead to
           // a situation when a fingerprint takes very long time and finishes successfully. FYI, the audio context
           // can be suspended when `document.hidden === false` and start running after a retry.
-          if (!d.hidden) {
+          if (!document.hidden) {
             resumeTriesLeft--
           }
           if (resumeTriesLeft > 0) {

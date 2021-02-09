@@ -1,6 +1,6 @@
-const d = document
-
 export default function isAdblockUsed(): boolean {
+  const d = document
+
   if (!d.body?.appendChild) {
     return false
   }
