@@ -1,10 +1,9 @@
 import { toFloat } from '../utils/data'
 
-const w = window
-
 export default function getTimezone(): string {
-  if (w.Intl?.DateTimeFormat) {
-    const timezone = new w.Intl.DateTimeFormat().resolvedOptions().timeZone
+  const DateTimeFormat = window.Intl?.DateTimeFormat
+  if (DateTimeFormat) {
+    const timezone = new DateTimeFormat().resolvedOptions().timeZone
     if (timezone) {
       return timezone
     }
