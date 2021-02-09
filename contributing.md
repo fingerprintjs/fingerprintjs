@@ -88,6 +88,12 @@ To check the distributive TypeScript declarations, build the project and run:
 yarn test:dts
 ```
 
+To check that the package is compatible with server side rendering, build the project and run:
+
+```bash
+yarn test:ssr
+```
+
 ### How to publish
 
 This section is for repository maintainers.
