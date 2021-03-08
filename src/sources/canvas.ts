@@ -1,8 +1,29 @@
+export interface CanvasFingerprint {
+  winding: boolean
+  geometry: string
+  text: string
+}
+
+// https://www.browserleaks.com/canvas#how-does-it-work
+export default function getCanvasFingerprint(): CanvasFingerprint {
+  const [canvas, context] = makeCanvasContext()
+  if (!isSupported(canvas, context)) {
+    return { winding: false, geometry: '', text: '' }
+  }
+
+  return {
+    winding: doesSupportWinding(context),
+    geometry: makeGeometryImage(canvas, context),
+    // Text is unstable (https://github.com/fingerprintjs/fingerprintjs/issues/583),
+    // therefore it's extracted into a separate image
+    text: makeTextImage(canvas, context),
+  }
+}
+
 function makeCanvasContext() {
   const canvas = document.createElement('canvas')
-  canvas.width = 240
-  canvas.height = 140
-  canvas.style.display = 'inline'
+  canvas.width = 1
+  canvas.height = 1
   return [canvas, canvas.getContext('2d')] as const
 }
 
@@ -14,33 +35,23 @@ function isSupported(
   return !!(context && canvas.toDataURL)
 }
 
-function save(canvas: HTMLCanvasElement) {
-  // TODO: look into: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob
-  return canvas.toDataURL()
-}
-
-export interface CanvasFingerprint {
-  winding: boolean
-  data: string
-}
-
-// https://www.browserleaks.com/canvas#how-does-it-work
-export default function getCanvasFingerprint(): CanvasFingerprint {
-  const [canvas, context] = makeCanvasContext()
-  if (!isSupported(canvas, context)) {
-    return { winding: false, data: '' }
-  }
-
-  // Detect browser support of canvas winding
+function doesSupportWinding(context: CanvasRenderingContext2D) {
   // https://web.archive.org/web/20170825024655/http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
   // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/winding.js
   context.rect(0, 0, 10, 10)
   context.rect(2, 2, 6, 6)
-  const winding = !context.isPointInPath(5, 5, 'evenodd')
+  return !context.isPointInPath(5, 5, 'evenodd')
+}
+
+function makeTextImage(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+  // Resizing the canvas cleans it
+  canvas.width = 240
+  canvas.height = 60
 
   context.textBaseline = 'alphabetic'
   context.fillStyle = '#f60'
-  context.fillRect(125, 1, 62, 20)
+  context.fillRect(100, 1, 62, 20)
+
   context.fillStyle = '#069'
   // It's important to use explicit built-in fonts in order to exclude the affect of font preferences
   // (there is a separate entropy source for them).
@@ -57,18 +68,26 @@ export default function getCanvasFingerprint(): CanvasFingerprint {
   context.font = '18pt Arial'
   context.fillText(printedText, 4, 45)
 
+  return save(canvas)
+}
+
+function makeGeometryImage(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+  // Resizing the canvas cleans it
+  canvas.width = 122
+  canvas.height = 110
+
   // Canvas blending
   // https://web.archive.org/web/20170826194121/http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
   // http://jsfiddle.net/NDYV8/16/
   context.globalCompositeOperation = 'multiply'
   for (const [color, x, y] of [
-    ['#f0f', 50, 50],
-    ['#0ff', 100, 50],
-    ['#ff0', 75, 100],
+    ['#f2f', 40, 40],
+    ['#2ff', 80, 40],
+    ['#ff2', 60, 80],
   ] as const) {
     context.fillStyle = color
     context.beginPath()
-    context.arc(x, y, 50, 0, Math.PI * 2, true)
+    context.arc(x, y, 40, 0, Math.PI * 2, true)
     context.closePath()
     context.fill()
   }
@@ -76,13 +95,15 @@ export default function getCanvasFingerprint(): CanvasFingerprint {
   // Canvas winding
   // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
   // http://jsfiddle.net/NDYV8/19/
-  context.fillStyle = '#f0f'
-  context.arc(75, 75, 75, 0, Math.PI * 2, true)
-  context.arc(75, 75, 25, 0, Math.PI * 2, true)
+  context.fillStyle = '#f9c'
+  context.arc(60, 60, 60, 0, Math.PI * 2, true)
+  context.arc(60, 60, 20, 0, Math.PI * 2, true)
   context.fill('evenodd')
 
-  return {
-    winding,
-    data: save(canvas),
-  }
+  return save(canvas)
+}
+
+function save(canvas: HTMLCanvasElement) {
+  // TODO: look into: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob
+  return canvas.toDataURL()
 }
