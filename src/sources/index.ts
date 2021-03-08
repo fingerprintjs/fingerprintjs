@@ -128,32 +128,20 @@ function ensureErrorWithMessage(error: unknown): { message: unknown } {
 /**
  * Gets a component from the given entropy source.
  */
-function getComponent<TOptions, TValue>(
+async function getComponent<TOptions, TValue>(
   source: Source<TOptions, TValue>,
   sourceOptions: TOptions,
 ): Promise<Component<TValue>> {
-  return new Promise((resolve) => {
-    const resolveWithDuration = (result: Omit<Component<TValue>, 'duration'>) => {
-      resolve({ ...result, duration: Date.now() - startTime } as Component<TValue>)
-    }
-    const startTime = Date.now()
+  let result: Omit<Component<TValue>, 'duration'>
+  const startTime = Date.now()
 
-    try {
-      const output = source(sourceOptions)
+  try {
+    result = { value: await source(sourceOptions) }
+  } catch (error) {
+    result = { error: ensureErrorWithMessage(error) }
+  }
 
-      if (output instanceof Promise) {
-        output.then(
-          (value) => resolveWithDuration({ value }),
-          (error) => resolveWithDuration({ error: ensureErrorWithMessage(error) }),
-        )
-      } else {
-        // Don't await a synchronous result in order not to include other components into this duration
-        resolveWithDuration({ value: output })
-      }
-    } catch (error) {
-      resolveWithDuration({ error: ensureErrorWithMessage(error) })
-    }
-  })
+  return { ...result, duration: Date.now() - startTime } as Component<TValue>
 }
 
 /**
@@ -171,18 +159,30 @@ export async function getComponents<
   sourceOptions: TSourceOptions,
   excludeSources: readonly TExclude[],
 ): Promise<Omit<SourcesToComponents<TSources>, TExclude>> {
+  const sourcePromises: Promise<unknown>[] = []
   const components = {} as Omit<SourcesToComponents<TSources>, TExclude>
 
-  await Promise.all(
-    Object.keys(sources).map(async (sourceKey: keyof TSources) => {
-      if (excludes(excludeSources, sourceKey)) {
-        // Create the key immediately to keep the component keys order the same as the sources keys order
-        components[sourceKey] = undefined as any
-        components[sourceKey] = (await getComponent(sources[sourceKey], sourceOptions)) as Component<any>
-      }
-    }),
-  )
+  // Create the keys immediately to keep the component keys order the same as the sources keys order
+  for (const sourceKey of Object.keys(sources) as Array<keyof TSources>) {
+    if (excludes(excludeSources, sourceKey)) {
+      components[sourceKey] = undefined as any
+    }
+  }
 
+  for (const sourceKey of Object.keys(components) as Array<keyof typeof components>) {
+    sourcePromises.push(
+      getComponent(sources[sourceKey], sourceOptions).then((component: Component<any>) => {
+        components[sourceKey] = component
+      }),
+    )
+
+    // It breaks the synchronous flow. That serves several goals:
+    // - Makes `getComponent` measure duration of synchronous sources without including other source operations;
+    // - Allows asynchronous sources to complete before all the sources are started;
+    await undefined
+  }
+
+  await Promise.all(sourcePromises)
   return components
 }
 
