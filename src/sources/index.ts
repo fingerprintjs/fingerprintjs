@@ -121,6 +121,41 @@ export type SourcesToComponents<TSources extends UnknownSources<any>> = {
  */
 export type BuiltinComponents = SourcesToComponents<typeof sources>
 
+function ensureErrorWithMessage(error: unknown): { message: unknown } {
+  return error && typeof error === 'object' && 'message' in error ? (error as { message: unknown }) : { message: error }
+}
+
+/**
+ * Gets a component from the given entropy source.
+ */
+function getComponent<TOptions, TValue>(
+  source: Source<TOptions, TValue>,
+  sourceOptions: TOptions,
+): Promise<Component<TValue>> {
+  return new Promise((resolve) => {
+    const resolveWithDuration = (result: Omit<Component<TValue>, 'duration'>) => {
+      resolve({ ...result, duration: Date.now() - startTime } as Component<TValue>)
+    }
+    const startTime = Date.now()
+
+    try {
+      const output = source(sourceOptions)
+
+      if (output instanceof Promise) {
+        output.then(
+          (value) => resolveWithDuration({ value }),
+          (error) => resolveWithDuration({ error: ensureErrorWithMessage(error) }),
+        )
+      } else {
+        // Don't await a synchronous result in order not to include other components into this duration
+        resolveWithDuration({ value: output })
+      }
+    } catch (error) {
+      resolveWithDuration({ error: ensureErrorWithMessage(error) })
+    }
+  })
+}
+
 /**
  * Gets a components list from the given list of entropy sources.
  *
@@ -136,26 +171,17 @@ export async function getComponents<
   sourceOptions: TSourceOptions,
   excludeSources: readonly TExclude[],
 ): Promise<Omit<SourcesToComponents<TSources>, TExclude>> {
-  let timestamp = Date.now()
   const components = {} as Omit<SourcesToComponents<TSources>, TExclude>
 
-  for (const sourceKey of Object.keys(sources) as Array<keyof TSources>) {
-    if (!excludes(excludeSources, sourceKey)) {
-      continue
-    }
-
-    let result: Pick<Component<unknown>, 'value' | 'error'>
-
-    try {
-      result = { value: await sources[sourceKey](sourceOptions) }
-    } catch (error) {
-      result = error && typeof error === 'object' && 'message' in error ? { error } : { error: { message: error } }
-    }
-
-    const nextTimestamp = Date.now()
-    components[sourceKey] = { ...result, duration: nextTimestamp - timestamp } as Component<any> // TypeScript has beaten me here
-    timestamp = nextTimestamp
-  }
+  await Promise.all(
+    Object.keys(sources).map(async (sourceKey: keyof TSources) => {
+      if (excludes(excludeSources, sourceKey)) {
+        // Create the key immediately to keep the component keys order the same as the sources keys order
+        components[sourceKey] = undefined as any
+        components[sourceKey] = (await getComponent(sources[sourceKey], sourceOptions)) as Component<any>
+      }
+    }),
+  )
 
   return components
 }
