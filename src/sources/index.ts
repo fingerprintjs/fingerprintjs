@@ -23,9 +23,8 @@ import getProductSub from './product_sub'
 import getEmptyEvalLength from './empty_eval_length'
 import getErrorFF from './error_ff'
 import getVendor from './vendor'
-import getChrome from './chrome'
+import getVendorFlavors from './vendor_flavors'
 import areCookiesEnabled from './cookies_enabled'
-import getWebKitFlavor from './webkit_flavor'
 
 /**
  * The list of entropy sources used to make visitor identifiers.
@@ -58,9 +57,8 @@ export const sources = {
   emptyEvalLength: getEmptyEvalLength,
   errorFF: getErrorFF,
   vendor: getVendor,
-  chrome: getChrome,
+  vendorFlavors: getVendorFlavors,
   cookiesEnabled: areCookiesEnabled,
-  webKitFlavor: getWebKitFlavor,
 }
 
 /**
