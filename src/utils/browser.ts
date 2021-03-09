@@ -199,6 +199,52 @@ export function isIPad(): boolean {
 }
 
 /**
+ * Checks whether the browser is a WebKit-based Chrome.
+ * You should check that the engine is WebKit before calling this function.
+ */
+export function isChromeWebKit(): boolean {
+  // Checked in Chrome 85 on iOS 13 and Chrome 87 on iOS 14 in March 2021
+  const w = window
+
+  return (
+    countTruthy([
+      // Yandex Browser inherits all these signs
+      '__crWeb' in w,
+      '__gCrWeb' in w,
+      'goog' in w,
+      'AutofillFormData' in w,
+    ]) >= 3 && !isYandexWebKit()
+  )
+}
+
+/**
+ * Checks whether the browser is a WebKit-based Yandex Browser.
+ * You should check that the engine is WebKit before calling this function.
+ */
+export function isYandexWebKit(): boolean {
+  // Checked in Yandex Browser 21.2 on iOS 14 in March 2021
+  const w = window
+
+  return (
+    countTruthy([
+      '__yb' in w,
+      '__ybro' in w,
+      'yandexCheckoutInternalApi' in w,
+      'YandexApplicationsFeatureAvailability' in w,
+    ]) >= 3
+  )
+}
+
+/**
+ * Checks whether the browser is a WebKit-based Firefox.
+ * You should check that the engine is WebKit before calling this function.
+ */
+export function isFirefoxWebKit(): boolean {
+  // Checked in Firefox 32 on iOS 14 in March 2021
+  return typeof ((window as unknown) as Record<string, unknown>).__firefox__ === 'object'
+}
+
+/**
  * Warning for package users:
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */

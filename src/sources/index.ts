@@ -25,6 +25,7 @@ import getErrorFF from './error_ff'
 import getVendor from './vendor'
 import getChrome from './chrome'
 import areCookiesEnabled from './cookies_enabled'
+import getWebKitFlavor from './webkit_flavor'
 
 /**
  * The list of entropy sources used to make visitor identifiers.
@@ -59,6 +60,7 @@ export const sources = {
   vendor: getVendor,
   chrome: getChrome,
   cookiesEnabled: areCookiesEnabled,
+  webKitFlavor: getWebKitFlavor,
 }
 
 /**
