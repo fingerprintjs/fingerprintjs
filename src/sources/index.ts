@@ -23,7 +23,7 @@ import getProductSub from './product_sub'
 import getEmptyEvalLength from './empty_eval_length'
 import getErrorFF from './error_ff'
 import getVendor from './vendor'
-import getChrome from './chrome'
+import getVendorFlavors from './vendor_flavors'
 import areCookiesEnabled from './cookies_enabled'
 
 /**
@@ -57,7 +57,7 @@ export const sources = {
   emptyEvalLength: getEmptyEvalLength,
   errorFF: getErrorFF,
   vendor: getVendor,
-  chrome: getChrome,
+  vendorFlavors: getVendorFlavors,
   cookiesEnabled: areCookiesEnabled,
 }
 

@@ -10,7 +10,6 @@ interface Window {
   cancelIdleCallback?(handle: number): void
   webkitOfflineAudioContext?: OfflineAudioContext
   openDatabase?(...args: unknown[]): void
-  chrome?: Record<string, unknown>
 }
 
 interface Navigator {
