@@ -34,12 +34,14 @@ import areCookiesEnabled from './cookies_enabled'
  */
 export const sources = {
   // Expected errors and default values must be handled inside the functions. Unexpected errors must be thrown.
+  // The sources run in this exact order. The asynchronous sources are at the start to run in parallel with other sources.
+  audio: getAudioFingerprint,
+  screenFrame: getRoundedScreenFrame,
   osCpu: getOsCpu,
   languages: getLanguages,
   colorDepth: getColorDepth,
   deviceMemory: getDeviceMemory,
   screenResolution: getScreenResolution,
-  screenFrame: getRoundedScreenFrame,
   hardwareConcurrency: getHardwareConcurrency,
   timezone: getTimezone,
   sessionStorage: getSessionStorage,
@@ -52,7 +54,6 @@ export const sources = {
   canvas: getCanvasFingerprint,
   touchSupport: getTouchSupport,
   fonts: getFonts,
-  audio: getAudioFingerprint,
   productSub: getProductSub,
   emptyEvalLength: getEmptyEvalLength,
   errorFF: getErrorFF,
