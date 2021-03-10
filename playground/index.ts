@@ -25,6 +25,7 @@ async function startPlayground() {
     addOutputSection(output, 'Entropy components:', FingerprintJS.componentsToDebugString(components))
 
     initializeDebugButtons(`Visitor identifier: \`${visitorId}\`
+Time took to get the identifier: ${totalTime}ms
 User agent: \`${navigator.userAgent}\`
 Entropy components:
 \`\`\`

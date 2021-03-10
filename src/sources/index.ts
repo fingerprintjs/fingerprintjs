@@ -34,12 +34,16 @@ import areCookiesEnabled from './cookies_enabled'
  */
 export const sources = {
   // Expected errors and default values must be handled inside the functions. Unexpected errors must be thrown.
+
+  // The sources run in this exact order. The asynchronous sources are at the start to run in parallel with other sources.
+  audio: getAudioFingerprint,
+  screenFrame: getRoundedScreenFrame,
+
   osCpu: getOsCpu,
   languages: getLanguages,
   colorDepth: getColorDepth,
   deviceMemory: getDeviceMemory,
   screenResolution: getScreenResolution,
-  screenFrame: getRoundedScreenFrame,
   hardwareConcurrency: getHardwareConcurrency,
   timezone: getTimezone,
   sessionStorage: getSessionStorage,
@@ -52,7 +56,6 @@ export const sources = {
   canvas: getCanvasFingerprint,
   touchSupport: getTouchSupport,
   fonts: getFonts,
-  audio: getAudioFingerprint,
   productSub: getProductSub,
   emptyEvalLength: getEmptyEvalLength,
   errorFF: getErrorFF,
@@ -121,6 +124,29 @@ export type SourcesToComponents<TSources extends UnknownSources<any>> = {
  */
 export type BuiltinComponents = SourcesToComponents<typeof sources>
 
+function ensureErrorWithMessage(error: unknown): { message: unknown } {
+  return error && typeof error === 'object' && 'message' in error ? (error as { message: unknown }) : { message: error }
+}
+
+/**
+ * Gets a component from the given entropy source.
+ */
+async function getComponent<TOptions, TValue>(
+  source: Source<TOptions, TValue>,
+  sourceOptions: TOptions,
+): Promise<Component<TValue>> {
+  let result: Omit<Component<TValue>, 'duration'>
+  const startTime = Date.now()
+
+  try {
+    result = { value: await source(sourceOptions) }
+  } catch (error) {
+    result = { error: ensureErrorWithMessage(error) }
+  }
+
+  return { ...result, duration: Date.now() - startTime } as Component<TValue>
+}
+
 /**
  * Gets a components list from the given list of entropy sources.
  *
@@ -136,27 +162,38 @@ export async function getComponents<
   sourceOptions: TSourceOptions,
   excludeSources: readonly TExclude[],
 ): Promise<Omit<SourcesToComponents<TSources>, TExclude>> {
-  let timestamp = Date.now()
+  const sourcePromises: Promise<unknown>[] = []
   const components = {} as Omit<SourcesToComponents<TSources>, TExclude>
+  const loopReleaseInterval = 16
+  let lastLoopReleaseTime = Date.now()
 
   for (const sourceKey of Object.keys(sources) as Array<keyof TSources>) {
     if (!excludes(excludeSources, sourceKey)) {
       continue
     }
 
-    let result: Pick<Component<unknown>, 'value' | 'error'>
+    // Create the keys immediately to keep the component keys order the same as the sources keys order
+    components[sourceKey] = undefined as any
 
-    try {
-      result = { value: await sources[sourceKey](sourceOptions) }
-    } catch (error) {
-      result = error && typeof error === 'object' && 'message' in error ? { error } : { error: { message: error } }
+    sourcePromises.push(
+      getComponent(sources[sourceKey], sourceOptions).then((component: Component<any>) => {
+        components[sourceKey] = component
+      }),
+    )
+
+    // Breaks the synchronous flow.
+    // It makes `getComponent` measure duration of the synchronous source without including other source operations.
+    const now = Date.now()
+    if (now >= lastLoopReleaseTime + loopReleaseInterval) {
+      lastLoopReleaseTime = now
+      // Allows asynchronous sources to complete and measure the duration correctly before running the next sources
+      await new Promise((resolve) => setTimeout(resolve))
+    } else {
+      await undefined
     }
-
-    const nextTimestamp = Date.now()
-    components[sourceKey] = { ...result, duration: nextTimestamp - timestamp } as Component<any> // TypeScript has beaten me here
-    timestamp = nextTimestamp
   }
 
+  await Promise.all(sourcePromises)
   return components
 }
 
