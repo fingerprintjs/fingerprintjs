@@ -34,9 +34,11 @@ import areCookiesEnabled from './cookies_enabled'
  */
 export const sources = {
   // Expected errors and default values must be handled inside the functions. Unexpected errors must be thrown.
+
   // The sources run in this exact order. The asynchronous sources are at the start to run in parallel with other sources.
   audio: getAudioFingerprint,
   screenFrame: getRoundedScreenFrame,
+
   osCpu: getOsCpu,
   languages: getLanguages,
   colorDepth: getColorDepth,
@@ -160,21 +162,38 @@ export async function getComponents<
   sourceOptions: TSourceOptions,
   excludeSources: readonly TExclude[],
 ): Promise<Omit<SourcesToComponents<TSources>, TExclude>> {
+  const sourcePromises: Promise<unknown>[] = []
   const components = {} as Omit<SourcesToComponents<TSources>, TExclude>
-  let componentCounter = 0
+  const loopReleaseInterval = 16
+  let lastLoopReleaseTime = Date.now()
 
-  await Promise.all(
-    Object.keys(sources).map(async (sourceKey: keyof TSources) => {
-      if (excludes(excludeSources, sourceKey)) {
-        // Create the keys immediately to keep the component keys order the same as the sources keys order
-        components[sourceKey] = undefined as any
-        await new Promise((resolve) => setTimeout(resolve, componentCounter++))
-        const component = await getComponent(sources[sourceKey], sourceOptions)
-        components[sourceKey] = component as Component<any>
-      }
-    }),
-  )
+  for (const sourceKey of Object.keys(sources) as Array<keyof TSources>) {
+    if (!excludes(excludeSources, sourceKey)) {
+      continue
+    }
 
+    // Create the keys immediately to keep the component keys order the same as the sources keys order
+    components[sourceKey] = undefined as any
+
+    sourcePromises.push(
+      getComponent(sources[sourceKey], sourceOptions).then((component: Component<any>) => {
+        components[sourceKey] = component
+      }),
+    )
+
+    // Breaks the synchronous flow.
+    // It makes `getComponent` measure duration of the synchronous source without including other source operations.
+    const now = Date.now()
+    if (now >= lastLoopReleaseTime + loopReleaseInterval) {
+      lastLoopReleaseTime = now
+      // Allows asynchronous sources to complete and measure the duration correctly before running the next sources
+      await new Promise((resolve) => setTimeout(resolve))
+    } else {
+      await undefined
+    }
+  }
+
+  await Promise.all(sourcePromises)
   return components
 }
 
