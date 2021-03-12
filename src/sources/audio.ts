@@ -30,7 +30,9 @@ export default async function getAudioFingerprint(): Promise<number> {
     return SpecialFingerprint.KnownToSuspend
   }
 
-  const context = new AudioContext(1, 44100, 44100)
+  const hashFromIndex = 4500
+  const hashToIndex = 5000
+  const context = new AudioContext(1, hashToIndex, 44100)
 
   const oscillator = context.createOscillator()
   oscillator.type = 'triangle'
@@ -61,7 +63,7 @@ export default async function getAudioFingerprint(): Promise<number> {
     compressor.disconnect()
   }
 
-  return getHash(buffer.getChannelData(0))
+  return getHash(buffer.getChannelData(0).subarray(hashFromIndex, hashToIndex))
 }
 
 /**
@@ -124,7 +126,7 @@ function renderAudio(context: OfflineAudioContext) {
 
 function getHash(signal: ArrayLike<number>): number {
   let hash = 0
-  for (let i = 4500; i < 5000; ++i) {
+  for (let i = 0; i < signal.length; ++i) {
     hash += Math.abs(signal[i])
   }
   return hash
