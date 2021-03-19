@@ -36,15 +36,14 @@ export default async function getAudioFingerprint(): Promise<number> {
 
   const oscillator = context.createOscillator()
   oscillator.type = 'triangle'
-  setAudioParam(context, oscillator.frequency, 10000)
+  oscillator.frequency.value = 10000
 
   const compressor = context.createDynamicsCompressor()
-  setAudioParam(context, compressor.threshold, -50)
-  setAudioParam(context, compressor.knee, 40)
-  setAudioParam(context, compressor.ratio, 12)
-  setAudioParam(context, compressor.reduction, -20)
-  setAudioParam(context, compressor.attack, 0)
-  setAudioParam(context, compressor.release, 0.25)
+  compressor.threshold.value = -50
+  compressor.knee.value = 40
+  compressor.ratio.value = 12
+  compressor.attack.value = 0
+  compressor.release.value = 0.25
 
   oscillator.connect(compressor)
   compressor.connect(context.destination)
@@ -58,12 +57,9 @@ export default async function getAudioFingerprint(): Promise<number> {
       return SpecialFingerprint.Timeout
     }
     throw error
-  } finally {
-    oscillator.disconnect()
-    compressor.disconnect()
   }
 
-  return getHash(buffer.getChannelData(0).subarray(hashFromIndex, hashToIndex))
+  return getHash(buffer.getChannelData(0).subarray(hashFromIndex))
 }
 
 /**
@@ -71,15 +67,6 @@ export default async function getAudioFingerprint(): Promise<number> {
  */
 function doesCurrentBrowserSuspendAudioContext() {
   return isWebKit() && !isDesktopSafari() && !isWebKit606OrNewer()
-}
-
-function setAudioParam(context: BaseAudioContext, param: unknown, value: number) {
-  const isAudioParam = (value: unknown): value is AudioParam =>
-    value && typeof (value as AudioParam).setValueAtTime === 'function'
-
-  if (isAudioParam(param)) {
-    param.setValueAtTime(value, context.currentTime)
-  }
 }
 
 function renderAudio(context: OfflineAudioContext) {
