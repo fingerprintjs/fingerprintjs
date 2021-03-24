@@ -19,9 +19,6 @@ import getIndexedDB from './indexed_db'
 import getOpenDatabase from './open_database'
 import getCpuClass from './cpu_class'
 import getPlatform from './platform'
-import getProductSub from './product_sub'
-import getEmptyEvalLength from './empty_eval_length'
-import getErrorFF from './error_ff'
 import getVendor from './vendor'
 import getVendorFlavors from './vendor_flavors'
 import areCookiesEnabled from './cookies_enabled'
@@ -56,9 +53,6 @@ export const sources = {
   canvas: getCanvasFingerprint,
   touchSupport: getTouchSupport,
   fonts: getFonts,
-  productSub: getProductSub,
-  emptyEvalLength: getEmptyEvalLength,
-  errorFF: getErrorFF,
   vendor: getVendor,
   vendorFlavors: getVendorFlavors,
   cookiesEnabled: areCookiesEnabled,
