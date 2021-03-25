@@ -29,12 +29,12 @@ Unlike cookies and local storage, fingerprint stays the same in incognito/privat
 ```html
 <script>
   function initFingerprintJS() {
-    // We recommend to call `load` at application startup.
-    const fpPromise = FingerprintJS.load()
+    // Initialize an agent at application startup.
+    const fpPromise = FingerprintJS.load();
 
-    // Get a visitor identifier when you need it.
+    // Get the visitor identifier when you need it.
     fpPromise
-      .then(fp => fp.get)
+      .then(fp => fp.get())
       .then(result => {
         // This is the visitor identifier:
         const visitorId = result.visitorId;
@@ -61,10 +61,10 @@ yarn add @fingerprintjs/fingerprintjs
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 (async () => {
-  // We recommend to call `load` at application startup.
+  // Initialize an agent at application startup.
   const fpPromise = FingerprintJS.load();
 
-  // Get a visitor identifier when you need it.
+  // Get the visitor identifier when you need it.
   const fp = await fpPromise
   const result = await fp.get();
 

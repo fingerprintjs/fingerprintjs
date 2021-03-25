@@ -48,12 +48,14 @@ The agent has a `get` method that you will use instead of calling `Fingerprint2.
 
 ```diff
 - requestIdleCallback(() => {
-+ FingerprintJS.load().then(fp => {
--   Fingerprint2.get().then(result => {
-+   fp.get().then(result => {
+-   Fingerprint2.get(result => {
++ const fpPromise = FingerprintJS.load()
++ fpPromise
++   .then(fp => fp.get()){
++   .then(result => {
       // Handle the result
     })
-  })
+- })
 ```
 
 ## Handling the result
