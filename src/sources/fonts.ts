@@ -3,7 +3,7 @@
 const testString = 'mmMwWLliI0O&1'
 
 // We test using 48px font size, we may use any size. I guess larger the better.
-const testSize = '48px'
+const textSize = '48px'
 
 // A font will be compared against all the three default fonts.
 // And if it doesn't match all 3 then that font is not available.
@@ -65,26 +65,35 @@ const fontList = [
   'ZWAdobeF',
 ] as const
 
-const fontSpanStyle = {
-  // CSS font reset to reset external styles
-  fontStyle: 'normal',
-  fontWeight: 'normal',
-  letterSpacing: 'normal',
-  lineBreak: 'auto',
-  lineHeight: 'normal',
-  textTransform: 'none',
-  textAlign: 'left',
-  textDecoration: 'none',
-  textShadow: 'none',
-  whiteSpace: 'normal',
-  wordBreak: 'normal',
-  wordSpacing: 'normal',
+const spanContainerStyle = {
+  display: 'block',
 
-  // We need this css as in some weird browser this span elements shows up for a microSec which creates
+  // We need this CSS as in some weird browser this span elements shows up for a microsecond which creates
   // a bad user experience
   position: 'absolute',
   left: '-9999px',
-  fontSize: testSize,
+  top: '0',
+}
+
+const fontSpanStyle = {
+  // CSS font reset to reset external styles
+  'font-style': 'normal',
+  'font-weight': 'normal',
+  'letter-spacing': 'normal',
+  'line-break': 'auto',
+  'line-height': 'normal',
+  'text-transform': 'none',
+  'text-align': 'left',
+  'text-decoration': 'none',
+  'white-space': 'normal',
+  'word-break': 'normal',
+  'word-spacing': 'normal',
+
+  'font-size': textSize,
+  display: 'inline-block',
+  position: 'absolute',
+  left: '0',
+  top: '0',
 }
 
 // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
@@ -92,42 +101,31 @@ export default function getFonts(): string[] {
   const d = document
   const holder = d.body
 
-  // div to load spans for the base fonts
-  const baseFontsDiv = d.createElement('div')
-
-  // div to load spans for the fonts to detect
-  const fontsDiv = d.createElement('div')
+  // div to load spans for the default fonts and the fonts to detect
+  const spansContainer = d.createElement('div')
+  setStyles(spansContainer, spanContainerStyle)
 
   const defaultWidth: Partial<Record<string, number>> = {}
   const defaultHeight: Partial<Record<string, number>> = {}
 
   // creates a span where the fonts will be loaded
-  const createSpan = () => {
+  const createSpan = (fontFamily: string) => {
     const span = d.createElement('span')
+    setStyles(span, fontSpanStyle)
+    setStyle(span, 'font-family', fontFamily)
     span.textContent = testString
-
-    for (const prop of Object.keys(fontSpanStyle) as Array<keyof typeof fontSpanStyle>) {
-      span.style[prop] = fontSpanStyle[prop]
-    }
-
+    spansContainer.appendChild(span)
     return span
   }
 
   // creates a span and load the font to detect and a base font for fallback
   const createSpanWithFonts = (fontToDetect: string, baseFont: string) => {
-    const s = createSpan()
-    s.style.fontFamily = `'${fontToDetect}',${baseFont}`
-    return s
+    return createSpan(`'${fontToDetect}',${baseFont}`)
   }
 
   // creates spans for the base fonts and adds them to baseFontsDiv
   const initializeBaseFontsSpans = () => {
-    return baseFonts.map((baseFont) => {
-      const s = createSpan()
-      s.style.fontFamily = baseFont
-      baseFontsDiv.appendChild(s)
-      return s
-    })
+    return baseFonts.map(createSpan)
   }
 
   // creates spans for the fonts to detect and adds them to fontsDiv
@@ -136,11 +134,7 @@ export default function getFonts(): string[] {
     const spans: Record<string, HTMLSpanElement[]> = {}
 
     for (const font of fontList) {
-      spans[font] = baseFonts.map((baseFont) => {
-        const s = createSpanWithFonts(font, baseFont)
-        fontsDiv.appendChild(s)
-        return s
-      })
+      spans[font] = baseFonts.map((baseFont) => createSpanWithFonts(font, baseFont))
     }
 
     return spans
@@ -158,31 +152,33 @@ export default function getFonts(): string[] {
   // create spans for base fonts
   const baseFontsSpans = initializeBaseFontsSpans()
 
-  // add the spans to the DOM
-  holder.appendChild(baseFontsDiv)
-
-  // get the default width for the three base fonts
-  for (let index = 0, length = baseFonts.length; index < length; index++) {
-    defaultWidth[baseFonts[index]] = baseFontsSpans[index].offsetWidth // width for the default font
-    defaultHeight[baseFonts[index]] = baseFontsSpans[index].offsetHeight // height for the default font
-  }
-
   // create spans for fonts to detect
   const fontsSpans = initializeFontsSpans()
 
   // add all the spans to the DOM
-  holder.appendChild(fontsDiv)
+  holder.appendChild(spansContainer)
 
-  // check available fonts
-  const available: string[] = []
-  for (let i = 0, l = fontList.length; i < l; i++) {
-    if (isFontAvailable(fontsSpans[fontList[i]])) {
-      available.push(fontList[i])
+  try {
+    // get the default width for the three base fonts
+    for (let index = 0; index < baseFonts.length; index++) {
+      defaultWidth[baseFonts[index]] = baseFontsSpans[index].offsetWidth // width for the default font
+      defaultHeight[baseFonts[index]] = baseFontsSpans[index].offsetHeight // height for the default font
     }
-  }
 
-  // remove spans from DOM
-  holder.removeChild(fontsDiv)
-  holder.removeChild(baseFontsDiv)
-  return available
+    // check available fonts
+    return fontList.filter((font) => isFontAvailable(fontsSpans[font]))
+  } finally {
+    // remove spans from DOM
+    holder.removeChild(spansContainer)
+  }
+}
+
+function setStyle(element: HTMLElement, property: string, value: string) {
+  element.style.setProperty(property, value, 'important')
+}
+
+function setStyles(element: HTMLElement, styles: Record<string, string>) {
+  for (const property of Object.keys(fontSpanStyle)) {
+    setStyle(element, property, styles[property])
+  }
 }
