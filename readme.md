@@ -18,9 +18,9 @@
   </a>
 </p>
 
-Makes a website visitor identifier from a browser fingerprint.
-Unlike cookies and local storage, fingerprint stays the same in incognito/private mode and even when browser data is purged.
-[Demo](https://fingerprintjs.github.io/fingerprintjs/).
+FingerprintJS is a browser fingerprinting library that queries browser attributes and computes a hashed visitor identifier from them. Unlike cookies and local storage, a fingerprint stays the same in incognito/private mode and even when browser data is purged. 
+
+[View Our Demo](https://fingerprintjs.github.io/fingerprintjs/).
 
 ## Quick start
 
@@ -76,7 +76,12 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 📕 [Full documentation](#open-source-version-reference)
 
-## Upgrade to [Pro version](https://fingerprintjs.com) to get 99.5% identification accuracy
+## Upgrade to [Pro version](https://pro.fingerprintjs.com/github/) to get 99.5% identification accuracy
+
+FingerprintJS Pro is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs. Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in 99.5% identification accuracy.
+
+See our [full product comparison](https://pro.fingerprintjs.com/github/) for more information on the differences between open source and Pro.
+
 
 <p align="center">
   <a href="https://fingerprintjs.com">

@@ -33,6 +33,7 @@ export const sources = {
   // Expected errors and default values must be handled inside the functions. Unexpected errors must be thrown.
 
   // The sources run in this exact order. The asynchronous sources are at the start to run in parallel with other sources.
+  fonts: getFonts,
   audio: getAudioFingerprint,
   screenFrame: getRoundedScreenFrame,
 
@@ -52,7 +53,6 @@ export const sources = {
   plugins: getPlugins,
   canvas: getCanvasFingerprint,
   touchSupport: getTouchSupport,
-  fonts: getFonts,
   vendor: getVendor,
   vendorFlavors: getVendorFlavors,
   cookiesEnabled: areCookiesEnabled,
