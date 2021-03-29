@@ -14,8 +14,10 @@ export default function getCanvasFingerprint(): CanvasFingerprint {
   return {
     winding: doesSupportWinding(context),
     geometry: makeGeometryImage(canvas, context),
-    // Text is unstable (https://github.com/fingerprintjs/fingerprintjs/issues/583),
-    // therefore it's extracted into a separate image
+    // Text is unstable:
+    // https://github.com/fingerprintjs/fingerprintjs/issues/583
+    // https://github.com/fingerprintjs/fingerprintjs/issues/103
+    // Therefore it's extracted into a separate image.
     text: makeTextImage(canvas, context),
   }
 }

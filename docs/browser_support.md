@@ -85,12 +85,15 @@ Examples for various installation methods:
 ### Code syntax
 
 Older browsers like IE11 do not support arrow functions (=>). To support older browsers, it should be used in the following form
+
 ```diff
-- FingerprintJS.load().then(fp => {
-+ FingerprintJS.load().then(function (fp) {
--   fp.get().then(result => {
-+   fp.get().then(function (result) {
+  const fpPromise = FingerprintJS.load();
+
+  fpPromise
+-   .then(fp => fp.get())
++   .then(function (fp) { return fp.get() })
+-   .then(result => {
++   .then(function (result) {
       // Handle the result
     });
-  });
 ```
