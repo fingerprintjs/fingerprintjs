@@ -96,22 +96,5 @@ console.log(result)
 ## Customization
 
 Version 3 has no options for customization, it provides a good built-in setup.
-Nevertheless, you can exclude components and add custom components manually.
-Use the provided hash function to achieve this:
-
-```js
-const result = await fp.get()
-
-// Exclude a couple components
-const { languages, audio, ...components } = result.components
-
-// Add a few custom components
-const extendedComponents = {
-  ...components,
-  foo: { value: await getFooComponent() },
-  bar: { value: await getBarComponent() },
-}
-
-// Make a visitor identifier from your custom list of components
-const visitorId = FingerprintJS.hashComponents(extendedComponents)
-```
+Nevertheless, you can exclude built-in entropy components and add custom entropy components manually.
+See the [extending guide](extending.md) to learn more.

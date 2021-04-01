@@ -21,6 +21,7 @@ At the moment, the browsers are:
 Other browsers will probably also work, but we don't guarantee it.
 
 ## Old browsers requirements
+
 ### Polyfills
 
 Very old browsers like Internet Explorer 11 and Android Browser 4.1
@@ -82,9 +83,10 @@ Examples for various installation methods:
 
       // Start loading FingerprintJS here
     ```
+
 ### Code syntax
 
-Older browsers like IE11 do not support arrow functions (=>). To support older browsers, it should be used in the following form
+Old browsers like IE11 don't support arrow functions (`=>`). Use the classic function syntax instead:
 
 ```diff
   const fpPromise = FingerprintJS.load();
