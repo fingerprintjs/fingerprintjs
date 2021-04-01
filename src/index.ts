@@ -31,6 +31,5 @@ export {
   isGecko,
   isDesktopSafari,
 } from './utils/browser'
-export { withIframe } from './utils/dom'
 export { getScreenFrame } from './sources/screen_frame'
 export { getComponents, SourcesToComponents } from './sources'

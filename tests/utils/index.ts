@@ -72,3 +72,16 @@ export function getBrowserEngineMajorVersion(): number | undefined {
   }
   return parseInt(version.split('.')[0])
 }
+
+export async function withCSS<T>(css: string, action: () => Promise<T> | T): Promise<T> {
+  const styleElement = document.createElement('style')
+
+  try {
+    styleElement.textContent = css
+    document.head.appendChild(styleElement)
+
+    return await action()
+  } finally {
+    styleElement.parentNode?.removeChild(styleElement)
+  }
+}

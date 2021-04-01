@@ -31,6 +31,7 @@ import getContrastPreference from './contrast'
 import isMotionReduced from './reduced_motion'
 import isHDR from './hdr'
 import getMathFingerprint from './math'
+import getFontPreferences from './font_preferences'
 
 /**
  * The list of entropy sources used to make visitor identifiers.
@@ -44,6 +45,7 @@ export const sources = {
   // The sources run in this exact order. The asynchronous sources are at the start to run in parallel with other sources.
   fonts: getFonts,
   domBlockers: getDomBlockers,
+  fontPreferences: getFontPreferences,
   audio: getAudioFingerprint,
   screenFrame: getRoundedScreenFrame,
 
