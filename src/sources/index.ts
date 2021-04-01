@@ -30,6 +30,7 @@ import getMonochromeDepth from './monochrome'
 import getContrastPreference from './contrast'
 import isMotionReduced from './reduced_motion'
 import isHDR from './hdr'
+import getMathFingerprint from './math'
 
 /**
  * The list of entropy sources used to make visitor identifiers.
@@ -72,6 +73,7 @@ export const sources = {
   contrast: getContrastPreference,
   reducedMotion: isMotionReduced,
   hdr: isHDR,
+  math: getMathFingerprint,
 }
 
 /**
