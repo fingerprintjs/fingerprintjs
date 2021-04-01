@@ -14,7 +14,10 @@ const enum InnerErrorName {
   Suspended = 'suspended',
 }
 
-// Inspired by and based on https://github.com/cozylife/audio-fingerprint
+/**
+ * A deep description: https://fingerprintjs.com/blog/audio-fingerprinting/
+ * Inspired by and based on https://github.com/cozylife/audio-fingerprint
+ */
 export default async function getAudioFingerprint(): Promise<number> {
   const w = window
   const AudioContext = w.OfflineAudioContext || w.webkitOfflineAudioContext
