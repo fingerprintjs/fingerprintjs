@@ -1,4 +1,4 @@
-import { round, toFloat, toInt } from './data'
+import { parseSimpleCssSelector, round, toFloat, toInt } from './data'
 
 describe('Data utilities', () => {
   it('converts to integer', () => {
@@ -35,5 +35,28 @@ describe('Data utilities', () => {
     expect(round(NaN)).toBeNaN()
     expect(round(NaN, 10)).toBeNaN()
     expect(round(1.5, NaN)).toBeNaN()
+  })
+
+  it('parses CSS selectors', () => {
+    expect(parseSimpleCssSelector('#narrow_ad_unit.top-menu-ads.foo_bar')).toEqual([
+      undefined,
+      { id: ['narrow_ad_unit'], class: ['top-menu-ads', 'foo_bar'] },
+    ])
+    expect(parseSimpleCssSelector('a[href^="https://syndication.optimizesrv.com/splash.php?"]')).toEqual([
+      'a',
+      { href: ['https://syndication.optimizesrv.com/splash.php?'] },
+    ])
+    expect(parseSimpleCssSelector(' img[width="460"][height=60 i]')).toEqual([
+      'img',
+      { width: ['460'], height: ['60'] },
+    ])
+    expect(parseSimpleCssSelector('a[href^="https://www.adultempire.com/"][href*="?partner_id="]')).toEqual([
+      'a',
+      { href: ['https://www.adultempire.com/', '?partner_id='] },
+    ])
+    expect(parseSimpleCssSelector('.mainmenu[style="padding:10px 0 0 0 !important;"]')).toEqual([
+      undefined,
+      { class: ['mainmenu'], style: ['padding:10px 0 0 0 !important;'] },
+    ])
   })
 })

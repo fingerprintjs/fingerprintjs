@@ -22,6 +22,7 @@ import getPlatform from './platform'
 import getVendor from './vendor'
 import getVendorFlavors from './vendor_flavors'
 import areCookiesEnabled from './cookies_enabled'
+import getDomBlockers from './dom_blockers'
 
 /**
  * The list of entropy sources used to make visitor identifiers.
@@ -34,6 +35,7 @@ export const sources = {
 
   // The sources run in this exact order. The asynchronous sources are at the start to run in parallel with other sources.
   fonts: getFonts,
+  domBlockers: getDomBlockers,
   audio: getAudioFingerprint,
   screenFrame: getRoundedScreenFrame,
 
@@ -191,9 +193,13 @@ export async function getComponents<
   return components
 }
 
+export interface BuiltinSourceOptions {
+  debug?: boolean
+}
+
 /**
  * Collects entropy components from the built-in sources to make the visitor identifier.
  */
-export default function getBuiltinComponents(): Promise<BuiltinComponents> {
-  return getComponents(sources, undefined, [])
+export default function getBuiltinComponents(options: BuiltinSourceOptions): Promise<BuiltinComponents> {
+  return getComponents(sources, options, [])
 }

@@ -212,3 +212,30 @@ export function exitFullscreen(): Promise<void> {
   // `call` is required because the function throws an error without a proper "this" context
   return (d.exitFullscreen || d.msExitFullscreen || d.mozCancelFullScreen || d.webkitExitFullscreen).call(d)
 }
+
+/**
+ * Checks whether the device runs on Android without using user-agent.
+ */
+export function isAndroid(): boolean {
+  const isItChromium = isChromium()
+  const isItGecko = isGecko()
+
+  // Only 2 browser engines are presented on Android.
+  // Actually, there is also Android 4.1 browser, but it's not worth detecting it at the moment.
+  if (!isItChromium && !isItGecko) {
+    return false
+  }
+
+  const w = window
+
+  // Chrome removes all words "Android" from `navigator` when desktop version is requested
+  // Firefox keeps "Android" in `navigator.appVersion` when desktop version is requested
+  return (
+    countTruthy([
+      'onorientationchange' in w,
+      'orientation' in w,
+      isItChromium && 'SharedWorker' in w,
+      isItGecko && /android/i.test(navigator.appVersion),
+    ]) >= 2
+  )
+}

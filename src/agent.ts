@@ -118,7 +118,7 @@ export class OpenAgent implements Agent {
    * @inheritDoc
    */
   public async get(options: Readonly<GetOptions> = {}): Promise<GetResult> {
-    const components = await getBuiltinComponents()
+    const components = await getBuiltinComponents(options)
     const result = makeLazyGetResult(components)
 
     if (options.debug) {

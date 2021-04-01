@@ -1,4 +1,5 @@
 import { wait } from './async'
+import { parseSimpleCssSelector } from './data'
 
 /**
  * Creates and keeps an invisible iframe while the given function runs.
@@ -50,4 +51,17 @@ export async function withIframe<T>(
   } finally {
     iframe.parentNode?.removeChild(iframe)
   }
+}
+
+/**
+ * Creates a DOM element that matches the given selector.
+ * Only single element selector are supported (without operators like space, +, >, etc).
+ */
+export function selectorToElement(selector: string): HTMLElement {
+  const [tag, attributes] = parseSimpleCssSelector(selector)
+  const element = document.createElement(tag ?? 'div')
+  for (const name of Object.keys(attributes)) {
+    element.setAttribute(name, attributes[name].join(' '))
+  }
+  return element
 }

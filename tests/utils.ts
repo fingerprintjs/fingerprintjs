@@ -39,6 +39,10 @@ export function isTablet(): boolean {
   return new UAParser().getDevice().type === 'tablet'
 }
 
+export function isAndroid(): boolean {
+  return new UAParser().getOS().name === 'Android'
+}
+
 /**
  * Probably you should use `isWebKit` instead
  */

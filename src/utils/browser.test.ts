@@ -54,4 +54,10 @@ describe('Browser utilities', () => {
       expect(browser.isIPad()).toBe(utils.isTablet())
     })
   })
+
+  describe('platform detection', () => {
+    it('detects Android', () => {
+      expect(browser.isAndroid()).toBe(utils.isAndroid())
+    })
+  })
 })
