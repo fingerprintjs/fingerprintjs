@@ -23,6 +23,13 @@ import getVendor from './vendor'
 import getVendorFlavors from './vendor_flavors'
 import areCookiesEnabled from './cookies_enabled'
 import getDomBlockers from './dom_blockers'
+import getColorGamut from './color_gamut'
+import areColorsInverted from './inverted_colors'
+import areColorsForced from './forced_colors'
+import getMonochromeDepth from './monochrome'
+import getContrastPreference from './contrast'
+import isMotionReduced from './reduced_motion'
+import isHDR from './hdr'
 
 /**
  * The list of entropy sources used to make visitor identifiers.
@@ -58,6 +65,13 @@ export const sources = {
   vendor: getVendor,
   vendorFlavors: getVendorFlavors,
   cookiesEnabled: areCookiesEnabled,
+  colorGamut: getColorGamut,
+  invertedColors: areColorsInverted,
+  forcedColors: areColorsForced,
+  monochrome: getMonochromeDepth,
+  contrast: getContrastPreference,
+  reducedMotion: isMotionReduced,
+  hdr: isHDR,
 }
 
 /**
