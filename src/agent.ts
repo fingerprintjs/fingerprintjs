@@ -43,6 +43,12 @@ export interface GetResult {
    * `UnknownComponents` that is more generic but guarantees backward compatibility within a major version.
    */
   components: BuiltinComponents
+  /**
+   * The fingerprinting algorithm version
+   *
+   * @see https://github.com/fingerprintjs/fingerprintjs#version-policy For more details
+   */
+  version: string
 }
 
 /**
@@ -101,6 +107,7 @@ function makeLazyGetResult<T extends UnknownComponents>(components: T) {
     set visitorId(visitorId: string) {
       visitorIdCache = visitorId
     },
+    version,
   }
 }
 
@@ -122,7 +129,7 @@ export class OpenAgent implements Agent {
       console.log(`Copy the text below to get the debug data:
 
 \`\`\`
-version: ${version}
+version: ${result.version}
 userAgent: ${navigator.userAgent}
 getOptions: ${JSON.stringify(options, undefined, 2)}
 visitorId: ${result.visitorId}

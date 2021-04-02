@@ -1,3 +1,4 @@
+import { version } from '../package.json'
 import { OpenAgent } from './agent'
 import { sources } from './sources'
 
@@ -7,6 +8,7 @@ describe('Agent', () => {
     const result = await agent.get()
     expect(typeof result.visitorId).toBe('string')
     expect(result.visitorId).not.toEqual('')
+    expect(result.version).toBe(version)
 
     const expectedComponents = Object.keys(sources).sort() as Array<keyof typeof sources>
     expect(expectedComponents.length).toBeGreaterThan(10) // To check the test itself
