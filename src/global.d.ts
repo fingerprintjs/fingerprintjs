@@ -39,3 +39,8 @@ interface Screen {
 interface Element {
   webkitRequestFullscreen?: typeof Element.prototype.requestFullscreen
 }
+
+interface CSSStyleDeclaration {
+  textSizeAdjust: string
+  webkitTextSizeAdjust: string
+}

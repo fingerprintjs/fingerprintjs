@@ -48,13 +48,12 @@ export const presets: Record<string, Preset> = {
  * The result is very stable in IE 11, Edge 18 and Safari 14.
  * The result changes when the OS pixel density changes in Chromium 87. The real pixel density is required to solve,
  * but seems like it's impossible: https://stackoverflow.com/q/1713771/1118709.
- * The "min" value changes when the OS pixel density changes in Firefox 84.
+ * The "min" and the "mono" (only on Windows) value may change when the page is zoomed in Firefox 87.
  */
-export default async function getFontPreferences(): Promise<Record<string, number>> {
-  const sizes: Record<string, number> = {}
-
-  await withNaturalFonts((document, container) => {
+export default function getFontPreferences(): Promise<Record<string, number>> {
+  return withNaturalFonts((document, container) => {
     const elements: Record<string, HTMLElement> = {}
+    const sizes: Record<string, number> = {}
 
     // First create all elements to measure. If the DOM steps below are done in a single cycle,
     // browser will alternate tree modification and layout reading, that is very slow.
@@ -81,9 +80,9 @@ export default async function getFontPreferences(): Promise<Record<string, numbe
     for (const key of Object.keys(presets)) {
       sizes[key] = elements[key].getBoundingClientRect().width
     }
-  })
 
-  return sizes
+    return sizes
+  })
 }
 
 /**
@@ -101,12 +100,13 @@ function withNaturalFonts<T>(
    * - The text mustn't be positioned absolutely;
    * - The text block must be wide enough.
    *   2560px on some devices in portrait orientation for the biggest font size option (32px);
-   * - There must be much enough text to form a few lines (I don't know the exact numbers).
+   * - There must be much enough text to form a few lines (I don't know the exact numbers);
+   * - The text must have the `text-size-adjust: none` style. Otherwise the text will scale in "Desktop site" mode;
    *
    * Requirements for Android Firefox to apply the system font size to a text inside an iframe:
    * - The iframe document must have a header: `<meta name="viewport" content="width=device-width, initial-scale=1" />`.
    *   The only way to set it is to use the `srcdoc` attribute of the iframe;
-   * - The iframe content must get loaded before adding extra content with JavaScript.
+   * - The iframe content must get loaded before adding extra content with JavaScript;
    *
    * https://example.com as the iframe target always inherits Android font settings so it can be used as a reference.
    *
@@ -142,7 +142,9 @@ function withNaturalFonts<T>(
     const iframeDocument = iframeWindow.document
     const iframeBody = iframeDocument.body
 
-    iframeBody.style.width = `${containerWidthPx}px`
+    const bodyStyle = iframeBody.style
+    bodyStyle.width = `${containerWidthPx}px`
+    bodyStyle.webkitTextSizeAdjust = bodyStyle.textSizeAdjust = 'none'
 
     // See the big comment above
     if (isChromium()) {
