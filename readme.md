@@ -78,7 +78,8 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 ## Upgrade to [Pro version](https://pro.fingerprintjs.com/github/) to get 99.5% identification accuracy
 
-FingerprintJS Pro is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs. Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in 99.5% identification accuracy.
+FingerprintJS Pro is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
+Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in 99.5% identification accuracy.
 
 See our [full product comparison](https://pro.fingerprintjs.com/github/) for more information on the differences between open source and Pro.
 
@@ -211,15 +212,19 @@ We recommend calling it as soon as possible.
 `delayFallback` is an optional parameter that sets duration (milliseconds) of the fallback for browsers that don't support [requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback);
 it has a good default value which we don't recommend to change.
 
-#### `agent.get({ debug?: boolean }): Promise<{ visitorId: string, components: object }>`
+#### `agent.get({ debug?: boolean }): Promise<object>`
 
 Gets the visitor identifier.
 We recommend calling it later, when you really need the identifier, to increase the chance of getting an accurate identifier.
 `debug: true` prints debug messages to the console.
-`visitorId` is the visitor identifier.
-`components` is a dictionary of components that have formed the identifier;
-each value is an object like `{ value: any, duration: number }` in case of success
-and `{ error: object, duration: number }` in case of an unexpected error during getting the component.
+Result object fields:
+
+- `visitorId` The visitor identifier
+- `components` A dictionary of components that have formed the identifier.
+    Each value is an object like `{ value: any, duration: number }` in case of success
+    and `{ error: object, duration: number }` in case of an unexpected error during getting the component.
+- `version` The fingerprinting algorithm version which is equal to the library version.
+    See [the version policy section](#version-policy) for more details.
 
 See the [extending guide](docs/extending.md) to learn how to remove and add entropy components.
 
@@ -239,9 +244,24 @@ Converts a dictionary of components (described above) into human-friendly format
 
 ## Version policy
 
-The OSS version doesn't guarantee the same visitor identifier between versions,
-but will try to keep them the same as much as possible.
-To get identifiers that remain stable up to 1 year, please consider [upgrading to pro.](https://dashboard.fingerprintjs.com)
+The library tries to keep visitor identifiers the same within a minor version (i.e. when the first 2 numbers of the version don't change).
+Some visitor identifiers may change within a minor version due to stability fixes.
+To get identifiers that remain stable up to 1 year, please consider [upgrading to pro](https://dashboard.fingerprintjs.com).
+
+Agent `get()` function returns the version together with the visitor identifier.
+You can use it to decide whether a couple of identifiers can be matched together.
+Example:
+
+```js
+if (
+  result1.version.split('.').slice(0, 2).join('.') ===
+  result2.version.split('.').slice(0, 2).join('.')
+) {
+  return result1.visitorId === result2.visitorId ? 'same' : 'different';
+} else {
+  return 'unknown';
+}
+```
 
 The documented JS API follows [Semantic Versioning](https://semver.org).
 Use undocumented features at your own risk.
