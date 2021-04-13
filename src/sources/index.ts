@@ -10,9 +10,8 @@ import getLanguages from './languages'
 import getColorDepth from './color_depth'
 import getDeviceMemory from './device_memory'
 import getScreenResolution from './screen_resolution'
-import getAvailableScreenResolution from './available_screen_resolution'
+import { getRoundedScreenFrame } from './screen_frame'
 import getHardwareConcurrency from './hardware_concurrency'
-import getTimezoneOffset from './timezone_offset'
 import getTimezone from './timezone'
 import getSessionStorage from './session_storage'
 import getLocalStorage from './local_storage'
@@ -20,13 +19,19 @@ import getIndexedDB from './indexed_db'
 import getOpenDatabase from './open_database'
 import getCpuClass from './cpu_class'
 import getPlatform from './platform'
-import getPluginsSupport from './plugins_support'
-import getProductSub from './product_sub'
-import getEmptyEvalLength from './empty_eval_length'
-import getErrorFF from './error_ff'
 import getVendor from './vendor'
-import getChrome from './chrome'
+import getVendorFlavors from './vendor_flavors'
 import areCookiesEnabled from './cookies_enabled'
+import getDomBlockers from './dom_blockers'
+import getColorGamut from './color_gamut'
+import areColorsInverted from './inverted_colors'
+import areColorsForced from './forced_colors'
+import getMonochromeDepth from './monochrome'
+import getContrastPreference from './contrast'
+import isMotionReduced from './reduced_motion'
+import isHDR from './hdr'
+import getMathFingerprint from './math'
+import getFontPreferences from './font_preferences'
 
 /**
  * The list of entropy sources used to make visitor identifiers.
@@ -36,14 +41,20 @@ import areCookiesEnabled from './cookies_enabled'
  */
 export const sources = {
   // Expected errors and default values must be handled inside the functions. Unexpected errors must be thrown.
+
+  // The sources run in this exact order. The asynchronous sources are at the start to run in parallel with other sources.
+  fonts: getFonts,
+  domBlockers: getDomBlockers,
+  fontPreferences: getFontPreferences,
+  audio: getAudioFingerprint,
+  screenFrame: getRoundedScreenFrame,
+
   osCpu: getOsCpu,
   languages: getLanguages,
   colorDepth: getColorDepth,
   deviceMemory: getDeviceMemory,
   screenResolution: getScreenResolution,
-  availableScreenResolution: getAvailableScreenResolution,
   hardwareConcurrency: getHardwareConcurrency,
-  timezoneOffset: getTimezoneOffset,
   timezone: getTimezone,
   sessionStorage: getSessionStorage,
   localStorage: getLocalStorage,
@@ -53,17 +64,18 @@ export const sources = {
   platform: getPlatform,
   plugins: getPlugins,
   canvas: getCanvasFingerprint,
-  // adBlock: isAdblockUsed, // https://github.com/fingerprintjs/fingerprintjs/issues/405
   touchSupport: getTouchSupport,
-  fonts: getFonts,
-  audio: getAudioFingerprint,
-  pluginsSupport: getPluginsSupport,
-  productSub: getProductSub,
-  emptyEvalLength: getEmptyEvalLength,
-  errorFF: getErrorFF,
   vendor: getVendor,
-  chrome: getChrome,
+  vendorFlavors: getVendorFlavors,
   cookiesEnabled: areCookiesEnabled,
+  colorGamut: getColorGamut,
+  invertedColors: areColorsInverted,
+  forcedColors: areColorsForced,
+  monochrome: getMonochromeDepth,
+  contrast: getContrastPreference,
+  reducedMotion: isMotionReduced,
+  hdr: isHDR,
+  math: getMathFingerprint,
 }
 
 /**
@@ -126,6 +138,29 @@ export type SourcesToComponents<TSources extends UnknownSources<any>> = {
  */
 export type BuiltinComponents = SourcesToComponents<typeof sources>
 
+function ensureErrorWithMessage(error: unknown): { message: unknown } {
+  return error && typeof error === 'object' && 'message' in error ? (error as { message: unknown }) : { message: error }
+}
+
+/**
+ * Gets a component from the given entropy source.
+ */
+async function getComponent<TOptions, TValue>(
+  source: Source<TOptions, TValue>,
+  sourceOptions: TOptions,
+): Promise<Component<TValue>> {
+  let result: Omit<Component<TValue>, 'duration'>
+  const startTime = Date.now()
+
+  try {
+    result = { value: await source(sourceOptions) }
+  } catch (error) {
+    result = { error: ensureErrorWithMessage(error) }
+  }
+
+  return { ...result, duration: Date.now() - startTime } as Component<TValue>
+}
+
 /**
  * Gets a components list from the given list of entropy sources.
  *
@@ -141,33 +176,48 @@ export async function getComponents<
   sourceOptions: TSourceOptions,
   excludeSources: readonly TExclude[],
 ): Promise<Omit<SourcesToComponents<TSources>, TExclude>> {
-  let timestamp = Date.now()
+  const sourcePromises: Promise<unknown>[] = []
   const components = {} as Omit<SourcesToComponents<TSources>, TExclude>
+  const loopReleaseInterval = 16
+  let lastLoopReleaseTime = Date.now()
 
   for (const sourceKey of Object.keys(sources) as Array<keyof TSources>) {
     if (!excludes(excludeSources, sourceKey)) {
       continue
     }
 
-    let result: Pick<Component<unknown>, 'value' | 'error'>
+    // Create the keys immediately to keep the component keys order the same as the sources keys order
+    components[sourceKey] = undefined as any
 
-    try {
-      result = { value: await sources[sourceKey](sourceOptions) }
-    } catch (error) {
-      result = error && typeof error === 'object' && 'message' in error ? { error } : { error: { message: error } }
+    sourcePromises.push(
+      getComponent(sources[sourceKey], sourceOptions).then((component: Component<any>) => {
+        components[sourceKey] = component
+      }),
+    )
+
+    // Breaks the synchronous flow.
+    // It makes `getComponent` measure duration of the synchronous source without including other source operations.
+    const now = Date.now()
+    if (now >= lastLoopReleaseTime + loopReleaseInterval) {
+      lastLoopReleaseTime = now
+      // Allows asynchronous sources to complete and measure the duration correctly before running the next sources
+      await new Promise((resolve) => setTimeout(resolve))
+    } else {
+      await undefined
     }
-
-    const nextTimestamp = Date.now()
-    components[sourceKey] = { ...result, duration: nextTimestamp - timestamp } as Component<any> // TypeScript has beaten me here
-    timestamp = nextTimestamp
   }
 
+  await Promise.all(sourcePromises)
   return components
+}
+
+export interface BuiltinSourceOptions {
+  debug?: boolean
 }
 
 /**
  * Collects entropy components from the built-in sources to make the visitor identifier.
  */
-export default function getBuiltinComponents(): Promise<BuiltinComponents> {
-  return getComponents(sources, undefined, [])
+export default function getBuiltinComponents(options: BuiltinSourceOptions): Promise<BuiltinComponents> {
+  return getComponents(sources, options, [])
 }

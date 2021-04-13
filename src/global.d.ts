@@ -10,7 +10,6 @@ interface Window {
   cancelIdleCallback?(handle: number): void
   webkitOfflineAudioContext?: OfflineAudioContext
   openDatabase?(...args: unknown[]): void
-  chrome?: Record<string, unknown>
 }
 
 interface Navigator {
@@ -20,4 +19,28 @@ interface Navigator {
   systemLanguage?: string
   deviceMemory?: number
   cpuClass?: string
+}
+
+interface Document {
+  msFullscreenElement?: typeof document.fullscreenElement
+  mozFullScreenElement?: typeof document.fullscreenElement
+  webkitFullscreenElement?: typeof document.fullscreenElement
+
+  msExitFullscreen?: typeof document.exitFullscreen
+  mozCancelFullScreen?: typeof document.exitFullscreen
+  webkitExitFullscreen?: typeof document.exitFullscreen
+}
+
+interface Screen {
+  availLeft?: number
+  availTop?: number
+}
+
+interface Element {
+  webkitRequestFullscreen?: typeof Element.prototype.requestFullscreen
+}
+
+interface CSSStyleDeclaration {
+  textSizeAdjust: string
+  webkitTextSizeAdjust: string
 }

@@ -1,7 +1,6 @@
 import { x64hash128 } from './utils/hashing'
 import { load, Agent, LoadOptions, GetOptions, GetResult, hashComponents, componentsToDebugString } from './agent'
-import { getComponents, Component, UnknownComponents, BuiltinComponents, SourcesToComponents } from './sources'
-import { isTrident, isEdgeHTML, isChromium, isWebKit, isGecko, isDesktopSafari } from './utils/browser'
+import { Component, UnknownComponents, BuiltinComponents } from './sources'
 
 // Exports that are under Semantic versioning
 export {
@@ -23,4 +22,14 @@ export default { load, hashComponents, componentsToDebugString }
 // The exports below are for private usage. They may change unexpectedly. Use them at your own risk.
 /** Not documented, out of Semantic Versioning, usage is at your own risk */
 export const murmurX64Hash128 = x64hash128
-export { getComponents, SourcesToComponents, isTrident, isEdgeHTML, isChromium, isWebKit, isGecko, isDesktopSafari }
+export {
+  getFullscreenElement,
+  isTrident,
+  isEdgeHTML,
+  isChromium,
+  isWebKit,
+  isGecko,
+  isDesktopSafari,
+} from './utils/browser'
+export { getScreenFrame } from './sources/screen_frame'
+export { getComponents, SourcesToComponents } from './sources'

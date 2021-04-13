@@ -27,7 +27,7 @@ describe('Browser utilities', () => {
       if (!utils.isWebKit()) {
         pending('The case is for WebKit only')
       }
-      expect(browser.isDesktopSafari()).toBe(!utils.isMobile())
+      expect(browser.isDesktopSafari()).toBe(!utils.isMobile() && !utils.isTablet())
     })
 
     it('detects Chromium 86+', () => {
@@ -44,6 +44,20 @@ describe('Browser utilities', () => {
         pending('The case is for Safari only')
       }
       expect(browser.isWebKit606OrNewer()).toBe((utils.getBrowserMajorVersion() ?? 0) >= 12)
+    })
+
+    it('detects iPad', () => {
+      // Unfortunately, UA-parser can't detect an iPad that pretends to be a Mac
+      if (!utils.isWebKit() || !(utils.isMobile() || utils.isTablet())) {
+        pending('The case is for mobile WebKit only')
+      }
+      expect(browser.isIPad()).toBe(utils.isTablet())
+    })
+  })
+
+  describe('platform detection', () => {
+    it('detects Android', () => {
+      expect(browser.isAndroid()).toBe(utils.isAndroid())
     })
   })
 })

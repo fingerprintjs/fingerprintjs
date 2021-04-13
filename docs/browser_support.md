@@ -89,11 +89,13 @@ Examples for various installation methods:
 Old browsers like IE11 don't support arrow functions (`=>`). Use the classic function syntax instead:
 
 ```diff
-- FingerprintJS.load().then(fp => {
-+ FingerprintJS.load().then(function (fp) {
--   fp.get().then(result => {
-+   fp.get().then(function (result) {
+  const fpPromise = FingerprintJS.load();
+
+  fpPromise
+-   .then(fp => fp.get())
++   .then(function (fp) { return fp.get() })
+-   .then(result => {
++   .then(function (result) {
       // Handle the result
     });
-  });
 ```

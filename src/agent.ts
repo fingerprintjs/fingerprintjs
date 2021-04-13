@@ -3,6 +3,7 @@ import { requestIdleCallbackIfAvailable } from './utils/async'
 import { x64hash128 } from './utils/hashing'
 import { errorToObject } from './utils/misc'
 import getBuiltinComponents, { BuiltinComponents, UnknownComponents } from './sources'
+import { watchScreenFrame } from './sources/screen_frame'
 
 /**
  * Options for Fingerprint class loading
@@ -63,7 +64,7 @@ export interface Agent {
 
 function componentsToCanonicalString(components: UnknownComponents) {
   let result = ''
-  for (const componentKey of Object.keys(components)) {
+  for (const componentKey of Object.keys(components).sort()) {
     const component = components[componentKey]
     const value = component.error ? 'error' : JSON.stringify(component.value)
     result += `${result ? '|' : ''}${componentKey.replace(/([:|\\])/g, '\\$1')}:${value}`
@@ -116,11 +117,15 @@ function makeLazyGetResult<T extends UnknownComponents>(components: T) {
  * The hiding gives more freedom for future non-breaking updates.
  */
 export class OpenAgent implements Agent {
+  constructor() {
+    watchScreenFrame()
+  }
+
   /**
    * @inheritDoc
    */
   public async get(options: Readonly<GetOptions> = {}): Promise<GetResult> {
-    const components = await getBuiltinComponents()
+    const components = await getBuiltinComponents(options)
     const result = makeLazyGetResult(components)
 
     if (options.debug) {

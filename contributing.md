@@ -104,7 +104,9 @@ This section is for repository maintainers.
     To see, run `yarn pack`, an archive will appear nearby, open it with any archive browser.
 4. Run
     ```bash
-    yarn publish --access public # Add '--tag beta' (without the quotes) if you release a beta version
+    # Add '--tag beta' (without the quotes) if you release a beta version
+    # Add '--tag dev' if you release a development version (which is expected to get new features)
+    yarn publish --access public
     ```
 5. Push the changes to the repository, and a version tag like `v1.3.4` to the commit.
 6. Describe the version changes at the [releases section](https://github.com/fingerprintjs/fingerprintjs/releases).
