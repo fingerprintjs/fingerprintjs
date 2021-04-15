@@ -76,16 +76,17 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 📕 [Full documentation](#open-source-version-reference)
 
-## Upgrade to [Pro version](https://pro.fingerprintjs.com/github/) to get 99.5% identification accuracy
+## Upgrade to [Pro version](https://fingerprintjs.com/github/) to get 99.5% identification accuracy
 
 FingerprintJS Pro is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
 Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in 99.5% identification accuracy.
 
-See our [full product comparison](https://pro.fingerprintjs.com/github/) for more information on the differences between open source and Pro.
+See our [full product comparison](https://fingerprintjs.com/github/) for more information on the differences between open source and Pro. 
 
+<b>You can use Pro FREE for up to 1,000 unique monthly visitors - no credit card required.</b>
 
 <p align="center">
-  <a href="https://fingerprintjs.com">
+  <a href="https://fingerprintjs.com/github/">
     <img src="resources/pro_screenshot.png" alt="Pro screenshot" width="697px" />
   </a>
 </p>
