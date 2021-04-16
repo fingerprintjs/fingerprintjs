@@ -20,7 +20,7 @@
 
 FingerprintJS is a browser fingerprinting library that queries browser attributes and computes a hashed visitor identifier from them. Unlike cookies and local storage, a fingerprint stays the same in incognito/private mode and even when browser data is purged.
 
-[View Our Demo](https://fingerprintjs.github.io/fingerprintjs/).
+🍿 [View Our Demo](https://fingerprintjs.github.io/fingerprintjs/)
 
 ## Quick start
 
@@ -30,16 +30,16 @@ FingerprintJS is a browser fingerprinting library that queries browser attribute
 <script>
   function initFingerprintJS() {
     // Initialize an agent at application startup.
-    const fpPromise = FingerprintJS.load();
+    const fpPromise = FingerprintJS.load()
 
     // Get the visitor identifier when you need it.
     fpPromise
       .then(fp => fp.get())
       .then(result => {
         // This is the visitor identifier:
-        const visitorId = result.visitorId;
-        console.log(visitorId);
-      });
+        const visitorId = result.visitorId
+        console.log(visitorId)
+      })
   }
 </script>
 <script
@@ -48,6 +48,8 @@ FingerprintJS is a browser fingerprinting library that queries browser attribute
   onload="initFingerprintJS()"
 ></script>
 ```
+
+🔬 [Run this code](https://stackblitz.com/edit/fpjs-3-cdn?file=index.html&devtoolsheight=100)
 
 ### Alternatively you can install from NPM to use with Webpack/Rollup/Browserify
 
@@ -58,21 +60,23 @@ yarn add @fingerprintjs/fingerprintjs
 ```
 
 ```js
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import FingerprintJS from '@fingerprintjs/fingerprintjs'
 
-(async () => {
-  // Initialize an agent at application startup.
-  const fpPromise = FingerprintJS.load();
+// Initialize an agent at application startup.
+const fpPromise = FingerprintJS.load()
 
+;(async () => {
   // Get the visitor identifier when you need it.
   const fp = await fpPromise
-  const result = await fp.get();
+  const result = await fp.get()
 
   // This is the visitor identifier:
-  const visitorId = result.visitorId;
-  console.log(visitorId);
-})();
+  const visitorId = result.visitorId
+  console.log(visitorId)
+})()
 ```
+
+🔬 [Run this code](https://stackblitz.com/edit/fpjs-3-npm?file=index.js&devtoolsheight=100)
 
 📕 [Full documentation](#open-source-version-reference)
 
@@ -81,7 +85,7 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 FingerprintJS Pro is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
 Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in 99.5% identification accuracy.
 
-See our [full product comparison](https://fingerprintjs.com/github/) for more information on the differences between open source and Pro. 
+See our [full product comparison](https://fingerprintjs.com/github/) for more information on the differences between open source and Pro.
 
 <b>You can use Pro FREE for up to 1,000 unique monthly visitors - no credit card required.</b>
 
@@ -171,7 +175,7 @@ require(
   (FingerprintJS) => {
     // Start loading FingerprintJS here
   }
-);
+)
 ```
 
 #### ECMAScript module
@@ -184,7 +188,7 @@ yarn add @fingerprintjs/fingerprintjs
 ```
 
 ```js
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import FingerprintJS from '@fingerprintjs/fingerprintjs'
 
 // Start loading FingerprintJS here
 ```
@@ -199,7 +203,7 @@ yarn add @fingerprintjs/fingerprintjs
 ```
 
 ```js
-const FingerprintJS = require('@fingerprintjs/fingerprintjs');
+const FingerprintJS = require('@fingerprintjs/fingerprintjs')
 
 // Start loading FingerprintJS here
 ```
@@ -258,9 +262,9 @@ if (
   result1.version.split('.').slice(0, 2).join('.') ===
   result2.version.split('.').slice(0, 2).join('.')
 ) {
-  return result1.visitorId === result2.visitorId ? 'same' : 'different';
+  return result1.visitorId === result2.visitorId ? 'same' : 'different'
 } else {
-  return 'unknown';
+  return 'unknown'
 }
 ```
 
