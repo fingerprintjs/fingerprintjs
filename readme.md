@@ -20,7 +20,7 @@
 
 FingerprintJS is a browser fingerprinting library that queries browser attributes and computes a hashed visitor identifier from them. Unlike cookies and local storage, a fingerprint stays the same in incognito/private mode and even when browser data is purged.
 
-🍿 [View Our Demo](https://fingerprintjs.github.io/fingerprintjs/)
+[View Our Demo](https://fingerprintjs.github.io/fingerprintjs/).
 
 ## Quick start
 
@@ -49,7 +49,7 @@ FingerprintJS is a browser fingerprinting library that queries browser attribute
 ></script>
 ```
 
-🔬 [Run this code](https://stackblitz.com/edit/fpjs-3-cdn?file=index.html&devtoolsheight=100)
+[Run this code](https://stackblitz.com/edit/fpjs-3-cdn?file=index.html&devtoolsheight=100)
 
 ### Alternatively you can install from NPM to use with Webpack/Rollup/Browserify
 
@@ -76,7 +76,7 @@ const fpPromise = FingerprintJS.load()
 })()
 ```
 
-🔬 [Run this code](https://stackblitz.com/edit/fpjs-3-npm?file=index.js&devtoolsheight=100)
+[Run this code](https://stackblitz.com/edit/fpjs-3-npm?file=index.js&devtoolsheight=100)
 
 📕 [Full documentation](#open-source-version-reference)
 
