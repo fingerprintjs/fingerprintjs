@@ -53,7 +53,7 @@ Examples for various installation methods:
         (FingerprintJS) => {
           // Start loading FingerprintJS here
         }
-      );
+      )
     ```
 - ECMAScript module
     ```bash
@@ -64,8 +64,8 @@ Examples for various installation methods:
     ```
 
     ```diff
-    + import 'promise-polyfill/src/polyfill';
-      import FingerprintJS from '@fingerprintjs/fingerprintjs';
+    + import 'promise-polyfill/src/polyfill'
+      import FingerprintJS from '@fingerprintjs/fingerprintjs'
 
       // Start loading FingerprintJS here
     ```
@@ -78,8 +78,8 @@ Examples for various installation methods:
     ```
 
     ```diff
-    + require('promise-polyfill/src/polyfill');
-      const FingerprintJS = require('@fingerprintjs/fingerprintjs');
+    + require('promise-polyfill/src/polyfill')
+      const FingerprintJS = require('@fingerprintjs/fingerprintjs')
 
       // Start loading FingerprintJS here
     ```
@@ -89,7 +89,7 @@ Examples for various installation methods:
 Old browsers like IE11 don't support arrow functions (`=>`). Use the classic function syntax instead:
 
 ```diff
-  const fpPromise = FingerprintJS.load();
+  const fpPromise = FingerprintJS.load()
 
   fpPromise
 -   .then(fp => fp.get())
@@ -97,5 +97,5 @@ Old browsers like IE11 don't support arrow functions (`=>`). Use the classic fun
 -   .then(result => {
 +   .then(function (result) {
       // Handle the result
-    });
+    })
 ```

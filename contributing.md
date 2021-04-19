@@ -110,3 +110,4 @@ This section is for repository maintainers.
     ```
 5. Push the changes to the repository, and a version tag like `v1.3.4` to the commit.
 6. Describe the version changes at the [releases section](https://github.com/fingerprintjs/fingerprintjs/releases).
+7. Update agent at https://stackblitz.com/edit/fpjs-3-npm (find "dependencies" and click the round arrow)
