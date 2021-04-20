@@ -78,16 +78,14 @@ const fpPromise = FingerprintJS.load()
 
 [Run this code](https://stackblitz.com/edit/fpjs-3-npm?file=index.js&devtoolsheight=100)
 
-📕 [Full documentation](#open-source-version-reference)
+📕 [Full documentation](docs/api.md)
 
 ## Upgrade to [Pro version](https://fingerprintjs.com/github/) to get 99.5% identification accuracy
 
 FingerprintJS Pro is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
 Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in 99.5% identification accuracy.
 
-See our [full product comparison](https://fingerprintjs.com/github/) for more information on the differences between open source and Pro.
-
-<b>You can use Pro FREE for up to 1,000 unique monthly visitors - no credit card required.</b>
+**You can use Pro FREE for up to 1,000 unique monthly visitors - no credit card required.**
 
 <p align="center">
   <a href="https://fingerprintjs.com/github/">
@@ -95,25 +93,47 @@ See our [full product comparison](https://fingerprintjs.com/github/) for more in
   </a>
 </p>
 
+Full product comparison:
+
 <table>
   <thead>
     <tr>
       <th></th>
-      <!-- The <img>s are to make the table take the full width -->
-      <th align="center"><img width="350" height="0"> <p>Open Source version</p></th>
-      <th align="center"><img width="350" height="0"> <p>Pro version</p></th>
+      <th align="center">Open Source</th>
+      <th align="center">Pro</th>
     </tr>
   </thead>
   <tbody>
-    <tr><td>Identification accuracy</td><td align="center">60%</td><td align="center" bgcolor="rgba(127, 127, 127, 0.1)">99.5%</td></tr>
-    <tr><td>Incognito / Private mode detection</td><td align="center">❌</td><td align="center">✅</td></tr>
-    <tr><td>Geolocation</td><td align="center">❌</td><td align="center">✅</td></tr>
-    <tr><td>Security</td><td align="center">❌</td><td align="center">✅</td></tr>
-    <tr><td>Server API</td><td align="center">❌</td><td align="center">✅</td></tr>
-    <tr><td>Webhooks</td><td align="center">❌</td><td align="center">✅</td></tr>
-    <tr><td>Stable identifier between versions</td><td align="center">❌</td><td align="center">✅</td></tr>
+    <tr><td colspan="3"><h4>Core Features</h4></td></tr>
+    <tr><td>100% Open-source</td><td align="center">yes</td><td align="center">no*</td></tr>
+    <tr><td><b>Standard fingerprint signals</b><br/><i>screen, os, device name</i></td><td align="center">✓</td><td align="center">✓</td></tr>
+    <tr><td><b>Advanced fingerprint signals</b><br/><i>canvas, audio, fonts</i></td><td align="center">✓</td><td align="center">✓</td></tr>
+    <tr><td><b>ID type</b></td><td align="center">fingerprint</td><td align="center">visitorID**</td></tr>
+    <tr><td><b>ID lifetime</b></td><td align="center">several weeks</td><td align="center">months/years</td></tr>
+    <tr><td><b>ID origin</b></td><td align="center">client</td><td align="center">server</td></tr>
+    <tr><td><b>ID collisions</b></td><td align="center">common</td><td align="center">rare</td></tr>
+    <!-- -->
+    <tr><td colspan="3"><h4>Additional Features</h4></td></tr>
+    <tr><td><b>Incognito mode detection</b><br/><i>works in all modern browsers - see our full list of <a href="https://dev.fingerprintjs.com/docs/browser-support/" target="_blank">browsers supported</a></i></td><td align="center">–</td><td align="center">✓</td></tr>
+    <tr><td><b>Server-side accuracy increase</b><br/><i>based on additional server-side signals, such as TLS crypto support, ipv4/v6 data and others</i></td><td align="center">–</td><td align="center">✓</td></tr>
+    <tr><td><b>Query API & realtime Webhooks</b><br/><i>build flexible workflows</i></td><td align="center">–</td><td align="center">✓</td></tr>
+    <tr><td><b>Geolocation</b><br/><i>based on IP address</i></td><td align="center">–</td><td align="center">✓</td></tr>
+    <!-- -->
+    <tr><td colspan="3"><h4>Operations</h4></td></tr>
+    <tr><td><b>Data security</b></td><td align="center">Your infrastructure</td><td align="center">Encrypted at rest</td></tr>
+    <tr><td><b>Storage</b></td><td align="center">Your infrastructure</td><td align="center">Unlimited up to 1 yr</td></tr>
+    <tr><td><b>Regions</b></td><td align="center">Your infrastructure</td><td align="center">99.9% Uptime</td></tr>
+    <tr><td><b>Compliance</b></td><td align="center">Your infrastructure</td><td align="center">GDPR, CCPA compliant***</td></tr>
+    <tr><td><b>SLA</b></td><td align="center">No SLA</td><td align="center">99.9% Uptime</td></tr>
+    <tr><td><b>Support</b></td><td align="center">GitHub community</td><td align="center">Support team via email, chat, and call-back within 1 business day</td></tr>
   </tbody>
 </table>
+
+<small>* Pro uses the open source fingerprinting library as well as proprietary technology for increased accuracy and stability.</small>
+
+<small>** VisitorIDs, in comparison to fingerprints, include server side techniques, are deduplicated and utilize fuzzy matching to result in a more accurate and stable identifier. Fingerprint hashes rely on an exact match across all browser attributes, making them unstable across > 2 week time intervals.</small>
+
+<small>*** FingerprintJS is GDPR and CCPA compliant as the data processor. You still need to be compliant as the data controller and use the identification for fraud under legitimate interest or ask for user consent.</small>
 
 Pro result example:
 
@@ -145,10 +165,6 @@ Pro result example:
 📕 [FingerprintJS Pro documentation](https://dev.fingerprintjs.com)
 
 ▶️ [Video: use FingerprintJS Pro to prevent multiple signups](https://www.youtube.com/watch?v=jWX9P5_jZn8)
-
-## Open-source version reference
-
-See the [API reference](docs/api.md).
 
 ## Migrating from v2
 
