@@ -78,16 +78,14 @@ const fpPromise = FingerprintJS.load()
 
 [Run this code](https://stackblitz.com/edit/fpjs-3-npm?file=index.js&devtoolsheight=100)
 
-📕 [Full documentation](#open-source-version-reference)
+📕 [Full documentation](docs/api.md)
 
 ## Upgrade to [Pro version](https://fingerprintjs.com/github/) to get 99.5% identification accuracy
 
 FingerprintJS Pro is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
 Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in 99.5% identification accuracy.
 
-See our [full product comparison](https://fingerprintjs.com/github/) for more information on the differences between open source and Pro.
-
-<b>You can use Pro FREE for up to 1,000 unique monthly visitors - no credit card required.</b>
+**You can use Pro FREE for up to 1,000 unique monthly visitors - no credit card required.**
 
 <p align="center">
   <a href="https://fingerprintjs.com/github/">
@@ -95,25 +93,47 @@ See our [full product comparison](https://fingerprintjs.com/github/) for more in
   </a>
 </p>
 
+Full product comparison:
+
 <table>
   <thead>
     <tr>
       <th></th>
-      <!-- The <img>s are to make the table take the full width -->
-      <th align="center"><img width="350" height="0"> <p>Open Source version</p></th>
-      <th align="center"><img width="350" height="0"> <p>Pro version</p></th>
+      <th align="center">Open Source</th>
+      <th align="center">Pro</th>
     </tr>
   </thead>
   <tbody>
-    <tr><td>Identification accuracy</td><td align="center">60%</td><td align="center">99.5%</td></tr>
-    <tr><td>Incognito / Private mode detection</td><td align="center">❌</td><td align="center">✅</td></tr>
-    <tr><td>Geolocation</td><td align="center">❌</td><td align="center">✅</td></tr>
-    <tr><td>Security</td><td align="center">❌</td><td align="center">✅</td></tr>
-    <tr><td>Server API</td><td align="center">❌</td><td align="center">✅</td></tr>
-    <tr><td>Webhooks</td><td align="center">❌</td><td align="center">✅</td></tr>
-    <tr><td>Stable identifier between versions</td><td align="center">❌</td><td align="center">✅</td></tr>
+    <tr><td colspan="3"><h4>Core Features</h4></td></tr>
+    <tr><td>100% Open-source</td><td align="center">yes</td><td align="center">no*</td></tr>
+    <tr><td><b>Standard fingerprint signals</b><br/><i>screen, os, device name</i></td><td align="center">✓</td><td align="center">✓</td></tr>
+    <tr><td><b>Advanced fingerprint signals</b><br/><i>canvas, audio, fonts</i></td><td align="center">✓</td><td align="center">✓</td></tr>
+    <tr><td><b>ID type</b></td><td align="center">fingerprint</td><td align="center">visitorID**</td></tr>
+    <tr><td><b>ID lifetime</b></td><td align="center">several weeks</td><td align="center">months/years</td></tr>
+    <tr><td><b>ID origin</b></td><td align="center">client</td><td align="center">server</td></tr>
+    <tr><td><b>ID collisions</b></td><td align="center">common</td><td align="center">rare</td></tr>
+    <!-- -->
+    <tr><td colspan="3"><h4>Additional Features</h4></td></tr>
+    <tr><td><b>Incognito mode detection</b><br/><i>works in all modern browsers - see our full list of <a href="https://dev.fingerprintjs.com/docs/browser-support/" target="_blank">browsers supported</a></i></td><td align="center">–</td><td align="center">✓</td></tr>
+    <tr><td><b>Server-side accuracy increase</b><br/><i>based on additional server-side signals, such as TLS crypto support, ipv4/v6 data and others</i></td><td align="center">–</td><td align="center">✓</td></tr>
+    <tr><td><b>Query API & realtime Webhooks</b><br/><i>build flexible workflows</i></td><td align="center">–</td><td align="center">✓</td></tr>
+    <tr><td><b>Geolocation</b><br/><i>based on IP address</i></td><td align="center">–</td><td align="center">✓</td></tr>
+    <!-- -->
+    <tr><td colspan="3"><h4>Operations</h4></td></tr>
+    <tr><td><b>Data security</b></td><td align="center">Your infrastructure</td><td align="center">Encrypted at rest</td></tr>
+    <tr><td><b>Storage</b></td><td align="center">Your infrastructure</td><td align="center">Unlimited up to 1 yr</td></tr>
+    <tr><td><b>Regions</b></td><td align="center">Your infrastructure</td><td align="center">Hosting in US and EU</td></tr>
+    <tr><td><b>Compliance</b></td><td align="center">Your infrastructure</td><td align="center">GDPR, CCPA compliant***</td></tr>
+    <tr><td><b>SLA</b></td><td align="center">No SLA</td><td align="center">99.9% Uptime</td></tr>
+    <tr><td><b>Support</b></td><td align="center">GitHub community</td><td align="center">Support team via email, chat, and call-back within 1 business day</td></tr>
   </tbody>
 </table>
+
+<small>* Pro uses the open source fingerprinting library as well as proprietary technology for increased accuracy and stability.</small>
+
+<small>** VisitorIDs, in comparison to fingerprints, include server side techniques, are deduplicated and utilize fuzzy matching to result in a more accurate and stable identifier. Fingerprint hashes rely on an exact match across all browser attributes, making them unstable across > 2 week time intervals.</small>
+
+<small>*** FingerprintJS is GDPR and CCPA compliant as the data processor. You still need to be compliant as the data controller and use the identification for fraud under legitimate interest or ask for user consent.</small>
 
 Pro result example:
 
@@ -146,102 +166,6 @@ Pro result example:
 
 ▶️ [Video: use FingerprintJS Pro to prevent multiple signups](https://www.youtube.com/watch?v=jWX9P5_jZn8)
 
-## Open-source version reference
-
-### Installation
-
-The library is shipped in various formats:
-
-#### Global variable
-
-```html
-<script>
-  function initFingerprintJS() {
-    // Start loading FingerprintJS here
-  }
-</script>
-<script
-  async
-  src="//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
-  onload="initFingerprintJS()"
-></script>
-```
-
-#### UMD
-
-```js
-require(
-  ['//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.umd.min.js'],
-  (FingerprintJS) => {
-    // Start loading FingerprintJS here
-  }
-)
-```
-
-#### ECMAScript module
-
-```bash
-# Install the package first:
-npm i @fingerprintjs/fingerprintjs
-# or
-yarn add @fingerprintjs/fingerprintjs
-```
-
-```js
-import FingerprintJS from '@fingerprintjs/fingerprintjs'
-
-// Start loading FingerprintJS here
-```
-
-#### CommonJS
-
-```bash
-# Install the package first:
-npm i @fingerprintjs/fingerprintjs
-# or
-yarn add @fingerprintjs/fingerprintjs
-```
-
-```js
-const FingerprintJS = require('@fingerprintjs/fingerprintjs')
-
-// Start loading FingerprintJS here
-```
-
-### API
-
-#### `FingerprintJS.load({ delayFallback?: number }): Promise<Agent>`
-
-Builds an instance of Agent and waits a delay required for a proper operation.
-We recommend calling it as soon as possible.
-`delayFallback` is an optional parameter that sets duration (milliseconds) of the fallback for browsers that don't support [requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback);
-it has a good default value which we don't recommend to change.
-
-#### `agent.get({ debug?: boolean }): Promise<object>`
-
-Gets the visitor identifier.
-We recommend calling it later, when you really need the identifier, to increase the chance of getting an accurate identifier.
-`debug: true` prints debug messages to the console.
-Result object fields:
-
-- `visitorId` The visitor identifier
-- `components` A dictionary of components that have formed the identifier.
-    Each value is an object like `{ value: any, duration: number }` in case of success
-    and `{ error: object, duration: number }` in case of an unexpected error during getting the component.
-- `version` The fingerprinting algorithm version which is equal to the library version.
-    See [the version policy section](#version-policy) for more details.
-
-See the [extending guide](docs/extending.md) to learn how to remove and add entropy components.
-
-#### `FingerprintJS.hashComponents(components: object): string`
-
-Converts a dictionary of components (described above) into a short hash string a.k.a. a visitor identifier.
-Designed for [extending the library](docs/extending.md) with your own components.
-
-#### `FingerprintJS.componentsToDebugString(components: object): string`
-
-Converts a dictionary of components (described above) into human-friendly format.
-
 ## Migrating from v2
 
 - [Migration guide](docs/migrating_v2_v3.md)
@@ -249,35 +173,12 @@ Converts a dictionary of components (described above) into human-friendly format
 
 ## Version policy
 
-The library tries to keep visitor identifiers the same within a minor version (i.e. when the first 2 numbers of the version don't change).
-Some visitor identifiers may change within a minor version due to stability fixes.
-To get identifiers that remain stable up to 1 year, please consider [upgrading to pro](https://dashboard.fingerprintjs.com).
-
-Agent `get()` function returns the version together with the visitor identifier.
-You can use it to decide whether a couple of identifiers can be matched together.
-Example:
-
-```js
-if (
-  result1.version.split('.').slice(0, 2).join('.') ===
-  result2.version.split('.').slice(0, 2).join('.')
-) {
-  return result1.visitorId === result2.visitorId ? 'same' : 'different'
-} else {
-  return 'unknown'
-}
-```
-
-The documented JS API follows [Semantic Versioning](https://semver.org).
-Use undocumented features at your own risk.
+See the visitor identifier compatibility policy in the [version policy guide](docs/browser_support.md).
 
 ## Browser support
 
-```bash
-npx browserslist "cover 95% in us, not IE < 10"
-```
-
-See more details and learn how to run the library in old browsers in the [documentation article](docs/browser_support.md).
+The library supports all popular browsers.
+See more details and learn how to run the library in old browsers in the [browser support guide](docs/browser_support.md).
 
 ## Contributing
 
