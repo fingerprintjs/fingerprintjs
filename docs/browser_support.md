@@ -4,7 +4,7 @@ The library supports all popular browsers.
 We use the following terminal command to decide which browsers to support:
 
 ```bash
-npx browserslist "cover 95% in us, not IE < 10"
+npx browserslist "cover 96% in us, not IE < 10, not safari < 9"
 ```
 
 At the moment, the browsers are:

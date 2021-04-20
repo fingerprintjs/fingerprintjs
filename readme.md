@@ -105,7 +105,7 @@ See our [full product comparison](https://fingerprintjs.com/github/) for more in
     </tr>
   </thead>
   <tbody>
-    <tr><td>Identification accuracy</td><td align="center">60%</td><td align="center">99.5%</td></tr>
+    <tr><td>Identification accuracy</td><td align="center">60%</td><td align="center" bgcolor="rgba(127, 127, 127, 0.1)">99.5%</td></tr>
     <tr><td>Incognito / Private mode detection</td><td align="center">❌</td><td align="center">✅</td></tr>
     <tr><td>Geolocation</td><td align="center">❌</td><td align="center">✅</td></tr>
     <tr><td>Security</td><td align="center">❌</td><td align="center">✅</td></tr>
@@ -148,99 +148,7 @@ Pro result example:
 
 ## Open-source version reference
 
-### Installation
-
-The library is shipped in various formats:
-
-#### Global variable
-
-```html
-<script>
-  function initFingerprintJS() {
-    // Start loading FingerprintJS here
-  }
-</script>
-<script
-  async
-  src="//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
-  onload="initFingerprintJS()"
-></script>
-```
-
-#### UMD
-
-```js
-require(
-  ['//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.umd.min.js'],
-  (FingerprintJS) => {
-    // Start loading FingerprintJS here
-  }
-)
-```
-
-#### ECMAScript module
-
-```bash
-# Install the package first:
-npm i @fingerprintjs/fingerprintjs
-# or
-yarn add @fingerprintjs/fingerprintjs
-```
-
-```js
-import FingerprintJS from '@fingerprintjs/fingerprintjs'
-
-// Start loading FingerprintJS here
-```
-
-#### CommonJS
-
-```bash
-# Install the package first:
-npm i @fingerprintjs/fingerprintjs
-# or
-yarn add @fingerprintjs/fingerprintjs
-```
-
-```js
-const FingerprintJS = require('@fingerprintjs/fingerprintjs')
-
-// Start loading FingerprintJS here
-```
-
-### API
-
-#### `FingerprintJS.load({ delayFallback?: number }): Promise<Agent>`
-
-Builds an instance of Agent and waits a delay required for a proper operation.
-We recommend calling it as soon as possible.
-`delayFallback` is an optional parameter that sets duration (milliseconds) of the fallback for browsers that don't support [requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback);
-it has a good default value which we don't recommend to change.
-
-#### `agent.get({ debug?: boolean }): Promise<object>`
-
-Gets the visitor identifier.
-We recommend calling it later, when you really need the identifier, to increase the chance of getting an accurate identifier.
-`debug: true` prints debug messages to the console.
-Result object fields:
-
-- `visitorId` The visitor identifier
-- `components` A dictionary of components that have formed the identifier.
-    Each value is an object like `{ value: any, duration: number }` in case of success
-    and `{ error: object, duration: number }` in case of an unexpected error during getting the component.
-- `version` The fingerprinting algorithm version which is equal to the library version.
-    See [the version policy section](#version-policy) for more details.
-
-See the [extending guide](docs/extending.md) to learn how to remove and add entropy components.
-
-#### `FingerprintJS.hashComponents(components: object): string`
-
-Converts a dictionary of components (described above) into a short hash string a.k.a. a visitor identifier.
-Designed for [extending the library](docs/extending.md) with your own components.
-
-#### `FingerprintJS.componentsToDebugString(components: object): string`
-
-Converts a dictionary of components (described above) into human-friendly format.
+See the [API reference](docs/api.md).
 
 ## Migrating from v2
 
@@ -249,35 +157,12 @@ Converts a dictionary of components (described above) into human-friendly format
 
 ## Version policy
 
-The library tries to keep visitor identifiers the same within a minor version (i.e. when the first 2 numbers of the version don't change).
-Some visitor identifiers may change within a minor version due to stability fixes.
-To get identifiers that remain stable up to 1 year, please consider [upgrading to pro](https://dashboard.fingerprintjs.com).
-
-Agent `get()` function returns the version together with the visitor identifier.
-You can use it to decide whether a couple of identifiers can be matched together.
-Example:
-
-```js
-if (
-  result1.version.split('.').slice(0, 2).join('.') ===
-  result2.version.split('.').slice(0, 2).join('.')
-) {
-  return result1.visitorId === result2.visitorId ? 'same' : 'different'
-} else {
-  return 'unknown'
-}
-```
-
-The documented JS API follows [Semantic Versioning](https://semver.org).
-Use undocumented features at your own risk.
+See the visitor identifier compatibility policy in the [version policy guide](docs/browser_support.md).
 
 ## Browser support
 
-```bash
-npx browserslist "cover 95% in us, not IE < 10"
-```
-
-See more details and learn how to run the library in old browsers in the [documentation article](docs/browser_support.md).
+The library supports all popular browsers.
+See more details and learn how to run the library in old browsers in the [browser support guide](docs/browser_support.md).
 
 ## Contributing
 
