@@ -81,7 +81,7 @@ Result object fields:
     Each value is an object like `{ value: any, duration: number }` in case of success
     and `{ error: object, duration: number }` in case of an unexpected error during getting the component.
 - `version` The fingerprinting algorithm version which is equal to the library version.
-    See [the version policy section](#version-policy) for more details.
+    See [the version policy guide](version_policy.md) for more details.
 
 See the [extending guide](extending.md) to learn how to remove and add entropy components.
 
