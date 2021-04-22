@@ -83,12 +83,12 @@ Result object fields:
 - `version` The fingerprinting algorithm version which is equal to the library version.
     See [the version policy section](#version-policy) for more details.
 
-See the [extending guide](docs/extending.md) to learn how to remove and add entropy components.
+See the [extending guide](extending.md) to learn how to remove and add entropy components.
 
 #### `FingerprintJS.hashComponents(components: object): string`
 
 Converts a dictionary of components (described above) into a short hash string a.k.a. a visitor identifier.
-Designed for [extending the library](docs/extending.md) with your own components.
+Designed for [extending the library](extending.md) with your own components.
 
 #### `FingerprintJS.componentsToDebugString(components: object): string`
 
