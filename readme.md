@@ -80,7 +80,7 @@ const fpPromise = FingerprintJS.load()
 
 📕 [Full documentation](docs/api.md)
 
-## Upgrade to [Pro version](https://fingerprintjs.com/github/) to get 99.5% identification accuracy
+## Switch to [Pro version](https://fingerprintjs.com/github/) for free to get 99.5% identification accuracy
 
 FingerprintJS Pro is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
 Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in 99.5% identification accuracy.
