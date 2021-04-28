@@ -35,12 +35,17 @@ export async function withIframe<T>(
       style.top = '0'
       style.left = '0'
       style.visibility = 'hidden'
+      d.body.appendChild(iframe)
+
+      // The order is important here.
+      // The `iframe.srcdoc = ...` expression must go after the `body.appendChild(iframe)` expression,
+      // otherwise the iframe will never load nor fail in WeChat built-in browser.
+      // See https://github.com/fingerprintjs/fingerprintjs/issues/645#issuecomment-828189330
       if (initialHtml && 'srcdoc' in iframe) {
         iframe.srcdoc = initialHtml
       } else {
         iframe.src = 'about:blank'
       }
-      d.body.appendChild(iframe)
     })
 
     while (!iframe.contentWindow?.document.body) {
