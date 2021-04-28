@@ -2,9 +2,9 @@ import { replaceNaN, round, toFloat } from '../utils/data'
 import { exitFullscreen, getFullscreenElement } from '../utils/browser'
 
 /**
- * The order matches the CSS side order
+ * The order matches the CSS side order: top, right, bottom, left
  */
-export type FrameSize = [top: number | null, right: number | null, bottom: number | null, left: number | null]
+export type FrameSize = [number | null, number | null, number | null, number | null]
 
 export const screenFrameCheckInterval = 2500
 const roundingPrecision = 10
