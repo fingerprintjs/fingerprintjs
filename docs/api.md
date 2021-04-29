@@ -45,6 +45,9 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs'
 // Start loading FingerprintJS here
 ```
 
+If you face a TypeScript error that occurs in a FingerprintJS file,
+see the [TypeScript support guide](typescript_support.md).
+
 ### CommonJS
 
 ```bash
