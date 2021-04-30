@@ -35,7 +35,7 @@ Here are the filters that we consider (the most popular filters):
     - EasyList Italy: https://easylist-downloads.adblockplus.org/easylistitaly.txt
     - EasyList Dutch: https://easylist-downloads.adblockplus.org/easylistdutch.txt
     - Liste FR (included in AdGuard French filter): https://easylist-downloads.adblockplus.org/liste_fr.txt
-    - EasyList China (included in AdGuard Chinese filter): https://easylist-downloads.adblockplus.org/easylistchina.txt
+    - EasyList China: https://easylist-downloads.adblockplus.org/easylistchina.txt
     - Bulgarian List: https://stanev.org/abp/adblock_bg.txt
     - ABPindo: https://raw.githubusercontent.com/heradhis/indonesianadblockrules/master/subscriptions/abpindo.txt
     - Liste AR: https://easylist-downloads.adblockplus.org/Liste_AR.txt
@@ -43,7 +43,7 @@ Here are the filters that we consider (the most popular filters):
     - Latvian List: https://notabug.org/latvian-list/adblock-latvian/raw/master/lists/latvian-list.txt
     - EasyList Hebrew: https://raw.githubusercontent.com/easylist/EasyListHebrew/master/EasyListHebrew.txt
     - EasyList Lithuania: https://raw.githubusercontent.com/EasyList-Lithuania/easylist_lithuania/master/easylistlithuania.txt
-    - AdBlock Warning Removal List: https://easylist-downloads.adblockplus.org/antiadblockfilters.txt
+    - AdBlock Warning Removal List (included in RU AdList): https://easylist-downloads.adblockplus.org/antiadblockfilters.txt
 - [Fanboy](https://www.fanboy.co.nz)
     - Fanboy Enhanced Trackers List: https://secure.fanboy.co.nz/enhancedstats.txt
     - Fanboy Anti-Facebook Filters (included in Social List): https://www.fanboy.co.nz/fanboy-antifacebook.txt
@@ -55,7 +55,7 @@ Here are the filters that we consider (the most popular filters):
     - Peter Lowe's Blocklist (no blocked selectors): https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=0&mimetype=plaintext
     - Web Annoyances Ultralist: everything from https://github.com/yourduskquibbles/webannoyances/tree/master/filters
     - I don't care about cookies: https://www.i-dont-care-about-cookies.eu/abp/
-    - ROList: https://zoso.ro/pages/rolist2.txt
+    - ROList and ROLIST2: https://zoso.ro/pages/rolist2.txt
     - RU AdList (it doesn't work in AdGuard for some reason): https://easylist-downloads.adblockplus.org/advblock.txt
     - Icelandic ABP List: https://adblock.gardar.net/is.abp.txt
     - Greek AdBlock Filter: https://raw.githubusercontent.com/kargig/greek-adblockplus-filter/master/void-gr-filters.txt
