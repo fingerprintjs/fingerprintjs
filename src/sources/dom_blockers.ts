@@ -323,7 +323,7 @@ export async function getBlockedSelectors<T extends string>(selectors: readonly 
 
   // document.body can be null while the page is loading
   while (!d.body) {
-    await wait(100)
+    await wait(50)
   }
   d.body.appendChild(root)
 
