@@ -68,7 +68,7 @@ const fontList = [
 ] as const
 
 // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
-export default function getFontsIframe(): Promise<string[]> {
+export default function getFonts(): Promise<string[]> {
   // Running the script in an iframe makes it not affect the page look and not be affected by the page CSS. See:
   // https://github.com/fingerprintjs/fingerprintjs/issues/592
   // https://github.com/fingerprintjs/fingerprintjs/issues/628
