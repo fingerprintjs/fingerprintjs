@@ -173,7 +173,7 @@ Pro result example:
 
 ## Version policy
 
-See the visitor identifier compatibility policy in the [version policy guide](docs/browser_support.md).
+See the compatibility policy for the API and visitor identifiers in the [version policy guide](docs/version_policy.md).
 
 ## Browser support
 
