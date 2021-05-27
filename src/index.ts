@@ -1,10 +1,20 @@
 import { x64hash128 } from './utils/hashing'
-import { load, Agent, LoadOptions, GetOptions, GetResult, hashComponents, componentsToDebugString } from './agent'
+import {
+  load,
+  load2,
+  Agent,
+  LoadOptions,
+  GetOptions,
+  GetResult,
+  hashComponents,
+  componentsToDebugString,
+} from './agent'
 import { Component, UnknownComponents, BuiltinComponents } from './sources'
 
 // Exports that are under Semantic versioning
 export {
   load,
+  load2,
   Agent,
   LoadOptions,
   GetOptions,

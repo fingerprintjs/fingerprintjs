@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { excludes } from '../utils/data'
+import { awaitIfAsync, forEachWithBreaks, MaybePromise, wait } from '../utils/async'
 import getAudioFingerprint from './audio'
-import getFonts from './fonts'
+import getFonts, { fontsSource } from './fonts'
 import getPlugins from './plugins'
-import getCanvasFingerprint from './canvas'
+import getCanvasFingerprint, { canvasSource } from './canvas'
 import getTouchSupport from './touch_support'
-import getOsCpu from './os_cpu'
+import getOsCpu, { osCpuSource } from './os_cpu'
 import getLanguages from './languages'
 import getColorDepth from './color_depth'
 import getDeviceMemory from './device_memory'
@@ -22,7 +23,7 @@ import getPlatform from './platform'
 import getVendor from './vendor'
 import getVendorFlavors from './vendor_flavors'
 import areCookiesEnabled from './cookies_enabled'
-import getDomBlockers from './dom_blockers'
+import getDomBlockers, { domBlockersSource } from './dom_blockers'
 import getColorGamut from './color_gamut'
 import areColorsInverted from './inverted_colors'
 import areColorsForced from './forced_colors'
@@ -31,7 +32,7 @@ import getContrastPreference from './contrast'
 import isMotionReduced from './reduced_motion'
 import isHDR from './hdr'
 import getMathFingerprint from './math'
-import getFontPreferences from './font_preferences'
+import getFontPreferences, { fontPreferencesSource } from './font_preferences'
 
 /**
  * The list of entropy sources used to make visitor identifiers.
@@ -78,6 +79,15 @@ export const sources = {
   math: getMathFingerprint,
 }
 
+export const sources2 = {
+  fonts: fontsSource,
+  domBlockers: domBlockersSource,
+  fontPreferences: fontPreferencesSource,
+
+  osCpu: osCpuSource,
+  canvas: canvasSource,
+}
+
 /**
  * A functions that returns data with entropy to identify visitor.
  * Source must handle expected errors by itself and turn them into entropy.
@@ -85,15 +95,21 @@ export const sources = {
  */
 export type Source<TOptions, TValue> = (options: TOptions) => Promise<TValue> | TValue
 
+export type Source2<TOptions, TValue> = (options: TOptions) => MaybePromise<() => MaybePromise<TValue>>
+
 /**
  * Generic dictionary of unknown sources
  */
 export type UnknownSources<TOptions> = Record<string, Source<TOptions, unknown>>
 
+export type UnknownSources2<TOptions> = Record<string, Source2<TOptions, unknown>>
+
 /**
  * Converts an entropy source type to the source return value type
  */
 export type SourceValue<TSource extends Source<any, any>> = TSource extends Source<any, infer T> ? T : never
+
+export type Source2Value<TSource extends Source2<any, any>> = TSource extends Source2<any, infer T> ? T : never
 
 /**
  * Result of getting entropy data from a source
@@ -128,6 +144,10 @@ export type SourcesToComponents<TSources extends UnknownSources<any>> = {
   [K in keyof TSources]: Component<SourceValue<TSources[K]>>
 }
 
+export type SourcesToComponents2<TSources extends UnknownSources2<any>> = {
+  [K in keyof TSources]: Component<Source2Value<TSources[K]>>
+}
+
 /**
  * List of components from the built-in entropy sources.
  *
@@ -137,6 +157,8 @@ export type SourcesToComponents<TSources extends UnknownSources<any>> = {
  * to change too.
  */
 export type BuiltinComponents = SourcesToComponents<typeof sources>
+
+export type BuiltinComponents2 = SourcesToComponents2<typeof sources2>
 
 function ensureErrorWithMessage(error: unknown): { message: unknown } {
   return error && typeof error === 'object' && 'message' in error ? (error as { message: unknown }) : { message: error }
@@ -159,6 +181,60 @@ async function getComponent<TOptions, TValue>(
   }
 
   return { ...result, duration: Date.now() - startTime } as Component<TValue>
+}
+
+function loadComponent2<TOptions, TValue>(
+  source: Source2<TOptions, TValue>,
+  sourceOptions: TOptions,
+  sourceName: keyof any, // Temporary for debug
+): () => Promise<Component<TValue>> {
+  const sourceLoadPromise = new Promise<() => MaybePromise<Component<TValue>>>((resolveLoad) => {
+    const loadStartTime = Date.now()
+    console.log('Load start', sourceName, performance.now())
+
+    // `awaitIfAsync` is used instead of just `await` in order to measure the duration of synchronous sources
+    // correctly (other microtasks won't affect the duration).
+    awaitIfAsync(
+      () => source(sourceOptions),
+      (...loadArgs) => {
+        const loadEndTime = Date.now()
+        console.log('Load end', sourceName, performance.now())
+
+        // Source loading failed
+        if (!loadArgs[0]) {
+          return resolveLoad(() => ({
+            error: ensureErrorWithMessage(loadArgs[1]),
+            duration: loadEndTime - loadStartTime,
+          }))
+        }
+
+        // Source loading succeeded
+        resolveLoad(
+          () =>
+            new Promise((resolveGet) => {
+              const getStartTime = Date.now()
+              console.log('Get start', sourceName, performance.now())
+
+              awaitIfAsync(loadArgs[1], (...getArgs) => {
+                const duration = Date.now() - getStartTime + loadEndTime - loadStartTime
+                console.log('Get end', sourceName, performance.now())
+                // Source getting failed
+                if (!getArgs[0]) {
+                  return resolveGet({ error: ensureErrorWithMessage(getArgs[1]), duration })
+                }
+
+                // Source getting succeeded
+                resolveGet({ value: getArgs[1], duration })
+              })
+            }),
+        )
+      },
+    )
+  })
+
+  return function getComponent() {
+    return sourceLoadPromise.then((finalizeSource) => finalizeSource())
+  }
 }
 
 /**
@@ -211,6 +287,45 @@ export async function getComponents<
   return components
 }
 
+export function loadSources2<TSourceOptions, TSources extends UnknownSources2<TSourceOptions>, TExclude extends string>(
+  sources: TSources,
+  sourceOptions: TSourceOptions,
+  excludeSources: readonly TExclude[],
+): () => Promise<Omit<SourcesToComponents2<TSources>, TExclude>> {
+  const includedSources = Object.keys(sources).filter((sourceKey) => excludes(excludeSources, sourceKey)) as Exclude<
+    keyof TSources,
+    TExclude
+  >[]
+  const sourceGetters = Array<() => Promise<Component<any>>>(includedSources.length)
+
+  // Using `forEachWithBreaks` allows asynchronous sources to complete between synchronous sources
+  // and measure the duration correctly
+  forEachWithBreaks(includedSources, (sourceKey, index) => {
+    sourceGetters[index] = loadComponent2(sources[sourceKey], sourceOptions, sourceKey)
+  })
+
+  return async function getComponents() {
+    const componentPromises = Array<Promise<unknown>>(includedSources.length)
+    const components = {} as Omit<SourcesToComponents2<TSources>, TExclude>
+
+    await forEachWithBreaks(includedSources, (sourceKey, index) => {
+      // Add the key immediately to keep the component keys order the same as the source keys order
+      components[sourceKey] = undefined as any
+
+      const getComponent = async () => {
+        // `sourceGetters` may be incomplete at this point of execution because `forEachWithBreaks` is asynchronous
+        while (!sourceGetters[index]) {
+          await wait(1)
+        }
+        components[sourceKey] = await sourceGetters[index]()
+      }
+      componentPromises[index] = getComponent()
+    })
+    await Promise.all(componentPromises)
+    return components
+  }
+}
+
 export interface BuiltinSourceOptions {
   debug?: boolean
 }
@@ -220,4 +335,8 @@ export interface BuiltinSourceOptions {
  */
 export default function getBuiltinComponents(options: BuiltinSourceOptions): Promise<BuiltinComponents> {
   return getComponents(sources, options, [])
+}
+
+export function loadBuiltinSources2(options: BuiltinSourceOptions): () => Promise<BuiltinComponents2> {
+  return loadSources2(sources2, options, [])
 }

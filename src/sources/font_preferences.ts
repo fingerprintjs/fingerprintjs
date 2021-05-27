@@ -85,6 +85,11 @@ export default function getFontPreferences(): Promise<Record<string, number>> {
   })
 }
 
+export async function fontPreferencesSource(): Promise<() => Record<string, number>> {
+  const sizes = await getFontPreferences()
+  return () => sizes
+}
+
 /**
  * Creates a DOM environment that provides the most natural font available, including Android OS font.
  * Measurements of the elements are zoom-independent.

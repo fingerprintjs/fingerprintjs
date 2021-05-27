@@ -1,3 +1,5 @@
+export type MaybePromise<T> = Promise<T> | T
+
 export function wait<T = void>(durationMs: number, resolveWith?: T): Promise<T> {
   return new Promise((resolve) => setTimeout(resolve, durationMs, resolveWith))
 }
@@ -8,5 +10,65 @@ export function requestIdleCallbackIfAvailable(fallbackTimeout: number, deadline
     return new Promise((resolve) => requestIdleCallback(() => resolve(), { timeout: deadlineTimeout }))
   } else {
     return wait(Math.min(fallbackTimeout, deadlineTimeout))
+  }
+}
+
+export function isPromise<T>(value: Promise<T> | unknown): value is Promise<T> {
+  return value && typeof (value as Promise<T>).then === 'function'
+}
+
+/**
+ * Calls a maybe asynchronous function without creating microtasks when the function is synchronous.
+ * Catches errors in both cases.
+ *
+ * If just you run a code like this:
+ * ```
+ * console.time('Action duration')
+ * await action()
+ * console.timeEnd('Action duration')
+ * ```
+ * The synchronous function time can be measured incorrectly because another microtask may run before the `await`
+ * returns the control back to the code.
+ */
+export function awaitIfAsync<TResult, TError = unknown>(
+  action: () => MaybePromise<TResult>,
+  callback: (...args: [success: true, result: TResult] | [success: false, error: TError]) => unknown,
+): void {
+  try {
+    const returnedValue = action()
+    if (isPromise(returnedValue)) {
+      returnedValue.then(
+        (result) => callback(true, result),
+        (error: TError) => callback(false, error),
+      )
+    } else {
+      callback(true, returnedValue)
+    }
+  } catch (error) {
+    callback(false, error as TError)
+  }
+}
+
+/**
+ * If you run many synchronous tasks without using this function, the JS main loop will be busy and asynchronous tasks
+ * (e.g. completing a network request, rendering the page) won't be able to happen.
+ * This function allows running many synchronous tasks such way that asynchronous tasks can run too in background.
+ */
+export async function forEachWithBreaks<T>(
+  items: readonly T[],
+  callback: (item: T, index: number) => unknown,
+  loopReleaseInterval = 16,
+): Promise<void> {
+  let lastLoopReleaseTime = Date.now()
+
+  for (let i = 0; i < items.length; ++i) {
+    callback(items[i], i)
+
+    const now = Date.now()
+    if (now >= lastLoopReleaseTime + loopReleaseInterval) {
+      lastLoopReleaseTime = now
+      // Allows asynchronous actions and microtasks to happen
+      await wait(0)
+    }
   }
 }

@@ -145,3 +145,8 @@ export default function getFonts(): Promise<string[]> {
     return fontList.filter((font) => isFontAvailable(fontsSpans[font]))
   })
 }
+
+export async function fontsSource(): Promise<() => string[]> {
+  const fonts = await getFonts()
+  return () => fonts
+}

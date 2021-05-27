@@ -2,7 +2,12 @@ import { version } from '../package.json'
 import { requestIdleCallbackIfAvailable } from './utils/async'
 import { x64hash128 } from './utils/hashing'
 import { errorToObject } from './utils/misc'
-import getBuiltinComponents, { BuiltinComponents, UnknownComponents } from './sources'
+import getBuiltinComponents, {
+  BuiltinComponents,
+  BuiltinComponents2,
+  loadBuiltinSources2,
+  UnknownComponents,
+} from './sources'
 import { watchScreenFrame } from './sources/screen_frame'
 
 /**
@@ -17,6 +22,14 @@ export interface LoadOptions {
   delayFallback?: number
 }
 
+export interface LoadOptions2 extends LoadOptions {
+  /**
+   * Whether to print debug messages to the console.
+   * Required to ease investigations of problems.
+   */
+  debug?: boolean
+}
+
 /**
  * Options for getting visitor identifier
  */
@@ -24,6 +37,16 @@ export interface GetOptions {
   /**
    * Whether to print debug messages to the console.
    * Required to ease investigations of problems.
+   */
+  debug?: boolean
+}
+
+/**
+ * Options for getting visitor identifier
+ */
+export interface GetOptions2 {
+  /**
+   * @deprecated Pass the option to `load` instead
    */
   debug?: boolean
 }
@@ -52,6 +75,10 @@ export interface GetResult {
   version: string
 }
 
+export interface GetResult2 extends Omit<GetResult, 'components'> {
+  components: BuiltinComponents2
+}
+
 /**
  * Agent object that can get visitor identifier
  */
@@ -60,6 +87,10 @@ export interface Agent {
    * Gets the visitor identifier
    */
   get(options?: Readonly<GetOptions>): Promise<GetResult>
+}
+
+export interface Agent2 {
+  get(options?: Readonly<GetOptions2>): Promise<GetResult2>
 }
 
 function componentsToCanonicalString(components: UnknownComponents) {
@@ -147,6 +178,38 @@ components: ${componentsToDebugString(components)}
 }
 
 /**
+ * The function isn't exported from the index file to not allow to call it without `load()`.
+ * The hiding gives more freedom for future non-breaking updates.
+ *
+ * A factory function is used instead of a class to shorten the attribute names in the minified code.
+ * Native private class fields could've been used, but TypeScript doesn't allow them with `"target": "es5"`.
+ */
+export function makeAgent2(getComponents: () => Promise<BuiltinComponents2>, debug?: boolean): Agent2 {
+  return {
+    async get(options = {}) {
+      const components = await getComponents()
+      const result = makeLazyGetResult(components)
+
+      if (debug || options.debug) {
+        // console.log is ok here because it's under a debug clause
+        // eslint-disable-next-line no-console
+        console.log(`Copy the text below to get the debug data:
+
+\`\`\`
+version: ${result.version}
+userAgent: ${navigator.userAgent}
+getOptions: ${JSON.stringify(options, undefined, 2)}
+visitorId: ${result.visitorId}
+components: ${componentsToDebugString(components)}
+\`\`\``)
+      }
+
+      return result
+    },
+  }
+}
+
+/**
  * Builds an instance of Agent and waits a delay required for a proper operation.
  */
 export async function load({ delayFallback = 50 }: Readonly<LoadOptions> = {}): Promise<Agent> {
@@ -157,4 +220,15 @@ export async function load({ delayFallback = 50 }: Readonly<LoadOptions> = {}): 
   // A proper deadline is unknown. Let it be twice the fallback timeout so that both cases have the same average time.
   await requestIdleCallbackIfAvailable(delayFallback, delayFallback * 2)
   return new OpenAgent()
+}
+
+export async function load2({ delayFallback = 50, debug }: Readonly<LoadOptions2> = {}): Promise<Agent2> {
+  // A delay is required to ensure consistent entropy components.
+  // See https://github.com/fingerprintjs/fingerprintjs/issues/254
+  // and https://github.com/fingerprintjs/fingerprintjs/issues/307
+  // and https://github.com/fingerprintjs/fingerprintjs/commit/945633e7c5f67ae38eb0fea37349712f0e669b18
+  // A proper deadline is unknown. Let it be twice the fallback timeout so that both cases have the same average time.
+  await requestIdleCallbackIfAvailable(delayFallback, delayFallback * 2)
+  const getComponents = loadBuiltinSources2({ debug })
+  return makeAgent2(getComponents, debug)
 }

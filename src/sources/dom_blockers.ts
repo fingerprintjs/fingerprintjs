@@ -342,6 +342,11 @@ export async function getBlockedSelectors<T extends string>(selectors: readonly 
   return blockedSelectors
 }
 
+export async function domBlockersSource(options: Options): Promise<() => string[] | undefined> {
+  const blockers = await getDomBlockers(options)
+  return () => blockers
+}
+
 function forceShow(element: HTMLElement) {
   element.style.setProperty('display', 'block', 'important')
 }
