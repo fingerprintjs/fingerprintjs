@@ -183,10 +183,10 @@ async function getComponent<TOptions, TValue>(
   return { ...result, duration: Date.now() - startTime } as Component<TValue>
 }
 
-function loadComponent2<TOptions, TValue>(
+export function loadSource2<TOptions, TValue>(
   source: Source2<TOptions, TValue>,
   sourceOptions: TOptions,
-  sourceName: keyof any, // Temporary for debug
+  sourceName?: keyof any, // Temporary for debug
 ): () => Promise<Component<TValue>> {
   const sourceLoadPromise = new Promise<() => MaybePromise<Component<TValue>>>((resolveLoad) => {
     const loadStartTime = Date.now()
@@ -301,26 +301,36 @@ export function loadSources2<TSourceOptions, TSources extends UnknownSources2<TS
   // Using `forEachWithBreaks` allows asynchronous sources to complete between synchronous sources
   // and measure the duration correctly
   forEachWithBreaks(includedSources, (sourceKey, index) => {
-    sourceGetters[index] = loadComponent2(sources[sourceKey], sourceOptions, sourceKey)
+    sourceGetters[index] = loadSource2(sources[sourceKey], sourceOptions, sourceKey)
   })
 
   return async function getComponents() {
-    const componentPromises = Array<Promise<unknown>>(includedSources.length)
+    // Add the keys immediately to keep the component keys order the same as the source keys order
     const components = {} as Omit<SourcesToComponents2<TSources>, TExclude>
-
-    await forEachWithBreaks(includedSources, (sourceKey, index) => {
-      // Add the key immediately to keep the component keys order the same as the source keys order
+    for (const sourceKey of includedSources) {
       components[sourceKey] = undefined as any
+    }
 
-      const getComponent = async () => {
-        // `sourceGetters` may be incomplete at this point of execution because `forEachWithBreaks` is asynchronous
-        while (!sourceGetters[index]) {
-          await wait(1)
+    const componentPromises = Array<Promise<unknown>>(includedSources.length)
+
+    for (;;) {
+      let hasAllComponentPromises = true
+      await forEachWithBreaks(includedSources, (sourceKey, index) => {
+        if (!componentPromises[index]) {
+          // `sourceGetters` may be incomplete at this point of execution because `forEachWithBreaks` is asynchronous
+          if (sourceGetters[index]) {
+            componentPromises[index] = sourceGetters[index]().then((component) => (components[sourceKey] = component))
+          } else {
+            hasAllComponentPromises = false
+          }
         }
-        components[sourceKey] = await sourceGetters[index]()
+      })
+      if (hasAllComponentPromises) {
+        break
       }
-      componentPromises[index] = getComponent()
-    })
+      await wait(1) // Lets the source load loop continue
+    }
+
     await Promise.all(componentPromises)
     return components
   }

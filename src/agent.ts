@@ -185,12 +185,15 @@ components: ${componentsToDebugString(components)}
  * Native private class fields could've been used, but TypeScript doesn't allow them with `"target": "es5"`.
  */
 export function makeAgent2(getComponents: () => Promise<BuiltinComponents2>, debug?: boolean): Agent2 {
+  const creationTime = Date.now()
+
   return {
-    async get(options = {}) {
+    async get(options) {
+      const startTime = Date.now()
       const components = await getComponents()
       const result = makeLazyGetResult(components)
 
-      if (debug || options.debug) {
+      if (debug || options?.debug) {
         // console.log is ok here because it's under a debug clause
         // eslint-disable-next-line no-console
         console.log(`Copy the text below to get the debug data:
@@ -198,7 +201,7 @@ export function makeAgent2(getComponents: () => Promise<BuiltinComponents2>, deb
 \`\`\`
 version: ${result.version}
 userAgent: ${navigator.userAgent}
-getOptions: ${JSON.stringify(options, undefined, 2)}
+timeBetweenLoadAndGet: ${startTime - creationTime}
 visitorId: ${result.visitorId}
 components: ${componentsToDebugString(components)}
 \`\`\``)
