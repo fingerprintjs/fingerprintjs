@@ -1,5 +1,5 @@
 import { getBrowserMajorVersion, isMobile, isSafari, isTrident } from '../../tests/utils'
-import getAudioFingerprint, { audioFingerprintSource } from './audio'
+import getAudioFingerprint, { audioFingerprintSource, SpecialFingerprint } from './audio'
 
 describe('Sources', () => {
   describe('audio', () => {
@@ -7,11 +7,11 @@ describe('Sources', () => {
       const result = await getAudioFingerprint()
 
       if (isTrident()) {
-        expect(result).toBe(-2)
+        expect(result).toBe(SpecialFingerprint.NotSupported)
       } else if (isSafari() && isMobile() && (getBrowserMajorVersion() ?? 0) < 12) {
         // WebKit has stopped telling its real version in the user-agent string since version 605.1.15,
         // therefore the browser version has to be checked instead of the engine version.
-        expect(result).toBe(-1)
+        expect(result).toBe(SpecialFingerprint.KnownToSuspend)
       } else {
         expect(result).toBeGreaterThanOrEqual(0)
       }
@@ -23,11 +23,11 @@ describe('Sources', () => {
       const result = audioFingerprintSource()
 
       if (isTrident()) {
-        expect(result).toBe(-2)
+        expect(result).toBe(SpecialFingerprint.NotSupported)
       } else if (isSafari() && isMobile() && (getBrowserMajorVersion() ?? 0) < 12) {
         // WebKit has stopped telling its real version in the user-agent string since version 605.1.15,
         // therefore the browser version has to be checked instead of the engine version.
-        expect(result).toBe(-1)
+        expect(result).toBe(SpecialFingerprint.KnownToSuspend)
       } else {
         // A type guard
         if (typeof result !== 'function') {

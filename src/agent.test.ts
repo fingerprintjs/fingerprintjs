@@ -3,6 +3,7 @@ import { withMockProperties } from '../tests/utils'
 import { Agent, Agent2, makeAgent2, OpenAgent } from './agent'
 import { sources, sources2 } from './sources'
 import { resetScreenFrameWatch } from './sources/screen_frame'
+import { wait } from './utils/async'
 
 describe('Agent', () => {
   it('collects all components without unexpected errors and makes visitorId', async () => {
@@ -95,6 +96,7 @@ describe('Agent2', () => {
       },
       async () => {
         agent = makeAgent2()
+        await wait(10) // Wait for the sources to complete loading
       },
     )
 
