@@ -1,6 +1,6 @@
 import { holdLoop } from '../../tests/utils'
 import { wait } from '../utils/async'
-import { getComponents, loadSource2, loadSources2 } from './index'
+import { getComponents, loadSource2, loadSources2, Source2 } from './index'
 
 describe('Sources', () => {
   describe('getComponents', () => {
@@ -68,31 +68,106 @@ describe('Sources', () => {
       expect(sourceGetter).toHaveBeenCalledWith()
     })
 
-    it("returns source's result", async () => {
-      const source = () => () => 'unpredictable value'
-      const loadedSource = loadSource2(source, undefined)
-      const component = await loadedSource()
-      expect(component).toEqual({ value: 'unpredictable value', duration: jasmine.anything() })
-    })
-
-    it("returns source's loading error", async () => {
-      const source = () => {
-        throw 'Failed to load'
+    describe('result handling', () => {
+      async function checkSource(source: Source2<undefined, 'unpredictable value'>) {
+        const loadedSource = loadSource2(source, undefined)
+        const component = await loadedSource()
+        expect(component).toEqual({ value: 'unpredictable value', duration: jasmine.anything() })
       }
 
-      const loadedSource = loadSource2(source, undefined)
-      const component = await loadedSource()
-      expect(component).toEqual({ error: { message: 'Failed to load' }, duration: jasmine.anything() })
+      describe('synchronous "load" phase', () => {
+        it('with no "get" phase', async () => {
+          const source = () => 'unpredictable value' as const
+          await checkSource(source)
+        })
+
+        it('with synchronous "get" phase', async () => {
+          const source = () => () => 'unpredictable value' as const
+          await checkSource(source)
+        })
+
+        it('with asynchronous "get" phase', async () => {
+          const source = () => () => wait(5, 'unpredictable value' as const)
+          await checkSource(source)
+        })
+      })
+
+      describe('asynchronous "load" phase', () => {
+        it('with no "get" phase', async () => {
+          const source = () => wait(5, 'unpredictable value' as const)
+          await checkSource(source)
+        })
+
+        it('with synchronous "get" phase', async () => {
+          const source = () => wait(5, () => 'unpredictable value' as const)
+          await checkSource(source)
+        })
+
+        it('with asynchronous "get" phase', async () => {
+          const source = () => wait(5, () => wait(5, 'unpredictable value' as const))
+          await checkSource(source)
+        })
+      })
     })
 
-    it("returns source's getting error", async () => {
-      const source = () => () => {
-        throw new Error('Failed to get')
+    describe('error handling', () => {
+      async function checkSource(source: Source2<undefined, never>) {
+        const loadedSource = loadSource2(source, undefined)
+        const component = await loadedSource()
+        expect(component).toEqual({
+          error: jasmine.objectContaining({ message: 'Fail' }),
+          duration: jasmine.anything(),
+        })
       }
 
-      const loadedSource = loadSource2(source, undefined)
-      const component = await loadedSource()
-      expect(component).toEqual({ error: new Error('Failed to get'), duration: jasmine.anything() })
+      describe('synchronous "load" phase', () => {
+        it('with no "get" phase', async () => {
+          await checkSource(() => {
+            throw 'Fail'
+          })
+        })
+
+        it('with synchronous "get" phase', async () => {
+          await checkSource(() => () => {
+            throw 'Fail'
+          })
+        })
+
+        it('with asynchronous "get" phase', async () => {
+          await checkSource(() => async () => {
+            await wait(5)
+            throw new Error('Fail')
+          })
+        })
+      })
+
+      describe('asynchronous "load" phase', () => {
+        it('with no "get" phase', async () => {
+          await checkSource(async () => {
+            await wait(5)
+            throw new Error('Fail')
+          })
+        })
+
+        it('with synchronous "get" phase', async () => {
+          await checkSource(async () => {
+            await wait(5)
+            return () => {
+              throw new Error('Fail')
+            }
+          })
+        })
+
+        it('with asynchronous "get" phase', async () => {
+          await checkSource(async () => {
+            await wait(5)
+            return async () => {
+              await wait(5)
+              throw new Error('Fail')
+            }
+          })
+        })
+      })
     })
 
     it('runs source\'s "load" phase once in total and "get" phase once per each getter call', async () => {
@@ -116,7 +191,7 @@ describe('Sources', () => {
       const source = async () => {
         await wait(10)
         isSourceReallyLoaded = true
-        return () => 'unpredictable value'
+        return 'unpredictable value'
       }
 
       const loadedSource = loadSource2(source, undefined)
@@ -171,9 +246,9 @@ describe('Sources', () => {
   describe('loadSources', () => {
     it('passes source options', async () => {
       const sources = {
-        foo: jasmine.createSpy().and.returnValue(() => ''),
-        bar: jasmine.createSpy().and.returnValue(() => ''),
-        baz: jasmine.createSpy().and.returnValue(() => ''),
+        foo: jasmine.createSpy(),
+        bar: jasmine.createSpy(),
+        baz: jasmine.createSpy(),
       }
 
       const loadedSources = loadSources2(sources, '12345', [])
@@ -185,7 +260,7 @@ describe('Sources', () => {
 
     it("returns sources' values and errors", async () => {
       const sources = {
-        success: () => wait(10, () => 'qwerty'),
+        success: () => wait(10, 'qwerty'),
         loadFail: async () => {
           await wait(5)
           throw new Error('Failed to load')
@@ -220,11 +295,11 @@ describe('Sources', () => {
 
     it('excludes', async () => {
       const sources = {
-        one: jasmine.createSpy().and.returnValue(() => 1),
-        two: jasmine.createSpy().and.returnValue(() => 2),
-        three: jasmine.createSpy().and.returnValue(() => 3),
-        four: jasmine.createSpy().and.returnValue(() => 4),
-        five: jasmine.createSpy().and.returnValue(() => 5),
+        one: jasmine.createSpy().and.returnValue(1),
+        two: jasmine.createSpy().and.returnValue(2),
+        three: jasmine.createSpy().and.returnValue(3),
+        four: jasmine.createSpy().and.returnValue(4),
+        five: jasmine.createSpy().and.returnValue(5),
       }
 
       const loadedSources = loadSources2(sources, undefined, ['four', 'two'])
@@ -310,9 +385,9 @@ describe('Sources', () => {
           // This pause will cause `loadSources` to release the JS event loop
           // which will let the getter run before the next source starts loading
           holdLoop(20)
-          return () => ''
+          return ''
         },
-        two: jasmine.createSpy().and.returnValue(() => ''),
+        two: jasmine.createSpy(),
       }
 
       const loadedSources = loadSources2(sources, undefined, [])

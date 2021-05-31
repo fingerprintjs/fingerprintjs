@@ -71,6 +71,16 @@ export async function getScreenFrame(): Promise<FrameSize> {
   return frameSize
 }
 
+export function screenFrameSource(): () => Promise<FrameSize> {
+  watchScreenFrame()
+  return getScreenFrame
+}
+
+export function roundedScreenFrameSource(): () => Promise<FrameSize> {
+  watchScreenFrame()
+  return getRoundedScreenFrame
+}
+
 /**
  * Sometimes the available screen resolution changes a bit, e.g. 1900x1440 → 1900x1439. A possible reason: macOS Dock
  * shrinks to fit more icons when there is too little space. The rounding is used to mitigate the difference.

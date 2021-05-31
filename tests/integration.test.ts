@@ -11,9 +11,9 @@ describe('Integration', () => {
   it('gets visitor id', async () => {
     // Uses the global FingerprintJS value left by the distributive script
     expect(FingerprintJS).toBeInstanceOf(Object)
-    expect(typeof FingerprintJS.load).toBe('function')
+    expect(typeof FingerprintJS.load2).toBe('function')
 
-    const fp = await FingerprintJS.load()
+    const fp = await FingerprintJS.load2()
     expect(typeof fp).toBe('object')
 
     const result = await fp.get()

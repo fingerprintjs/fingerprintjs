@@ -184,7 +184,8 @@ components: ${componentsToDebugString(components)}
  * A factory function is used instead of a class to shorten the attribute names in the minified code.
  * Native private class fields could've been used, but TypeScript doesn't allow them with `"target": "es5"`.
  */
-export function makeAgent2(getComponents: () => Promise<BuiltinComponents2>, debug?: boolean): Agent2 {
+export function makeAgent2(debug?: boolean): Agent2 {
+  const getComponents = loadBuiltinSources2({ debug })
   const creationTime = Date.now()
 
   return {
@@ -232,6 +233,5 @@ export async function load2({ delayFallback = 50, debug }: Readonly<LoadOptions2
   // and https://github.com/fingerprintjs/fingerprintjs/commit/945633e7c5f67ae38eb0fea37349712f0e669b18
   // A proper deadline is unknown. Let it be twice the fallback timeout so that both cases have the same average time.
   await requestIdleCallbackIfAvailable(delayFallback, delayFallback * 2)
-  const getComponents = loadBuiltinSources2({ debug })
-  return makeAgent2(getComponents, debug)
+  return makeAgent2(debug)
 }

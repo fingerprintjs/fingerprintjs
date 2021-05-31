@@ -2,16 +2,16 @@
 import { excludes } from '../utils/data'
 import { awaitIfAsync, forEachWithBreaks, MaybePromise, wait } from '../utils/async'
 import getAudioFingerprint from './audio'
-import getFonts, { fontsSource } from './fonts'
+import getFonts from './fonts'
 import getPlugins from './plugins'
-import getCanvasFingerprint, { canvasSource } from './canvas'
+import getCanvasFingerprint from './canvas'
 import getTouchSupport from './touch_support'
-import getOsCpu, { osCpuSource } from './os_cpu'
+import getOsCpu from './os_cpu'
 import getLanguages from './languages'
 import getColorDepth from './color_depth'
 import getDeviceMemory from './device_memory'
 import getScreenResolution from './screen_resolution'
-import { getRoundedScreenFrame } from './screen_frame'
+import { getRoundedScreenFrame, roundedScreenFrameSource } from './screen_frame'
 import getHardwareConcurrency from './hardware_concurrency'
 import getTimezone from './timezone'
 import getSessionStorage from './session_storage'
@@ -23,7 +23,7 @@ import getPlatform from './platform'
 import getVendor from './vendor'
 import getVendorFlavors from './vendor_flavors'
 import areCookiesEnabled from './cookies_enabled'
-import getDomBlockers, { domBlockersSource } from './dom_blockers'
+import getDomBlockers from './dom_blockers'
 import getColorGamut from './color_gamut'
 import areColorsInverted from './inverted_colors'
 import areColorsForced from './forced_colors'
@@ -32,7 +32,7 @@ import getContrastPreference from './contrast'
 import isMotionReduced from './reduced_motion'
 import isHDR from './hdr'
 import getMathFingerprint from './math'
-import getFontPreferences, { fontPreferencesSource } from './font_preferences'
+import getFontPreferences from './font_preferences'
 
 /**
  * The list of entropy sources used to make visitor identifiers.
@@ -80,12 +80,13 @@ export const sources = {
 }
 
 export const sources2 = {
-  fonts: fontsSource,
-  domBlockers: domBlockersSource,
-  fontPreferences: fontPreferencesSource,
+  fonts: getFonts,
+  domBlockers: getDomBlockers,
+  fontPreferences: getFontPreferences,
+  screenFrame: roundedScreenFrameSource,
 
-  osCpu: osCpuSource,
-  canvas: canvasSource,
+  osCpu: getOsCpu,
+  canvas: getCanvasFingerprint,
 }
 
 /**
@@ -95,7 +96,7 @@ export const sources2 = {
  */
 export type Source<TOptions, TValue> = (options: TOptions) => Promise<TValue> | TValue
 
-export type Source2<TOptions, TValue> = (options: TOptions) => MaybePromise<() => MaybePromise<TValue>>
+export type Source2<TOptions, TValue> = (options: TOptions) => MaybePromise<TValue | (() => MaybePromise<TValue>)>
 
 /**
  * Generic dictionary of unknown sources
@@ -188,6 +189,10 @@ export function loadSource2<TOptions, TValue>(
   sourceOptions: TOptions,
   sourceName?: keyof any, // Temporary for debug
 ): () => Promise<Component<TValue>> {
+  const isFinalResultLoaded = (loadResult: TValue | (() => MaybePromise<TValue>)): loadResult is TValue => {
+    return typeof loadResult !== 'function'
+  }
+
   const sourceLoadPromise = new Promise<() => MaybePromise<Component<TValue>>>((resolveLoad) => {
     const loadStartTime = Date.now()
     console.log('Load start', sourceName, performance.now())
@@ -197,27 +202,32 @@ export function loadSource2<TOptions, TValue>(
     awaitIfAsync(
       () => source(sourceOptions),
       (...loadArgs) => {
-        const loadEndTime = Date.now()
+        const loadDuration = Date.now() - loadStartTime
         console.log('Load end', sourceName, performance.now())
 
         // Source loading failed
         if (!loadArgs[0]) {
-          return resolveLoad(() => ({
-            error: ensureErrorWithMessage(loadArgs[1]),
-            duration: loadEndTime - loadStartTime,
-          }))
+          return resolveLoad(() => ({ error: ensureErrorWithMessage(loadArgs[1]), duration: loadDuration }))
         }
 
-        // Source loading succeeded
+        const loadResult = loadArgs[1]
+
+        // Source loaded with the final result
+        if (isFinalResultLoaded(loadResult)) {
+          return resolveLoad(() => ({ value: loadResult, duration: loadDuration }))
+        }
+
+        // Source loaded with "get" stage
         resolveLoad(
           () =>
             new Promise((resolveGet) => {
               const getStartTime = Date.now()
               console.log('Get start', sourceName, performance.now())
 
-              awaitIfAsync(loadArgs[1], (...getArgs) => {
-                const duration = Date.now() - getStartTime + loadEndTime - loadStartTime
+              awaitIfAsync(loadResult, (...getArgs) => {
+                const duration = loadDuration + Date.now() - getStartTime
                 console.log('Get end', sourceName, performance.now())
+
                 // Source getting failed
                 if (!getArgs[0]) {
                   return resolveGet({ error: ensureErrorWithMessage(getArgs[1]), duration })

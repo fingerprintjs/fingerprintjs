@@ -22,11 +22,6 @@ export default function getCanvasFingerprint(): CanvasFingerprint {
   }
 }
 
-export function canvasSource(): () => CanvasFingerprint {
-  const fingerprint = getCanvasFingerprint()
-  return () => fingerprint
-}
-
 function makeCanvasContext() {
   const canvas = document.createElement('canvas')
   canvas.width = 1
