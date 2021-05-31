@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { excludes } from '../utils/data'
 import { awaitIfAsync, forEachWithBreaks, MaybePromise, wait } from '../utils/async'
-import getAudioFingerprint from './audio'
+import getAudioFingerprint, { audioFingerprintSource } from './audio'
 import getFonts from './fonts'
 import getPlugins from './plugins'
 import getCanvasFingerprint from './canvas'
@@ -83,10 +83,36 @@ export const sources2 = {
   fonts: getFonts,
   domBlockers: getDomBlockers,
   fontPreferences: getFontPreferences,
+  audio: audioFingerprintSource,
   screenFrame: roundedScreenFrameSource,
 
   osCpu: getOsCpu,
+  languages: getLanguages,
+  colorDepth: getColorDepth,
+  deviceMemory: getDeviceMemory,
+  screenResolution: getScreenResolution,
+  hardwareConcurrency: getHardwareConcurrency,
+  timezone: getTimezone,
+  sessionStorage: getSessionStorage,
+  localStorage: getLocalStorage,
+  indexedDB: getIndexedDB,
+  openDatabase: getOpenDatabase,
+  cpuClass: getCpuClass,
+  platform: getPlatform,
+  plugins: getPlugins,
   canvas: getCanvasFingerprint,
+  touchSupport: getTouchSupport,
+  vendor: getVendor,
+  vendorFlavors: getVendorFlavors,
+  cookiesEnabled: areCookiesEnabled,
+  colorGamut: getColorGamut,
+  invertedColors: areColorsInverted,
+  forcedColors: areColorsForced,
+  monochrome: getMonochromeDepth,
+  contrast: getContrastPreference,
+  reducedMotion: isMotionReduced,
+  hdr: isHDR,
+  math: getMathFingerprint,
 }
 
 /**

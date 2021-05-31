@@ -69,7 +69,7 @@ describe('Agent2', () => {
     expect(result.version).toBe(version)
 
     const expectedComponents = Object.keys(sources2).sort() as Array<keyof typeof sources2>
-    expect(expectedComponents.length).toBeGreaterThan(1) // To check the test itself
+    expect(expectedComponents.length).toBeGreaterThan(10) // To check the test itself
     expect(Object.keys(result.components).sort()).toEqual(expectedComponents)
     for (const componentName of expectedComponents) {
       expect(result.components[componentName].error)
