@@ -19,10 +19,10 @@ describe('Sources', () => {
           availTop: { get: () => 11 },
         },
         async () => {
-          const frame = await screenFrame.getScreenFrame()
+          const frame = await screenFrame.getScreenFrame()()
           expect(frame).toEqual([11, 24, 36, 49])
 
-          const roundedFrame = await screenFrame.getRoundedScreenFrame()
+          const roundedFrame = await screenFrame.getRoundedScreenFrame()()
           expect(roundedFrame).toEqual([10, 20, 40, 50])
         },
       )
@@ -40,10 +40,10 @@ describe('Sources', () => {
           availTop: { get: () => 0 },
         },
         async () => {
-          const frame = await screenFrame.getScreenFrame()
+          const frame = await screenFrame.getScreenFrame()()
           expect(frame).toEqual([0, 0, 0, 0])
 
-          const roundedFrame = await screenFrame.getRoundedScreenFrame()
+          const roundedFrame = await screenFrame.getRoundedScreenFrame()()
           expect(roundedFrame).toEqual([0, 0, 0, 0])
         },
       )
@@ -61,10 +61,10 @@ describe('Sources', () => {
           availTop: { get: () => undefined },
         },
         async () => {
-          const frame = await screenFrame.getScreenFrame()
+          const frame = await screenFrame.getScreenFrame()()
           expect(frame).toEqual([null, 98, 24, null])
 
-          const roundedFrame = await screenFrame.getRoundedScreenFrame()
+          const roundedFrame = await screenFrame.getRoundedScreenFrame()()
           expect(roundedFrame).toEqual([null, 100, 20, null])
         },
       )
@@ -74,6 +74,8 @@ describe('Sources', () => {
       try {
         jasmine.clock().install()
         jasmine.clock().mockDate()
+
+        let screenFrameGetter: () => Promise<screenFrame.FrameSize>
 
         await withMockProperties(
           screen,
@@ -86,10 +88,10 @@ describe('Sources', () => {
             availTop: { get: () => 0 },
           },
           async () => {
-            screenFrame.watchScreenFrame()
+            screenFrameGetter = screenFrame.getScreenFrame()
 
             // The screen frame is null now
-            const frame = await screenFrame.getScreenFrame()
+            const frame = await screenFrameGetter()
             expect(frame).toEqual([0, 0, 0, 0])
           },
         )
@@ -123,7 +125,7 @@ describe('Sources', () => {
           async () => {
             // The screen frame has become null again, `getScreenFrame` shall return the remembered non-null frame
             jasmine.clock().tick(screenFrame.screenFrameCheckInterval)
-            const frame = await screenFrame.getScreenFrame()
+            const frame = await screenFrameGetter()
             expect(frame).toEqual([30, 30, 50, 10])
           },
         )
@@ -141,7 +143,7 @@ describe('Sources', () => {
           async () => {
             // The screen frame has become non-null, `getScreenFrame` shall return the new size and remember it
             jasmine.clock().tick(screenFrame.screenFrameCheckInterval)
-            const frame = await screenFrame.getScreenFrame()
+            const frame = await screenFrameGetter()
             expect(frame).toEqual([10, 10, 70, 30])
           },
         )
@@ -159,7 +161,7 @@ describe('Sources', () => {
           async () => {
             // The screen frame has become null again, `getScreenFrame` shall return the new non-null frame
             jasmine.clock().tick(screenFrame.screenFrameCheckInterval)
-            const frame = await screenFrame.getScreenFrame()
+            const frame = await screenFrameGetter()
             expect(frame).toEqual([10, 10, 70, 30])
           },
         )

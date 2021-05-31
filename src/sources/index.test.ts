@@ -1,76 +1,22 @@
 import { holdLoop } from '../../tests/utils'
 import { wait } from '../utils/async'
-import { getComponents, loadSource2, loadSources2, Source2 } from './index'
+import { loadSource, loadSources, Source } from './index'
 
 describe('Sources', () => {
-  describe('getComponents', () => {
-    it('handles errors', async () => {
-      const sources = {
-        success1: () => 'foo',
-        throwsErrorObject: () => {
-          throw new Error('bar')
-        },
-        throwsErrorString: () => {
-          throw 'baz'
-        },
-        success2: () => 'baq',
-      }
-
-      const components = await getComponents(sources, undefined, [])
-
-      expect(Object.keys(components).sort()).toEqual(['success1', 'success2', 'throwsErrorObject', 'throwsErrorString'])
-      expect(components.success1.error).toBeUndefined()
-      expect(components.success1.value).toBe('foo')
-      expect(components.success2.error).toBeUndefined()
-      expect(components.success2.value).toBe('baq')
-      expect(components.throwsErrorObject.value).toBeUndefined()
-      expect(components.throwsErrorObject.error).toBeInstanceOf(Error)
-      expect(components.throwsErrorObject.error!.message).toBe('bar') // eslint-disable-line @typescript-eslint/no-non-null-assertion
-      expect(components.throwsErrorString.value).toBeUndefined()
-      expect(components.throwsErrorString.error).toEqual({ message: 'baz' })
-    })
-
-    it('measures duration', async () => {
-      const sources = {
-        instant: () => true,
-        delayedResult: () => new Promise((resolve) => setTimeout(resolve, 50)),
-        delayedError: () => new Promise((_resolve, reject) => setTimeout(() => reject('test'), 50)),
-      }
-
-      const components = await getComponents(sources, undefined, [])
-
-      expect(components.instant.duration).toBeLessThan(25)
-      expect(components.delayedResult.duration).toBeGreaterThan(25)
-      expect(components.delayedError.duration).toBeGreaterThan(25)
-    })
-
-    it('excludes', async () => {
-      const sources = {
-        toBe: () => true,
-        notToBe: () => false,
-      }
-
-      const components = await getComponents(sources, undefined, ['notToBe'])
-
-      expect(Object.keys(components)).toEqual(['toBe'])
-      expect(components.toBe.value).toBe(true)
-    })
-  })
-
   describe('loadSource', () => {
     it('passes source options', async () => {
       const sourceGetter = jasmine.createSpy()
       const sourceLoader = jasmine.createSpy().and.returnValue(sourceGetter)
 
-      const loadedSource = loadSource2(sourceLoader, '12345')
+      const loadedSource = loadSource(sourceLoader, '12345')
       await loadedSource()
       expect(sourceLoader).toHaveBeenCalledWith('12345')
       expect(sourceGetter).toHaveBeenCalledWith()
     })
 
     describe('result handling', () => {
-      async function checkSource(source: Source2<undefined, 'unpredictable value'>) {
-        const loadedSource = loadSource2(source, undefined)
+      async function checkSource(source: Source<undefined, 'unpredictable value'>) {
+        const loadedSource = loadSource(source, undefined)
         const component = await loadedSource()
         expect(component).toEqual({ value: 'unpredictable value', duration: jasmine.anything() })
       }
@@ -111,8 +57,8 @@ describe('Sources', () => {
     })
 
     describe('error handling', () => {
-      async function checkSource(source: Source2<undefined, never>) {
-        const loadedSource = loadSource2(source, undefined)
+      async function checkSource(source: Source<undefined, never>) {
+        const loadedSource = loadSource(source, undefined)
         const component = await loadedSource()
         expect(component).toEqual({
           error: jasmine.objectContaining({ message: 'Fail' }),
@@ -174,7 +120,7 @@ describe('Sources', () => {
       const sourceGetter = jasmine.createSpy().and.returnValues('one', 'two', 'three')
       const sourceLoader = jasmine.createSpy().and.returnValue(sourceGetter)
 
-      const loadedSource = loadSource2(sourceLoader, undefined)
+      const loadedSource = loadSource(sourceLoader, undefined)
       await wait(5)
       expect(sourceLoader).toHaveBeenCalledTimes(1)
       expect(sourceGetter).not.toHaveBeenCalled()
@@ -194,7 +140,7 @@ describe('Sources', () => {
         return 'unpredictable value'
       }
 
-      const loadedSource = loadSource2(source, undefined)
+      const loadedSource = loadSource(source, undefined)
       expect(isSourceReallyLoaded).toBeFalse()
       expect(await loadedSource()).toEqual({ value: 'unpredictable value', duration: jasmine.anything() })
       expect(isSourceReallyLoaded).toBeTrue()
@@ -206,7 +152,7 @@ describe('Sources', () => {
         return () => holdLoop(5)
       }
 
-      const loadedSource = loadSource2(source, undefined)
+      const loadedSource = loadSource(source, undefined)
       await wait(50) // To make a pause between the loading completes and the getting starts
       const component = await loadedSource()
       expect(component.duration).toBeGreaterThanOrEqual(7 + 5)
@@ -219,7 +165,7 @@ describe('Sources', () => {
         throw new Error('Failed to load')
       }
 
-      const loadedSource = loadSource2(source, undefined)
+      const loadedSource = loadSource(source, undefined)
       await wait(50) // To make a pause between the loading completes and the getting starts
       const component = await loadedSource()
       expect(component.duration).toBeGreaterThanOrEqual(5)
@@ -235,7 +181,7 @@ describe('Sources', () => {
         }
       }
 
-      const loadedSource = loadSource2(source, undefined)
+      const loadedSource = loadSource(source, undefined)
       await wait(50) // To make a pause between the loading completes and the getting starts
       const component = await loadedSource()
       expect(component.duration).toBeGreaterThanOrEqual(7 + 5)
@@ -251,7 +197,7 @@ describe('Sources', () => {
         baz: jasmine.createSpy(),
       }
 
-      const loadedSources = loadSources2(sources, '12345', [])
+      const loadedSources = loadSources(sources, '12345', [])
       await loadedSources()
       expect(sources.foo).toHaveBeenCalledWith('12345')
       expect(sources.bar).toHaveBeenCalledWith('12345')
@@ -271,7 +217,7 @@ describe('Sources', () => {
         },
       }
 
-      const loadedSources = loadSources2(sources, undefined, [])
+      const loadedSources = loadSources(sources, undefined, [])
       const components = await loadedSources()
       expect(components).toEqual({
         success: { value: 'qwerty', duration: jasmine.anything() },
@@ -288,7 +234,7 @@ describe('Sources', () => {
         four: () => wait(5, () => wait(5, '')),
       }
 
-      const loadedSources = loadSources2(sources, undefined, [])
+      const loadedSources = loadSources(sources, undefined, [])
       const components = await loadedSources()
       expect(Object.keys(components)).toEqual(['one', 'two', 'three', 'four'])
     })
@@ -302,7 +248,7 @@ describe('Sources', () => {
         five: jasmine.createSpy().and.returnValue(5),
       }
 
-      const loadedSources = loadSources2(sources, undefined, ['four', 'two'])
+      const loadedSources = loadSources(sources, undefined, ['four', 'two'])
       const components = await loadedSources()
       expect(components).toEqual({
         one: { value: 1, duration: jasmine.anything() },
@@ -326,7 +272,7 @@ describe('Sources', () => {
         bar: jasmine.createSpy().and.returnValue(sourceGetters.bar),
       }
 
-      const loadedSources = loadSources2(sourceLoaders, undefined, [])
+      const loadedSources = loadSources(sourceLoaders, undefined, [])
       await wait(5)
       expect(sourceLoaders.foo).toHaveBeenCalledTimes(1)
       expect(sourceLoaders.bar).toHaveBeenCalledTimes(1)
@@ -371,7 +317,7 @@ describe('Sources', () => {
       let intervalFireCounter = 0
       const intervalId = setInterval(() => ++intervalFireCounter, 1)
       try {
-        const loadedSources = loadSources2(sources, undefined, [])
+        const loadedSources = loadSources(sources, undefined, [])
         await loadedSources()
       } finally {
         clearInterval(intervalId)
@@ -390,7 +336,7 @@ describe('Sources', () => {
         two: jasmine.createSpy(),
       }
 
-      const loadedSources = loadSources2(sources, undefined, [])
+      const loadedSources = loadSources(sources, undefined, [])
       expect(sources.two).not.toHaveBeenCalled()
       await Promise.all([loadedSources(), loadedSources(), loadedSources()])
       expect(sources.two).toHaveBeenCalledTimes(1)
