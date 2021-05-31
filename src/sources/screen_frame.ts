@@ -49,6 +49,13 @@ export function resetScreenFrameWatch(): void {
   screenFrameBackup = undefined
 }
 
+/**
+ * For tests only
+ */
+export function hasScreenFrameBackup(): boolean {
+  return !!screenFrameBackup
+}
+
 export function getScreenFrame(): () => Promise<FrameSize> {
   watchScreenFrame()
 
@@ -85,8 +92,8 @@ export function getRoundedScreenFrame(): () => Promise<FrameSize> {
   const screenFrameGetter = getScreenFrame()
 
   return async () => {
-    const processSize = (sideSize: FrameSize[number]) => (sideSize === null ? null : round(sideSize, roundingPrecision))
     const frameSize = await screenFrameGetter()
+    const processSize = (sideSize: FrameSize[number]) => (sideSize === null ? null : round(sideSize, roundingPrecision))
 
     // It might look like I don't know about `for` and `map`.
     // In fact, such code is used to avoid TypeScript issues without using `as`.
