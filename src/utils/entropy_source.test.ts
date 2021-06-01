@@ -1,8 +1,8 @@
 import { holdLoop } from '../../tests/utils'
-import { wait } from '../utils/async'
-import { loadSource, loadSources, Source } from './index'
+import { wait } from './async'
+import { loadSource, loadSources, Source } from './entropy_source'
 
-describe('Sources', () => {
+describe('Entropy source utilities', () => {
   describe('loadSource', () => {
     it('passes source options', async () => {
       const sourceGetter = jasmine.createSpy()

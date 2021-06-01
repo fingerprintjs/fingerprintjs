@@ -1,8 +1,9 @@
 import { version } from '../package.json'
 import { requestIdleCallbackIfAvailable } from './utils/async'
+import { UnknownComponents } from './utils/entropy_source'
 import { x64hash128 } from './utils/hashing'
 import { errorToObject } from './utils/misc'
-import loadBuiltinSources, { BuiltinComponents, UnknownComponents } from './sources'
+import loadBuiltinSources, { BuiltinComponents } from './sources'
 
 /**
  * Options for Fingerprint class loading
@@ -26,6 +27,8 @@ export interface LoadOptions {
  */
 export interface GetOptions {
   /**
+   * Whether to print debug messages to the console.
+   *
    * @deprecated Pass the option to `load` instead
    */
   debug?: boolean
@@ -116,6 +119,17 @@ function makeLazyGetResult<T extends UnknownComponents>(components: T) {
 }
 
 /**
+ * A delay is required to ensure consistent entropy components.
+ * See https://github.com/fingerprintjs/fingerprintjs/issues/254
+ * and https://github.com/fingerprintjs/fingerprintjs/issues/307
+ * and https://github.com/fingerprintjs/fingerprintjs/commit/945633e7c5f67ae38eb0fea37349712f0e669b18
+ */
+export function prepareForSources(delayFallback = 50): Promise<void> {
+  // A proper deadline is unknown. Let it be twice the fallback timeout so that both cases have the same average time.
+  return requestIdleCallbackIfAvailable(delayFallback, delayFallback * 2)
+}
+
+/**
  * The function isn't exported from the index file to not allow to call it without `load()`.
  * The hiding gives more freedom for future non-breaking updates.
  *
@@ -154,12 +168,7 @@ components: ${componentsToDebugString(components)}
 /**
  * Builds an instance of Agent and waits a delay required for a proper operation.
  */
-export async function load({ delayFallback = 50, debug }: Readonly<LoadOptions> = {}): Promise<Agent> {
-  // A delay is required to ensure consistent entropy components.
-  // See https://github.com/fingerprintjs/fingerprintjs/issues/254
-  // and https://github.com/fingerprintjs/fingerprintjs/issues/307
-  // and https://github.com/fingerprintjs/fingerprintjs/commit/945633e7c5f67ae38eb0fea37349712f0e669b18
-  // A proper deadline is unknown. Let it be twice the fallback timeout so that both cases have the same average time.
-  await requestIdleCallbackIfAvailable(delayFallback, delayFallback * 2)
+export async function load({ delayFallback, debug }: Readonly<LoadOptions> = {}): Promise<Agent> {
+  await prepareForSources(delayFallback)
   return makeAgent(debug)
 }

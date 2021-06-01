@@ -147,6 +147,9 @@ function startRenderingAudio(context: OfflineAudioContext) {
     }
   })
 
+  // Suppresses the console error message in case when the rendering fails before getting finalized
+  resultPromise.catch(() => undefined)
+
   return () => {
     finalize()
     return resultPromise
