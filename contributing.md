@@ -94,6 +94,118 @@ To check that the package is compatible with server side rendering, build the pr
 yarn test:ssr
 ```
 
+### How to make an entropy source
+
+Entropy source is a function that gets a piece of data about the browser a.k.a. a fingerprint component.
+Entropy sources are located in the [src/sources](src/sources) directory.
+Entropy component must be a simple JS value that can be JSON-encoded.
+
+Entropy source runs in 2 stages: "load" and "get":
+- "Load" runs once when the agent's `load` function is called.
+    It must do as much work of the source as possible to make the "get" phase as fast as possible.
+    It may start background processes that will run indefinitely or until the "get" phase runs.
+- "Get" runs once per each agent's `get` function call.
+    It must be as fast as possible.
+
+An example entropy source:
+
+```js
+// The function below represents the "load" phase
+async function entropySource() {
+  // The "load" phase starts here
+  const preData = await doLongAction()
+
+  // The "load" phase ends when the `entropySource` function returns
+  // The function below represents the "get" phase
+  return async () => {
+    // The "get" phase starts here
+    const finalData = await finalizeData(preData)
+    return finalData
+    // The "get" phase ends then this returned function returns
+  }
+}
+```
+
+Any of the phases can be synchronous:
+
+```js
+function entropySource() {
+  const preData = doLongSynchronousAction()
+
+  return () => {
+    const finalData = finalizeDataSynchronously(preData)
+    return finalData
+  }
+}
+```
+
+The "get" phase can be omitted:
+
+```js
+async function entropySource() {
+  const finalData = await doLongAction()
+
+  // If the source's returned value isn't a function, it's considered as a fingerprint component
+  return finalData // Equivalent to: return () => finalData
+}
+```
+
+In fact, most entropy sources don't require a "get" phase.
+The "get" phase is required if the component can change after completing the load phase.
+
+In order for agent to measure the entropy source execution duration correctly,
+the "load" phase shouldn't run in background (after the source function returns).
+On the other hand, in order not to detain the whole agent, the "load" phase must contain only the necessary actions.
+Example:
+
+```ts
+async function entropySource() {
+  let result: Record<string, unknown> | undefined
+  const dataPromise = doLongAction().then((value) => result = value) // Simplified. Error handling is required.
+
+  // Apply the minimal required timeout
+  await Promise.race([dataPromise, wait(300)])
+
+  // Then complete the "load" phase by returning. `dataPromise` will continue running until the "get" phase starts.
+  return () => {
+    if (result === undefined) {
+      return 'timeout'
+    } else {
+      return result
+    }
+  }
+}
+```
+
+Entropy source must handle expected and only expected errors.
+The expected errors must be turned into fingerprint components.
+Pay attention to potential asynchronous errors.
+If you handle unexpected errors, you won't know what's going wrong inside the entropy source.
+Example:
+
+```js
+async function entropySource() {
+  try {
+    // `await` is necessary to catch asynchronous errors
+    return await doLongAction()
+  } catch (error) {
+    // WRONG:
+    return 'error'
+
+    // Correct:
+    if (error.message = 'Foo bar') {
+      return 'bot'
+    }
+    if (/boo/.test(error.message)) {
+      return 'ie'
+    }
+    throw error // Unexpected error
+  }
+}
+```
+
+When you complete an entropy source, add it to [src/sources/index.ts](src/sources/index.ts).
+
 ### How to publish
 
 This section is for repository maintainers.

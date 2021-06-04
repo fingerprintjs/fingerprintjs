@@ -3,7 +3,7 @@ import * as FingerprintJS from '../src'
 import { errorToObject } from '../src/utils/misc'
 
 async function getVisitorData() {
-  const fp = await FingerprintJS.load({ /*debug: true*/ })
+  const fp = await FingerprintJS.load({ debug: true })
   return await fp.get()
 }
 

@@ -29,7 +29,7 @@ export interface GetOptions {
   /**
    * Whether to print debug messages to the console.
    *
-   * @deprecated Pass the option to `load` instead
+   * @deprecated Use the `debug` option of `load()` instead
    */
   debug?: boolean
 }

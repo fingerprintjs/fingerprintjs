@@ -4,10 +4,9 @@ import { excludes } from './data'
 
 /**
  * A functions that returns data with entropy to identify visitor.
- * Source must handle expected errors by itself and turn them into entropy.
- * The return value must be compatible with `JSON.stringify` or be undefined.
  *
- * @todo Add a documentation article
+ * See https://github.com/fingerprintjs/fingerprintjs/blob/master/contributing.md#how-to-make-an-entropy-source
+ * to learn how entropy source works and how to make your own.
  */
 export type Source<TOptions, TValue> = (options: TOptions) => MaybePromise<TValue | (() => MaybePromise<TValue>)>
 
@@ -67,17 +66,13 @@ function ensureErrorWithMessage(error: unknown): { message: unknown } {
 export function loadSource<TOptions, TValue>(
   source: Source<TOptions, TValue>,
   sourceOptions: TOptions,
-  sourceName?: keyof any, // Temporary for debug. Todo: remove
 ): () => Promise<Component<TValue>> {
   const isFinalResultLoaded = (loadResult: TValue | (() => MaybePromise<TValue>)): loadResult is TValue => {
     return typeof loadResult !== 'function'
   }
 
-  sourceName
-
   const sourceLoadPromise = new Promise<() => MaybePromise<Component<TValue>>>((resolveLoad) => {
     const loadStartTime = Date.now()
-    // console.log('Load start', sourceName, performance.now())
 
     // `awaitIfAsync` is used instead of just `await` in order to measure the duration of synchronous sources
     // correctly (other microtasks won't affect the duration).
@@ -85,7 +80,6 @@ export function loadSource<TOptions, TValue>(
       () => source(sourceOptions),
       (...loadArgs) => {
         const loadDuration = Date.now() - loadStartTime
-        // console.log('Load end', sourceName, performance.now())
 
         // Source loading failed
         if (!loadArgs[0]) {
@@ -104,11 +98,9 @@ export function loadSource<TOptions, TValue>(
           () =>
             new Promise((resolveGet) => {
               const getStartTime = Date.now()
-              // console.log('Get start', sourceName, performance.now())
 
               awaitIfAsync(loadResult, (...getArgs) => {
                 const duration = loadDuration + Date.now() - getStartTime
-                // console.log('Get end', sourceName, performance.now())
 
                 // Source getting failed
                 if (!getArgs[0]) {
@@ -152,7 +144,7 @@ export function loadSources<TSourceOptions, TSources extends UnknownSources<TSou
   // Using `forEachWithBreaks` allows asynchronous sources to complete between synchronous sources
   // and measure the duration correctly
   forEachWithBreaks(includedSources, (sourceKey, index) => {
-    sourceGetters[index] = loadSource(sources[sourceKey], sourceOptions, sourceKey)
+    sourceGetters[index] = loadSource(sources[sourceKey], sourceOptions)
   })
 
   return async function getComponents() {
