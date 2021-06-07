@@ -155,24 +155,23 @@ The "get" phase is required if the component can change after completing the loa
 
 In order for agent to measure the entropy source execution duration correctly,
 the "load" phase shouldn't run in background (after the source function returns).
-On the other hand, in order not to detain the whole agent, the "load" phase must contain only the necessary actions.
+On the other hand, in order not to block the whole agent, the "load" phase must contain only the necessary actions.
 Example:
 
-```ts
+```js
 async function entropySource() {
-  let result: Record<string, unknown> | undefined
-  const dataPromise = doLongAction().then((value) => result = value) // Simplified. Error handling is required.
+  // Wait for the required data to be calculated during the "load" phase
+  let result = await doLongAction()
 
-  // Apply the minimal required timeout
-  await Promise.race([dataPromise, wait(300)])
+  // Start watching optional data in background (this function doesn't block the execution)
+  watchNextResults((newResult) => {
+    result = newResult
+  })
 
-  // Then complete the "load" phase by returning. `dataPromise` will continue running until the "get" phase starts.
+  // Then complete the "load" phase by returning a function.
+  // `watchNextResults` will continue working until the "get" phase starts.
   return () => {
-    if (result === undefined) {
-      return 'timeout'
-    } else {
-      return result
-    }
+    return result
   }
 }
 ```
