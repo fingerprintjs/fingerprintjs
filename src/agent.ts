@@ -136,8 +136,7 @@ export function prepareForSources(delayFallback = 50): Promise<void> {
  * A factory function is used instead of a class to shorten the attribute names in the minified code.
  * Native private class fields could've been used, but TypeScript doesn't allow them with `"target": "es5"`.
  */
-export function makeAgent(debug?: boolean): Agent {
-  const getComponents = loadBuiltinSources({ debug })
+function makeAgent(getComponents: () => Promise<BuiltinComponents>, debug?: boolean): Agent {
   const creationTime = Date.now()
 
   return {
@@ -170,5 +169,6 @@ components: ${componentsToDebugString(components)}
  */
 export async function load({ delayFallback, debug }: Readonly<LoadOptions> = {}): Promise<Agent> {
   await prepareForSources(delayFallback)
-  return makeAgent(debug)
+  const getComponents = loadBuiltinSources({ debug })
+  return makeAgent(getComponents, debug)
 }

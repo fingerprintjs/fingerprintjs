@@ -76,44 +76,41 @@ export function loadSource<TOptions, TValue>(
 
     // `awaitIfAsync` is used instead of just `await` in order to measure the duration of synchronous sources
     // correctly (other microtasks won't affect the duration).
-    awaitIfAsync(
-      () => source(sourceOptions),
-      (...loadArgs) => {
-        const loadDuration = Date.now() - loadStartTime
+    awaitIfAsync(source.bind(null, sourceOptions), (...loadArgs) => {
+      const loadDuration = Date.now() - loadStartTime
 
-        // Source loading failed
-        if (!loadArgs[0]) {
-          return resolveLoad(() => ({ error: ensureErrorWithMessage(loadArgs[1]), duration: loadDuration }))
-        }
+      // Source loading failed
+      if (!loadArgs[0]) {
+        return resolveLoad(() => ({ error: ensureErrorWithMessage(loadArgs[1]), duration: loadDuration }))
+      }
 
-        const loadResult = loadArgs[1]
+      const loadResult = loadArgs[1]
 
-        // Source loaded with the final result
-        if (isFinalResultLoaded(loadResult)) {
-          return resolveLoad(() => ({ value: loadResult, duration: loadDuration }))
-        }
+      // Source loaded with the final result
+      if (isFinalResultLoaded(loadResult)) {
+        return resolveLoad(() => ({ value: loadResult, duration: loadDuration }))
+      }
 
-        // Source loaded with "get" stage
-        resolveLoad(
-          () =>
-            new Promise((resolveGet) => {
-              const getStartTime = Date.now()
+      // Source loaded with "get" stage
+      resolveLoad(
+        () =>
+          new Promise<Component<TValue>>((resolveGet) => {
+            const getStartTime = Date.now()
 
-              awaitIfAsync(loadResult, (...getArgs) => {
-                const duration = loadDuration + Date.now() - getStartTime
+            awaitIfAsync(loadResult, (...getArgs) => {
+              const duration = loadDuration + Date.now() - getStartTime
 
-                // Source getting failed
-                if (!getArgs[0]) {
-                  return resolveGet({ error: ensureErrorWithMessage(getArgs[1]), duration })
-                }
+              // Source getting failed
+              if (!getArgs[0]) {
+                return resolveGet({ error: ensureErrorWithMessage(getArgs[1]), duration })
+              }
 
-                // Source getting succeeded
-                resolveGet({ value: getArgs[1], duration })
-              })
-            }),
-        )
-      },
-    )
+              // Source getting succeeded
+              resolveGet({ value: getArgs[1], duration })
+            })
+          }),
+      )
+    })
   })
 
   return function getComponent() {

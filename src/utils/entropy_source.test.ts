@@ -262,7 +262,7 @@ describe('Entropy source utilities', () => {
       expect(sources.five).toHaveBeenCalledTimes(1)
     })
 
-    it('runs source\'s "load" phase once in total and "get" phase once per each getter call', async () => {
+    it('runs sources\' "load" phase once in total and "get" phase once per each getter call', async () => {
       const sourceGetters = {
         foo: jasmine.createSpy().and.returnValues('one', 'two', 'three'),
         bar: jasmine.createSpy().and.returnValues(1, 2, 3),

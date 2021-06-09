@@ -13,8 +13,8 @@ export function requestIdleCallbackIfAvailable(fallbackTimeout: number, deadline
   }
 }
 
-export function isPromise<T>(value: Promise<T> | unknown): value is Promise<T> {
-  return value && typeof (value as Promise<T>).then === 'function'
+export function isPromise<T>(value: PromiseLike<T> | unknown): value is PromiseLike<T> {
+  return value && typeof (value as PromiseLike<T>).then === 'function'
 }
 
 /**

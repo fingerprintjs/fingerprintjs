@@ -52,19 +52,23 @@ export default function getAudioFingerprint(): number | (() => Promise<number>) 
   compressor.connect(context.destination)
   oscillator.start(0)
 
-  const stopRenderingAudio = startRenderingAudio(context)
-  return async () => {
-    let buffer: AudioBuffer
-    try {
-      buffer = await stopRenderingAudio()
-    } catch (error) {
+  const [renderPromise, finishRendering] = startRenderingAudio(context)
+  const fingerprintPromise = renderPromise.then(
+    (buffer) => getHash(buffer.getChannelData(0).subarray(hashFromIndex)),
+    (error) => {
       if (error.name === InnerErrorName.Timeout || error.name === InnerErrorName.Suspended) {
         return SpecialFingerprint.Timeout
       }
       throw error
-    }
+    },
+  )
 
-    return getHash(buffer.getChannelData(0).subarray(hashFromIndex))
+  // Suppresses the console error message in case when the fingerprint fails before requested
+  fingerprintPromise.catch(() => undefined)
+
+  return () => {
+    finishRendering()
+    return fingerprintPromise
   }
 }
 
@@ -84,7 +88,7 @@ function startRenderingAudio(context: OfflineAudioContext) {
   const renderRetryDelay = 500
   const runningMaxAwaitTime = 500
   const runningSufficientTime = 5000
-  let finalize: () => void
+  let finalize = () => undefined as void
 
   const resultPromise = new Promise<AudioBuffer>((resolve, reject) => {
     let isFinalized = false
@@ -147,13 +151,7 @@ function startRenderingAudio(context: OfflineAudioContext) {
     }
   })
 
-  // Suppresses the console error message in case when the rendering fails before getting finalized
-  resultPromise.catch(() => undefined)
-
-  return () => {
-    finalize()
-    return resultPromise
-  }
+  return [resultPromise, finalize] as const
 }
 
 function getHash(signal: ArrayLike<number>): number {
