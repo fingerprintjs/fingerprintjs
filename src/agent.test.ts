@@ -23,8 +23,8 @@ describe('Agent', () => {
     }
   })
 
-  it('loads sources when created', async () => {
-    // Checking by checking whether the screen frame is watched
+  it('loads entropy sources when created', async () => {
+    // Checking whether agent loads entropy sources when created by checking whether the screen frame is watched
     resetScreenFrameWatch()
 
     await withMockProperties(

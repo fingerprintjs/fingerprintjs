@@ -102,7 +102,7 @@ Entropy component must be a simple JS value that can be JSON-encoded.
 
 Entropy source runs in 2 stages: "load" and "get":
 - "Load" runs once when the agent's `load` function is called.
-    It must do as much work of the source as possible to make the "get" phase as fast as possible.
+    It must do as much work on the source as possible to make the "get" phase as fast as possible.
     It may start background processes that will run indefinitely or until the "get" phase runs.
 - "Get" runs once per each agent's `get` function call.
     It must be as fast as possible.
