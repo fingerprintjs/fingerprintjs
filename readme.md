@@ -16,6 +16,9 @@
   <a href="https://www.jsdelivr.com/package/npm/@fingerprintjs/fingerprintjs">
     <img src="https://img.shields.io/jsdelivr/npm/hm/@fingerprintjs/fingerprintjs.svg" alt="Monthly downloads from jsDelivr">
   </a>
+  <a href="https://discord.gg/39EpE2neBg">
+    <img src="https://img.shields.io/discord/852099967190433792?label=Discord&logo=Discord&logoColor=white" alt="Discord server">
+  </a>
 </p>
 
 FingerprintJS is a browser fingerprinting library that queries browser attributes and computes a hashed visitor identifier from them. Unlike cookies and local storage, a fingerprint stays the same in incognito/private mode and even when browser data is purged.
