@@ -16,8 +16,10 @@
   <a href="https://www.jsdelivr.com/package/npm/@fingerprintjs/fingerprintjs">
     <img src="https://img.shields.io/jsdelivr/npm/hm/@fingerprintjs/fingerprintjs.svg" alt="Monthly downloads from jsDelivr">
   </a>
+</p>
+<p align="center">
   <a href="https://discord.gg/39EpE2neBg">
-    <img src="https://img.shields.io/discord/852099967190433792?label=Discord&logo=Discord&logoColor=white" alt="Discord server">
+    <img src="https://img.shields.io/discord/852099967190433792?style=for-the-badge&label=Discord&logo=Discord&logoColor=white" alt="Discord server">
   </a>
 </p>
 
