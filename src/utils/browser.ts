@@ -215,6 +215,9 @@ export function exitFullscreen(): Promise<void> {
 
 /**
  * Checks whether the device runs on Android without using user-agent.
+ *
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function isAndroid(): boolean {
   const isItChromium = isChromium()
