@@ -28,6 +28,7 @@ export { sources } from './sources'
 export { getScreenFrame } from './sources/screen_frame'
 export {
   getFullscreenElement,
+  isAndroid,
   isTrident,
   isEdgeHTML,
   isChromium,
