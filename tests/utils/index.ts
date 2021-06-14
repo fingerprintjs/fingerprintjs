@@ -85,3 +85,10 @@ export async function withCSS<T>(css: string, action: () => Promise<T> | T): Pro
     styleElement.parentNode?.removeChild(styleElement)
   }
 }
+
+export function holdLoop(timeMs: number): void {
+  const startTime = Date.now()
+  while (Date.now() < startTime + timeMs) {
+    // Do nothing
+  }
+}

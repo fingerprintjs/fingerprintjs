@@ -2,7 +2,9 @@ import { replaceNaN, round, toFloat } from '../utils/data'
 import { exitFullscreen, getFullscreenElement } from '../utils/browser'
 
 /**
- * The order matches the CSS side order: top, right, bottom, left
+ * The order matches the CSS side order: top, right, bottom, left.
+ *
+ * @ignore Named array elements aren't used because of multiple TypeScript compatibility complaints from users
  */
 export type FrameSize = [number | null, number | null, number | null, number | null]
 
@@ -15,12 +17,12 @@ let screenFrameSizeTimeoutId: number | undefined
 
 /**
  * Starts watching the screen frame size. When a non-zero size appears, the size is saved and the watch is stopped.
- * Later, when `getScreenFrame` is called, it will return the saved non-zero size if the current size is null.
+ * Later, when `getScreenFrame` runs, it will return the saved non-zero size if the current size is null.
  *
  * This trick is required to mitigate the fact that the screen frame turns null in some cases.
  * See more on this at https://github.com/fingerprintjs/fingerprintjs/issues/568
  */
-export function watchScreenFrame(): void {
+function watchScreenFrame() {
   if (screenFrameSizeTimeoutId !== undefined) {
     return
   }
@@ -47,41 +49,56 @@ export function resetScreenFrameWatch(): void {
   screenFrameBackup = undefined
 }
 
-export async function getScreenFrame(): Promise<FrameSize> {
-  let frameSize = getCurrentScreenFrame()
+/**
+ * For tests only
+ */
+export function hasScreenFrameBackup(): boolean {
+  return !!screenFrameBackup
+}
 
-  if (isFrameSizeNull(frameSize)) {
-    if (screenFrameBackup) {
-      return [...screenFrameBackup]
+export function getScreenFrame(): () => Promise<FrameSize> {
+  watchScreenFrame()
+
+  return async () => {
+    let frameSize = getCurrentScreenFrame()
+
+    if (isFrameSizeNull(frameSize)) {
+      if (screenFrameBackup) {
+        return [...screenFrameBackup]
+      }
+
+      if (getFullscreenElement()) {
+        // Some browsers set the screen frame to zero when programmatic fullscreen is on.
+        // There is a chance of getting a non-zero frame after exiting the fullscreen.
+        // See more on this at https://github.com/fingerprintjs/fingerprintjs/issues/568
+        await exitFullscreen()
+        frameSize = getCurrentScreenFrame()
+      }
     }
 
-    if (getFullscreenElement()) {
-      // Some browsers set the screen frame to zero when programmatic fullscreen is on.
-      // There is a chance of getting a non-zero frame after exiting the fullscreen.
-      // See more on this at https://github.com/fingerprintjs/fingerprintjs/issues/568
-      await exitFullscreen()
-      frameSize = getCurrentScreenFrame()
+    if (!isFrameSizeNull(frameSize)) {
+      screenFrameBackup = frameSize
     }
-  }
 
-  if (!isFrameSizeNull(frameSize)) {
-    screenFrameBackup = frameSize
+    return frameSize
   }
-
-  return frameSize
 }
 
 /**
  * Sometimes the available screen resolution changes a bit, e.g. 1900x1440 → 1900x1439. A possible reason: macOS Dock
  * shrinks to fit more icons when there is too little space. The rounding is used to mitigate the difference.
  */
-export async function getRoundedScreenFrame(): Promise<FrameSize> {
-  const processSize = (sideSize: FrameSize[number]) => (sideSize === null ? null : round(sideSize, roundingPrecision))
-  const frameSize = await getScreenFrame()
+export function getRoundedScreenFrame(): () => Promise<FrameSize> {
+  const screenFrameGetter = getScreenFrame()
 
-  // It might look like I don't know about `for` and `map`.
-  // In fact, such code is used to avoid TypeScript issues without using `as`.
-  return [processSize(frameSize[0]), processSize(frameSize[1]), processSize(frameSize[2]), processSize(frameSize[3])]
+  return async () => {
+    const frameSize = await screenFrameGetter()
+    const processSize = (sideSize: FrameSize[number]) => (sideSize === null ? null : round(sideSize, roundingPrecision))
+
+    // It might look like I don't know about `for` and `map`.
+    // In fact, such code is used to avoid TypeScript issues without using `as`.
+    return [processSize(frameSize[0]), processSize(frameSize[1]), processSize(frameSize[2]), processSize(frameSize[3])]
+  }
 }
 
 function getCurrentScreenFrame(): FrameSize {
