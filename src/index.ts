@@ -24,6 +24,7 @@ export default { load, hashComponents, componentsToDebugString }
 export const murmurX64Hash128 = x64hash128
 export {
   getFullscreenElement,
+  isAndroid,
   isTrident,
   isEdgeHTML,
   isChromium,
