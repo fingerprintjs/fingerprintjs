@@ -305,20 +305,20 @@ export function isApplicable(): boolean {
 export async function getBlockedSelectors<T extends string>(selectors: readonly T[]): Promise<{ [K in T]?: true }> {
   const d = document
   const root = d.createElement('div')
-  const elements: HTMLElement[] = []
+  const elements = new Array<HTMLElement>(selectors.length)
   const blockedSelectors: { [K in T]?: true } = {} // Set() isn't used just in case somebody need older browser support
 
   forceShow(root)
 
   // First create all elements that can be blocked. If the DOM steps below are done in a single cycle,
   // browser will alternate tree modification and layout reading, that is very slow.
-  for (const selector of selectors) {
-    const element = selectorToElement(selector)
+  for (let i = 0; i < selectors.length; ++i) {
+    const element = selectorToElement(selectors[i])
     const holder = d.createElement('div') // Protects from unwanted effects of `+` and `~` selectors of filters
     forceShow(holder)
     holder.appendChild(element)
     root.appendChild(holder)
-    elements.push(element)
+    elements[i] = element
   }
 
   // document.body can be null while the page is loading

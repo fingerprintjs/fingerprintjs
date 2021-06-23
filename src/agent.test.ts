@@ -1,12 +1,13 @@
 import { version } from '../package.json'
 import { withMockProperties } from '../tests/utils'
-import { Agent, OpenAgent } from './agent'
+import { load as loadAgent } from './agent'
 import { sources } from './sources'
-import { resetScreenFrameWatch } from './sources/screen_frame'
+import { hasScreenFrameBackup, resetScreenFrameWatch } from './sources/screen_frame'
+import { wait } from './utils/async'
 
 describe('Agent', () => {
   it('collects all components without unexpected errors and makes visitorId', async () => {
-    const agent = new OpenAgent()
+    const agent = await loadAgent({ delayFallback: 0 })
     const result = await agent.get()
     expect(typeof result.visitorId).toBe('string')
     expect(result.visitorId).not.toEqual('')
@@ -22,9 +23,9 @@ describe('Agent', () => {
     }
   })
 
-  it('watches screen frame before calling `get()`', async () => {
+  it('loads entropy sources when created', async () => {
+    // Checking whether agent loads entropy sources when created by checking whether the screen frame is watched
     resetScreenFrameWatch()
-    let agent: Agent
 
     await withMockProperties(
       screen,
@@ -37,24 +38,19 @@ describe('Agent', () => {
         availTop: { get: () => 0 },
       },
       async () => {
-        agent = new OpenAgent()
-      },
-    )
+        const agent = await loadAgent({ delayFallback: 0 })
+        let areSourcesLoaded = false
 
-    // Emulates turning on UI fullscreen in Chrome on macOS
-    await withMockProperties(
-      screen,
-      {
-        width: { get: () => 1200 },
-        height: { get: () => 800 },
-        availWidth: { get: () => 1200 },
-        availHeight: { get: () => 800 },
-        availLeft: { get: () => 0 },
-        availTop: { get: () => 0 },
-      },
-      async () => {
-        const result = await agent.get()
-        expect(result.components.screenFrame.value).toEqual([0, 0, 40, 100])
+        // The screen frame source may be not loaded yet at this moment of time, so we need to wait
+        for (let i = 0; i < 20 && !areSourcesLoaded; ++i) {
+          if (hasScreenFrameBackup()) {
+            areSourcesLoaded = true
+          }
+          await wait(50)
+        }
+
+        expect(areSourcesLoaded).withContext('Entropy sources are not loaded').toBeTrue()
+        await agent.get() // To wait until the background processes complete
       },
     )
   })

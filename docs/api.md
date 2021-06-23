@@ -65,18 +65,18 @@ const FingerprintJS = require('@fingerprintjs/fingerprintjs')
 
 ## API
 
-#### `FingerprintJS.load({ delayFallback?: number }): Promise<Agent>`
+#### `FingerprintJS.load({ delayFallback?: number, debug?: boolean }): Promise<Agent>`
 
 Builds an instance of Agent and waits a delay required for a proper operation.
 We recommend calling it as soon as possible.
 `delayFallback` is an optional parameter that sets duration (milliseconds) of the fallback for browsers that don't support [requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback);
 it has a good default value which we don't recommend to change.
+`debug: true` prints debug messages to the console.
 
-#### `agent.get({ debug?: boolean }): Promise<object>`
+#### `agent.get(): Promise<object>`
 
 A method of an Agent instance that gets the visitor identifier.
 We recommend calling it later, when you really need the identifier, to increase the chance of getting an accurate identifier.
-`debug: true` prints debug messages to the console.
 Result object fields:
 
 - `visitorId` The visitor identifier
