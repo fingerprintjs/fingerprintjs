@@ -188,3 +188,7 @@ See more details and learn how to run the library in old browsers in the [browse
 ## Contributing
 
 See the [contributing guidelines](contributing.md) to learn how to start a playground, test and build.
+
+## Useful links
+
+* [Easy to use bot detection in JS, new FingerprintJS project](https://github.com/fingerprintjs/botd)
