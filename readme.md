@@ -90,7 +90,7 @@ const fpPromise = FingerprintJS.load()
 FingerprintJS Pro is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
 Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in 99.5% identification accuracy.
 
-**You can try Pro without usage limits for 30 days- no credit card required.**
+**You can try Pro without usage limits for 30 days - no credit card required.**
 
 <p align="center">
   <a href="https://fingerprintjs.com/github/">
