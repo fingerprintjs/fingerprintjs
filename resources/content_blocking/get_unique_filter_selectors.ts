@@ -4,6 +4,7 @@
 
 import * as path from 'path'
 import { promises as fsAsync } from 'fs'
+import { areSetsEqual, maxInIterator } from '../../src/utils/data'
 import { eachLineInFile } from './utils'
 
 const inputDirectory = path.join(__dirname, 'blocked_selectors')
@@ -15,13 +16,13 @@ async function run() {
 }
 
 async function getUniqueFilterSelectors(directoryPath: string) {
+  // Loading the selectors of the filters
   const selectorsOfFilters = await getSelectorsFromDirectory(directoryPath)
-  const uniqueSelectorsOfFilters = new Map<string, Set<string>>()
+
+  // Building a cache. For every selector, the cache stores the list of filters that contain the selector.
   const filtersOfSelectors = new Map<string, Set<string>>()
 
   selectorsOfFilters.forEach((selectors, filterName) => {
-    uniqueSelectorsOfFilters.set(filterName, new Set())
-
     selectors.forEach((selector) => {
       let filtersOfSelector = filtersOfSelectors.get(selector)
       if (!filtersOfSelector) {
@@ -32,12 +33,61 @@ async function getUniqueFilterSelectors(directoryPath: string) {
     })
   })
 
+  // Assigning the unique selectors to their filters
+  const uniqueSelectorsOfFilters = new Map<string, Set<string>>()
+
   filtersOfSelectors.forEach((filtersOfSelector, selector) => {
     if (filtersOfSelector.size === 1) {
       filtersOfSelector.forEach((filterName) => {
-        uniqueSelectorsOfFilters.get(filterName)?.add(selector)
+        let uniqueSelectorsOfFilter = uniqueSelectorsOfFilters.get(filterName)
+        if (!uniqueSelectorsOfFilter) {
+          uniqueSelectorsOfFilter = new Set()
+          uniqueSelectorsOfFilters.set(filterName, uniqueSelectorsOfFilter)
+        }
+        uniqueSelectorsOfFilter.add(selector)
       })
     }
+  })
+
+  // Finding almost unique selectors for each of the filters that have no unique selectors.
+  // It's better than nothing. Such way we will be able to tell the following cases apart:
+  // - A visitor uses filter "A" (filter "A" has no unique selectors),
+  // - A visitor uses filter "AB" ("AB" is a filter that includes the "A" filter inside).
+  selectorsOfFilters.forEach((selectors, filterName) => {
+    if (uniqueSelectorsOfFilters.has(filterName)) {
+      return
+    }
+
+    // Finding the filter's selector that appears in the fewest number of other filters
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const rarestSelector = maxInIterator(selectors.values(), (selector) => -filtersOfSelectors.get(selector)!.size)
+    if (rarestSelector === undefined) {
+      print(`Filter "${filterName}" has no selectors`)
+      return
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const filtersOfRarestSelector = filtersOfSelectors.get(rarestSelector)!
+    {
+      let message = `Filter "${filterName}" is found to be included in the following filters:`
+      filtersOfRarestSelector.forEach((otherFilterName) => {
+        if (otherFilterName !== filterName) {
+          message += `\n - ${otherFilterName}`
+        }
+      })
+      print(message)
+    }
+
+    // Finding the selectors that appear in the same filters that the found selector
+    const uniqueSelectorsOfFilter = new Set<string>()
+    uniqueSelectorsOfFilters.set(filterName, uniqueSelectorsOfFilter)
+
+    selectors.forEach((selector) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      if (areSetsEqual(filtersOfSelectors.get(selector)!, filtersOfRarestSelector)) {
+        uniqueSelectorsOfFilter.add(selector)
+      }
+    })
   })
 
   return uniqueSelectorsOfFilters
@@ -92,6 +142,11 @@ function stringifyResult(filterSelectors: Map<string, Set<string>>) {
     },
     2,
   )
+}
+
+function print(message: string) {
+  // eslint-disable-next-line no-console
+  console.log(message)
 }
 
 run().catch((error) => {

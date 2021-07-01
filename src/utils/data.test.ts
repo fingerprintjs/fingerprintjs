@@ -1,4 +1,4 @@
-import { parseSimpleCssSelector, round, toFloat, toInt } from './data'
+import { areSetsEqual, maxInIterator, parseSimpleCssSelector, round, toFloat, toInt } from './data'
 
 describe('Data utilities', () => {
   it('converts to integer', () => {
@@ -58,5 +58,38 @@ describe('Data utilities', () => {
       undefined,
       { class: ['mainmenu'], style: ['padding:10px 0 0 0 !important;'] },
     ])
+  })
+
+  it('checks whether sets are equal', () => {
+    if (typeof Set === 'undefined') {
+      pending("The browser doesn't support Set")
+    }
+
+    const set = new Set(['foo', 'bar'])
+    expect(areSetsEqual(set, set)).toBeTrue()
+    expect(areSetsEqual(new Set(['hello', 1, set]), new Set([1, set, 'hello']))).toBeTrue()
+    expect(areSetsEqual(new Set([{}]), new Set([{}]))).toBeFalse()
+    expect(areSetsEqual(new Set(), new Set())).toBeTrue()
+    expect(areSetsEqual(new Set(['Hello', 'world']), new Set(['Hello, world']))).toBeFalse()
+  })
+
+  it('gets maximum in iterator', () => {
+    function* generator() {
+      yield { val: 3 }
+      yield { val: 2 }
+      yield { val: 6 }
+      yield { val: 1 }
+      yield { val: 5 }
+      yield { val: 4 }
+      yield { val: 8 }
+      yield { val: 7 }
+    }
+    function* emptyGenerator() {
+      // Nothing
+    }
+    expect(maxInIterator(generator(), (item) => item.val)).toEqual({ val: 8 })
+    expect(maxInIterator(generator(), (item) => -item.val)).toEqual({ val: 1 })
+    expect(maxInIterator(generator(), (item) => (item.val % 2 === 0 ? item.val : item.val * 2))).toEqual({ val: 7 })
+    expect(maxInIterator(emptyGenerator(), () => Math.random())).toBeUndefined()
   })
 })

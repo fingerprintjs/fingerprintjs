@@ -131,17 +131,7 @@ I prefer selectors that depict features of filters (e.g. have foreign words or d
 they increase the stability of selectors.
 Avoid selectors with `iframe` if possible as they produce excess load on browsers.
 
-#### 5. Handle empty filters
-
-If you see a filter with no unique selectors, it shall mean that the filter is included into another filter (see notes in the filter list above).
-In this case, temporary move the files of the filters that include that filter out of the `resources/content_blocking/blocked_selectors` directory,
-run `get_unique_filter_selectors.ts` again, see selectors for the filter in the new version of the `unique_filter_selectors.json` file
-and return the moved files back (to the initial state).
-Such way you'll get selectors that identify both the included, and the including filters.
-
-Repeat the steps for all filters with no unique selectors.
-
-#### 6. EasyList Android case
+#### 5. EasyList Android case
 
 AdGuard on Android blocks slightly different selectors than AdGuard on iOS.
 Sometimes it leads to false positive EasyList detection when AdGuard Base filter is used.

@@ -106,3 +106,46 @@ export function parseSimpleCssSelector(
 
   return [tag, attributes]
 }
+
+export function areSetsEqual(set1: Set<unknown>, set2: Set<unknown>): boolean {
+  if (set1 === set2) {
+    return true
+  }
+  if (set1.size !== set2.size) {
+    return false
+  }
+
+  if (set1.values) {
+    for (let iter = set1.values(), step = iter.next(); !step.done; step = iter.next()) {
+      if (!set2.has(step.value)) {
+        return false
+      }
+    }
+    return true
+  } else {
+    // An implementation for browsers that don't support Set iterators
+    let areEqual = true
+    set1.forEach((value) => {
+      if (areEqual && !set2.has(value)) {
+        areEqual = false
+      }
+    })
+    return areEqual
+  }
+}
+
+export function maxInIterator<T>(iterator: Iterator<T>, getItemScore: (item: T) => number): T | undefined {
+  let maxItem: T | undefined
+  let maxItemScore: number | undefined
+
+  for (let step = iterator.next(); !step.done; step = iterator.next()) {
+    const item = step.value
+    const score = getItemScore(item)
+    if (maxItemScore === undefined || score > maxItemScore) {
+      maxItem = item
+      maxItemScore = score
+    }
+  }
+
+  return maxItem
+}
