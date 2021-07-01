@@ -28,15 +28,18 @@ async function getUniqueSelectorsFromDirectory(directoryPath: string) {
     if (!/^[^.].*\.txt$/.test(directoryItem.name)) {
       continue
     }
-    await eachSelectorInFile(path.join(inputDirectory, directoryItem.name), (selector) => {
+    const selectors = await getSelectorsFromFile(path.join(inputDirectory, directoryItem.name))
+    for (const selector of selectors) {
       uniqueSelectors.add(selector)
-    })
+    }
   }
 
   return uniqueSelectors
 }
 
-async function eachSelectorInFile(filePath: string, callback: (selector: string) => void | Promise<void>) {
+async function getSelectorsFromFile(filePath: string) {
+  const selectors: string[] = []
+
   await eachLineInFile(filePath, async (rule) => {
     const selectorMatch = /^##(.+)$/.exec(rule)
     if (!selectorMatch) {
@@ -51,8 +54,10 @@ async function eachSelectorInFile(filePath: string, callback: (selector: string)
     if (/[\s:]/.test(selectorWithoutAttributes)) {
       return
     }
-    await callback(selector)
+    selectors.push(selector)
   })
+
+  return selectors
 }
 
 async function makeTesterHtml(selectors: { forEach: (callback: (selector: string) => void) => void }) {
