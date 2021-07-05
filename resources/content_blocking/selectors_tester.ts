@@ -16,8 +16,23 @@ copyButton.addEventListener('click', (event) => {
   document.execCommand('copy')
 })
 
+const downloadButton = document.createElement('button')
+downloadButton.textContent = 'Save to file'
+downloadButton.addEventListener('click', (event) => {
+  event.preventDefault()
+  const copier = document.createElement('a')
+  copier.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(display.value)}`)
+  copier.setAttribute('download', '')
+  copier.style.display = 'none'
+  document.body.appendChild(copier)
+  copier.click()
+  document.body.removeChild(copier)
+})
+
 document.body.appendChild(display)
 document.body.appendChild(copyButton)
+document.body.appendChild(document.createTextNode(' '))
+document.body.appendChild(downloadButton)
 
 // Wait a bit to draw the initial UI
 setTimeout(async () => {
