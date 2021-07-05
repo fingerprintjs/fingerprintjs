@@ -1,8 +1,6 @@
 # User input
 /resources/content_blocking/blocked_selectors/
 !/resources/content_blocking/blocked_selectors/.gitkeep
-/resources/content_blocking/filters/
-!/resources/content_blocking/filters/.gitkeep
 
 # Project artifacts
 /dist/

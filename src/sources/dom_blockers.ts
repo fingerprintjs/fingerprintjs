@@ -267,7 +267,7 @@ interface Options {
 }
 
 /**
- * The returned array order means nothing (it's always sorted alphabetically).
+ * The order of the returned array means nothing (it's always sorted alphabetically).
  *
  * Notice that the source is slightly unstable.
  * Safari provides a 2-taps way to disable all content blockers on a page temporarily.
