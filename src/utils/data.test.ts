@@ -65,12 +65,20 @@ describe('Data utilities', () => {
       pending("The browser doesn't support Set")
     }
 
-    const set = new Set(['foo', 'bar'])
+    const makeSet = (...values: unknown[]): Set<unknown> => {
+      const set = new Set() // Just `new Set(values)` doesn't work in IE11
+      for (const value of values) {
+        set.add(value)
+      }
+      return set
+    }
+
+    const set = makeSet('foo', 'bar')
     expect(areSetsEqual(set, set)).toBeTrue()
-    expect(areSetsEqual(new Set(['hello', 1, set]), new Set([1, set, 'hello']))).toBeTrue()
-    expect(areSetsEqual(new Set([{}]), new Set([{}]))).toBeFalse()
-    expect(areSetsEqual(new Set(), new Set())).toBeTrue()
-    expect(areSetsEqual(new Set(['Hello', 'world']), new Set(['Hello, world']))).toBeFalse()
+    expect(areSetsEqual(makeSet('hello', 1, set), makeSet(1, set, 'hello'))).toBeTrue()
+    expect(areSetsEqual(makeSet({}), makeSet({}))).toBeFalse()
+    expect(areSetsEqual(makeSet(), makeSet())).toBeTrue()
+    expect(areSetsEqual(makeSet('Hello', 'world'), makeSet('Hello, world'))).toBeFalse()
   })
 
   it('gets maximum in iterator', () => {

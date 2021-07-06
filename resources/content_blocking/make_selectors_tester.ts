@@ -5,7 +5,6 @@
 import * as path from 'path'
 import { promises as fsAsync } from 'fs'
 import * as rollup from 'rollup'
-import { makeDeferred } from '../../../../src/utils/async'
 import filterConfig, { FilterList } from './filters'
 import { fetchFilter } from './utils'
 
@@ -34,7 +33,8 @@ async function fetchUniqueSelectors(filterConfig: FilterList) {
 
   printProgress()
 
-  const abortPromise = makeDeferred()
+  let abort: (() => void) | undefined
+  const abortPromise = new Promise((resolve) => (abort = resolve))
   try {
     await Promise.all(
       filters.map(async (filter) => {
@@ -55,7 +55,7 @@ async function fetchUniqueSelectors(filterConfig: FilterList) {
       }),
     )
   } finally {
-    abortPromise.resolve(undefined)
+    abort?.()
     clearProgress()
   }
 
