@@ -26,7 +26,7 @@ const filters: FilterList = {
     title: 'AdGuard Tracking Protection',
     file: 'https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_3_Spyware/filter.txt',
   },
-  adGuardSocialMedia: {
+  adGuardSocial: {
     title: 'AdGuard Social Media',
     file: 'https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_4_Social/filter.txt',
   },
@@ -75,6 +75,7 @@ const filters: FilterList = {
   },
   easyPrivacy: {
     title: 'EasyPrivacy',
+    note: 'Can have no blocked selectors',
     file: 'https://easylist.to/easylist/easyprivacy.txt',
   },
   easyListCookie: {
@@ -123,6 +124,7 @@ const filters: FilterList = {
   },
   easyListHebrew: {
     title: 'EasyList Hebrew',
+    note: 'Can have no blocked selectors',
     file: 'https://raw.githubusercontent.com/easylist/EasyListHebrew/master/EasyListHebrew.txt',
   },
   easyListLithuania: {
@@ -148,6 +150,7 @@ const filters: FilterList = {
   },
   fanboyThirdpartyFonts: {
     title: 'Fanboy Thirdparty Fonts Filters',
+    note: 'Can have no blocked selectors',
     file: 'https://www.fanboy.co.nz/fanboy-antifonts.txt',
   },
   fanboySocial: {
@@ -164,6 +167,7 @@ const filters: FilterList = {
    */
   peterLowesBlocklist: {
     title: "Peter Lowe's Blocklist",
+    note: 'Can have no blocked selectors',
     file: 'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=0&mimetype=plaintext',
   },
   webAnnoyancesUltralist: {
@@ -180,7 +184,7 @@ const filters: FilterList = {
   },
   ruAd: {
     title: 'RU AdList',
-    note: "Doesn't work in AdGuard for some reason",
+    note: "Sometimes doesn't work in AdGuard for some reason",
     file: 'https://easylist-downloads.adblockplus.org/advblock.txt',
   },
   icelandicAbp: {

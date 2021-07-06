@@ -81,7 +81,7 @@ describe('Sources', () => {
       await withBlockedSelectors(
         [
           ...filters.frellwitSwedish.slice(0, 2),
-          ...filters.easyListCookie.slice(0, 3),
+          ...filters.easyListCookie.slice(0, 4),
           ...filters.listKr,
           ...filters.adGuardBase,
           ...filters.adGuardMobile,
