@@ -34,7 +34,7 @@ export const filters = {
   ],
   adBlockPersian: [
     '#navbar_notice_50',
-    'a[href^="https://iqoption.com/lp/mobile-partner/?aff="]',
+    'a[href^="http://g1.v.fwmrm.net/ad/"]',
     '.kadr',
     'TABLE[width="140px"]',
     '#divAgahi',
@@ -47,39 +47,45 @@ export const filters = {
     '#AdBlockDialog',
   ],
   adGuardAnnoyances: ['amp-embed[type="zen"]', '.hs-sosyal', '#cookieconsentdiv', 'div[class^="app_gdpr"]', '.as-oil'],
-  adGuardBase: ['#gads_middle', '.tjads', '.BetterJsPopOverlay', '#ad_300X250', '#bannerfloat22'],
+  adGuardBase: [
+    '#ad-fullbanner2-billboard-outer',
+    '.stky-ad-footer',
+    '.BetterJsPopOverlay',
+    '#ad_300X250',
+    '#bannerfloat22',
+  ],
   adGuardChinese: [
-    'a[href*=".123ch.cn"]',
+    '#piao_div_0[style*="width:140px;"]',
     'a[href*=".ttz5.cn"]',
     'a[href*=".yabovip2027.com/"]',
     '.tm3all2h4b',
-    '#j-new-ad',
+    '#duilian_left',
   ],
   adGuardFrench: [
-    '#div_banniere_pub',
-    'a[href^="https://secure.securitetotale.fr/"]',
-    'a[href*="fducks.com/"]',
-    'a[href^="http://frtyd.com/"]',
-    '.publicite1',
+    '#anAdScGp300x25',
+    'a[href*=".kfiopkln.com/"]',
+    'a[href^="https://jsecoin.com/o/?"]',
+    'a[href^="https://www.clickadu.com/?"]',
+    '.bandeauClosePub',
   ],
   adGuardGerman: [
     '.banneritemwerbung_head_1',
     '.boxstartwerbung',
     '.werbung3',
-    'a[href^="http://www.ichwuerde.com/?ref="]',
-    'a[href^="http://partners.adklick.de/tracking.php?"]',
+    'a[href^="http://www.eis.de/index.phtml?refid="]',
+    'a[href^="https://www.tipico.com/?affiliateId="]',
   ],
   adGuardJapanese: [
-    '.ad-text-blockA01',
-    '._popIn_infinite_video',
-    '[class^=blogroll_wrapper]',
+    '#kauli_yad_1',
+    '.adArticleSidetile',
+    '.ads_entrymore',
     'a[href^="http://ad2.trafficgate.net/"]',
     'a[href^="http://www.rssad.jp/"]',
   ],
   adGuardMobile: ['amp-auto-ads', '#mgid_iframe', '.amp_ad', 'amp-sticky-ad', '.plugin-blogroll'],
   adGuardRussian: [
     'a[href^="https://ya-distrib.ru/r/"]',
-    '[onclick*=".twkv.ru"]',
+    'a[href^="https://ad.letmeads.com/"]',
     '.reclama',
     'div[id^="smi2adblock"]',
     'div[id^="AdFox_banner_"]',
@@ -113,7 +119,7 @@ export const filters = {
     'a[href^="http://www.installads.net/"]',
   ],
   bulgarian: ['td#freenet_table_ads', '#newAd', '#ea_intext_div', '.lapni-pop-over', '#xenium_hot_offers'],
-  easyList: ['[lazy-ad="leftthin_banner"]', '#ad_300x250_2', '#interstitialAd', '#wide_ad_unit', '.showcaseAd'],
+  easyList: ['#adlabelheader', '#anAdScGame300x250', '#adTakeOverLeft', '#ad_LargeRec01', '#adundergame'],
   easyListChina: [
     'a[href*=".wensixuetang.com/"]',
     'A[href*="/hth107.com/"]',
@@ -121,7 +127,7 @@ export const filters = {
     '.frontpageAdvM',
     '#taotaole',
   ],
-  easyListCookie: ['#CookieEU', '#__cookies_', '#les_cookies', '.asset_balaNotification', '.gdpr-tab'],
+  easyListCookie: ['#Button_Cookie', '#CWCookie', '#CookieCon', '#DGPR', '#PnlCookie'],
   easyListCzechSlovak: ['#onlajny-stickers', '#reklamni-box', '.reklama-megaboard', '.sklik', '[id^="sklikReklama"]'],
   easyListDutch: [
     '#advertentie',
@@ -131,11 +137,11 @@ export const filters = {
     '#semilo-lrectangle',
   ],
   easyListGermany: [
-    '#LxWerbeteaser',
+    '#nativendo-hometop',
     'a[href^="http://www.kontakt-vermittler.de/?wm="]',
-    '.werbung301',
-    '.ads_bueroklammer',
-    '#Werbung_Sky',
+    '#gwerbung',
+    'a[href^="https://marketing.net.brillen.de/"]',
+    '.werbenbox',
   ],
   easyListItaly: [
     '.box_adv_annunci',
@@ -267,7 +273,7 @@ interface Options {
 }
 
 /**
- * The returned array order means nothing (it's always sorted alphabetically).
+ * The order of the returned array means nothing (it's always sorted alphabetically).
  *
  * Notice that the source is slightly unstable.
  * Safari provides a 2-taps way to disable all content blockers on a page temporarily.
@@ -290,7 +296,7 @@ export default async function getDomBlockers({ debug }: Options = {}): Promise<s
   const activeBlockers = filterNames.filter((filterName) => {
     const selectors = filters[filterName]
     const blockedCount = countTruthy(selectors.map((selector) => blockedSelectors[selector]))
-    return blockedCount > selectors.length * 0.5
+    return blockedCount > selectors.length * 0.6
   })
   activeBlockers.sort()
 

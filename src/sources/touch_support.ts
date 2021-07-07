@@ -28,7 +28,7 @@ export default function getTouchSupport(): TouchSupport {
   try {
     document.createEvent('TouchEvent')
     touchEvent = true
-  } catch (_) {
+  } catch {
     touchEvent = false
   }
   const touchStart = 'ontouchstart' in window

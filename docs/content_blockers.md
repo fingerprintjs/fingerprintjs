@@ -11,63 +11,7 @@ Filter is a list of rules that tell browser what to block.
 Filters are written using a common standard: [AdBlock Plus syntax](https://help.eyeo.com/en/adblockplus/how-to-write-filters).
 Most ad blockers use this syntax, so the filters are universal.
 
-Here are the filters that we consider (the most popular filters):
-
-- [AdGuard](https://kb.adguard.com/en/general/adguard-ad-filters#adguard-filters)
-    - AdGuard Base filter: https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_2_English/filter.txt
-    - AdGuard Mobile Ads filter: https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_11_Mobile/filter.txt
-    - AdGuard Tracking Protection filter: https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_3_Spyware/filter.txt
-    - AdGuard Social Media filter: https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_4_Social/filter.txt
-    - AdGuard Annoyances filter: https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_14_Annoyances/filter.txt
-    - AdGuard Russian filter: https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_1_Russian/filter.txt
-    - AdGuard Chinese filter: https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_224_Chinese/filter.txt
-    - AdGuard German filter (included in EasyList Germany): https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_6_German/filter.txt
-    - AdGuard Dutch filter (same selectors as in EasyList Dutch): https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_8_Dutch/filter.txt
-    - AdGuard French filter: https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_16_French/filter.txt
-    - AdGuard Japanese filter: https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_7_Japanese/filter.txt
-    - AdGuard Spanish/Portuguese filter: https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_9_Spanish/filter.txt
-    - AdGuard Turkish filter: https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_13_Turkish/filter.txt
-- [EasyList](https://easylist.to)
-    - EasyList: https://easylist.to/easylist/easylist.txt
-    - EasyPrivacy (no blocked selectors): https://easylist.to/easylist/easyprivacy.txt
-    - EasyList Cookie List: https://secure.fanboy.co.nz/fanboy-cookiemonster.txt
-    - EasyList Germany: https://easylist.to/easylistgermany/easylistgermany.txt
-    - EasyList Italy: https://easylist-downloads.adblockplus.org/easylistitaly.txt
-    - EasyList Dutch: https://easylist-downloads.adblockplus.org/easylistdutch.txt
-    - Liste FR (included in AdGuard French filter): https://easylist-downloads.adblockplus.org/liste_fr.txt
-    - EasyList China: https://easylist-downloads.adblockplus.org/easylistchina.txt
-    - Bulgarian List: https://stanev.org/abp/adblock_bg.txt
-    - ABPindo: https://raw.githubusercontent.com/heradhis/indonesianadblockrules/master/subscriptions/abpindo.txt
-    - Liste AR: https://easylist-downloads.adblockplus.org/Liste_AR.txt
-    - EasyList Czech and Slovak: https://raw.githubusercontent.com/tomasko126/easylistczechandslovak/master/filters.txt
-    - Latvian List: https://notabug.org/latvian-list/adblock-latvian/raw/master/lists/latvian-list.txt
-    - EasyList Hebrew: https://raw.githubusercontent.com/easylist/EasyListHebrew/master/EasyListHebrew.txt
-    - EasyList Lithuania: https://raw.githubusercontent.com/EasyList-Lithuania/easylist_lithuania/master/easylistlithuania.txt
-    - AdBlock Warning Removal List (included in RU AdList): https://easylist-downloads.adblockplus.org/antiadblockfilters.txt
-- [Fanboy](https://www.fanboy.co.nz)
-    - Fanboy Enhanced Trackers List: https://secure.fanboy.co.nz/enhancedstats.txt
-    - Fanboy Anti-Facebook Filters (included in Social List): https://www.fanboy.co.nz/fanboy-antifacebook.txt
-    - Fanboy Thirdparty Fonts Filters (no blocked selectors): https://www.fanboy.co.nz/fanboy-antifonts.txt
-    - Fanboy Social List (included in Annoyances): https://easylist.to/easylist/fanboy-social.txt
-    - Fanboy Annoyances: https://secure.fanboy.co.nz/fanboy-annoyance.txt
-    - Fanboy Anti-Cookie Filters (equals to EasyList Cookie List, included in Annoyances)
-- Other
-    - Peter Lowe's Blocklist (no blocked selectors): https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=0&mimetype=plaintext
-    - Web Annoyances Ultralist: everything from https://github.com/yourduskquibbles/webannoyances/tree/master/filters
-    - I don't care about cookies: https://www.i-dont-care-about-cookies.eu/abp/
-    - ROList and ROLIST2: https://zoso.ro/pages/rolist2.txt
-    - RU AdList (it doesn't work in AdGuard for some reason): https://easylist-downloads.adblockplus.org/advblock.txt
-    - Icelandic ABP List: https://adblock.gardar.net/is.abp.txt
-    - Greek AdBlock Filter: https://raw.githubusercontent.com/kargig/greek-adblockplus-filter/master/void-gr-filters.txt
-    - Thai Ads Filters: https://adblock-thai.github.io/thai-ads-filter/subscription.txt
-    - Hungarian filter: https://raw.githubusercontent.com/hufilter/hufilter/master/hufilter.txt
-    - ABPVN List (Vietnamese): https://abpvn.com/filter/abpvn-h9kF1c.txt
-    - Official Polish filters for AdBlock, uBlock Origin & AdGuard: https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-adblock-filters/adblock.txt
-    - Estonian List: https://adblock.ee/list.php
-    - Adblock-Persian list: https://ideone.com/plain/K452p
-    - List-KR: https://raw.githubusercontent.com/List-KR/List-KR/master/filter.txt
-    - Adblock List for Finland: https://raw.githubusercontent.com/finnish-easylist-addition/finnish-easylist-addition/master/Finland_adb.txt
-    - Frellwit's Swedish Filter: https://raw.githubusercontent.com/lassekongo83/Frellwits-filter-lists/master/Frellwits-Swedish-Filter.txt
+See the filters that we consider (the most popular filters) in [filters.ts](../resources/content_blocking/filters.ts).
 
 ## DOM blockers
 
@@ -78,14 +22,8 @@ This list should be actualized periodically.
 
 ### How to make the list of filters
 
-#### 1. Download the filters
+#### 1. Make a selectors tester
 
-Download all the filters from the list above.
-The downloaded file names mustn't start with `.` and must have the `.txt` extension.
-
-#### 2. Make a selectors tester
-
-Put the downloaded files into the `resources/content_blocking/filters` directory.
 The open a terminal, go to the repository root and run:
 
 ```bash
@@ -93,9 +31,10 @@ yarn install
 ./node_modules/.bin/ts-node --compiler-options '{"module": "CommonJS"}' ./resources/content_blocking/make_selectors_tester.ts
 ```
 
-An HTML file will be created at `resources/content_blocking/selectors_tester.html`.
+It will download all the filters and
+create an HTML file at `resources/content_blocking/selectors_tester.html`.
 
-#### 3. Get selectors blocked by each filter
+#### 2. Get selectors blocked by each filter
 
 Install an ad blocker where you can choose individual filters to use.
 We strongly recommend to use AdGuard on iOS or macOS because AdGuard allows choosing individual filters,
@@ -115,7 +54,7 @@ For each filter in the list above, except for the filters noted as having no blo
 
 After that, you will get the list of files that matches the current list of filters in the entropy source code.
 
-#### 4. Get unique selectors for each filter
+#### 3. Get unique selectors for each filter
 
 Open a terminal, go to the repository root and run:
 
@@ -129,19 +68,8 @@ This file contains unique blocked selectors for each of the filters.
 Take 5 random selectors for each filter from the file and copy them to `src/sources/dom_blockers.ts`.
 I prefer selectors that depict features of filters (e.g. have foreign words or domains in case of regional filters),
 they increase the stability of selectors.
-Avoid selectors with `iframe` if possible as they produce excess load on browsers.
 
-#### 5. Handle empty filters
-
-If you see a filter with no unique selectors, it shall mean that the filter is included into another filter (see notes in the filter list above).
-In this case, temporary move the files of the filters that include that filter out of the `resources/content_blocking/blocked_selectors` directory,
-run `get_unique_filter_selectors.ts` again, see selectors for the filter in the new version of the `unique_filter_selectors.json` file
-and return the moved files back (to the initial state).
-Such way you'll get selectors that identify both the included, and the including filters.
-
-Repeat the steps for all filters with no unique selectors.
-
-#### 6. EasyList Android case
+#### 4. EasyList Android case
 
 AdGuard on Android blocks slightly different selectors than AdGuard on iOS.
 Sometimes it leads to false positive EasyList detection when AdGuard Base filter is used.
