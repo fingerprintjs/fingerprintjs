@@ -1,5 +1,6 @@
 import { load, Agent, LoadOptions, GetOptions, GetResult, hashComponents, componentsToDebugString } from './agent'
 import { BuiltinComponents } from './sources'
+import { Confidence } from './confidence'
 import { Component, UnknownComponents } from './utils/entropy_source'
 import { x64hash128 } from './utils/hashing'
 
@@ -15,6 +16,7 @@ export {
   Component,
   UnknownComponents,
   BuiltinComponents,
+  Confidence,
 }
 // The default export is a syntax sugar (`import * as FP from '...' → import FP from '...'`).
 // It should contain all the public exported values.

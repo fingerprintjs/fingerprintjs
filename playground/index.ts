@@ -16,30 +16,31 @@ async function startPlayground() {
   const startTime = Date.now()
 
   try {
-    const { visitorId, confidenceScore, potentialConfidenceScore, components } = await getVisitorData()
+    const { visitorId, confidence, components } = await getVisitorData()
     const totalTime = Date.now() - startTime
     output.innerHTML = ''
     addOutputSection(output, 'Visitor identifier:', visitorId, 'giant')
     addOutputSection(output, 'Time took to get the identifier:', `${totalTime}ms`, 'big')
-    addOutputSection(output, 'Confidence score:', String(confidenceScore), 'big')
-    addOutputSection(
-      output,
-      'Potential confidence score:',
-      {
-        html: potentialConfidenceScore.replace(
-          /(upgrade\s+to\s+)?pro(\s+version)?/gi,
-          '<a href="https://fingerprintjs.com/github/" target="_blank">$&</a>',
-        ),
-      },
-      'big',
-    )
+    addOutputSection(output, 'Confidence score:', String(confidence.score), 'big')
+    if (confidence.details) {
+      addOutputSection(
+        output,
+        'Potential confidence score:',
+        {
+          html: confidence.details.replace(
+            /(upgrade\s+to\s+)?pro(\s+version)?(:\s+(https?:\/\/\S+))?/gi,
+            '<a href="$4" target="_blank">$&</a>',
+          ),
+        },
+        'big',
+      )
+    }
     addOutputSection(output, 'User agent:', navigator.userAgent)
     addOutputSection(output, 'Entropy components:', FingerprintJS.componentsToDebugString(components))
 
     initializeDebugButtons(`Visitor identifier: \`${visitorId}\`
 Time took to get the identifier: ${totalTime}ms
-Confidence score: ${confidenceScore}
-Potential confidence score: ${potentialConfidenceScore}
+Confidence: ${JSON.stringify(confidence)}
 User agent: \`${navigator.userAgent}\`
 Entropy components:
 \`\`\`
