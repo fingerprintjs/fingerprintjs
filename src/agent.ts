@@ -4,6 +4,7 @@ import { UnknownComponents } from './utils/entropy_source'
 import { x64hash128 } from './utils/hashing'
 import { errorToObject } from './utils/misc'
 import loadBuiltinSources, { BuiltinComponents } from './sources'
+import getConfidenceScore from './confidence_score'
 
 /**
  * Options for Fingerprint class loading
@@ -42,6 +43,16 @@ export interface GetResult {
    * The visitor identifier
    */
   visitorId: string
+  /**
+   * A confidence score.
+   * This is a number between 0 and 1 that tells how much the agent is sure about the visitor identifier.
+   * The higher the number, the higher the chance of the visitor identifier to be true.
+   */
+  confidenceScore: number
+  /**
+   * A confidence score that the visitor identifier can have if you use advanced identification methods
+   */
+  potentialConfidenceScore: string
   /**
    * List of components that has formed the visitor identifier.
    *
@@ -99,12 +110,14 @@ export function hashComponents(components: UnknownComponents): string {
  * Makes a GetResult implementation that calculates the visitor id hash on demand.
  * Designed for optimisation.
  */
-function makeLazyGetResult<T extends UnknownComponents>(components: T) {
+function makeLazyGetResult(components: BuiltinComponents): GetResult {
   let visitorIdCache: string | undefined
+
+  // This function runs very fast, so there is no need to make it lazy
+  const [confidenceScore, potentialConfidenceScore] = getConfidenceScore(components)
 
   // A plain class isn't used because its getters and setters aren't enumerable.
   return {
-    components,
     get visitorId(): string {
       if (visitorIdCache === undefined) {
         visitorIdCache = hashComponents(this.components)
@@ -114,6 +127,9 @@ function makeLazyGetResult<T extends UnknownComponents>(components: T) {
     set visitorId(visitorId: string) {
       visitorIdCache = visitorId
     },
+    confidenceScore,
+    potentialConfidenceScore,
+    components,
     version,
   }
 }

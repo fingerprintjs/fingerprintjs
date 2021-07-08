@@ -16,16 +16,30 @@ async function startPlayground() {
   const startTime = Date.now()
 
   try {
-    const { visitorId, components } = await getVisitorData()
+    const { visitorId, confidenceScore, potentialConfidenceScore, components } = await getVisitorData()
     const totalTime = Date.now() - startTime
     output.innerHTML = ''
     addOutputSection(output, 'Visitor identifier:', visitorId, 'giant')
     addOutputSection(output, 'Time took to get the identifier:', `${totalTime}ms`, 'big')
+    addOutputSection(output, 'Confidence score:', String(confidenceScore), 'big')
+    addOutputSection(
+      output,
+      'Potential confidence score:',
+      {
+        html: potentialConfidenceScore.replace(
+          /(upgrade\s+to\s+)?pro(\s+version)?/gi,
+          '<a href="https://fingerprintjs.com/github/" target="_blank">$&</a>',
+        ),
+      },
+      'big',
+    )
     addOutputSection(output, 'User agent:', navigator.userAgent)
     addOutputSection(output, 'Entropy components:', FingerprintJS.componentsToDebugString(components))
 
     initializeDebugButtons(`Visitor identifier: \`${visitorId}\`
 Time took to get the identifier: ${totalTime}ms
+Confidence score: ${confidenceScore}
+Potential confidence score: ${potentialConfidenceScore}
 User agent: \`${navigator.userAgent}\`
 Entropy components:
 \`\`\`
@@ -49,7 +63,7 @@ User agent: \`${navigator.userAgent}\``)
   }
 }
 
-function addOutputSection(output: Node, header: string, content: string, size?: 'big' | 'giant') {
+function addOutputSection(output: Node, header: string, content: string | { html: string }, size?: 'big' | 'giant') {
   const headerElement = document.createElement('div')
   headerElement.classList.add('heading')
   headerElement.textContent = header
@@ -59,7 +73,11 @@ function addOutputSection(output: Node, header: string, content: string, size?: 
   if (size) {
     contentElement.classList.add(size)
   }
-  contentElement.textContent = content
+  if (typeof content === 'string') {
+    contentElement.textContent = content
+  } else {
+    contentElement.innerHTML = content.html
+  }
   output.appendChild(contentElement)
 }
 

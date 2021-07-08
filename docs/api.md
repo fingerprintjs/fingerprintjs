@@ -80,6 +80,11 @@ We recommend calling it later, when you really need the identifier, to increase 
 Result object fields:
 
 - `visitorId` The visitor identifier
+- `confidenceScore` The confidence score.
+    This is a number between 0 and 1 that tells how much the agent is sure about the visitor identifier.
+    The higher the number, the higher the chance of the visitor identifier to be true.
+- `potentialConfidenceScore` A confidence score that the visitor identifier can have
+    if you use advanced identification methods that are used in [Pro version](https://fingerprintjs.com/github/).
 - `components` A dictionary of components that have formed the identifier.
     Each value is an object like `{ value: any, duration: number }` in case of success
     and `{ error: object, duration: number }` in case of an unexpected error during getting the component.
