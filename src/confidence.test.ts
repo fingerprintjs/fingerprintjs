@@ -1,14 +1,13 @@
 import { isAndroid, isMacOS, isMobile, isSafari, isTablet, isWindows } from '../tests/utils'
 import { loadSources } from './utils/entropy_source'
 import getPlatform from './sources/platform'
-import { BuiltinComponents } from './sources'
-import getConfidenceScore, { updateToProURL } from './confidence'
+import getConfidence, { updateToProURL } from './confidence'
 
 describe('Confidence', () => {
   it('matches the current platform', async () => {
     const getComponents = loadSources({ platform: getPlatform }, undefined, [])
     const components = await getComponents()
-    const confidence = getConfidenceScore(components as BuiltinComponents)
+    const confidence = getConfidence(components)
 
     if (isAndroid()) {
       expect(confidence).toEqual({ score: 0.4, details: `0.994 if upgrade to Pro: ${updateToProURL}` })

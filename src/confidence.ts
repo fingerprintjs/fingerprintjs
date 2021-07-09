@@ -16,13 +16,13 @@ export interface Confidence {
 
 export const updateToProURL = 'https://bit.ly/3xr3cJD'
 
-export default function getConfidence(components: BuiltinComponents): Confidence {
+export default function getConfidence(components: Pick<BuiltinComponents, 'platform'>): Confidence {
   const openConfidenceScore = getOpenConfidenceScore(components)
-  const proConfidenceScore = getProConfidenceScore(openConfidenceScore)
+  const proConfidenceScore = deriveProConfidenceScore(openConfidenceScore)
   return { score: openConfidenceScore, details: `${proConfidenceScore} if upgrade to Pro: ${updateToProURL}` }
 }
 
-function getOpenConfidenceScore(components: BuiltinComponents): number {
+function getOpenConfidenceScore(components: Pick<BuiltinComponents, 'platform'>): number {
   // In order to calculate the true probability of the visitor identifier being correct, we need to know the number of
   // website visitors (the higher the number, the less the probability because the fingerprint entropy is limited).
   // JS agent doesn't know the number of visitors, so we can only do an approximate assessment.
@@ -59,6 +59,14 @@ function getOpenConfidenceScore(components: BuiltinComponents): number {
   return 0.7
 }
 
-function getProConfidenceScore(openConfidenceScore: number): number {
+function deriveProConfidenceScore(openConfidenceScore: number): number {
   return round(0.99 + 0.01 * openConfidenceScore, 0.0001)
+}
+
+/**
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
+ */
+export function getProConfidenceScore(...args: Parameters<typeof getOpenConfidenceScore>): number {
+  return deriveProConfidenceScore(getOpenConfidenceScore(...args))
 }

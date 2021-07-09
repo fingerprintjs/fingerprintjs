@@ -19,6 +19,8 @@ describe('Integration', () => {
     const result = await fp.get()
     expect(result).toBeInstanceOf(Object)
     expect(typeof result.visitorId).toBe('string')
+    expect(result.confidence.score).toBeGreaterThan(0.1)
+    expect(result.confidence.score).toBeLessThan(0.9)
     expect(result.components).toBeInstanceOf(Object)
   }, 10000) // Such tests can take too much time to complete on BrowserStack
 })

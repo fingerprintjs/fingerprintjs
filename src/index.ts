@@ -26,6 +26,7 @@ export default { load, hashComponents, componentsToDebugString }
 /** Not documented, out of Semantic Versioning, usage is at your own risk */
 export const murmurX64Hash128 = x64hash128
 export { prepareForSources } from './agent'
+export { getProConfidenceScore } from './confidence'
 export { sources } from './sources'
 export { getScreenFrame } from './sources/screen_frame'
 export {
