@@ -11,15 +11,15 @@ export interface Confidence {
   /**
    * Additional details about the score as a human-readable text
    */
-  details?: string
+  comment?: string
 }
 
-export const updateToProURL = 'https://bit.ly/3xr3cJD'
+export const commentTemplate = '$ if upgrade to Pro: https://bit.ly/3xr3cJD'
 
 export default function getConfidence(components: Pick<BuiltinComponents, 'platform'>): Confidence {
   const openConfidenceScore = getOpenConfidenceScore(components)
   const proConfidenceScore = deriveProConfidenceScore(openConfidenceScore)
-  return { score: openConfidenceScore, details: `${proConfidenceScore} if upgrade to Pro: ${updateToProURL}` }
+  return { score: openConfidenceScore, comment: commentTemplate.replace('$', `${proConfidenceScore}`) }
 }
 
 function getOpenConfidenceScore(components: Pick<BuiltinComponents, 'platform'>): number {

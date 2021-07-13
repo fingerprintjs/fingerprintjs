@@ -84,7 +84,7 @@ interface GetResult {
   visitorId: string
   confidence: {
     score: number
-    details?: string
+    comment?: string
   }
   components: {
     [key: string]:
@@ -101,7 +101,7 @@ The returned object fields:
 - `confidence`.`score` The confidence score.
     This is a number between 0 and 1 that tells how much the agent is sure about the visitor identifier.
     The higher the number, the higher the chance of the visitor identifier to be true.
-- `confidence`.`details` Additional information for the confidence score. A human-readable text.
+- `confidence`.`comment` Additional information for the confidence score. A human-readable text.
 - `components` A dictionary of components that have formed the identifier.
     The keys are the component names.
     `value` is a component value (in case of success).
