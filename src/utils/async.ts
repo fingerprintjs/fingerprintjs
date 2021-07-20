@@ -7,7 +7,10 @@ export function wait<T = void>(durationMs: number, resolveWith?: T): Promise<T> 
 export function requestIdleCallbackIfAvailable(fallbackTimeout: number, deadlineTimeout = Infinity): Promise<void> {
   const { requestIdleCallback } = window
   if (requestIdleCallback) {
-    return new Promise((resolve) => requestIdleCallback(() => resolve(), { timeout: deadlineTimeout }))
+    // The function `requestIdleCallback` loses the binding to `window` here.
+    // `globalThis` isn't always equal `window` (see https://github.com/fingerprintjs/fingerprintjs/issues/683).
+    // Therefore, an error can occur. `call(window,` prevents the error.
+    return new Promise((resolve) => requestIdleCallback.call(window, () => resolve(), { timeout: deadlineTimeout }))
   } else {
     return wait(Math.min(fallbackTimeout, deadlineTimeout))
   }
