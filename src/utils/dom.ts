@@ -55,7 +55,7 @@ export async function withIframe<T>(
       checkReadyState()
     })
 
-    while (!iframe.contentWindow?.document.body) {
+    while (!iframe.contentDocument?.body) {
       await wait(domPollInterval)
     }
 
