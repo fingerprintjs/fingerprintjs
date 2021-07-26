@@ -46,7 +46,9 @@ export async function withIframe<T>(
       // This code checks for the loading state manually.
       // See https://github.com/fingerprintjs/fingerprintjs/issues/645
       const checkReadyState = () => {
-        if (iframe.contentWindow?.document.readyState === 'complete') {
+        // Make sure iframe.contentWindow and iframe.contentWindow.document are both loaded
+        // The contentWindow.document can miss in JSDOM (https://github.com/jsdom/jsdom).
+        if (iframe.contentWindow?.document?.readyState === 'complete') {
           resolve()
         } else {
           setTimeout(checkReadyState, 10)
@@ -55,7 +57,7 @@ export async function withIframe<T>(
       checkReadyState()
     })
 
-    while (!iframe.contentWindow?.document.body) {
+    while (!iframe.contentWindow?.document?.body) {
       await wait(domPollInterval)
     }
 
