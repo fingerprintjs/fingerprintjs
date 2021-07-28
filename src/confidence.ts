@@ -19,7 +19,7 @@ export const commentTemplate = '$ if upgrade to Pro: https://fpjs.dev/pro'
 export default function getConfidence(components: Pick<BuiltinComponents, 'platform'>): Confidence {
   const openConfidenceScore = getOpenConfidenceScore(components)
   const proConfidenceScore = deriveProConfidenceScore(openConfidenceScore)
-  return { score: openConfidenceScore, comment: commentTemplate.replace('$', `${proConfidenceScore}`) }
+  return { score: openConfidenceScore, comment: commentTemplate.replace(/\$/g, `${proConfidenceScore}`) }
 }
 
 function getOpenConfidenceScore(components: Pick<BuiltinComponents, 'platform'>): number {
