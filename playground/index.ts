@@ -2,6 +2,8 @@ import 'promise-polyfill/src/polyfill'
 import * as FingerprintJS from '../src'
 import { errorToObject } from '../src/utils/misc'
 
+type Text = string | { html: string }
+
 async function getVisitorData() {
   const fp = await FingerprintJS.load({ debug: true })
   return await fp.get()
@@ -16,16 +18,33 @@ async function startPlayground() {
   const startTime = Date.now()
 
   try {
-    const { visitorId, components } = await getVisitorData()
+    const { visitorId, confidence, components } = await getVisitorData()
     const totalTime = Date.now() - startTime
     output.innerHTML = ''
-    addOutputSection(output, 'Visitor identifier:', visitorId, 'giant')
-    addOutputSection(output, 'Time took to get the identifier:', `${totalTime}ms`, 'big')
-    addOutputSection(output, 'User agent:', navigator.userAgent)
-    addOutputSection(output, 'Entropy components:', FingerprintJS.componentsToDebugString(components))
+    addOutputSection({ output, header: 'Visitor identifier:', content: visitorId, size: 'giant' })
+    addOutputSection({ output, header: 'Time took to get the identifier:', content: `${totalTime}ms`, size: 'big' })
+    addOutputSection({
+      output,
+      header: 'Confidence score:',
+      content: String(confidence.score),
+      comment: confidence.comment && {
+        html: confidence.comment.replace(
+          /(upgrade\s+to\s+)?pro(\s+version)?(:\s+(https?:\/\/\S+))?/gi,
+          '<a href="$4" target="_blank">$&</a>',
+        ),
+      },
+      size: 'big',
+    })
+    addOutputSection({ output, header: 'User agent:', content: navigator.userAgent })
+    addOutputSection({
+      output,
+      header: 'Entropy components:',
+      content: FingerprintJS.componentsToDebugString(components),
+    })
 
     initializeDebugButtons(`Visitor identifier: \`${visitorId}\`
 Time took to get the identifier: ${totalTime}ms
+Confidence: ${JSON.stringify(confidence)}
 User agent: \`${navigator.userAgent}\`
 Entropy components:
 \`\`\`
@@ -35,9 +54,9 @@ ${FingerprintJS.componentsToDebugString(components)}
     const totalTime = Date.now() - startTime
     const errorData = errorToObject(error)
     output.innerHTML = ''
-    addOutputSection(output, 'Unexpected error:', JSON.stringify(errorData, null, 2))
-    addOutputSection(output, 'Time passed before the error:', `${totalTime}ms`, 'big')
-    addOutputSection(output, 'User agent:', navigator.userAgent)
+    addOutputSection({ output, header: 'Unexpected error:', content: JSON.stringify(errorData, null, 2) })
+    addOutputSection({ output, header: 'Time passed before the error:', content: `${totalTime}ms`, size: 'big' })
+    addOutputSection({ output, header: 'User agent:', content: navigator.userAgent })
 
     initializeDebugButtons(`Unexpected error:\n
 \`\`\`
@@ -49,18 +68,37 @@ User agent: \`${navigator.userAgent}\``)
   }
 }
 
-function addOutputSection(output: Node, header: string, content: string, size?: 'big' | 'giant') {
+function addOutputSection({
+  output,
+  header,
+  content,
+  comment,
+  size,
+}: {
+  output: Node
+  header: Text
+  content: Text
+  comment?: Text
+  size?: 'big' | 'giant'
+}) {
   const headerElement = document.createElement('div')
+  headerElement.appendChild(textToDOM(header))
   headerElement.classList.add('heading')
-  headerElement.textContent = header
   output.appendChild(headerElement)
 
   const contentElement = document.createElement('pre')
+  contentElement.appendChild(textToDOM(content))
   if (size) {
     contentElement.classList.add(size)
   }
-  contentElement.textContent = content
   output.appendChild(contentElement)
+
+  if (comment) {
+    const commentElement = document.createElement('div')
+    commentElement.appendChild(textToDOM(comment))
+    commentElement.classList.add('comment')
+    output.appendChild(commentElement)
+  }
 }
 
 function initializeDebugButtons(debugText: string) {
@@ -113,6 +151,19 @@ Sharing is available in mobile browsers and only on HTTPS websites. ${
   } catch {
     // Do nothing in case of a share abort
   }
+}
+
+function textToDOM(text: Text): Node {
+  if (typeof text === 'string') {
+    return document.createTextNode(text)
+  }
+  const container = document.createElement('div')
+  container.innerHTML = text.html
+  const fragment = document.createDocumentFragment()
+  while (container.firstChild) {
+    fragment.appendChild(container.firstChild)
+  }
+  return fragment
 }
 
 startPlayground()

@@ -11,6 +11,8 @@ describe('Agent', () => {
     const result = await agent.get()
     expect(typeof result.visitorId).toBe('string')
     expect(result.visitorId).not.toEqual('')
+    expect(typeof result.confidence.score).toBe('number')
+    expect(typeof result.confidence.comment).toBe('string')
     expect(result.version).toBe(version)
 
     const expectedComponents = Object.keys(sources).sort() as Array<keyof typeof sources>

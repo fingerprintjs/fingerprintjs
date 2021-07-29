@@ -73,16 +73,39 @@ We recommend calling it as soon as possible.
 it has a good default value which we don't recommend to change.
 `debug: true` prints debug messages to the console.
 
-#### `agent.get(): Promise<object>`
+#### `agent.get(): Promise<GetResult>`
 
 A method of an Agent instance that gets the visitor identifier.
 We recommend calling it later, when you really need the identifier, to increase the chance of getting an accurate identifier.
-Result object fields:
+The returned object format:
+
+```ts
+interface GetResult {
+  visitorId: string
+  confidence: {
+    score: number
+    comment?: string
+  }
+  components: {
+    [key: string]:
+      { value: any, duration: number } |
+      { error: object, duration: number }
+  }
+  version: string
+}
+```
+
+The returned object fields:
 
 - `visitorId` The visitor identifier
+- `confidence`.`score` The confidence score.
+    This is a number between 0 and 1 that tells how much the agent is sure about the visitor identifier.
+    The higher the number, the higher the chance of the visitor identifier to be true.
+- `confidence`.`comment` Additional information for the confidence score. A human-readable text.
 - `components` A dictionary of components that have formed the identifier.
-    Each value is an object like `{ value: any, duration: number }` in case of success
-    and `{ error: object, duration: number }` in case of an unexpected error during getting the component.
+    The keys are the component names.
+    `value` is a component value (in case of success).
+    `error` is an error object (in case of an unexpected error during getting the component).
 - `version` The fingerprinting algorithm version which is equal to the library version.
     See [the version policy guide](version_policy.md) for more details.
 
