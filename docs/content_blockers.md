@@ -77,7 +77,7 @@ Sometimes it leads to false positive EasyList detection when AdGuard Base filter
 To solve it, you need an Android device or emulator with AdGuard installed.
 Do the step 4, but instead of 5, copy all the selectors of EasyList.
 On the device, enable AdGuard, open the settings and enable a few filters including AdGuard Base but not including EasyList.
-Start the playground, connect Chrome (or any other browser) dubugger to the device, open the device browser console,
+Start the playground, connect Chrome (or any other browser) debugger to the device, open the device browser console,
 check which of the selectors are passed (see more detail about the debugging below) and copy 5 of them to the entropy source code.
 
 If you don't have an ability to use an Android device/emulator,
