@@ -134,11 +134,11 @@ Full product comparison:
   </tbody>
 </table>
 
-<small>* Pro uses the open source fingerprinting library as well as proprietary technology for increased accuracy and identifier stability.</small>
+<sub>* Pro uses the open source fingerprinting library as well as proprietary technology for increased accuracy and identifier stability.</sub>
 
-<small>** VisitorIDs, in comparison to fingerprints, include server side techniques, are deduplicated and utilize fuzzy matching to result in a more accurate and stable identifier. Fingerprint hashes rely on an exact match across all browser attributes, making them unstable across > 4 week time intervals.</small>
+<sub>** VisitorIDs, in comparison to fingerprints, include server side techniques, are deduplicated and utilize fuzzy matching to result in a more accurate and stable identifier. Fingerprint hashes rely on an exact match across all browser attributes, making them less stable across > 4 week time intervals.</sub>
 
-<small>*** FingerprintJS Pro is GDPR and CCPA compliant as the data processor. You still need to be compliant as the data controller and use the identification for fraud under legitimate interest or ask for user consent.</small>
+<sub>*** FingerprintJS Pro is GDPR and CCPA compliant as the data processor. You still need to be compliant as the data controller and use the identification for fraud under legitimate interest or ask for user consent.</sub>
 
 Pro result example:
 
