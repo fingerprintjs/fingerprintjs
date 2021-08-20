@@ -31,27 +31,31 @@ Examples for various installation methods:
 
 - Global variable
     ```diff
+    + <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
       <script>
-        function initFingerprintJS() {
-          // Start loading FingerprintJS here
-        }
+        const fpPromise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+          script.onload = resolve
+          script.onerror = reject
+          script.async = true
+          script.src = 'https://cdn.jsdelivr.net/npm/'
+            + '@fingerprintjs/fingerprintjs@3/dist/fp.min.js'
+          document.head.appendChild(script)
+        })
+          .then(() => {
+            // ...
+          })
       </script>
-    + <script src="//cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
-      <script
-        async
-        src="//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
-        onload="initFingerprintJS()"
-      ></script>
     ```
 - UMD
     ```diff
       require(
         [
-          '//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.umd.min.js',
-    +     '//cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js',
+          'https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.umd.min.js',
+    +     'https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js',
         ],
         (FingerprintJS) => {
-          // Start loading FingerprintJS here
+          // ...
         }
       )
     ```
@@ -67,7 +71,7 @@ Examples for various installation methods:
     + import 'promise-polyfill/src/polyfill'
       import FingerprintJS from '@fingerprintjs/fingerprintjs'
 
-      // Start loading FingerprintJS here
+      // ...
     ```
 - CommonJS
     ```bash
@@ -81,7 +85,7 @@ Examples for various installation methods:
     + require('promise-polyfill/src/polyfill')
       const FingerprintJS = require('@fingerprintjs/fingerprintjs')
 
-      // Start loading FingerprintJS here
+      // ...
     ```
 
 ### Code syntax
