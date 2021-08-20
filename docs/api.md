@@ -27,6 +27,21 @@ The library is shipped in various formats:
 </script>
 ```
 
+Or a synchronous code that blocks the page during loading and therefore isn't recommended:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
+<script>
+  // Initialize the agent at application startup.
+  const fpPromise = FingerprintJS.load()
+
+  // Get the visitor identifier when you need it.
+  fpPromise
+    .then(fp => fp.get())
+    .then(result => console.log(result.visitorId))
+</script>
+```
+
 ### UMD
 
 ```js

@@ -47,6 +47,14 @@ Examples for various installation methods:
           })
       </script>
     ```
+    If you use a synchronous loading:
+    ```diff
+    + <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
+      <script>
+        // ...
+      </script>
+    ```
 - UMD
     ```diff
       require(
