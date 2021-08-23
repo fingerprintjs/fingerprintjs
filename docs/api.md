@@ -8,24 +8,53 @@ The library is shipped in various formats:
 
 ```html
 <script>
-  function initFingerprintJS() {
-    // Start loading FingerprintJS here
-  }
+  // Initialize the agent at application startup.
+  const fpPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.onload = resolve
+    script.onerror = reject
+    script.async = true
+    script.src = 'https://cdn.jsdelivr.net/npm/'
+      + '@fingerprintjs/fingerprintjs@3/dist/fp.min.js'
+    document.head.appendChild(script)
+  })
+    .then(() => FingerprintJS.load())
+
+  // Get the visitor identifier when you need it.
+  fpPromise
+    .then(fp => fp.get())
+    .then(result => console.log(result.visitorId))
 </script>
-<script
-  async
-  src="//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
-  onload="initFingerprintJS()"
-></script>
+```
+
+Or a synchronous code that blocks the page during loading and therefore isn't recommended:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
+<script>
+  // Initialize the agent at application startup.
+  const fpPromise = FingerprintJS.load()
+
+  // Get the visitor identifier when you need it.
+  fpPromise
+    .then(fp => fp.get())
+    .then(result => console.log(result.visitorId))
+</script>
 ```
 
 ### UMD
 
 ```js
 require(
-  ['//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.umd.min.js'],
+  ['https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.umd.min.js'],
   (FingerprintJS) => {
-    // Start loading FingerprintJS here
+    // Initialize the agent at application startup.
+    const fpPromise = FingerprintJS.load()
+
+    // Get the visitor identifier when you need it.
+    fpPromise
+      .then(fp => fp.get())
+      .then(result => console.log(result.visitorId))
   }
 )
 ```
@@ -42,7 +71,15 @@ yarn add @fingerprintjs/fingerprintjs
 ```js
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
 
-// Start loading FingerprintJS here
+// Initialize an agent at application startup.
+const fpPromise = FingerprintJS.load()
+
+;(async () => {
+  // Get the visitor identifier when you need it.
+  const fp = await fpPromise
+  const result = await fp.get()
+  console.log(result.visitorId)
+})()
 ```
 
 If you face a TypeScript error that occurs in a FingerprintJS file,
@@ -60,7 +97,13 @@ yarn add @fingerprintjs/fingerprintjs
 ```js
 const FingerprintJS = require('@fingerprintjs/fingerprintjs')
 
-// Start loading FingerprintJS here
+// Initialize the agent at application startup.
+const fpPromise = FingerprintJS.load()
+
+// Get the visitor identifier when you need it.
+fpPromise
+  .then(fp => fp.get())
+  .then(result => console.log(result.visitorId))
 ```
 
 ## API

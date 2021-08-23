@@ -33,25 +33,27 @@ FingerprintJS is a browser fingerprinting library that queries browser attribute
 
 ```html
 <script>
-  function initFingerprintJS() {
-    // Initialize an agent at application startup.
-    const fpPromise = FingerprintJS.load()
+  // Initialize the agent at application startup.
+  const fpPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.onload = resolve
+    script.onerror = reject
+    script.async = true
+    script.src = 'https://cdn.jsdelivr.net/npm/'
+      + '@fingerprintjs/fingerprintjs@3/dist/fp.min.js'
+    document.head.appendChild(script)
+  })
+    .then(() => FingerprintJS.load())
 
-    // Get the visitor identifier when you need it.
-    fpPromise
-      .then(fp => fp.get())
-      .then(result => {
-        // This is the visitor identifier:
-        const visitorId = result.visitorId
-        console.log(visitorId)
-      })
-  }
+  // Get the visitor identifier when you need it.
+  fpPromise
+    .then(fp => fp.get())
+    .then(result => {
+      // This is the visitor identifier:
+      const visitorId = result.visitorId
+      console.log(visitorId)
+    })
 </script>
-<script
-  async
-  src="//cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"
-  onload="initFingerprintJS()"
-></script>
 ```
 
 [Run this code](https://stackblitz.com/edit/fpjs-3-cdn?file=index.html&devtoolsheight=100)
@@ -110,7 +112,7 @@ Full product comparison:
   </thead>
   <tbody>
     <tr><td colspan="3"><h4>Core Features</h4></td></tr>
-      <tr><td>100% Open-source</td><td align="center">yes</td><td align="center">no<sup>1</sup></td></tr>
+    <tr><td>100% Open-source</td><td align="center">yes</td><td align="center">no<sup>1</sup></td></tr>
     <tr><td><b>Standard fingerprint signals</b><br/><i>screen, os, device name</i></td><td align="center">✓</td><td align="center">✓</td></tr>
     <tr><td><b>Advanced fingerprint signals</b><br/><i>canvas, audio, fonts</i></td><td align="center">✓</td><td align="center">✓</td></tr>
     <tr><td><b>ID type</b></td><td align="center">fingerprint</td><td align="center">visitorID<sup>2</sup></td></tr>
@@ -147,9 +149,10 @@ Pro result example:
   "requestId": "HFMlljrzKEiZmhUNDx7Z",
   "visitorId": "kHqPGWS1Mj18sZFsP8Wl",
   "visitorFound": true,
+  "confidence": { "score": 0.995 },
   "incognito": false,
   "browserName": "Chrome",
-  "browserVersion": "85.0.4183",
+  "browserVersion": "92.0.4515.107",
   "os": "Mac OS X",
   "osVersion": "10.15.6",
   "device": "Other",
