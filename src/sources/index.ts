@@ -43,7 +43,8 @@ export const sources = {
   // See https://github.com/fingerprintjs/fingerprintjs/blob/master/contributing.md#how-to-make-an-entropy-source
   // to learn how entropy source works and how to make your own.
 
-  // The sources run in this exact order. The asynchronous sources are at the start to run in parallel with other sources.
+  // The sources run in this exact order.
+  // The asynchronous sources are at the start to run in parallel with other sources.
   fonts: getFonts,
   domBlockers: getDomBlockers,
   fontPreferences: getFontPreferences,

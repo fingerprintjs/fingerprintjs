@@ -27,6 +27,7 @@
         "@typescript-eslint"
       ],
       "rules": {
+        "max-len": ["error", { "code": 120, "ignoreUrls": true }],
         "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }]
       }
     }

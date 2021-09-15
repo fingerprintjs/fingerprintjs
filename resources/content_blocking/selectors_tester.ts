@@ -20,13 +20,13 @@ const downloadButton = document.createElement('button')
 downloadButton.textContent = 'Save to file'
 downloadButton.addEventListener('click', (event) => {
   event.preventDefault()
-  const copier = document.createElement('a')
-  copier.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(display.value)}`)
-  copier.setAttribute('download', '')
-  copier.style.display = 'none'
-  document.body.appendChild(copier)
-  copier.click()
-  document.body.removeChild(copier)
+  const downloader = document.createElement('a')
+  downloader.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(display.value)}`)
+  downloader.setAttribute('download', '')
+  downloader.style.display = 'none'
+  document.body.appendChild(downloader)
+  downloader.click()
+  document.body.removeChild(downloader)
 })
 
 document.body.appendChild(display)
