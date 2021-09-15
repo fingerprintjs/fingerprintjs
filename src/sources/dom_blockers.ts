@@ -265,9 +265,6 @@ export const filters = {
   ],
 }
 
-/** Just a syntax sugar */
-const filterNames = Object.keys(filters) as Array<keyof typeof filters>
-
 interface Options {
   debug?: boolean
 }
@@ -286,6 +283,7 @@ export default async function getDomBlockers({ debug }: Options = {}): Promise<s
     return undefined
   }
 
+  const filterNames = Object.keys(filters) as Array<keyof typeof filters>
   const allSelectors = ([] as string[]).concat(...filterNames.map((filterName) => filters[filterName]))
   const blockedSelectors = await getBlockedSelectors(allSelectors)
 
@@ -354,7 +352,7 @@ function forceShow(element: HTMLElement) {
 
 function printDebug(blockedSelectors: { [K in string]?: true }) {
   let message = 'DOM blockers debug:\n```'
-  for (const filterName of filterNames) {
+  for (const filterName of Object.keys(filters) as Array<keyof typeof filters>) {
     message += `\n${filterName}:`
     for (const selector of filters[filterName]) {
       message += `\n  ${selector} ${blockedSelectors[selector] ? '🚫' : '➡️'}`

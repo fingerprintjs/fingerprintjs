@@ -53,6 +53,30 @@ yarn build
 
 The files will appear at `dist`.
 
+### Pitfalls
+
+Avoid running expression in top level of the modules.
+It will help to tree-shake the library better:
+
+```js
+// Ok. Will be removed if not used.
+function do() {
+  // Any expression inside a function is ok
+}
+
+// Ok. Will be removed if not used.
+const var1 = { prop: 'foo' }
+
+// No! A function is called, the function call won't be removed.
+const var2 = Object.keys(var1)
+
+// No! An object property is accessed, the expression won't be removed because the property may be a getter.
+const var3 = var1.prop
+
+// No! Will be converted to `const var4 = {}; var4.bar = 'foo'`.
+const var4 = { [Enum.Member]: 'foo' }
+```
+
 ### How to test
 
 There are automatic tests.
@@ -211,7 +235,7 @@ This section is for repository maintainers.
 
 1. Bump the version. Search the current version number in the code to know where to change it.
 2. Build and test the project.
-3. See what's will get into the NPM package, make sure it contains the distributive files and no excess files.
+3. See what will get into the NPM package, make sure it contains the distributive files and no excess files.
     To see, run `yarn pack`, an archive will appear nearby, open it with any archive browser.
 4. Run
     ```bash
