@@ -238,7 +238,7 @@ export function isAndroid(): boolean {
     countTruthy([
       'onorientationchange' in w,
       'orientation' in w,
-      isItChromium && 'SharedWorker' in w,
+      isItChromium && !('SharedWorker' in w),
       isItGecko && /android/i.test(navigator.appVersion),
     ]) >= 2
   )
