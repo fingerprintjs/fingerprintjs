@@ -124,7 +124,7 @@ export function isGecko(): boolean {
     countTruthy([
       'buildID' in navigator,
       'MozAppearance' in (document.documentElement?.style ?? {}),
-      'MediaRecorderErrorEvent' in w,
+      'onmozfullscreenchange' in w,
       'mozInnerScreenX' in w,
       'CSSMozDocumentRule' in w,
       'CanvasCaptureMediaStream' in w,
