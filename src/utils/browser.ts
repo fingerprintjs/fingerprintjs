@@ -193,7 +193,8 @@ export function isIPad(): boolean {
     countTruthy([
       'MediaSource' in window, // Since iOS 13
       !!Element.prototype.webkitRequestFullscreen, // Since iOS 12
-      screenRatio > 2 / 3 && screenRatio < 3 / 2,
+      // iPhone 4S that runs iOS 9 matches this. But it won't match the criteria above, so it won't be detected as iPad.
+      screenRatio > 0.65 && screenRatio < 1.53,
     ]) >= 2
   )
 }
