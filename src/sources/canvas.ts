@@ -95,7 +95,7 @@ function makeGeometryImage(canvas: HTMLCanvasElement, context: CanvasRenderingCo
   }
 
   // Canvas winding
-  // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
+  // https://web.archive.org/web/20130913061632/http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
   // http://jsfiddle.net/NDYV8/19/
   context.fillStyle = '#f9c'
   context.arc(60, 60, 60, 0, Math.PI * 2, true)
