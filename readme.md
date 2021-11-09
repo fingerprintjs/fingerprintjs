@@ -29,21 +29,11 @@ FingerprintJS is a browser fingerprinting library that queries browser attribute
 
 ## Quick start
 
-### Install from CDN
-
 ```html
 <script>
   // Initialize the agent at application startup.
-  const fpPromise = new Promise((resolve, reject) => {
-    const script = document.createElement('script')
-    script.onload = resolve
-    script.onerror = reject
-    script.async = true
-    script.src = 'https://cdn.jsdelivr.net/npm/'
-      + '@fingerprintjs/fingerprintjs@3/dist/fp.min.js'
-    document.head.appendChild(script)
-  })
-    .then(() => FingerprintJS.load())
+  const fpPromise = import('https://openfpcdn.net/fingerprintjs@3')
+    .then(FingerprintJS => FingerprintJS.load())
 
   // Get the visitor identifier when you need it.
   fpPromise
@@ -57,33 +47,6 @@ FingerprintJS is a browser fingerprinting library that queries browser attribute
 ```
 
 [Run this code](https://stackblitz.com/edit/fpjs-3-cdn?file=index.html&devtoolsheight=100)
-
-### Alternatively you can install from NPM to use with Webpack/Rollup/Browserify
-
-```bash
-npm i @fingerprintjs/fingerprintjs
-# or
-yarn add @fingerprintjs/fingerprintjs
-```
-
-```js
-import FingerprintJS from '@fingerprintjs/fingerprintjs'
-
-// Initialize an agent at application startup.
-const fpPromise = FingerprintJS.load()
-
-;(async () => {
-  // Get the visitor identifier when you need it.
-  const fp = await fpPromise
-  const result = await fp.get()
-
-  // This is the visitor identifier:
-  const visitorId = result.visitorId
-  console.log(visitorId)
-})()
-```
-
-[Run this code](https://stackblitz.com/edit/fpjs-3-npm?file=index.js&devtoolsheight=100)
 
 📕 [Full documentation](docs/api.md)
 
