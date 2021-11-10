@@ -67,8 +67,9 @@ const fpPromise = FingerprintJS.load()
 
 [Run this code](https://stackblitz.com/edit/fpjs-3-npm?file=index.js&devtoolsheight=100)
 
-When you run FingerprintJS installed with NPM or Yarn, the library sends an AJAX request to a FingerprintJS server
-to collect usage statistics. A request includes the following information:
+When you run FingerprintJS installed with NPM or Yarn, the library sends an AJAX request to a FingerprintJS server to collect usage statistics.
+The request is sent at most once a week from one browser instance (if the browser cache is not cleared).
+A request includes the following information:
 
 - The library version
 - The HTTP headers that the client sends, including the origin and the referrer of the page where the library runs
@@ -81,6 +82,8 @@ const fpPromise = FingerprintJS.load({
 + monitoring: false
 })
 ```
+
+The request is always turned off in the scripts downloaded from https://openfpcdn.net.
 
 If you face a TypeScript error that occurs in a FingerprintJS file,
 see the [TypeScript support guide](typescript_support.md).
