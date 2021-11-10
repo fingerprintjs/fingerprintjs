@@ -13,9 +13,6 @@
   <a href="https://www.npmjs.com/package/@fingerprintjs/fingerprintjs">
     <img src="https://img.shields.io/npm/dm/@fingerprintjs/fingerprintjs.svg" alt="Monthly downloads from NPM">
   </a>
-  <a href="https://www.jsdelivr.com/package/npm/@fingerprintjs/fingerprintjs">
-    <img src="https://img.shields.io/jsdelivr/npm/hm/@fingerprintjs/fingerprintjs.svg" alt="Monthly downloads from jsDelivr">
-  </a>
 </p>
 <p align="center">
   <a href="https://discord.gg/39EpE2neBg">
