@@ -9,7 +9,8 @@ The library supports all the popular installation methods:
 ```html
 <script>
   // Initialize the agent at application startup.
-  const fpPromise = import('https://openfpcdn.net/fingerprintjs@3')
+  // You can also use https://openfpcdn.net/fingerprintjs/v3/esm.min.js
+  const fpPromise = import('https://openfpcdn.net/fingerprintjs/v3')
     .then(FingerprintJS => FingerprintJS.load())
 
   // Get the visitor identifier when you need it.
@@ -22,13 +23,13 @@ The library supports all the popular installation methods:
 [Run this code](https://stackblitz.com/edit/fpjs-3-cdn?file=index.html&devtoolsheight=100)
 
 For browsers that don't support [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
-see the [browser support guide](docs/browser_support.md#old-browsers-requirements).
+see the [browser support guide](browser_support.md#import-support).
 
 ### UMD
 
 ```js
 require(
-  ['https://openfpcdn.net/fingerprintjs@3/umd.min.js'],
+  ['https://openfpcdn.net/fingerprintjs/v3/umd.min.js'],
   FingerprintJS => {
     // Initialize the agent at application startup.
     const fpPromise = FingerprintJS.load()

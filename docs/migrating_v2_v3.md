@@ -14,7 +14,7 @@ The migration process depends on the way you install the library.
 
 ### CDN
 
-Use the new URL: https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js
+Use the new URL: https://openfpcdn.net/fingerprintjs/v3/iife.min.js
 
 ### Bower
 

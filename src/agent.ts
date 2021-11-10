@@ -188,7 +188,7 @@ function monitor() {
   }
   try {
     const request = new XMLHttpRequest()
-    request.open('get', `https://opencdn.net/fingerprintjs@${version}/npm-monitoring`, true)
+    request.open('get', `https://openfpcdn.net/fingerprintjs/v${version}/npm-monitoring`, true)
     request.send()
   } catch (error) {
     // console.error is ok here because it's an unexpected error handler
