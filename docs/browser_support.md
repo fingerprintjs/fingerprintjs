@@ -29,9 +29,9 @@ Old browsers don't support [import](https://developer.mozilla.org/en-US/docs/Web
 Replace it with a `<script>` tag:
 
 ```diff
-+ <script src="https://openfpcdn.net/fingerprintjs/v3/iife.min.js"></script>
++ <script src="https://openfpcdn.io/fingerprintjs/v3/iife.min.js"></script>
   <script>
--   const fpPromise = import('https://openfpcdn.net/fingerprintjs/v3')
+-   const fpPromise = import('https://openfpcdn.io/fingerprintjs/v3')
 -     .then(FingerprintJS => FingerprintJS.load())
 +   var fpPromise = FingerprintJS.load()
 
@@ -50,7 +50,7 @@ Examples for various installation methods:
 
 ```diff
 + <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
-  <script src="https://openfpcdn.net/fingerprintjs/v3/iife.min.js"></script>
+  <script src="https://openfpcdn.io/fingerprintjs/v3/iife.min.js"></script>
   <script>
     var fpPromise = FingerprintJS.load()
 
@@ -63,7 +63,7 @@ Examples for various installation methods:
 ```diff
   require(
     [
-      'https://openfpcdn.net/fingerprintjs/v3/umd.min.js',
+      'https://openfpcdn.io/fingerprintjs/v3/umd.min.js',
 +     'https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js',
     ],
     function (FingerprintJS) {

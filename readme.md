@@ -32,7 +32,7 @@ FingerprintJS is a browser fingerprinting library that queries browser attribute
 ```html
 <script>
   // Initialize the agent at application startup.
-  const fpPromise = import('https://openfpcdn.net/fingerprintjs/v3')
+  const fpPromise = import('https://openfpcdn.io/fingerprintjs/v3')
     .then(FingerprintJS => FingerprintJS.load())
 
   // Get the visitor identifier when you need it.
