@@ -9,14 +9,14 @@ npx browserslist "cover 96% in us, not IE < 10, not safari < 9"
 
 At the moment, these browsers are:
 
-- **Internet Explorer** 11 ([see the section below](#polyfills))
+- **Internet Explorer** 11 ([see the section below](#old-browsers-requirements))
 - **Edge** 18 and 85+
 - **Chrome** 42+
 - **Firefox** 48+
 - **Desktop Safari** 11.1+
 - **Mobile Safari** 9.3+
 - **Samsung Internet** 11.1+
-- **Android Browser** 4.1+ ([see the section below](#polyfills))
+- **Android Browser** 4.1+ ([see the section below](#old-browsers-requirements))
 
 Other browsers will probably also work, but we don't guarantee it.
 
@@ -29,7 +29,7 @@ Old browsers don't support [import](https://developer.mozilla.org/en-US/docs/Web
 Replace it with a `<script>` tag:
 
 ```diff
-+ // note that we use iife.min.js with older browsers
++ // Note that we use iife.min.js with older browsers
 + <script src="https://openfpcdn.io/fingerprintjs/v3/iife.min.js"></script>
   <script>
 -   const fpPromise = import('https://openfpcdn.io/fingerprintjs/v3')
