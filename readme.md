@@ -53,7 +53,7 @@ FingerprintJS is a browser fingerprinting library that queries browser attribute
 ## Upgrade to [Pro version](https://fingerprintjs.com/github/) to get 99.5% identification accuracy
 
 FingerprintJS Pro is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
-Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in 99.5% identification accuracy.
+Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in the 99.5% identification accuracy.
 
 **You can try Pro without usage limits for 10 days - no credit card required.**
 
@@ -85,6 +85,7 @@ Full product comparison:
     <!-- -->
     <tr><td colspan="3"><h4>Additional Features</h4></td></tr>
     <tr><td><b>Incognito mode detection</b><br/><i>works in all modern browsers - see our full list of <a href="https://dev.fingerprintjs.com/docs/browser-support/" target="_blank">browsers supported</a></i></td><td align="center">–</td><td align="center">✓</td></tr>
+    <tr><td><b>Confidence score</b><br/><i>Indicates how accurate each identification event is</i></td><td align="center">–</td><td align="center">✓</td></tr>
     <tr><td><b>Server-side accuracy increase</b><br/><i>based on additional server-side signals, such as TLS crypto support, ipv4/v6 data and others</i></td><td align="center">–</td><td align="center">✓</td></tr>
     <tr><td><b>Query API & realtime Webhooks</b><br/><i>build flexible workflows</i></td><td align="center">–</td><td align="center">✓</td></tr>
     <tr><td><b>Geolocation</b><br/><i>based on IP address</i></td><td align="center">–</td><td align="center">✓</td></tr>
@@ -155,6 +156,7 @@ See more details and learn how to run the library in old browsers in the [browse
 
 See the [contributing guidelines](contributing.md) to learn how to start a playground, test and build.
 
-## Useful links
+## Other projects by FingerprintJS
 
-* [Easy to use bot detection in JS, new FingerprintJS project](https://github.com/fingerprintjs/botd)
+* [BotD -- Easy to use JavaScript bot detection](https://github.com/fingerprintjs/botd)
+* [AEV -- Android App Environment Verification API](https://github.com/fingerprintjs/aev)

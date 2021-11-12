@@ -67,15 +67,15 @@ const fpPromise = FingerprintJS.load()
 
 [Run this code](https://stackblitz.com/edit/fpjs-3-npm?file=index.js&devtoolsheight=100)
 
-When you run FingerprintJS installed with NPM or Yarn, the library sends an AJAX request to a FingerprintJS server to collect usage statistics.
-The request is sent at most once a week from one browser instance (if the browser cache is not cleared).
+When you run FingerprintJS installed with NPM or Yarn, the library will periodically send AJAX requests to FingerprintJS servers to collect usage statistics.
+The requests are sent once a week from one browser instance (unless the browser cache was cleared).
 A request includes the following information:
 
 - The library version
 - The HTTP headers that the client sends, including the origin and the referrer of the page where the library runs
 - The IP of the client
 
-You can turn off this request using the `monitoring` option:
+You can turn off these requests by using the `monitoring` option:
 
 ```diff
 const fpPromise = FingerprintJS.load({
@@ -83,12 +83,12 @@ const fpPromise = FingerprintJS.load({
 })
 ```
 
-The request is always turned off in the scripts downloaded from https://openfpcdn.io.
+💡 Scripts downloaded from our CDN (https://openfpcdn.io) have monitoring requests diabled by default.
 
-If you face a TypeScript error that occurs in a FingerprintJS file,
+If you have a TypeScript error that occurs in a FingerprintJS file,
 see the [TypeScript support guide](typescript_support.md).
 
-An outdated CommonJS syntax:
+CommonJS syntax (outdated):
 
 ```js
 const FingerprintJS = require('@fingerprintjs/fingerprintjs')
