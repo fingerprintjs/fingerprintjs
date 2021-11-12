@@ -49,6 +49,7 @@
   "devDependencies": {
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-replace": "^3.0.0",
     "@rollup/plugin-typescript": "^6.0.0",
     "@types/jasmine": "^3.5.14",
     "@types/ua-parser-js": "^0.7.35",
