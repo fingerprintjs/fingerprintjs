@@ -83,7 +83,7 @@ const fpPromise = FingerprintJS.load({
 })
 ```
 
-💡 Scripts downloaded from our CDN (https://openfpcdn.io) have monitoring requests diabled by default.
+💡 Scripts downloaded from our CDN (https://openfpcdn.io) have monitoring disabled by default.
 
 If you have a TypeScript error that occurs in a FingerprintJS file,
 see the [TypeScript support guide](typescript_support.md).
