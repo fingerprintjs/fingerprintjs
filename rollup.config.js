@@ -2,6 +2,7 @@ const path = require('path')
 const jsonPlugin = require('@rollup/plugin-json')
 const nodeResolvePlugin = require('@rollup/plugin-node-resolve').nodeResolve
 const typescriptPlugin = require('@rollup/plugin-typescript')
+const replacePlugin = require('@rollup/plugin-replace')
 const terserPlugin = require('rollup-plugin-terser').terser
 const dtsPlugin = require('rollup-plugin-dts').default
 const licensePlugin = require('rollup-plugin-license')
@@ -40,6 +41,17 @@ module.exports = [
   // Browser bundles. They have all the dependencies included for convenience.
   {
     ...commonInput,
+    plugins: [
+      ...commonInput.plugins,
+      // The monitoring is disabled in the browser bundles temporarily because these bundles are served from jsDelivr,
+      // and we don't want the script to send monitoring requests unexpectedly for the website owners.
+      // todo: Remove this plugin when there are more downloads from our CDN than from jsDelivr, or after 2022-02-11
+      replacePlugin({
+        values: { 'window.__fpjs_d_m': 'true' },
+        preventAssignment: true,
+        exclude: '**/node_modules/**',
+      }),
+    ],
     output: [
       // IIFE for users who use Require.js or Electron and want to just call `window.FingerprintJS.load()`
       {

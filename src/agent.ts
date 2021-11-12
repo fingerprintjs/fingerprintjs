@@ -21,6 +21,11 @@ export interface LoadOptions {
    * Required to ease investigations of problems.
    */
   debug?: boolean
+  /**
+   * Set `false` to disable the unpersonalized AJAX request that the agent sends to collect installation statistics.
+   * It's always disabled in the version published to the FingerprintJS CDN.
+   */
+  monitoring?: boolean
 }
 
 /**
@@ -174,9 +179,31 @@ components: ${componentsToDebugString(components)}
 }
 
 /**
+ * Sends an unpersonalized AJAX request to collect installation statistics
+ */
+function monitor() {
+  // The FingerprintJS CDN (https://github.com/fingerprintjs/cdn) replaces `window.__fpjs_d_m` with `true`
+  if (window.__fpjs_d_m) {
+    return
+  }
+  try {
+    const request = new XMLHttpRequest()
+    request.open('get', `https://openfpcdn.io/fingerprintjs/v${version}/npm-monitoring`, true)
+    request.send()
+  } catch (error) {
+    // console.error is ok here because it's an unexpected error handler
+    // eslint-disable-next-line no-console
+    console.error(error)
+  }
+}
+
+/**
  * Builds an instance of Agent and waits a delay required for a proper operation.
  */
-export async function load({ delayFallback, debug }: Readonly<LoadOptions> = {}): Promise<Agent> {
+export async function load({ delayFallback, debug, monitoring = true }: Readonly<LoadOptions> = {}): Promise<Agent> {
+  if (monitoring) {
+    monitor()
+  }
   await prepareForSources(delayFallback)
   const getComponents = loadBuiltinSources({ debug })
   return makeAgent(getComponents, debug)

@@ -10,6 +10,7 @@ interface Window {
   cancelIdleCallback?(handle: number): void
   webkitOfflineAudioContext?: OfflineAudioContext
   openDatabase?(...args: unknown[]): void
+  __fpjs_d_m?: unknown
 }
 
 interface Navigator {

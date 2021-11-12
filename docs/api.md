@@ -2,23 +2,16 @@
 
 ## Installation
 
-The library is shipped in various formats:
+The library supports all the popular installation methods:
 
-### Global variable
+### Browser ECMAScript module
 
 ```html
 <script>
   // Initialize the agent at application startup.
-  const fpPromise = new Promise((resolve, reject) => {
-    const script = document.createElement('script')
-    script.onload = resolve
-    script.onerror = reject
-    script.async = true
-    script.src = 'https://cdn.jsdelivr.net/npm/'
-      + '@fingerprintjs/fingerprintjs@3/dist/fp.min.js'
-    document.head.appendChild(script)
-  })
-    .then(() => FingerprintJS.load())
+  // You can also use https://openfpcdn.io/fingerprintjs/v3/esm.min.js
+  const fpPromise = import('https://openfpcdn.io/fingerprintjs/v3')
+    .then(FingerprintJS => FingerprintJS.load())
 
   // Get the visitor identifier when you need it.
   fpPromise
@@ -27,27 +20,17 @@ The library is shipped in various formats:
 </script>
 ```
 
-Or a synchronous code that blocks the page during loading and therefore isn't recommended:
+[Run this code](https://stackblitz.com/edit/fpjs-3-cdn?file=index.html&devtoolsheight=100)
 
-```html
-<script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
-<script>
-  // Initialize the agent at application startup.
-  const fpPromise = FingerprintJS.load()
-
-  // Get the visitor identifier when you need it.
-  fpPromise
-    .then(fp => fp.get())
-    .then(result => console.log(result.visitorId))
-</script>
-```
+For browsers that don't support [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
+see the [browser support guide](browser_support.md#import-support).
 
 ### UMD
 
 ```js
 require(
-  ['https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.umd.min.js'],
-  (FingerprintJS) => {
+  ['https://openfpcdn.io/fingerprintjs/v3/umd.min.js'],
+  FingerprintJS => {
     // Initialize the agent at application startup.
     const fpPromise = FingerprintJS.load()
 
@@ -59,7 +42,7 @@ require(
 )
 ```
 
-### ECMAScript module
+### Webpack/Rollup/NPM/Yarn
 
 ```bash
 # Install the package first:
@@ -82,17 +65,30 @@ const fpPromise = FingerprintJS.load()
 })()
 ```
 
+[Run this code](https://stackblitz.com/edit/fpjs-3-npm?file=index.js&devtoolsheight=100)
+
+When you run FingerprintJS installed with NPM or Yarn, the library sends an AJAX request to a FingerprintJS server to collect usage statistics.
+The request is sent at most once a week from one browser instance (if the browser cache is not cleared).
+A request includes the following information:
+
+- The library version
+- The HTTP headers that the client sends, including the origin and the referrer of the page where the library runs
+- The IP of the client
+
+You can turn off this request using the `monitoring` option:
+
+```diff
+const fpPromise = FingerprintJS.load({
++ monitoring: false
+})
+```
+
+The request is always turned off in the scripts downloaded from https://openfpcdn.io.
+
 If you face a TypeScript error that occurs in a FingerprintJS file,
 see the [TypeScript support guide](typescript_support.md).
 
-### CommonJS
-
-```bash
-# Install the package first:
-npm i @fingerprintjs/fingerprintjs
-# or
-yarn add @fingerprintjs/fingerprintjs
-```
+An outdated CommonJS syntax:
 
 ```js
 const FingerprintJS = require('@fingerprintjs/fingerprintjs')
@@ -108,13 +104,15 @@ fpPromise
 
 ## API
 
-#### `FingerprintJS.load({ delayFallback?: number, debug?: boolean }): Promise<Agent>`
+#### `FingerprintJS.load({ delayFallback?: number, debug?: boolean, monitoring?: boolean }): Promise<Agent>`
 
 Builds an instance of Agent and waits a delay required for a proper operation.
 We recommend calling it as soon as possible.
 `delayFallback` is an optional parameter that sets duration (milliseconds) of the fallback for browsers that don't support [requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback);
 it has a good default value which we don't recommend to change.
 `debug: true` prints debug messages to the console.
+`monitoring: false` disables the AJAX request that the library sends to a FingerprintJS server to collect usage statistics
+(it's always disabled in the CDN version).
 
 #### `agent.get(): Promise<GetResult>`
 
