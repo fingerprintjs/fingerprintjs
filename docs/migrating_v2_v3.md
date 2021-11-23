@@ -70,7 +70,7 @@ Version 3 emits a complete visitor identifier, you don't need to derive it from 
   })
 ```
 
-If you need to get raw components, you can, but the format is different:
+If you need to get the raw components, you can, but the format is different:
 
 ```diff
 const result = await fp.get()
@@ -98,3 +98,67 @@ console.log(result)
 Version 3 has no options for customization, it provides a good built-in setup.
 Nevertheless, you can exclude built-in entropy components and add custom entropy components manually.
 See the [extending guide](extending.md) to learn more.
+
+## How to update without losing the identifiers
+
+The identifiers produced by version 3 don't match the identifiers produced by version 2.
+If this is an issue for you, you can implement the following strategy.
+
+Install version 3 together with version 2:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@2/dist/fingerprint2.min.js"></script>
+<script src="https://openfpcdn.io/fingerprintjs/v3/iife.min.js"></script>
+```
+
+(if you prefer NPM or Yarn, see [this note](https://stackoverflow.com/a/56495651/1118709))
+
+When you need the visitor identifier, get identifiers from both versions:
+
+```js
+Promise.all([
+  new Promise(resolve => {
+    requestIdleCallback(() => {
+      Fingerprint2.get(resolve)
+    })
+  }),
+  FingerprintJS.load().then(fp => fp.get())
+]).then(([v2Result, v3Result]) => {
+  // Handle both the results. For example, send to your server.
+  const v2VisitorId = Fingerprint2.x64hash128(
+    v2Result.map(component => component.value).join(''),
+    31
+  )
+  const v3VisitorId = v3Result.visitorId
+  return fetch(
+    '/visitor'
+      + `?fingerprintV2=${encodeURIComponent(v2VisitorId)}`
+      + `&fingerprintV3=${encodeURIComponent(v3VisitorId)}`
+  )
+})
+```
+
+Make your server search using both the identifiers. Save the version 3 identifier:
+
+```sql
+-- Getting the visitor
+SELECT * FROM visitors
+WHERE
+  fingerprintV2 = :fingerprintV2 OR
+  fingerprintV3 = :fingerprintV3;
+
+-- Update the visitor identifier
+-- to switch to the fingerprint version 3
+UPDATE visitors
+SET fingerprintV3 = :fingerprintV3
+WHERE fingerprintV2 = :fingerprintV2;
+
+-- Saving a new visitor
+INSERT INTO visitors (..., fingerprintV3)
+VALUES (..., :fingerprintV3);
+```
+
+Later, when you get many enough identifiers of the version 3, remove the version 2 library and its identifiers.
+
+The version 3 fingerprints may change after updating to a new major version, so you should
+[extend this strategy](version_policy.md#how-to-update-without-losing-the-identifiers) to minor sub-versions of version 3 too.
