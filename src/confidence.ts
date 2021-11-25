@@ -62,11 +62,3 @@ function getOpenConfidenceScore(components: Pick<BuiltinComponents, 'platform'>)
 function deriveProConfidenceScore(openConfidenceScore: number): number {
   return round(0.99 + 0.01 * openConfidenceScore, 0.0001)
 }
-
-/**
- * Warning for package users:
- * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
- */
-export function getProConfidenceScore(...args: Parameters<typeof getOpenConfidenceScore>): number {
-  return deriveProConfidenceScore(getOpenConfidenceScore(...args))
-}
