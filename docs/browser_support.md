@@ -4,19 +4,19 @@ The library supports all popular browsers.
 We use the following command to determine which browsers to support:
 
 ```bash
-npx browserslist "cover 96% in us, not IE < 10, not safari < 9"
+npx browserslist "cover 96% in us, not IE < 11"
 ```
 
 At the moment, these browsers are:
 
 - **Internet Explorer** 11 ([see the section below](#old-browsers-requirements))
-- **Edge** 18 and 85+
-- **Chrome** 42+
-- **Firefox** 48+
-- **Desktop Safari** 11.1+
-- **Mobile Safari** 9.3+
-- **Samsung Internet** 11.1+
-- **Android Browser** 4.1+ ([see the section below](#old-browsers-requirements))
+- **Edge** 93+
+- **Chrome** 49+
+- **Firefox** 52+
+- **Desktop Safari** 12.1+
+- **Mobile Safari** 10.3+
+- **Samsung Internet** 14.0+
+- **Android Browser** 4.4+ ([see the section below](#old-browsers-requirements))
 
 Other browsers will probably also work, but we don't guarantee it.
 
@@ -42,7 +42,7 @@ Replace it with a `<script>` tag:
 
 ### Polyfills
 
-Very old browsers like Internet Explorer 11 and Android Browser 4.1
+Very old browsers like Internet Explorer 11 and Android Browser 4.4
 require a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) polyfill to work.
 Add a Promise polyfill before loading the FingerprintJS agent.
 Examples for various installation methods:
