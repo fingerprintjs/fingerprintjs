@@ -8,7 +8,7 @@ const testString = 'mmMwWLliI0O&1'
 const textSize = '48px'
 
 // A font will be compared against all the three default fonts.
-// And if it doesn't match all 3 then that font is not available.
+// And if for any default fonts it doesn't match, then that font is available.
 const baseFonts = ['monospace', 'sans-serif', 'serif'] as const
 
 const fontList = [
