@@ -50,11 +50,10 @@ export async function withIframe<T>(
         // The contentWindow.document can miss in JSDOM (https://github.com/jsdom/jsdom).
         if (iframe.contentWindow?.document?.readyState === 'complete') {
           resolve()
-        } else {
-          setTimeout(checkReadyState, 10)
+          clearInterval(timerId)
         }
       }
-      checkReadyState()
+      const timerId = setInterval(checkReadyState, 10)
     })
 
     while (!iframe.contentWindow?.document?.body) {
