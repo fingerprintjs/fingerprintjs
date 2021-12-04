@@ -4,6 +4,24 @@ export function wait<T = void>(durationMs: number, resolveWith?: T): Promise<T> 
   return new Promise((resolve) => setTimeout(resolve, durationMs, resolveWith))
 }
 
+export function waitUntil<T>(condition: () => T, intervalMs: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const checkCondition = () => {
+      try {
+        const v = condition()
+        if (v) {
+          resolve(v)
+          clearInterval(timerId)
+        }
+      } catch (e) {
+        reject(e)
+        clearInterval(timerId)
+      }
+    }
+    const timerId = setInterval(checkCondition, intervalMs)
+  })
+}
+
 export function requestIdleCallbackIfAvailable(fallbackTimeout: number, deadlineTimeout = Infinity): Promise<void> {
   const { requestIdleCallback } = window
   if (requestIdleCallback) {

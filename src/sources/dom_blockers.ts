@@ -1,7 +1,7 @@
 import { isAndroid, isWebKit } from '../utils/browser'
 import { selectorToElement } from '../utils/dom'
 import { countTruthy } from '../utils/data'
-import { wait } from '../utils/async'
+import { waitUntil } from '../utils/async'
 
 /**
  * Only single element selector are supported (no operators like space, +, >, etc).
@@ -326,10 +326,8 @@ export async function getBlockedSelectors<T extends string>(selectors: readonly 
   }
 
   // document.body can be null while the page is loading
-  while (!d.body) {
-    await wait(50)
-  }
-  d.body.appendChild(root)
+  const body = d.body || (await waitUntil(() => d.body, 50))
+  body.appendChild(root)
 
   try {
     // Then check which of the elements are blocked

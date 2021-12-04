@@ -1,4 +1,4 @@
-import { wait } from './async'
+import { waitUntil } from './async'
 import { parseSimpleCssSelector } from './data'
 
 /**
@@ -19,8 +19,8 @@ export async function withIframe<T>(
   const d = document
 
   // document.body can be null while the page is loading
-  while (!d.body) {
-    await wait(domPollInterval)
+  if (!d.body) {
+    await waitUntil(() => d.body, domPollInterval)
   }
 
   const iframe = d.createElement('iframe')
@@ -56,11 +56,12 @@ export async function withIframe<T>(
       const timerId = setInterval(checkReadyState, 10)
     })
 
-    while (!iframe.contentWindow?.document?.body) {
-      await wait(domPollInterval)
+    const haveContentBody = () => !!iframe.contentWindow?.document?.body
+    if (!haveContentBody()) {
+      await waitUntil(haveContentBody, domPollInterval)
     }
 
-    return await action(iframe, iframe.contentWindow)
+    return await action(iframe, iframe.contentWindow as Window)
   } finally {
     iframe.parentNode?.removeChild(iframe)
   }
