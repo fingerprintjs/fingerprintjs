@@ -26,7 +26,17 @@ export async function withIframe<T>(
   const iframe = d.createElement('iframe')
 
   try {
-    await new Promise((resolve, reject) => {
+    await new Promise((_resolve, _reject) => {
+      let isComplete = false
+      const resolve = () => {
+        isComplete = true
+        _resolve()
+      }
+      const reject = (error: unknown) => {
+        isComplete = true
+        _reject(error)
+      }
+
       iframe.onload = resolve
       iframe.onerror = reject
       const { style } = iframe
@@ -46,6 +56,13 @@ export async function withIframe<T>(
       // This code checks for the loading state manually.
       // See https://github.com/fingerprintjs/fingerprintjs/issues/645
       const checkReadyState = () => {
+        // The ready state may never become 'complete' in Firefox despite the 'load' event being fired.
+        // So an infinite setTimeout loop can happen without this check.
+        // See https://github.com/fingerprintjs/fingerprintjs/pull/716#issuecomment-986898796
+        if (isComplete) {
+          return
+        }
+
         // Make sure iframe.contentWindow and iframe.contentWindow.document are both loaded
         // The contentWindow.document can miss in JSDOM (https://github.com/jsdom/jsdom).
         if (iframe.contentWindow?.document?.readyState === 'complete') {
