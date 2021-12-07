@@ -45,7 +45,7 @@ Open the HTML file created above in the browser.
 AdGuard in Safari works well if you just open the local file directly.
 You can use [ngrok](https://stackoverflow.com/a/58547760/1118709) to open the file on another device.
 
-For each filter in the list above, except for the filters noted as having no blocked selectors or duplicating other filters, do the following steps:
+For each filter in the list mentioned above, do the following steps:
 
 1. Go to the ab blocker settings, turn on only this filter, make sure the new filter set is applied (click the refresh button in the ad blocker settings and wait a couple seconds).
 2. Return to the browser, refresh the page (make sure the field content has changed). It will show which CSS selectors are blocked by the current filter.
