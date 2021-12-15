@@ -38,8 +38,8 @@
     "playground:build": "cd playground && webpack --mode production",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore --max-warnings 0 .",
     "lint:fix": "yarn lint --fix",
-    "test:local": "karma start tests/karma.local.config.js --single-run",
-    "test:browserstack": "karma start tests/karma.browserstack.config.js --single-run",
+    "test:local": "karma start --preset local --single-run",
+    "test:browserstack": "karma start --preset browserstack --single-run",
     "test:dts": "tsc --noEmit dist/fp.d.ts",
     "test:ssr": "node --require './dist/fp.cjs.js' --eval '' || (echo \"The distributive files can't be used with server side rendering. Make sure the code doesn't use browser API until an exported function is called.\" && exit 1)"
   },
