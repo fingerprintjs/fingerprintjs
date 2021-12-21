@@ -183,7 +183,7 @@ components: ${componentsToDebugString(components)}
  */
 function monitor() {
   // The FingerprintJS CDN (https://github.com/fingerprintjs/cdn) replaces `window.__fpjs_d_m` with `true`
-  if (window.__fpjs_d_m) {
+  if (window.__fpjs_d_m || Math.random() >= 0.01) {
     return
   }
   try {
