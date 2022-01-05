@@ -14,7 +14,7 @@ const result = await fp.get()
 // The `languages` and `audio` components will be excluded
 const { languages, audio, ...components } = result.components
 
-// Optinally, you can make a visitor identifier from your custom list of components
+// Optionally, you can make a visitor identifier from your custom list of components
 const visitorId = FingerprintJS.hashComponents(components)
 ```
 
@@ -34,7 +34,7 @@ const components = {
   bar: { value: await getBarComponent() },
 }
 
-// Optinally, you can make a visitor identifier from your custom list of components
+// Optionally, you can make a visitor identifier from your custom list of components
 const visitorId = FingerprintJS.hashComponents(components)
 ```
 
@@ -55,7 +55,7 @@ const extendedComponents = {
   bar: { value: await getBarComponent() },
 }
 
-// Optinally, you can make a visitor identifier from your custom list of components
+// Optionally, you can make a visitor identifier from your custom list of components
 const visitorId = FingerprintJS.hashComponents(extendedComponents)
 ```
 
@@ -94,6 +94,6 @@ if (components.canvas.value) {
   }
 }
 
-// Optinally, you can make a visitor identifier from your custom list of components
+// Optionally, you can make a visitor identifier from your custom list of components
 const visitorId = FingerprintJS.hashComponents(components)
 ```
