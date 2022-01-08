@@ -80,11 +80,13 @@ export interface Agent {
 
 function componentsToCanonicalString(components: UnknownComponents) {
   let result = ''
-  for (const componentKey of Object.keys(components).sort()) {
-    const component = components[componentKey]
-    const value = component.error ? 'error' : JSON.stringify(component.value)
-    result += `${result ? '|' : ''}${componentKey.replace(/([:|\\])/g, '\\$1')}:${value}`
-  }
+  Object.keys(components)
+    .sort()
+    .forEach((componentKey) => {
+      const component = components[componentKey]
+      const value = component.error ? 'error' : JSON.stringify(component.value)
+      result += `${result ? '|' : ''}${componentKey.replace(/([:|\\])/g, '\\$1')}:${value}`
+    })
   return result
 }
 
@@ -183,6 +185,7 @@ components: ${componentsToDebugString(components)}
  */
 function monitor() {
   // The FingerprintJS CDN (https://github.com/fingerprintjs/cdn) replaces `window.__fpjs_d_m` with `true`
+  // eslint-disable-next-line no-underscore-dangle
   if (window.__fpjs_d_m || Math.random() >= 0.01) {
     return
   }

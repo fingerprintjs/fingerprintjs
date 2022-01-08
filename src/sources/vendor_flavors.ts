@@ -5,7 +5,7 @@
 export default function getVendorFlavors(): string[] {
   const flavors: string[] = []
 
-  for (const key of [
+  ;[
     // Blink and some browsers on iOS
     'chrome',
 
@@ -45,12 +45,12 @@ export default function getVendorFlavors(): string[] {
 
     // UC on iOS and Opera on Android have no specific global variables
     // Edge for Android isn't checked
-  ]) {
+  ].forEach((key) => {
     const value = ((window as unknown) as Record<string, unknown>)[key]
     if (value && typeof value === 'object') {
       flavors.push(key)
     }
-  }
+  })
 
   return flavors.sort()
 }

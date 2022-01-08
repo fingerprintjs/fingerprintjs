@@ -144,8 +144,8 @@ export function isChromium86OrNewer(): boolean {
     countTruthy([
       !('MediaSettingsRange' in w),
       'RTCEncodedAudioFrame' in w,
-      '' + w.Intl === '[object Intl]',
-      '' + w.Reflect === '[object Reflect]',
+      `${w.Intl}` === '[object Intl]',
+      `${w.Reflect}` === '[object Reflect]',
     ]) >= 3
   )
 }
@@ -186,7 +186,7 @@ export function isIPad(): boolean {
     return true
   }
 
-  const s = screen
+  const s = window.screen
   const screenRatio = s.width / s.height
 
   return (

@@ -10,7 +10,7 @@ import { wait } from '../utils/async'
  *
  * See docs/content_blockers.md to learn how to make the list
  */
-export const filters = {
+export const filters: { [key: string]: string[] } = {
   abpIndo: [
     '#Iklan-Melayang',
     '#Kolom-Iklan-728',
@@ -257,41 +257,13 @@ interface Options {
   debug?: boolean
 }
 
-/**
- * The order of the returned array means nothing (it's always sorted alphabetically).
- *
- * Notice that the source is slightly unstable.
- * Safari provides a 2-taps way to disable all content blockers on a page temporarily.
- * Also content blockers can be disabled permanently for a domain, but it requires 4 taps.
- * So empty array shouldn't be treated as "no blockers", it should be treated as "no signal".
- * If you are a website owner, don't make your visitors want to disable content blockers.
- */
-export default async function getDomBlockers({ debug }: Options = {}): Promise<string[] | undefined> {
-  if (!isApplicable()) {
-    return undefined
-  }
-
-  const filterNames = Object.keys(filters) as Array<keyof typeof filters>
-  const allSelectors = ([] as string[]).concat(...filterNames.map((filterName) => filters[filterName]))
-  const blockedSelectors = await getBlockedSelectors(allSelectors)
-
-  if (debug) {
-    printDebug(blockedSelectors)
-  }
-
-  const activeBlockers = filterNames.filter((filterName) => {
-    const selectors = filters[filterName]
-    const blockedCount = countTruthy(selectors.map((selector) => blockedSelectors[selector]))
-    return blockedCount > selectors.length * 0.6
-  })
-  activeBlockers.sort()
-
-  return activeBlockers
-}
-
 export function isApplicable(): boolean {
   // Safari (desktop and mobile) and all Android browsers keep content blockers in both regular and private mode
   return isWebKit() || isAndroid()
+}
+
+function forceShow(element: HTMLElement) {
+  element.style.setProperty('display', 'block', 'important')
 }
 
 export async function getBlockedSelectors<T extends string>(selectors: readonly T[]): Promise<{ [K in T]?: true }> {
@@ -334,19 +306,47 @@ export async function getBlockedSelectors<T extends string>(selectors: readonly 
   return blockedSelectors
 }
 
-function forceShow(element: HTMLElement) {
-  element.style.setProperty('display', 'block', 'important')
-}
-
 function printDebug(blockedSelectors: { [K in string]?: true }) {
   let message = 'DOM blockers debug:\n```'
-  for (const filterName of Object.keys(filters) as Array<keyof typeof filters>) {
+  Object.keys(filters).forEach((filterName) => {
     message += `\n${filterName}:`
-    for (const selector of filters[filterName]) {
+    filters[filterName].forEach((selector) => {
       message += `\n  ${selector} ${blockedSelectors[selector] ? '🚫' : '➡️'}`
-    }
-  }
+    })
+  })
   // console.log is ok here because it's under a debug clause
   // eslint-disable-next-line no-console
   console.log(`${message}\n\`\`\``)
+}
+
+/**
+ * The order of the returned array means nothing (it's always sorted alphabetically).
+ *
+ * Notice that the source is slightly unstable.
+ * Safari provides a 2-taps way to disable all content blockers on a page temporarily.
+ * Also content blockers can be disabled permanently for a domain, but it requires 4 taps.
+ * So empty array shouldn't be treated as "no blockers", it should be treated as "no signal".
+ * If you are a website owner, don't make your visitors want to disable content blockers.
+ */
+export default async function getDomBlockers({ debug }: Options = {}): Promise<string[] | undefined> {
+  if (!isApplicable()) {
+    return undefined
+  }
+
+  const filterNames = Object.keys(filters)
+  const allSelectors = ([] as string[]).concat(...filterNames.map((filterName) => filters[filterName]))
+  const blockedSelectors = await getBlockedSelectors(allSelectors)
+
+  if (debug) {
+    printDebug(blockedSelectors)
+  }
+
+  const activeBlockers = filterNames.filter((filterName) => {
+    const selectors = filters[filterName]
+    const blockedCount = countTruthy(selectors.map((selector) => blockedSelectors[selector]))
+    return blockedCount > selectors.length * 0.6
+  })
+  activeBlockers.sort()
+
+  return activeBlockers
 }

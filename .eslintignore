@@ -1,0 +1,8 @@
+node_modules
+dist
+tests
+resources
+playground
+src_old
+**/*.test.ts
+

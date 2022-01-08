@@ -4,24 +4,6 @@ export interface CanvasFingerprint {
   text: string
 }
 
-// https://www.browserleaks.com/canvas#how-does-it-work
-export default function getCanvasFingerprint(): CanvasFingerprint {
-  const [canvas, context] = makeCanvasContext()
-  if (!isSupported(canvas, context)) {
-    return { winding: false, geometry: '', text: '' }
-  }
-
-  return {
-    winding: doesSupportWinding(context),
-    geometry: makeGeometryImage(canvas, context),
-    // Text is unstable:
-    // https://github.com/fingerprintjs/fingerprintjs/issues/583
-    // https://github.com/fingerprintjs/fingerprintjs/issues/103
-    // Therefore it's extracted into a separate image.
-    text: makeTextImage(canvas, context),
-  }
-}
-
 function makeCanvasContext() {
   const canvas = document.createElement('canvas')
   canvas.width = 1
@@ -45,9 +27,16 @@ function doesSupportWinding(context: CanvasRenderingContext2D) {
   return !context.isPointInPath(5, 5, 'evenodd')
 }
 
+function save(canvas: HTMLCanvasElement) {
+  // TODO: look into: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob
+  return canvas.toDataURL()
+}
+
 function makeTextImage(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
   // Resizing the canvas cleans it
+  // eslint-disable-next-line no-param-reassign
   canvas.width = 240
+  // eslint-disable-next-line no-param-reassign
   canvas.height = 60
 
   context.textBaseline = 'alphabetic'
@@ -75,24 +64,29 @@ function makeTextImage(canvas: HTMLCanvasElement, context: CanvasRenderingContex
 
 function makeGeometryImage(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
   // Resizing the canvas cleans it
+  // eslint-disable-next-line no-param-reassign
   canvas.width = 122
+  // eslint-disable-next-line no-param-reassign
   canvas.height = 110
 
   // Canvas blending
   // https://web.archive.org/web/20170826194121/http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
   // http://jsfiddle.net/NDYV8/16/
   context.globalCompositeOperation = 'multiply'
-  for (const [color, x, y] of [
+
+  const paths = [
     ['#f2f', 40, 40],
     ['#2ff', 80, 40],
     ['#ff2', 60, 80],
-  ] as const) {
+  ] as const
+
+  paths.forEach(([color, x, y]) => {
     context.fillStyle = color
     context.beginPath()
     context.arc(x, y, 40, 0, Math.PI * 2, true)
     context.closePath()
     context.fill()
-  }
+  })
 
   // Canvas winding
   // https://web.archive.org/web/20130913061632/http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
@@ -105,7 +99,20 @@ function makeGeometryImage(canvas: HTMLCanvasElement, context: CanvasRenderingCo
   return save(canvas)
 }
 
-function save(canvas: HTMLCanvasElement) {
-  // TODO: look into: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob
-  return canvas.toDataURL()
+// https://www.browserleaks.com/canvas#how-does-it-work
+export default function getCanvasFingerprint(): CanvasFingerprint {
+  const [canvas, context] = makeCanvasContext()
+  if (!isSupported(canvas, context)) {
+    return { winding: false, geometry: '', text: '' }
+  }
+
+  return {
+    winding: doesSupportWinding(context),
+    geometry: makeGeometryImage(canvas, context),
+    // Text is unstable:
+    // https://github.com/fingerprintjs/fingerprintjs/issues/583
+    // https://github.com/fingerprintjs/fingerprintjs/issues/103
+    // Therefore it's extracted into a separate image.
+    text: makeTextImage(canvas, context),
+  }
 }

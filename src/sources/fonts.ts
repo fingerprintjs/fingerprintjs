@@ -110,9 +110,9 @@ export default function getFonts(): Promise<string[]> {
       // Stores {fontName : [spans for that font]}
       const spans: Record<string, HTMLSpanElement[]> = {}
 
-      for (const font of fontList) {
+      fontList.forEach((font) => {
         spans[font] = baseFonts.map((baseFont) => createSpanWithFonts(font, baseFont))
-      }
+      })
 
       return spans
     }

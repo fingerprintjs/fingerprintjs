@@ -2,13 +2,15 @@
  * Taken from https://github.com/karanlyons/murmurHash3.js/blob/a33d0723127e2e5415056c455f8aed2451ace208/murmurHash3.js
  */
 
+/* eslint-disable no-bitwise */
+
 //
 // Given two 64bit ints (as an array of two 32bit ints) returns the two
 // added together as a 64bit int (as an array of two 32bit ints).
 //
-function x64Add(m: number[], n: number[]) {
-  m = [m[0] >>> 16, m[0] & 0xffff, m[1] >>> 16, m[1] & 0xffff]
-  n = [n[0] >>> 16, n[0] & 0xffff, n[1] >>> 16, n[1] & 0xffff]
+function x64Add(inputM: number[], inputN: number[]) {
+  const m = [inputM[0] >>> 16, inputM[0] & 0xffff, inputM[1] >>> 16, inputM[1] & 0xffff]
+  const n = [inputN[0] >>> 16, inputN[0] & 0xffff, inputN[1] >>> 16, inputN[1] & 0xffff]
   const o = [0, 0, 0, 0]
   o[3] += m[3] + n[3]
   o[2] += o[3] >>> 16
@@ -28,9 +30,9 @@ function x64Add(m: number[], n: number[]) {
 // Given two 64bit ints (as an array of two 32bit ints) returns the two
 // multiplied together as a 64bit int (as an array of two 32bit ints).
 //
-function x64Multiply(m: number[], n: number[]) {
-  m = [m[0] >>> 16, m[0] & 0xffff, m[1] >>> 16, m[1] & 0xffff]
-  n = [n[0] >>> 16, n[0] & 0xffff, n[1] >>> 16, n[1] & 0xffff]
+function x64Multiply(inputM: number[], inputN: number[]) {
+  const m = [inputM[0] >>> 16, inputM[0] & 0xffff, inputM[1] >>> 16, inputM[1] & 0xffff]
+  const n = [inputN[0] >>> 16, inputN[0] & 0xffff, inputN[1] >>> 16, inputN[1] & 0xffff]
   const o = [0, 0, 0, 0]
   o[3] += m[3] * n[3]
   o[2] += o[3] >>> 16
@@ -60,16 +62,16 @@ function x64Multiply(m: number[], n: number[]) {
 // representing a number of bit positions, returns the 64bit int (as an
 // array of two 32bit ints) rotated left by that number of positions.
 //
-function x64Rotl(m: number[], n: number) {
-  n %= 64
+function x64Rotl(m: number[], inputN: number) {
+  let n = inputN % 64
   if (n === 32) {
     return [m[1], m[0]]
-  } else if (n < 32) {
-    return [(m[0] << n) | (m[1] >>> (32 - n)), (m[1] << n) | (m[0] >>> (32 - n))]
-  } else {
-    n -= 32
-    return [(m[1] << n) | (m[0] >>> (32 - n)), (m[0] << n) | (m[1] >>> (32 - n))]
   }
+  if (n < 32) {
+    return [(m[0] << n) | (m[1] >>> (32 - n)), (m[1] << n) | (m[0] >>> (32 - n))]
+  }
+  n -= 32
+  return [(m[1] << n) | (m[0] >>> (32 - n)), (m[0] << n) | (m[1] >>> (32 - n))]
 }
 
 //
@@ -77,15 +79,15 @@ function x64Rotl(m: number[], n: number) {
 // representing a number of bit positions, returns the 64bit int (as an
 // array of two 32bit ints) shifted left by that number of positions.
 //
-function x64LeftShift(m: number[], n: number) {
-  n %= 64
+function x64LeftShift(m: number[], inputN: number) {
+  const n = inputN % 64
   if (n === 0) {
     return m
-  } else if (n < 32) {
-    return [(m[0] << n) | (m[1] >>> (32 - n)), m[1] << n]
-  } else {
-    return [m[1] << (n - 32), 0]
   }
+  if (n < 32) {
+    return [(m[0] << n) | (m[1] >>> (32 - n)), m[1] << n]
+  }
+  return [m[1] << (n - 32), 0]
 }
 //
 // Given two 64bit ints (as an array of two 32bit ints) returns the two
@@ -99,8 +101,8 @@ function x64Xor(m: number[], n: number[]) {
 // (`[0, h[0] >>> 1]` is a 33 bit unsigned right shift. This is the
 // only place where we need to right shift 64bit ints.)
 //
-function x64Fmix(h: number[]) {
-  h = x64Xor(h, [0, h[0] >>> 1])
+function x64Fmix(inputH: number[]) {
+  let h = x64Xor(inputH, [0, inputH[0] >>> 1])
   h = x64Multiply(h, [0xff51afd7, 0xed558ccd])
   h = x64Xor(h, [0, h[0] >>> 1])
   h = x64Multiply(h, [0xc4ceb9fe, 0x1a85ec53])
@@ -112,9 +114,9 @@ function x64Fmix(h: number[]) {
 // Given a string and an optional seed as an int, returns a 128 bit
 // hash using the x64 flavor of MurmurHash3, as an unsigned hex.
 //
-export function x64hash128(key: string, seed?: number): string {
-  key = key || ''
-  seed = seed || 0
+export function x64hash128(inputKey: string, inputSeed?: number): string {
+  const key = inputKey || ''
+  const seed = inputSeed || 0
   const remainder = key.length % 16
   const bytes = key.length - remainder
   let h1 = [0, seed]
@@ -124,7 +126,7 @@ export function x64hash128(key: string, seed?: number): string {
   const c1 = [0x87c37b91, 0x114253d5]
   const c2 = [0x4cf5ad43, 0x2745937f]
   let i: number
-  for (i = 0; i < bytes; i = i + 16) {
+  for (i = 0; i < bytes; i += 16) {
     k1 = [
       (key.charCodeAt(i + 4) & 0xff) |
         ((key.charCodeAt(i + 5) & 0xff) << 8) |
@@ -162,6 +164,7 @@ export function x64hash128(key: string, seed?: number): string {
   }
   k1 = [0, 0]
   k2 = [0, 0]
+  // eslint-disable-next-line default-case
   switch (remainder) {
     case 15:
       k2 = x64Xor(k2, x64LeftShift([0, key.charCodeAt(i + 14)], 48))
@@ -226,9 +229,9 @@ export function x64hash128(key: string, seed?: number): string {
   h1 = x64Add(h1, h2)
   h2 = x64Add(h2, h1)
   return (
-    ('00000000' + (h1[0] >>> 0).toString(16)).slice(-8) +
-    ('00000000' + (h1[1] >>> 0).toString(16)).slice(-8) +
-    ('00000000' + (h2[0] >>> 0).toString(16)).slice(-8) +
-    ('00000000' + (h2[1] >>> 0).toString(16)).slice(-8)
+    `00000000${(h1[0] >>> 0).toString(16)}`.slice(-8) +
+    `00000000${(h1[1] >>> 0).toString(16)}`.slice(-8) +
+    `00000000${(h2[0] >>> 0).toString(16)}`.slice(-8) +
+    `00000000${(h2[1] >>> 0).toString(16)}`.slice(-8)
   )
 }

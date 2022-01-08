@@ -76,6 +76,7 @@ export function loadSource<TOptions, TValue>(
 
     // `awaitIfAsync` is used instead of just `await` in order to measure the duration of synchronous sources
     // correctly (other microtasks won't affect the duration).
+    // eslint-disable-next-line consistent-return
     awaitIfAsync(source.bind(null, sourceOptions), (...loadArgs) => {
       const loadDuration = Date.now() - loadStartTime
 
@@ -97,6 +98,7 @@ export function loadSource<TOptions, TValue>(
           new Promise<Component<TValue>>((resolveGet) => {
             const getStartTime = Date.now()
 
+            // eslint-disable-next-line consistent-return
             awaitIfAsync(loadResult, (...getArgs) => {
               const duration = loadDuration + Date.now() - getStartTime
 
@@ -147,9 +149,9 @@ export function loadSources<TSourceOptions, TSources extends UnknownSources<TSou
   return async function getComponents() {
     // Add the keys immediately to keep the component keys order the same as the source keys order
     const components = {} as Omit<SourcesToComponents<TSources>, TExclude>
-    for (const sourceKey of includedSources) {
+    includedSources.forEach((sourceKey) => {
       components[sourceKey] = undefined as any
-    }
+    })
 
     const componentPromises = Array<Promise<unknown>>(includedSources.length)
 
@@ -159,7 +161,9 @@ export function loadSources<TSourceOptions, TSources extends UnknownSources<TSou
         if (!componentPromises[index]) {
           // `sourceGetters` may be incomplete at this point of execution because `forEachWithBreaks` is asynchronous
           if (sourceGetters[index]) {
-            componentPromises[index] = sourceGetters[index]().then((component) => (components[sourceKey] = component))
+            componentPromises[index] = sourceGetters[index]().then((component) => {
+              components[sourceKey] = component
+            })
           } else {
             hasAllComponentPromises = false
           }

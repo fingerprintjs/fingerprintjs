@@ -91,8 +91,8 @@ export async function withIframe<T>(
 export function selectorToElement(selector: string): HTMLElement {
   const [tag, attributes] = parseSimpleCssSelector(selector)
   const element = document.createElement(tag ?? 'div')
-  for (const name of Object.keys(attributes)) {
+  Object.keys(attributes).forEach((name) => {
     element.setAttribute(name, attributes[name].join(' '))
-  }
+  })
   return element
 }

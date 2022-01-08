@@ -12,6 +12,105 @@ export const enum SpecialFingerprint {
 const enum InnerErrorName {
   Timeout = 'timeout',
   Suspended = 'suspended',
+  Closed = 'closed',
+}
+
+/**
+ * Checks if the current browser is known to always suspend audio context
+ */
+function doesCurrentBrowserSuspendAudioContext() {
+  return isWebKit() && !isDesktopSafari() && !isWebKit606OrNewer()
+}
+
+function makeInnerError(name: InnerErrorName) {
+  const error = new Error(name)
+  error.name = name
+  return error
+}
+
+/**
+ * Starts rendering the audio context.
+ * When the returned function is called, the render process starts finishing.
+ */
+function startRenderingAudio(context: OfflineAudioContext) {
+  const renderTryMaxCount = 3
+  const renderRetryDelay = 500
+  const runningMaxAwaitTime = 500
+  const runningSufficientTime = 5000
+  let finalize = () => undefined as void
+
+  const resultPromise = new Promise<AudioBuffer>((resolve, reject) => {
+    let isFinalized = false
+    let renderTryCount = 0
+    let startedRunningAt = 0
+
+    context.oncomplete = (event) => resolve(event.renderedBuffer)
+
+    const startRunningTimeout = () => {
+      setTimeout(
+        () => reject(makeInnerError(InnerErrorName.Timeout)),
+        Math.min(runningMaxAwaitTime, startedRunningAt + runningSufficientTime - Date.now()),
+      )
+    }
+
+    const tryRender = () => {
+      try {
+        context.startRendering()
+
+        switch (context.state) {
+          case 'running':
+            startedRunningAt = Date.now()
+            if (isFinalized) {
+              startRunningTimeout()
+            }
+            break
+
+          // Sometimes the audio context doesn't start after calling `startRendering` (in addition to the cases where
+          // audio context doesn't start at all). A known case is starting an audio context when the browser tab is in
+          // background on iPhone. Retries usually help in this case.
+          case 'suspended':
+            // The audio context can reject starting until the tab is in foreground. Long fingerprint duration
+            // in background isn't a problem, therefore the retry attempts don't count in background. It can lead to
+            // a situation when a fingerprint takes very long time and finishes successfully. FYI, the audio context
+            // can be suspended when `document.hidden === false` and start running after a retry.
+            if (!document.hidden) {
+              renderTryCount += 1
+            }
+            if (isFinalized && renderTryCount >= renderTryMaxCount) {
+              reject(makeInnerError(InnerErrorName.Suspended))
+            } else {
+              setTimeout(tryRender, renderRetryDelay)
+            }
+            break
+          default:
+            makeInnerError(InnerErrorName.Closed)
+        }
+      } catch (error) {
+        reject(error)
+      }
+    }
+
+    tryRender()
+
+    finalize = () => {
+      if (!isFinalized) {
+        isFinalized = true
+        if (startedRunningAt > 0) {
+          startRunningTimeout()
+        }
+      }
+    }
+  })
+
+  return [resultPromise, finalize] as const
+}
+
+function getHash(signal: ArrayLike<number>): number {
+  let hash = 0
+  for (let i = 0; i < signal.length; ++i) {
+    hash += Math.abs(signal[i])
+  }
+  return hash
 }
 
 /**
@@ -70,100 +169,4 @@ export default function getAudioFingerprint(): number | (() => Promise<number>) 
     finishRendering()
     return fingerprintPromise
   }
-}
-
-/**
- * Checks if the current browser is known to always suspend audio context
- */
-function doesCurrentBrowserSuspendAudioContext() {
-  return isWebKit() && !isDesktopSafari() && !isWebKit606OrNewer()
-}
-
-/**
- * Starts rendering the audio context.
- * When the returned function is called, the render process starts finishing.
- */
-function startRenderingAudio(context: OfflineAudioContext) {
-  const renderTryMaxCount = 3
-  const renderRetryDelay = 500
-  const runningMaxAwaitTime = 500
-  const runningSufficientTime = 5000
-  let finalize = () => undefined as void
-
-  const resultPromise = new Promise<AudioBuffer>((resolve, reject) => {
-    let isFinalized = false
-    let renderTryCount = 0
-    let startedRunningAt = 0
-
-    context.oncomplete = (event) => resolve(event.renderedBuffer)
-
-    const startRunningTimeout = () => {
-      setTimeout(
-        () => reject(makeInnerError(InnerErrorName.Timeout)),
-        Math.min(runningMaxAwaitTime, startedRunningAt + runningSufficientTime - Date.now()),
-      )
-    }
-
-    const tryRender = () => {
-      try {
-        context.startRendering()
-
-        switch (context.state) {
-          case 'running':
-            startedRunningAt = Date.now()
-            if (isFinalized) {
-              startRunningTimeout()
-            }
-            break
-
-          // Sometimes the audio context doesn't start after calling `startRendering` (in addition to the cases where
-          // audio context doesn't start at all). A known case is starting an audio context when the browser tab is in
-          // background on iPhone. Retries usually help in this case.
-          case 'suspended':
-            // The audio context can reject starting until the tab is in foreground. Long fingerprint duration
-            // in background isn't a problem, therefore the retry attempts don't count in background. It can lead to
-            // a situation when a fingerprint takes very long time and finishes successfully. FYI, the audio context
-            // can be suspended when `document.hidden === false` and start running after a retry.
-            if (!document.hidden) {
-              renderTryCount++
-            }
-            if (isFinalized && renderTryCount >= renderTryMaxCount) {
-              reject(makeInnerError(InnerErrorName.Suspended))
-            } else {
-              setTimeout(tryRender, renderRetryDelay)
-            }
-            break
-        }
-      } catch (error) {
-        reject(error)
-      }
-    }
-
-    tryRender()
-
-    finalize = () => {
-      if (!isFinalized) {
-        isFinalized = true
-        if (startedRunningAt > 0) {
-          startRunningTimeout()
-        }
-      }
-    }
-  })
-
-  return [resultPromise, finalize] as const
-}
-
-function getHash(signal: ArrayLike<number>): number {
-  let hash = 0
-  for (let i = 0; i < signal.length; ++i) {
-    hash += Math.abs(signal[i])
-  }
-  return hash
-}
-
-function makeInnerError(name: InnerErrorName) {
-  const error = new Error(name)
-  error.name = name
-  return error
 }

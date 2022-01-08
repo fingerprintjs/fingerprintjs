@@ -6,6 +6,10 @@ export const enum ContrastPreference {
   ForcedColors = 10,
 }
 
+function doesMatch(value: string) {
+  return matchMedia(`(prefers-contrast: ${value})`).matches
+}
+
 /**
  * @see https://www.w3.org/TR/mediaqueries-5/#prefers-contrast
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-contrast
@@ -26,8 +30,4 @@ export default function getContrastPreference(): ContrastPreference | undefined 
     return ContrastPreference.ForcedColors
   }
   return undefined
-}
-
-function doesMatch(value: string) {
-  return matchMedia(`(prefers-contrast: ${value})`).matches
 }

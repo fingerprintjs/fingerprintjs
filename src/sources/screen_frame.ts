@@ -15,6 +15,31 @@ const roundingPrecision = 10
 let screenFrameBackup: Readonly<FrameSize> | undefined
 let screenFrameSizeTimeoutId: number | undefined
 
+function isFrameSizeNull(frameSize: FrameSize) {
+  for (let i = 0; i < 4; ++i) {
+    if (frameSize[i]) {
+      return false
+    }
+  }
+  return true
+}
+
+function getCurrentScreenFrame(): FrameSize {
+  const s = window.screen
+
+  // Some browsers return screen resolution as strings, e.g. "1200", instead of a number, e.g. 1200.
+  // I suspect it's done by certain plugins that randomize browser properties to prevent fingerprinting.
+  //
+  // Some browsers (IE, Edge ≤18) don't provide `screen.availLeft` and `screen.availTop`. The property values are
+  // replaced with 0 in such cases to not lose the entropy from `screen.availWidth` and `screen.availHeight`.
+  return [
+    replaceNaN(toFloat(s.availTop), null),
+    replaceNaN(toFloat(s.width) - toFloat(s.availWidth) - replaceNaN(toFloat(s.availLeft), 0), null),
+    replaceNaN(toFloat(s.height) - toFloat(s.availHeight) - replaceNaN(toFloat(s.availTop), 0), null),
+    replaceNaN(toFloat(s.availLeft), null),
+  ]
+}
+
 /**
  * Starts watching the screen frame size. When a non-zero size appears, the size is saved and the watch is stopped.
  * Later, when `getScreenFrame` runs, it will return the saved non-zero size if the current size is null.
@@ -99,29 +124,4 @@ export function getRoundedScreenFrame(): () => Promise<FrameSize> {
     // In fact, such code is used to avoid TypeScript issues without using `as`.
     return [processSize(frameSize[0]), processSize(frameSize[1]), processSize(frameSize[2]), processSize(frameSize[3])]
   }
-}
-
-function getCurrentScreenFrame(): FrameSize {
-  const s = screen
-
-  // Some browsers return screen resolution as strings, e.g. "1200", instead of a number, e.g. 1200.
-  // I suspect it's done by certain plugins that randomize browser properties to prevent fingerprinting.
-  //
-  // Some browsers (IE, Edge ≤18) don't provide `screen.availLeft` and `screen.availTop`. The property values are
-  // replaced with 0 in such cases to not lose the entropy from `screen.availWidth` and `screen.availHeight`.
-  return [
-    replaceNaN(toFloat(s.availTop), null),
-    replaceNaN(toFloat(s.width) - toFloat(s.availWidth) - replaceNaN(toFloat(s.availLeft), 0), null),
-    replaceNaN(toFloat(s.height) - toFloat(s.availHeight) - replaceNaN(toFloat(s.availTop), 0), null),
-    replaceNaN(toFloat(s.availLeft), null),
-  ]
-}
-
-function isFrameSizeNull(frameSize: FrameSize) {
-  for (let i = 0; i < 4; ++i) {
-    if (frameSize[i]) {
-      return false
-    }
-  }
-  return true
 }

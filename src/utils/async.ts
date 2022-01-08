@@ -1,7 +1,9 @@
 export type MaybePromise<T> = Promise<T> | T
 
 export function wait<T = void>(durationMs: number, resolveWith?: T): Promise<T> {
-  return new Promise((resolve) => setTimeout(resolve, durationMs, resolveWith))
+  return new Promise((resolve) => {
+    setTimeout(resolve, durationMs, resolveWith)
+  })
 }
 
 export function requestIdleCallbackIfAvailable(fallbackTimeout: number, deadlineTimeout = Infinity): Promise<void> {
@@ -10,10 +12,11 @@ export function requestIdleCallbackIfAvailable(fallbackTimeout: number, deadline
     // The function `requestIdleCallback` loses the binding to `window` here.
     // `globalThis` isn't always equal `window` (see https://github.com/fingerprintjs/fingerprintjs/issues/683).
     // Therefore, an error can occur. `call(window,` prevents the error.
-    return new Promise((resolve) => requestIdleCallback.call(window, () => resolve(), { timeout: deadlineTimeout }))
-  } else {
-    return wait(Math.min(fallbackTimeout, deadlineTimeout))
+    return new Promise((resolve) => {
+      requestIdleCallback.call(window, () => resolve(), { timeout: deadlineTimeout })
+    })
   }
+  return wait(Math.min(fallbackTimeout, deadlineTimeout))
 }
 
 export function isPromise<T>(value: PromiseLike<T> | unknown): value is PromiseLike<T> {

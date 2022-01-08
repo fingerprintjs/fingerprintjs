@@ -5,7 +5,7 @@ type WritableCSSProperties = {
   [K in keyof CSSStyleDeclaration]: CSSStyleDeclaration[K] extends string ? K : never
 }[Extract<keyof CSSStyleDeclaration, string>]
 
-type WritableCSSStyles = Partial<Pick<CSSStyleDeclaration, WritableCSSProperties>>
+type WritableCSSStyles = Partial<Pick<CSSStyleDeclaration, NonNullable<WritableCSSProperties>>>
 
 type Preset = [style?: WritableCSSStyles, text?: string]
 
@@ -39,50 +39,6 @@ export const presets: Record<string, Preset> = {
   min: [{ fontSize: '1px' }],
   /** Tells one OS from another in desktop Chrome. */
   system: [{ fontFamily: 'system-ui' }],
-}
-
-/**
- * The result is a dictionary of the width of the text samples.
- * Heights aren't included because they give no extra entropy and are unstable.
- *
- * The result is very stable in IE 11, Edge 18 and Safari 14.
- * The result changes when the OS pixel density changes in Chromium 87. The real pixel density is required to solve,
- * but seems like it's impossible: https://stackoverflow.com/q/1713771/1118709.
- * The "min" and the "mono" (only on Windows) value may change when the page is zoomed in Firefox 87.
- */
-export default function getFontPreferences(): Promise<Record<string, number>> {
-  return withNaturalFonts((document, container) => {
-    const elements: Record<string, HTMLElement> = {}
-    const sizes: Record<string, number> = {}
-
-    // First create all elements to measure. If the DOM steps below are done in a single cycle,
-    // browser will alternate tree modification and layout reading, that is very slow.
-    for (const key of Object.keys(presets)) {
-      const [style = {}, text = defaultText] = presets[key]
-
-      const element = document.createElement('span')
-      element.textContent = text
-      element.style.whiteSpace = 'nowrap'
-
-      for (const name of Object.keys(style) as Array<keyof typeof style>) {
-        const value = style[name]
-        if (value !== undefined) {
-          element.style[name] = value
-        }
-      }
-
-      elements[key] = element
-      container.appendChild(document.createElement('br'))
-      container.appendChild(element)
-    }
-
-    // Then measure the created elements
-    for (const key of Object.keys(presets)) {
-      sizes[key] = elements[key].getBoundingClientRect().width
-    }
-
-    return sizes
-  })
 }
 
 /**
@@ -144,7 +100,8 @@ function withNaturalFonts<T>(
 
     const bodyStyle = iframeBody.style
     bodyStyle.width = `${containerWidthPx}px`
-    bodyStyle.webkitTextSizeAdjust = bodyStyle.textSizeAdjust = 'none'
+    bodyStyle.webkitTextSizeAdjust = 'none'
+    bodyStyle.textSizeAdjust = 'none'
 
     // See the big comment above
     if (isChromium()) {
@@ -155,9 +112,53 @@ function withNaturalFonts<T>(
 
     // See the big comment above
     const linesOfText = iframeDocument.createElement('div')
+    // eslint-disable-next-line no-bitwise
     linesOfText.textContent = [...Array((containerWidthPx / 20) << 0)].map(() => 'word').join(' ')
     iframeBody.appendChild(linesOfText)
 
     return action(iframeDocument, iframeBody)
   }, '<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1">')
+}
+
+/**
+ * The result is a dictionary of the width of the text samples.
+ * Heights aren't included because they give no extra entropy and are unstable.
+ *
+ * The result is very stable in IE 11, Edge 18 and Safari 14.
+ * The result changes when the OS pixel density changes in Chromium 87. The real pixel density is required to solve,
+ * but seems like it's impossible: https://stackoverflow.com/q/1713771/1118709.
+ * The "min" and the "mono" (only on Windows) value may change when the page is zoomed in Firefox 87.
+ */
+export default function getFontPreferences(): Promise<Record<string, number>> {
+  return withNaturalFonts((document, container) => {
+    const elements: Record<string, HTMLElement> = {}
+    const sizes: Record<string, number> = {}
+
+    // First create all elements to measure. If the DOM steps below are done in a single cycle,
+    // browser will alternate tree modification and layout reading, that is very slow.
+    Object.keys(presets).forEach((key) => {
+      const [style = {}, text = defaultText] = presets[key]
+
+      const element = document.createElement('span')
+      element.textContent = text
+      element.style.whiteSpace = 'nowrap'
+      ;(Object.keys(style) as Array<keyof typeof style>).forEach((name) => {
+        const value = style[name]
+        if (value !== undefined) {
+          element.style[name] = value
+        }
+      })
+
+      elements[key] = element
+      container.appendChild(document.createElement('br'))
+      container.appendChild(element)
+    })
+
+    // Then measure the created elements
+    Object.keys(presets).forEach((key) => {
+      sizes[key] = elements[key].getBoundingClientRect().width
+    })
+
+    return sizes
+  })
 }

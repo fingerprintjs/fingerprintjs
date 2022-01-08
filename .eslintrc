@@ -14,10 +14,17 @@
     "no-console": "warn",
     "max-len": ["error", { "code": 120, "ignoreUrls": true }]
   },
+  "parserOptions": {
+    "project": [
+      "./tsconfig.json"
+    ]
+  },
   "overrides": [
     {
       "files": ["**/*.ts"],
       "extends": [
+        "airbnb-base",
+        "airbnb-typescript/base",
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
@@ -28,7 +35,13 @@
       ],
       "rules": {
         "max-len": ["error", { "code": 120, "ignoreUrls": true }],
-        "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }]
+        "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }],
+        "@typescript-eslint/semi": 0,
+        "no-await-in-loop": 0,
+        "no-plusplus": [2, {"allowForLoopAfterthoughts":  true}],
+        "@typescript-eslint/indent": 0,
+        "import/prefer-default-export": 0,
+        "prefer-exponentiation-operator": 0
       }
     }
   ]

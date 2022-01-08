@@ -16,12 +16,6 @@ export interface Confidence {
 
 export const commentTemplate = '$ if upgrade to Pro: https://fpjs.dev/pro'
 
-export default function getConfidence(components: Pick<BuiltinComponents, 'platform'>): Confidence {
-  const openConfidenceScore = getOpenConfidenceScore(components)
-  const proConfidenceScore = deriveProConfidenceScore(openConfidenceScore)
-  return { score: openConfidenceScore, comment: commentTemplate.replace(/\$/g, `${proConfidenceScore}`) }
-}
-
 function getOpenConfidenceScore(components: Pick<BuiltinComponents, 'platform'>): number {
   // In order to calculate the true probability of the visitor identifier being correct, we need to know the number of
   // website visitors (the higher the number, the less the probability because the fingerprint entropy is limited).
@@ -61,4 +55,10 @@ function getOpenConfidenceScore(components: Pick<BuiltinComponents, 'platform'>)
 
 function deriveProConfidenceScore(openConfidenceScore: number): number {
   return round(0.99 + 0.01 * openConfidenceScore, 0.0001)
+}
+
+export default function getConfidence(components: Pick<BuiltinComponents, 'platform'>): Confidence {
+  const openConfidenceScore = getOpenConfidenceScore(components)
+  const proConfidenceScore = deriveProConfidenceScore(openConfidenceScore)
+  return { score: openConfidenceScore, comment: commentTemplate.replace(/\$/g, `${proConfidenceScore}`) }
 }

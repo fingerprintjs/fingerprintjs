@@ -28,7 +28,7 @@ export function excludes<THaystack, TNeedle>(
  * Be careful, NaN can return
  */
 export function toInt(value: unknown): number {
-  return parseInt(value as string)
+  return parseInt(value as string, 10)
 }
 
 /**
@@ -39,7 +39,7 @@ export function toFloat(value: unknown): number {
 }
 
 export function replaceNaN<T, U>(value: T, replacement: U): T | U {
-  return typeof value === 'number' && isNaN(value) ? replacement : value
+  return typeof value === 'number' && Number.isNaN(value) ? replacement : value
 }
 
 export function countTruthy(values: unknown[]): number {
@@ -49,12 +49,11 @@ export function countTruthy(values: unknown[]): number {
 export function round(value: number, base = 1): number {
   if (Math.abs(base) >= 1) {
     return Math.round(value / base) * base
-  } else {
-    // Sometimes when a number is multiplied by a small number, precision is lost,
-    // for example 1234 * 0.0001 === 0.12340000000000001, and it's more precise divide: 1234 / (1 / 0.0001) === 0.1234.
-    const counterBase = 1 / base
-    return Math.round(value * counterBase) / counterBase
   }
+  // Sometimes when a number is multiplied by a small number, precision is lost,
+  // for example 1234 * 0.0001 === 0.12340000000000001, and it's more precise divide: 1234 / (1 / 0.0001) === 0.1234.
+  const counterBase = 1 / base
+  return Math.round(value * counterBase) / counterBase
 }
 
 /**
@@ -122,16 +121,15 @@ export function areSetsEqual(set1: Set<unknown>, set2: Set<unknown>): boolean {
       }
     }
     return true
-  } else {
-    // An implementation for browsers that don't support Set iterators
-    let areEqual = true
-    set1.forEach((value) => {
-      if (areEqual && !set2.has(value)) {
-        areEqual = false
-      }
-    })
-    return areEqual
   }
+  // An implementation for browsers that don't support Set iterators
+  let areEqual = true
+  set1.forEach((value) => {
+    if (areEqual && !set2.has(value)) {
+      areEqual = false
+    }
+  })
+  return areEqual
 }
 
 export function maxInIterator<T>(iterator: Iterator<T>, getItemScore: (item: T) => number): T | undefined {
