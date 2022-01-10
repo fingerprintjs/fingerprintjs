@@ -155,7 +155,7 @@ See more details and learn how to run the library in old browsers in the [browse
 
 See the [contributing guidelines](contributing.md) to learn how to start a playground, test and build.
 
-## Other projects by FingerprintJS
+## Other products by FingerprintJS
 
-* [BotD -- Easy to use JavaScript bot detection](https://github.com/fingerprintjs/botd)
+* [BotD -- Easy to use JavaScript bot detection](https://fingerprintjs.com/products/bot-detection/)
 * [AEV -- Android App Environment Verification API](https://github.com/fingerprintjs/aev)
