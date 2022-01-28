@@ -92,7 +92,14 @@ export function selectorToElement(selector: string): HTMLElement {
   const [tag, attributes] = parseSimpleCssSelector(selector)
   const element = document.createElement(tag ?? 'div')
   for (const name of Object.keys(attributes)) {
-    element.setAttribute(name, attributes[name].join(' '))
+    const value = attributes[name].join(' ')
+    // Changing the `style` attribute can cause a CSP error, therefore we change the `style.cssText` property.
+    // https://github.com/fingerprintjs/fingerprintjs/issues/733
+    if (name === 'style') {
+      element.style.cssText = value
+    } else {
+      element.setAttribute(name, value)
+    }
   }
   return element
 }
