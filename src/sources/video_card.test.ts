@@ -2,35 +2,15 @@ import getVideoCard from './video_card'
 
 describe('Sources', () => {
   describe('videoCard', () => {
-    const videoCard = getVideoCard()
-    it('to be defined', () => {
-      expect(videoCard).toBeDefined()
+    it('to be correctly typed if defined', () => {
+      const videoCard = getVideoCard()
+
+      if (videoCard) {
+        expect(videoCard).toEqual({
+          vendor: jasmine.any(String),
+          renderer: jasmine.any(String),
+        })
+      }
     })
-
-    // Doesn't work
-    // it needs the object to be exactly like what I provided and I only need the keys
-    // it('has vendor and renderer', () => {
-    //   expect(videoCard).toEqual(
-    //     jasmine.objectContaining({
-    //       vendor: 'Graphics card vendor',
-    //       renderer: 'Graphics card renderer',
-    //     }),
-    //   )
-    // })
-
-    // Throws Error
-    // it('has vendor and renderer', () => {
-    //   expect(Object.keys(videoCard)).toEqual(['vendor', 'renderer'])
-    // })
-
-    // Didn't work
-    // it('contain vendor', () => {
-    //   expect(videoCard).toContain('vendor')
-    // })
-    // it('contain renderer', () => {
-    //   expect(videoCard).toContain('renderer')
-    // })
-
-    // I give up
   })
 })
