@@ -43,7 +43,8 @@ export const filters = {
   adGuardAnnoyances: ['amp-embed[type="zen"]', '.hs-sosyal', '#cookieconsentdiv', 'div[class^="app_gdpr"]', '.as-oil'],
   adGuardBase: ['#ad-after', '#ad-p3', '.BetterJsPopOverlay', '#ad_300X250', '#bannerfloat22'],
   adGuardChinese: [
-    '#piao_div_0[style*="width:140px;"]',
+    // Disabled because not reproducible. Will be replaced during the next filter update.
+    // '#piao_div_0[style*="width:140px;"]',
     'a[href*=".ttz5.cn"]',
     'a[href*=".yabovip2027.com/"]',
     '.tm3all2h4b',
