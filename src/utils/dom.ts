@@ -96,10 +96,25 @@ export function selectorToElement(selector: string): HTMLElement {
     // Changing the `style` attribute can cause a CSP error, therefore we change the `style.cssText` property.
     // https://github.com/fingerprintjs/fingerprintjs/issues/733
     if (name === 'style') {
-      element.style.cssText = value
+      addStyleString(element.style, value)
     } else {
       element.setAttribute(name, value)
     }
   }
   return element
+}
+
+/**
+ * Adds CSS styles from a string in such a way that doesn't trigger a CSP warning (unsafe-inline or unsafe-eval)
+ */
+export function addStyleString(style: CSSStyleDeclaration, source: string): void {
+  // We don't use `style.cssText` because browsers must block it when no `unsafe-eval` CSP is presented: https://csplite.com/csp145/#w3c_note
+  // Even though the browsers ignore this standard, we don't use `cssText` just in case.
+  for (const property of source.split(';')) {
+    const match = /^\s*([\w-]+)\s*:\s*(.+?)(\s*!([\w-]+))?\s*$/.exec(property)
+    if (match) {
+      const [, name, value, , priority] = match
+      style.setProperty(name, value, priority)
+    }
+  }
 }
