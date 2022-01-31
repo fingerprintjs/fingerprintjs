@@ -114,7 +114,7 @@ export function addStyleString(style: CSSStyleDeclaration, source: string): void
     const match = /^\s*([\w-]+)\s*:\s*(.+?)(\s*!([\w-]+))?\s*$/.exec(property)
     if (match) {
       const [, name, value, , priority] = match
-      style.setProperty(name, value, priority)
+      style.setProperty(name, value, priority || '') // The last argument can't be undefined in IE11
     }
   }
 }
