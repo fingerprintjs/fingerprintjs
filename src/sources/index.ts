@@ -31,6 +31,7 @@ import isMotionReduced from './reduced_motion'
 import isHDR from './hdr'
 import getMathFingerprint from './math'
 import getFontPreferences from './font_preferences'
+import getVideoCard from './video_card'
 
 /**
  * The list of entropy sources used to make visitor identifiers.
@@ -81,6 +82,7 @@ export const sources = {
   reducedMotion: isMotionReduced,
   hdr: isHDR,
   math: getMathFingerprint,
+  videoCard: getVideoCard,
 }
 
 /**
