@@ -13,8 +13,8 @@ export default function getVideoCard(): VideoCard | undefined {
     const debugInfo = gl.getExtension('WEBGL_debug_renderer_info')
     if (debugInfo) {
       return {
-        vendor: gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL).toString(),
-        renderer: gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL).toString(),
+        vendor: (gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || '').toString(),
+        renderer: (gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || '').toString(),
       }
     }
   }
