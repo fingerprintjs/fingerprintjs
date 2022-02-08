@@ -131,7 +131,7 @@ Pro result example:
 
 🍿 [Live demo](https://fingerprintjs.com/demo)
 
-⏱ [How to upgrade from Open Source to Pro in 30 seconds](https://dev.fingerprintjs.com/v3/docs/migrating-from-open-source-v3)
+⏱ [How to upgrade from Open Source to Pro in 30 seconds](https://dev.fingerprintjs.com/v3/docs/migrating-from-previous-versions#from-fingerprintjs-open-source-version-3)
 
 📕 [FingerprintJS Pro documentation](https://dev.fingerprintjs.com)
 
