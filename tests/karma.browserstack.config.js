@@ -1,4 +1,5 @@
 const makeLocalConfig = require('./karma.local.config')
+const { Browser, OS } = require('./utils/enums')
 
 // The shapes of these objects are taken from:
 // https://github.com/SeleniumHQ/selenium/tree/d8ddb4d83972df0f565ef65264bcb733e7a94584/javascript/node/selenium-webdriver
@@ -28,30 +29,30 @@ const firefoxIncognitoCapabilities = {
 /* eslint-disable max-len */
 // prettier-ignore
 const browserstackBrowsers = {
-  IE11: { os: 'Windows', os_version: '7', browser: 'IE', browser_version: '11.0' },
-  Windows11_EdgeLatest: { os: 'Windows', os_version: '11', browser: 'Edge', browser_version: 'latest-beta' },
-  Windows10_Chrome49: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: '49.0' },
-  // Windows10_Chrome49_Incognito: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: '49.0', ...chromeIncognitoCapabilities },
-  Windows11_ChromeLatest: { os: 'Windows', os_version: '11', browser: 'Chrome', browser_version: 'latest-beta' },
-  // Windows11_ChromeLatest_Incognito: { os: 'Windows', os_version: '11', browser: 'Chrome', browser_version: 'latest-beta, ...chromeIncognitoCapabilities },
-  Windows10_Firefox52: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: '52.0' },
-  // Windows10_Firefox52_Incognito: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: '52.0', ...firefoxIncognitoCapabilities },
-  Windows11_FirefoxLatest: { os: 'Windows', os_version: '11', browser: 'Firefox', browser_version: 'latest-beta' },
-  // Windows11_FirefoxLatest_Incognito: { os: 'Windows', os_version: '11', browser: 'Firefox', browser_version: 'latest-beta, ...firefoxIncognitoCapabilities },
-  OSXMojave_Safari12: { os: 'OS X', os_version: 'Mojave', browser: 'Safari', browser_version: '12.1' },
-  OSXMonterey_Safari15: { os: 'OS X', os_version: 'Monterey', browser: 'Safari', browser_version: '15.0' },
-  OSXMonterey_ChromeLatest: { os: 'OS X', os_version: 'Monterey', browser: 'Chrome', browser_version: 'latest-beta' },
-  // OSXMonterey_ChromeLatest_Incognito: { os: 'OS X', os_version: 'Monterey', browser: 'Chrome', browser_version: 'latest-beta, ...chromeIncognitoCapabilities },
-  OSXMonterey_FirefoxLatest: { os: 'OS X', os_version: 'Monterey', browser: 'Firefox', browser_version: 'latest-beta' },
-  // OSXMonterey_FirefoxLatest_Incognito: { os: 'OS X', os_version: 'Monterey', browser: 'Firefox', browser_version: 'latest-beta, ...firefoxIncognitoCapabilities },
-  OSXMonterey_EdgeLatest: { os: 'OS X', os_version: 'Monterey', browser: 'Edge', browser_version: 'latest-beta' },
-  Android11_ChromeLatest: { device: 'Google Pixel 4', os: 'Android', os_version: '11.0', browser: 'Chrome', browser_version: 'latest-beta' },
-  iOS10_Safari: { device: 'iPhone 7', os: 'iOS', os_version: '10', browser: 'Safari' },
-  iOS11_Safari: { device: 'iPhone 8 Plus', os: 'iOS', os_version: '11', browser: 'Safari' },
-  iOS12_Safari: { device: 'iPhone XS', os: 'iOS', os_version: '12', browser: 'Safari' },
-  iOS13_Safari: { device: 'iPhone 11 Pro', os: 'iOS', os_version: '13', browser: 'Safari' },
-  iOS14_Safari: { device: 'iPhone 11', os: 'iOS', os_version: '14', browser: 'Safari' },
-  iOS15_Safari: { device: 'iPhone 11 Pro', os: 'iOS', os_version: '15', browser: 'Safari' },
+  IE11: { os: OS.Windows, os_version: '7', browser: Browser.IE, browser_version: '11.0' },
+  Windows11_EdgeLatest: { os: OS.Windows, os_version: '11', browser: Browser.Edge, browser_version: 'latest-beta' },
+  Windows10_Chrome49: { os: OS.Windows, os_version: '10', browser: Browser.Chrome, browser_version: '49.0' },
+  // Windows10_Chrome49_Incognito: { os: OS.Windows, os_version: '10', browser: Browser.Chrome, browser_version: '49.0', ...chromeIncognitoCapabilities },
+  Windows11_ChromeLatest: { os: OS.Windows, os_version: '11', browser: Browser.Chrome, browser_version: 'latest-beta' },
+  // Windows11_ChromeLatest_Incognito: { os: OS.Windows, os_version: '11', browser: Browser.Chrome, browser_version: 'latest-beta, ...chromeIncognitoCapabilities },
+  Windows10_Firefox52: { os: OS.Windows, os_version: '10', browser: Browser.Firefox, browser_version: '52.0' },
+  // Windows10_Firefox52_Incognito: { os: OS.Windows, os_version: '10', browser: Browser.Firefox, browser_version: '52.0', ...firefoxIncognitoCapabilities },
+  Windows11_FirefoxLatest: { os: OS.Windows, os_version: '11', browser: Browser.Firefox, browser_version: 'latest-beta' },
+  // Windows11_FirefoxLatest_Incognito: { os: OS.Windows, os_version: '11', browser: Browser.Firefox, browser_version: 'latest-beta, ...firefoxIncognitoCapabilities },
+  OSXMojave_Safari12: { os: OS.OSX, os_version: 'Mojave', browser: Browser.Safari, browser_version: '12.1' },
+  OSXMonterey_Safari15: { os: OS.OSX, os_version: 'Monterey', browser: Browser.Safari, browser_version: '15.0' },
+  OSXMonterey_ChromeLatest: { os: OS.OSX, os_version: 'Monterey', browser: Browser.Chrome, browser_version: 'latest-beta' },
+  // OSXMonterey_ChromeLatest_Incognito: { os: OS.OSX, os_version: 'Monterey', browser: Browser.Chrome, browser_version: 'latest-beta, ...chromeIncognitoCapabilities },
+  OSXMonterey_FirefoxLatest: { os: OS.OSX, os_version: 'Monterey', browser: Browser.Firefox, browser_version: 'latest-beta' },
+  // OSXMonterey_FirefoxLatest_Incognito: { os: OS.OSX, os_version: 'Monterey', browser: Browser.Firefox, browser_version: 'latest-beta, ...firefoxIncognitoCapabilities },
+  OSXMonterey_EdgeLatest: { os: OS.OSX, os_version: 'Monterey', browser: Browser.Edge, browser_version: 'latest-beta' },
+  Android11_ChromeLatest: { device: 'Google Pixel 4', os: OS.Android, os_version: '11.0', browser: Browser.Chrome, browser_version: 'latest-beta' },
+  iOS10_Safari: { device: 'iPhone 7', os: OS.IOs, os_version: '10', browser: Browser.Safari },
+  iOS11_Safari: { device: 'iPhone 8 Plus', os: OS.IOs, os_version: '11', browser: Browser.Safari },
+  iOS12_Safari: { device: 'iPhone XS', os: OS.IOs, os_version: '12', browser: Browser.Safari },
+  iOS13_Safari: { device: 'iPhone 11 Pro', os: OS.IOs, os_version: '13', browser: Browser.Safari },
+  iOS14_Safari: { device: 'iPhone 11', os: OS.IOs, os_version: '14', browser: Browser.Safari },
+  iOS15_Safari: { device: 'iPhone 11 Pro', os: OS.IOs, os_version: '15', browser: Browser.Safari },
 }
 /* eslint-enable max-len */
 

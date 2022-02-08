@@ -1,4 +1,5 @@
 import { UAParser } from 'ua-parser-js'
+import {EngineName, EngineType} from "./enums";
 
 export { default as withMockProperties } from './mock_properties'
 export { default as withMockMatchMedia } from './mock_match_media'
@@ -15,43 +16,43 @@ export { default as withMockMatchMedia } from './mock_match_media'
  */
 
 export function isTrident(): boolean {
-  return new UAParser().getEngine().name === 'Trident'
+  return new UAParser().getEngine().name === EngineName.Trident
 }
 
 export function isEdgeHTML(): boolean {
-  return new UAParser().getEngine().name === 'EdgeHTML'
+  return new UAParser().getEngine().name === EngineName.EdgeHTML
 }
 
 export function isChromium(): boolean {
-  return new UAParser().getEngine().name === 'Blink'
+  return new UAParser().getEngine().name === EngineName.Blink
 }
 
 export function isGecko(): boolean {
-  return new UAParser().getEngine().name === 'Gecko'
+  return new UAParser().getEngine().name === EngineName.Gecko
 }
 
 export function isWebKit(): boolean {
-  return new UAParser().getEngine().name === 'WebKit'
+  return new UAParser().getEngine().name === EngineName.WebKit
 }
 
 export function isMobile(): boolean {
-  return new UAParser().getDevice().type === 'mobile'
+  return new UAParser().getDevice().type === EngineType.mobile
 }
 
 export function isTablet(): boolean {
-  return new UAParser().getDevice().type === 'tablet'
+  return new UAParser().getDevice().type === EngineType.tablet
 }
 
 export function isAndroid(): boolean {
-  return new UAParser().getOS().name === 'Android'
+  return new UAParser().getOS().name === EngineName.Android
 }
 
 export function isWindows(): boolean {
-  return new UAParser().getOS().name === 'Windows'
+  return new UAParser().getOS().name === EngineName.Windows
 }
 
 export function isMacOS(): boolean {
-  return new UAParser().getOS().name === 'Mac OS'
+  return new UAParser().getOS().name === EngineName.MacOs
 }
 
 /**
@@ -59,7 +60,7 @@ export function isMacOS(): boolean {
  */
 export function isSafari(): boolean {
   const browserName = new UAParser().getBrowser().name
-  return browserName === 'Safari' || browserName === 'Mobile Safari'
+  return browserName === EngineName.Safari || browserName === EngineName.MobileSafari
 }
 
 /**
