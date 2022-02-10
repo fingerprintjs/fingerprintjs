@@ -1,5 +1,4 @@
 const makeLocalConfig = require('./karma.local.config')
-const { Browser, OS } = require('./utils/enums')
 
 // The shapes of these objects are taken from:
 // https://github.com/SeleniumHQ/selenium/tree/d8ddb4d83972df0f565ef65264bcb733e7a94584/javascript/node/selenium-webdriver
@@ -18,6 +17,21 @@ const firefoxIncognitoCapabilities = {
     },
   },
 }
+
+const OS = Object.freeze({
+  Windows: 'Windows',
+  OSX: 'OS X',
+  Android: 'Android',
+  IOs: 'iOS',
+})
+
+const Browser = Object.freeze({
+  Chrome: 'Chrome',
+  Firefox: 'Firefox',
+  Safari: 'Safari',
+  Edge: 'Edge',
+  IE: 'IE',
+})
 
 /*
  * You can find values for any supported browsers in the interactive form at
