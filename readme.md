@@ -153,7 +153,7 @@ See more details and learn how to run the library in old browsers in the [browse
 
 ## Where to get support
 
-Thanks to [series B funding](https://fingerprintjs.com/blog/series-b/), we are happy to provide you with technical email support for our open-source FingerprintJS library. We recommend using GitHub [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) and [Discussions](https://github.com/fingerprintjs/fingerprintjs/discussions) to help the open-source community and other users with similar issues. If you require private support, email us at [oss-support@fingerprintjs.com](mailto:oss-support@fingerprintjs.com).
+Thanks to [series B funding](https://fingerprintjs.com/blog/series-b/), we are happy to provide you with technical support for our open-source FingerprintJS library. We recommend using GitHub [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) and [Discussions](https://github.com/fingerprintjs/fingerprintjs/discussions) to help the open-source community and other users with similar issues. If you require private support, email us at [oss-support@fingerprintjs.com](mailto:oss-support@fingerprintjs.com).
 
 ## Contributing
 
