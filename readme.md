@@ -146,14 +146,16 @@ Pro result example:
 
 See the compatibility policy for the API and visitor identifiers in the [version policy guide](docs/version_policy.md).
 
-## Browser support
+## Supported browsers
 
 The library supports all popular browsers.
 See more details and learn how to run the library in old browsers in the [browser support guide](docs/browser_support.md).
 
 ## Where to get support
 
-Thanks to [series B funding](https://fingerprintjs.com/blog/series-b/), we are happy to provide you with technical support for our open-source FingerprintJS library. We recommend using GitHub [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) and [Discussions](https://github.com/fingerprintjs/fingerprintjs/discussions) to help the open-source community and other users with similar issues. If you require private support, email us at [oss-support@fingerprintjs.com](mailto:oss-support@fingerprintjs.com).
+Thanks to our [series B funding](https://fingerprintjs.com/blog/series-b/), we are happy to provide technical support for our open-source FingerprintJS library. We recommend using GitHub [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) to submit a bug or [Discussions](https://github.com/fingerprintjs/fingerprintjs/discussions) to ask a question.
+Using issues and discussions publicly will help the open-source community and other users with similar issues. 
+However, if you require private support, please email us at [oss-support@fingerprintjs.com](mailto:oss-support@fingerprintjs.com).
 
 ## Contributing
 
