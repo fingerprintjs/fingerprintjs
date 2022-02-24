@@ -32,6 +32,9 @@ yarn remove fingerprintjs2
 yarn add @fingerprintjs/fingerprintjs
 ```
 
+The new version sends HTTP requests to collect usage statistics, they can be disabled.
+See [this page](api.md#webpackrollupnpmyarn) for more details.
+
 Remove the type declaration package.
 You don't need it because the type declaration is embedded into the main package in v3:
 

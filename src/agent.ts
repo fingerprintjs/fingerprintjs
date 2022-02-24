@@ -183,12 +183,12 @@ components: ${componentsToDebugString(components)}
  */
 function monitor() {
   // The FingerprintJS CDN (https://github.com/fingerprintjs/cdn) replaces `window.__fpjs_d_m` with `true`
-  if (window.__fpjs_d_m || Math.random() >= 0.01) {
+  if (window.__fpjs_d_m || Math.random() >= 0.001) {
     return
   }
   try {
     const request = new XMLHttpRequest()
-    request.open('get', `https://openfpcdn.io/fingerprintjs/v${version}/npm-monitoring`, true)
+    request.open('get', `https://m1.openfpcdn.io/fingerprintjs/v${version}/npm-monitoring`, true)
     request.send()
   } catch (error) {
     // console.error is ok here because it's an unexpected error handler

@@ -68,7 +68,7 @@ const fpPromise = FingerprintJS.load()
 [Run this code](https://stackblitz.com/edit/fpjs-3-npm?file=index.js&devtoolsheight=100)
 
 **When you run FingerprintJS installed with NPM or Yarn, the library will send AJAX requests to FingerprintJS servers to collect usage statistics.**
-When the `load` function runs, there is a 1% chance of sending a request.
+When the `load` function runs, there is a 0.1% chance of sending a request.
 The requests are sent at most once a week from one browser instance (unless the browser cache was cleared).
 A request includes the following information:
 
