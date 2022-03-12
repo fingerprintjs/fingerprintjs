@@ -3,7 +3,6 @@
 !/resources/content_blocking/blocked_selectors/.gitkeep
 
 # Project artifacts
-/dist/
 /node_modules/
 /playground/dist/
 /resources/content_blocking/selectors_tester.html
