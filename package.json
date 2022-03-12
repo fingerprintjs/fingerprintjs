@@ -18,12 +18,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fingerprintjs/fingerprintjs.git"
+    "url": "https://github.com/Jitpomi/fingerprintjs.git"
   },
   "bugs": {
-    "url": "https://github.com/fingerprintjs/fingerprintjs/issues"
+    "url": "https://github.com/Jitpomi/fingerprintjs/issues"
   },
-  "homepage": "https://github.com/fingerprintjs/fingerprintjs",
+  "homepage": "https://github.com/Jitpomi/fingerprintjs",
   "main": "dist/fp.cjs.js",
   "module": "dist/fp.esm.js",
   "types": "dist/fp.d.ts",
