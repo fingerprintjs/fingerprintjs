@@ -1,4 +1,4 @@
-const maxValueToCheck = 100
+const maxValueToCheck = 100;
 
 /**
  * If the display is monochrome (e.g. black&white), the value will be ≥0 and will mean the number of bits per pixel.
@@ -10,16 +10,16 @@ const maxValueToCheck = 100
 export default function getMonochromeDepth(): number | undefined {
   if (!matchMedia('(min-monochrome: 0)').matches) {
     // The media feature isn't supported by the browser
-    return undefined
+    return undefined;
   }
 
   // A variation of binary search algorithm can be used here.
   // But since expected values are very small (≤10), there is no sense in adding the complexity.
   for (let i = 0; i <= maxValueToCheck; ++i) {
     if (matchMedia(`(max-monochrome: ${i})`).matches) {
-      return i
+      return i;
     }
   }
 
-  throw new Error('Too high value')
+  throw new Error('Too high value');
 }

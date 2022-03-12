@@ -1,23 +1,23 @@
-export type MaybePromise<T> = Promise<T> | T
+export type MaybePromise<T> = Promise<T> | T;
 
 export function wait<T = void>(durationMs: number, resolveWith?: T): Promise<T> {
-  return new Promise((resolve) => setTimeout(resolve, durationMs, resolveWith))
+  return new Promise((resolve) => setTimeout(resolve, durationMs, resolveWith));
 }
 
 export function requestIdleCallbackIfAvailable(fallbackTimeout: number, deadlineTimeout = Infinity): Promise<void> {
-  const { requestIdleCallback } = window
+  const { requestIdleCallback } = window;
   if (requestIdleCallback) {
     // The function `requestIdleCallback` loses the binding to `window` here.
     // `globalThis` isn't always equal `window` (see https://github.com/fingerprintjs/fingerprintjs/issues/683).
     // Therefore, an error can occur. `call(window,` prevents the error.
-    return new Promise((resolve) => requestIdleCallback.call(window, () => resolve(), { timeout: deadlineTimeout }))
+    return new Promise((resolve) => requestIdleCallback.call(window, () => resolve(), { timeout: deadlineTimeout }));
   } else {
-    return wait(Math.min(fallbackTimeout, deadlineTimeout))
+    return wait(Math.min(fallbackTimeout, deadlineTimeout));
   }
 }
 
 export function isPromise<T>(value: PromiseLike<T> | unknown): value is PromiseLike<T> {
-  return value && typeof (value as PromiseLike<T>).then === 'function'
+  return value && typeof (value as PromiseLike<T>).then === 'function';
 }
 
 /**
@@ -38,17 +38,17 @@ export function awaitIfAsync<TResult, TError = unknown>(
   callback: (...args: [success: true, result: TResult] | [success: false, error: TError]) => unknown,
 ): void {
   try {
-    const returnedValue = action()
+    const returnedValue = action();
     if (isPromise(returnedValue)) {
       returnedValue.then(
         (result) => callback(true, result),
         (error: TError) => callback(false, error),
-      )
+      );
     } else {
-      callback(true, returnedValue)
+      callback(true, returnedValue);
     }
   } catch (error) {
-    callback(false, error as TError)
+    callback(false, error as TError);
   }
 }
 
@@ -62,16 +62,16 @@ export async function forEachWithBreaks<T>(
   callback: (item: T, index: number) => unknown,
   loopReleaseInterval = 16,
 ): Promise<void> {
-  let lastLoopReleaseTime = Date.now()
+  let lastLoopReleaseTime = Date.now();
 
   for (let i = 0; i < items.length; ++i) {
-    callback(items[i], i)
+    callback(items[i], i);
 
-    const now = Date.now()
+    const now = Date.now();
     if (now >= lastLoopReleaseTime + loopReleaseInterval) {
-      lastLoopReleaseTime = now
+      lastLoopReleaseTime = now;
       // Allows asynchronous actions and microtasks to happen
-      await wait(0)
+      await wait(0);
     }
   }
 }

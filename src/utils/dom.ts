@@ -1,5 +1,5 @@
-import { wait } from './async'
-import { parseSimpleCssSelector } from './data'
+import { wait } from './async';
+import { parseSimpleCssSelector } from './data';
 
 /**
  * Creates and keeps an invisible iframe while the given function runs.
@@ -16,41 +16,41 @@ export async function withIframe<T>(
   initialHtml?: string,
   domPollInterval = 50,
 ): Promise<T> {
-  const d = document
+  const d = document;
 
   // document.body can be null while the page is loading
   while (!d.body) {
-    await wait(domPollInterval)
+    await wait(domPollInterval);
   }
 
-  const iframe = d.createElement('iframe')
+  const iframe = d.createElement('iframe');
 
   try {
     await new Promise((_resolve, _reject) => {
-      let isComplete = false
+      let isComplete = false;
       const resolve = () => {
-        isComplete = true
-        _resolve()
-      }
+        isComplete = true;
+        _resolve();
+      };
       const reject = (error: unknown) => {
-        isComplete = true
-        _reject(error)
-      }
+        isComplete = true;
+        _reject(error);
+      };
 
-      iframe.onload = resolve
-      iframe.onerror = reject
-      const { style } = iframe
-      style.setProperty('display', 'block', 'important') // Required for browsers to calculate the layout
-      style.position = 'absolute'
-      style.top = '0'
-      style.left = '0'
-      style.visibility = 'hidden'
+      iframe.onload = resolve;
+      iframe.onerror = reject;
+      const { style } = iframe;
+      style.setProperty('display', 'block', 'important'); // Required for browsers to calculate the layout
+      style.position = 'absolute';
+      style.top = '0';
+      style.left = '0';
+      style.visibility = 'hidden';
       if (initialHtml && 'srcdoc' in iframe) {
-        iframe.srcdoc = initialHtml
+        iframe.srcdoc = initialHtml;
       } else {
-        iframe.src = 'about:blank'
+        iframe.src = 'about:blank';
       }
-      d.body.appendChild(iframe)
+      d.body.appendChild(iframe);
 
       // WebKit in WeChat doesn't fire the iframe's `onload` for some reason.
       // This code checks for the loading state manually.
@@ -60,27 +60,27 @@ export async function withIframe<T>(
         // So an infinite setTimeout loop can happen without this check.
         // See https://github.com/fingerprintjs/fingerprintjs/pull/716#issuecomment-986898796
         if (isComplete) {
-          return
+          return;
         }
 
         // Make sure iframe.contentWindow and iframe.contentWindow.document are both loaded
         // The contentWindow.document can miss in JSDOM (https://github.com/jsdom/jsdom).
         if (iframe.contentWindow?.document?.readyState === 'complete') {
-          resolve()
+          resolve();
         } else {
-          setTimeout(checkReadyState, 10)
+          setTimeout(checkReadyState, 10);
         }
-      }
-      checkReadyState()
-    })
+      };
+      checkReadyState();
+    });
 
     while (!iframe.contentWindow?.document?.body) {
-      await wait(domPollInterval)
+      await wait(domPollInterval);
     }
 
-    return await action(iframe, iframe.contentWindow)
+    return await action(iframe, iframe.contentWindow);
   } finally {
-    iframe.parentNode?.removeChild(iframe)
+    iframe.parentNode?.removeChild(iframe);
   }
 }
 
@@ -89,19 +89,19 @@ export async function withIframe<T>(
  * Only single element selector are supported (without operators like space, +, >, etc).
  */
 export function selectorToElement(selector: string): HTMLElement {
-  const [tag, attributes] = parseSimpleCssSelector(selector)
-  const element = document.createElement(tag ?? 'div')
+  const [tag, attributes] = parseSimpleCssSelector(selector);
+  const element = document.createElement(tag ?? 'div');
   for (const name of Object.keys(attributes)) {
-    const value = attributes[name].join(' ')
+    const value = attributes[name].join(' ');
     // Changing the `style` attribute can cause a CSP error, therefore we change the `style.cssText` property.
     // https://github.com/fingerprintjs/fingerprintjs/issues/733
     if (name === 'style') {
-      addStyleString(element.style, value)
+      addStyleString(element.style, value);
     } else {
-      element.setAttribute(name, value)
+      element.setAttribute(name, value);
     }
   }
-  return element
+  return element;
 }
 
 /**
@@ -111,10 +111,10 @@ export function addStyleString(style: CSSStyleDeclaration, source: string): void
   // We don't use `style.cssText` because browsers must block it when no `unsafe-eval` CSP is presented: https://csplite.com/csp145/#w3c_note
   // Even though the browsers ignore this standard, we don't use `cssText` just in case.
   for (const property of source.split(';')) {
-    const match = /^\s*([\w-]+)\s*:\s*(.+?)(\s*!([\w-]+))?\s*$/.exec(property)
+    const match = /^\s*([\w-]+)\s*:\s*(.+?)(\s*!([\w-]+))?\s*$/.exec(property);
     if (match) {
-      const [, name, value, , priority] = match
-      style.setProperty(name, value, priority || '') // The last argument can't be undefined in IE11
+      const [, name, value, , priority] = match;
+      style.setProperty(name, value, priority || ''); // The last argument can't be undefined in IE11
     }
   }
 }

@@ -1,6 +1,6 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = (env, { mode = 'development' }) => ({
   entry: './index.ts',
@@ -51,4 +51,4 @@ module.exports = (env, { mode = 'development' }) => ({
       title: `FingerprintJS ${mode === 'development' ? 'Playground' : 'Demo'}`,
     }),
   ],
-})
+});

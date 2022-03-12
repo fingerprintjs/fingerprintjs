@@ -44,6 +44,7 @@
     "test:ssr": "node --require './dist/fp.cjs.js' --eval '' || (echo \"The distributive files can't be used with server side rendering. Make sure the code doesn't use browser API until an exported function is called.\" && exit 1)"
   },
   "dependencies": {
+    "bowser": "^2.11.0",
     "tslib": "^2.0.1"
   },
   "devDependencies": {
@@ -62,6 +63,8 @@
     "file-loader": "^6.2.0",
     "got": "^11.8.2",
     "html-webpack-plugin": "^4.5.2",
+    "jasmine": "^4.0.2",
+    "jasmine-ts": "^0.4.0",
     "karma": "^6.3.2",
     "karma-browserstack-launcher": "^1.6.0",
     "karma-chrome-launcher": "^3.1.0",

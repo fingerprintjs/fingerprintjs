@@ -1,4 +1,4 @@
-import { x64hash128 } from './hashing'
+import { x64hash128 } from './hashing';
 
 const longText =
   'Sociosqu libero in, gravida curae lobortis imperdiet. Elit odio consequat magna, molestie adipiscing phasellus, ' +
@@ -22,11 +22,11 @@ const longText =
   'Nam scelerisque litora himenaeos, maecenas sed enim, per bibendum erat gravida tincidunt porttitor egestas ' +
   'lacinia. Libero turpis rhoncus nulla, aliquam etiam ac, per eleifend nisi luctus vitae nunc. Etiam accumsan, ' +
   'senectus felis ad. Curabitur dui lobortis, mauris metus, est nec proin eleifend gravida magna laoreet. Porta ' +
-  'vitae, himenaeos turpis integer varius. Vehicula fusce enim nostra, aliquam nisi nec ultricies aliquet.'
+  'vitae, himenaeos turpis integer varius. Vehicula fusce enim nostra, aliquam nisi nec ultricies aliquet.';
 
 describe('Murmur3', () => {
   it('makes x64 128 bit hash', () => {
-    expect(x64hash128('Hello, world')).toBe('ebd28b45027ab97477416103e3fff7b8')
-    expect(x64hash128(longText)).toBe('211a6f425b82e115fb52ccdc51edb290')
-  })
-})
+    expect(x64hash128('Hello, world')).toBe('ebd28b45027ab97477416103e3fff7b8');
+    expect(x64hash128(longText)).toBe('211a6f425b82e115fb52ccdc51edb290');
+  });
+});

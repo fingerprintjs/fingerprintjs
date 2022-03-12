@@ -1,10 +1,10 @@
 export interface Filter {
-  title: string
-  note?: string
-  file: string
+  title: string;
+  note?: string;
+  file: string;
 }
 
-export type FilterList = Record<string, Filter>
+export type FilterList = Record<string, Filter>;
 
 /**
  * A list of ad blocking filters to work with
@@ -232,6 +232,6 @@ const filters: FilterList = {
     title: "Frellwit's Swedish Filter",
     file: 'https://raw.githubusercontent.com/lassekongo83/Frellwits-filter-lists/master/Frellwits-Swedish-Filter.txt',
   },
-}
+};
 
-export default filters
+export default filters;

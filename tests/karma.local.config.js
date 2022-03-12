@@ -36,5 +36,5 @@ module.exports = (config) => {
     summaryReporter: {
       show: 'skipped', // To know that some tests are skipped exactly where they are supposed to be skipped
     },
-  })
-}
+  });
+};

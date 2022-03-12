@@ -1,7 +1,7 @@
-import { isAndroid, isWebKit } from '../utils/browser'
-import { selectorToElement } from '../utils/dom'
-import { countTruthy } from '../utils/data'
-import { wait } from '../utils/async'
+import { isAndroid, isWebKit } from '@/utils/browser';
+import { selectorToElement } from '@/utils/dom';
+import { countTruthy } from '@/utils/data';
+import { wait } from '@/utils/async';
 
 /**
  * Only single element selector are supported (no operators like space, +, >, etc).
@@ -252,10 +252,10 @@ export const filters = {
     '.zergnet-recommend',
     '.yt.btn-link.btn-md.btn',
   ],
-}
+};
 
 interface Options {
-  debug?: boolean
+  debug?: boolean;
 }
 
 /**
@@ -269,85 +269,85 @@ interface Options {
  */
 export default async function getDomBlockers({ debug }: Options = {}): Promise<string[] | undefined> {
   if (!isApplicable()) {
-    return undefined
+    return undefined;
   }
 
-  const filterNames = Object.keys(filters) as Array<keyof typeof filters>
-  const allSelectors = ([] as string[]).concat(...filterNames.map((filterName) => filters[filterName]))
-  const blockedSelectors = await getBlockedSelectors(allSelectors)
+  const filterNames = Object.keys(filters) as Array<keyof typeof filters>;
+  const allSelectors = ([] as string[]).concat(...filterNames.map((filterName) => filters[filterName]));
+  const blockedSelectors = await getBlockedSelectors(allSelectors);
 
   if (debug) {
-    printDebug(blockedSelectors)
+    printDebug(blockedSelectors);
   }
 
   const activeBlockers = filterNames.filter((filterName) => {
-    const selectors = filters[filterName]
-    const blockedCount = countTruthy(selectors.map((selector) => blockedSelectors[selector]))
-    return blockedCount > selectors.length * 0.6
-  })
-  activeBlockers.sort()
+    const selectors = filters[filterName];
+    const blockedCount = countTruthy(selectors.map((selector) => blockedSelectors[selector]));
+    return blockedCount > selectors.length * 0.6;
+  });
+  activeBlockers.sort();
 
-  return activeBlockers
+  return activeBlockers;
 }
 
 export function isApplicable(): boolean {
   // Safari (desktop and mobile) and all Android browsers keep content blockers in both regular and private mode
-  return isWebKit() || isAndroid()
+  return isWebKit() || isAndroid();
 }
 
 export async function getBlockedSelectors<T extends string>(selectors: readonly T[]): Promise<{ [K in T]?: true }> {
-  const d = document
-  const root = d.createElement('div')
-  const elements = new Array<HTMLElement>(selectors.length)
-  const blockedSelectors: { [K in T]?: true } = {} // Set() isn't used just in case somebody need older browser support
+  const d = document;
+  const root = d.createElement('div');
+  const elements = new Array<HTMLElement>(selectors.length);
+  const blockedSelectors: { [K in T]?: true } = {}; // Set() isn't used just in case somebody need older browser support
 
-  forceShow(root)
+  forceShow(root);
 
   // First create all elements that can be blocked. If the DOM steps below are done in a single cycle,
   // browser will alternate tree modification and layout reading, that is very slow.
   for (let i = 0; i < selectors.length; ++i) {
-    const element = selectorToElement(selectors[i])
-    const holder = d.createElement('div') // Protects from unwanted effects of `+` and `~` selectors of filters
-    forceShow(holder)
-    holder.appendChild(element)
-    root.appendChild(holder)
-    elements[i] = element
+    const element = selectorToElement(selectors[i]);
+    const holder = d.createElement('div'); // Protects from unwanted effects of `+` and `~` selectors of filters
+    forceShow(holder);
+    holder.appendChild(element);
+    root.appendChild(holder);
+    elements[i] = element;
   }
 
   // document.body can be null while the page is loading
   while (!d.body) {
-    await wait(50)
+    await wait(50);
   }
-  d.body.appendChild(root)
+  d.body.appendChild(root);
 
   try {
     // Then check which of the elements are blocked
     for (let i = 0; i < selectors.length; ++i) {
       if (!elements[i].offsetParent) {
-        blockedSelectors[selectors[i]] = true
+        blockedSelectors[selectors[i]] = true;
       }
     }
   } finally {
     // Then remove the elements
-    root.parentNode?.removeChild(root)
+    root.parentNode?.removeChild(root);
   }
 
-  return blockedSelectors
+  return blockedSelectors;
 }
 
 function forceShow(element: HTMLElement) {
-  element.style.setProperty('display', 'block', 'important')
+  element.style.setProperty('display', 'block', 'important');
 }
 
 function printDebug(blockedSelectors: { [K in string]?: true }) {
-  let message = 'DOM blockers debug:\n```'
+  let message = 'DOM blockers debug:\n```';
   for (const filterName of Object.keys(filters) as Array<keyof typeof filters>) {
-    message += `\n${filterName}:`
+    message += `\n${filterName}:`;
     for (const selector of filters[filterName]) {
-      message += `\n  ${selector} ${blockedSelectors[selector] ? '🚫' : '➡️'}`
+      message += `\n  ${selector} ${blockedSelectors[selector] ? '🚫' : '➡️'}`;
     }
   }
   // console.log is ok here because it's under a debug clause
   // eslint-disable-next-line no-console
-  console.log(`${message}\n\`\`\``)
+  console.log(`${message}\n\`\`\``);
 }

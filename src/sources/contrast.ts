@@ -12,22 +12,22 @@ export const enum ContrastPreference {
  */
 export default function getContrastPreference(): ContrastPreference | undefined {
   if (doesMatch('no-preference')) {
-    return ContrastPreference.None
+    return ContrastPreference.None;
   }
   // The sources contradict on the keywords. Probably 'high' and 'low' will never be implemented.
   // Need to check it when all browsers implement the feature.
   if (doesMatch('high') || doesMatch('more')) {
-    return ContrastPreference.More
+    return ContrastPreference.More;
   }
   if (doesMatch('low') || doesMatch('less')) {
-    return ContrastPreference.Less
+    return ContrastPreference.Less;
   }
   if (doesMatch('forced')) {
-    return ContrastPreference.ForcedColors
+    return ContrastPreference.ForcedColors;
   }
-  return undefined
+  return undefined;
 }
 
 function doesMatch(value: string) {
-  return matchMedia(`(prefers-contrast: ${value})`).matches
+  return matchMedia(`(prefers-contrast: ${value})`).matches;
 }

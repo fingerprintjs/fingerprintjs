@@ -1,193 +1,193 @@
-import { holdLoop } from '../../tests/utils'
-import { wait } from './async'
-import { loadSource, loadSources, Source } from './entropy_source'
+import { holdLoop } from '../../tests/utils';
+import { wait } from './async';
+import { loadSource, loadSources, Source } from './entropy_source';
 
 describe('Entropy source utilities', () => {
   describe('loadSource', () => {
     it('passes source options', async () => {
-      const sourceGetter = jasmine.createSpy()
-      const sourceLoader = jasmine.createSpy().and.returnValue(sourceGetter)
+      const sourceGetter = jasmine.createSpy();
+      const sourceLoader = jasmine.createSpy().and.returnValue(sourceGetter);
 
-      const loadedSource = loadSource(sourceLoader, '12345')
-      await loadedSource()
-      expect(sourceLoader).toHaveBeenCalledWith('12345')
-      expect(sourceGetter).toHaveBeenCalledWith()
-    })
+      const loadedSource = loadSource(sourceLoader, '12345');
+      await loadedSource();
+      expect(sourceLoader).toHaveBeenCalledWith('12345');
+      expect(sourceGetter).toHaveBeenCalledWith();
+    });
 
     describe('result handling', () => {
       async function checkSource(source: Source<undefined, 'unpredictable value'>) {
-        const loadedSource = loadSource(source, undefined)
-        const component = await loadedSource()
-        expect(component).toEqual({ value: 'unpredictable value', duration: jasmine.anything() })
+        const loadedSource = loadSource(source, undefined);
+        const component = await loadedSource();
+        expect(component).toEqual({ value: 'unpredictable value', duration: jasmine.anything() });
       }
 
       describe('synchronous "load" phase', () => {
         it('with no "get" phase', async () => {
-          const source = () => 'unpredictable value' as const
-          await checkSource(source)
-        })
+          const source = () => 'unpredictable value' as const;
+          await checkSource(source);
+        });
 
         it('with synchronous "get" phase', async () => {
-          const source = () => () => 'unpredictable value' as const
-          await checkSource(source)
-        })
+          const source = () => () => 'unpredictable value' as const;
+          await checkSource(source);
+        });
 
         it('with asynchronous "get" phase', async () => {
-          const source = () => () => wait(5, 'unpredictable value' as const)
-          await checkSource(source)
-        })
-      })
+          const source = () => () => wait(5, 'unpredictable value' as const);
+          await checkSource(source);
+        });
+      });
 
       describe('asynchronous "load" phase', () => {
         it('with no "get" phase', async () => {
-          const source = () => wait(5, 'unpredictable value' as const)
-          await checkSource(source)
-        })
+          const source = () => wait(5, 'unpredictable value' as const);
+          await checkSource(source);
+        });
 
         it('with synchronous "get" phase', async () => {
-          const source = () => wait(5, () => 'unpredictable value' as const)
-          await checkSource(source)
-        })
+          const source = () => wait(5, () => 'unpredictable value' as const);
+          await checkSource(source);
+        });
 
         it('with asynchronous "get" phase', async () => {
-          const source = () => wait(5, () => wait(5, 'unpredictable value' as const))
-          await checkSource(source)
-        })
-      })
-    })
+          const source = () => wait(5, () => wait(5, 'unpredictable value' as const));
+          await checkSource(source);
+        });
+      });
+    });
 
     describe('error handling', () => {
       async function checkSource(source: Source<undefined, never>) {
-        const loadedSource = loadSource(source, undefined)
-        const component = await loadedSource()
+        const loadedSource = loadSource(source, undefined);
+        const component = await loadedSource();
         expect(component).toEqual({
           error: jasmine.objectContaining({ message: 'Fail' }),
           duration: jasmine.anything(),
-        })
+        });
       }
 
       describe('synchronous "load" phase', () => {
         it('with no "get" phase', async () => {
           await checkSource(() => {
-            throw 'Fail'
-          })
-        })
+            throw 'Fail';
+          });
+        });
 
         it('with synchronous "get" phase', async () => {
           await checkSource(() => () => {
-            throw 'Fail'
-          })
-        })
+            throw 'Fail';
+          });
+        });
 
         it('with asynchronous "get" phase', async () => {
           await checkSource(() => async () => {
-            await wait(5)
-            throw new Error('Fail')
-          })
-        })
-      })
+            await wait(5);
+            throw new Error('Fail');
+          });
+        });
+      });
 
       describe('asynchronous "load" phase', () => {
         it('with no "get" phase', async () => {
           await checkSource(async () => {
-            await wait(5)
-            throw new Error('Fail')
-          })
-        })
+            await wait(5);
+            throw new Error('Fail');
+          });
+        });
 
         it('with synchronous "get" phase', async () => {
           await checkSource(async () => {
-            await wait(5)
+            await wait(5);
             return () => {
-              throw new Error('Fail')
-            }
-          })
-        })
+              throw new Error('Fail');
+            };
+          });
+        });
 
         it('with asynchronous "get" phase', async () => {
           await checkSource(async () => {
-            await wait(5)
+            await wait(5);
             return async () => {
-              await wait(5)
-              throw new Error('Fail')
-            }
-          })
-        })
-      })
-    })
+              await wait(5);
+              throw new Error('Fail');
+            };
+          });
+        });
+      });
+    });
 
     it('runs source\'s "load" phase once in total and "get" phase once per each getter call', async () => {
-      const sourceGetter = jasmine.createSpy().and.returnValues('one', 'two', 'three')
-      const sourceLoader = jasmine.createSpy().and.returnValue(sourceGetter)
+      const sourceGetter = jasmine.createSpy().and.returnValues('one', 'two', 'three');
+      const sourceLoader = jasmine.createSpy().and.returnValue(sourceGetter);
 
-      const loadedSource = loadSource(sourceLoader, undefined)
-      await wait(5)
-      expect(sourceLoader).toHaveBeenCalledTimes(1)
-      expect(sourceGetter).not.toHaveBeenCalled()
+      const loadedSource = loadSource(sourceLoader, undefined);
+      await wait(5);
+      expect(sourceLoader).toHaveBeenCalledTimes(1);
+      expect(sourceGetter).not.toHaveBeenCalled();
 
-      expect(await loadedSource()).toEqual({ value: 'one', duration: jasmine.anything() })
-      expect(await loadedSource()).toEqual({ value: 'two', duration: jasmine.anything() })
-      expect(await loadedSource()).toEqual({ value: 'three', duration: jasmine.anything() })
-      expect(sourceLoader).toHaveBeenCalledTimes(1)
-      expect(sourceGetter).toHaveBeenCalledTimes(3)
-    })
+      expect(await loadedSource()).toEqual({ value: 'one', duration: jasmine.anything() });
+      expect(await loadedSource()).toEqual({ value: 'two', duration: jasmine.anything() });
+      expect(await loadedSource()).toEqual({ value: 'three', duration: jasmine.anything() });
+      expect(sourceLoader).toHaveBeenCalledTimes(1);
+      expect(sourceGetter).toHaveBeenCalledTimes(3);
+    });
 
     it('allows getting the component before source is loaded', async () => {
-      let isSourceReallyLoaded = false
+      let isSourceReallyLoaded = false;
       const source = async () => {
-        await wait(10)
-        isSourceReallyLoaded = true
-        return 'unpredictable value'
-      }
+        await wait(10);
+        isSourceReallyLoaded = true;
+        return 'unpredictable value';
+      };
 
-      const loadedSource = loadSource(source, undefined)
-      expect(isSourceReallyLoaded).toBeFalse()
-      expect(await loadedSource()).toEqual({ value: 'unpredictable value', duration: jasmine.anything() })
-      expect(isSourceReallyLoaded).toBeTrue()
-    })
+      const loadedSource = loadSource(source, undefined);
+      expect(isSourceReallyLoaded).toBeFalse();
+      expect(await loadedSource()).toEqual({ value: 'unpredictable value', duration: jasmine.anything() });
+      expect(isSourceReallyLoaded).toBeTrue();
+    });
 
     it('measures duration in case of success', async () => {
       const source = () => {
-        holdLoop(7) // setTimeout is too inaccurate
-        return () => holdLoop(5)
-      }
+        holdLoop(7); // setTimeout is too inaccurate
+        return () => holdLoop(5);
+      };
 
-      const loadedSource = loadSource(source, undefined)
-      await wait(50) // To make a pause between the loading completes and the getting starts
-      const component = await loadedSource()
-      expect(component.duration).toBeGreaterThanOrEqual(7 + 5)
-      expect(component.duration).toBeLessThan(50 + 5)
-    })
+      const loadedSource = loadSource(source, undefined);
+      await wait(50); // To make a pause between the loading completes and the getting starts
+      const component = await loadedSource();
+      expect(component.duration).toBeGreaterThanOrEqual(7 + 5);
+      expect(component.duration).toBeLessThan(50 + 5);
+    });
 
     it('measures duration in case of error in "load" phase', async () => {
       const source = () => {
-        holdLoop(5) // setTimeout is too inaccurate
-        throw new Error('Failed to load')
-      }
+        holdLoop(5); // setTimeout is too inaccurate
+        throw new Error('Failed to load');
+      };
 
-      const loadedSource = loadSource(source, undefined)
-      await wait(50) // To make a pause between the loading completes and the getting starts
-      const component = await loadedSource()
-      expect(component.duration).toBeGreaterThanOrEqual(5)
-      expect(component.duration).toBeLessThan(50)
-    })
+      const loadedSource = loadSource(source, undefined);
+      await wait(50); // To make a pause between the loading completes and the getting starts
+      const component = await loadedSource();
+      expect(component.duration).toBeGreaterThanOrEqual(5);
+      expect(component.duration).toBeLessThan(50);
+    });
 
     it('measures duration in case of error in "get" phase', async () => {
       const source = () => {
-        holdLoop(7) // setTimeout is too inaccurate
+        holdLoop(7); // setTimeout is too inaccurate
         return () => {
-          holdLoop(5)
-          throw new Error('Failed to get')
-        }
-      }
+          holdLoop(5);
+          throw new Error('Failed to get');
+        };
+      };
 
-      const loadedSource = loadSource(source, undefined)
-      await wait(50) // To make a pause between the loading completes and the getting starts
-      const component = await loadedSource()
-      expect(component.duration).toBeGreaterThanOrEqual(7 + 5)
-      expect(component.duration).toBeLessThan(50 + 5)
-    })
-  })
+      const loadedSource = loadSource(source, undefined);
+      await wait(50); // To make a pause between the loading completes and the getting starts
+      const component = await loadedSource();
+      expect(component.duration).toBeGreaterThanOrEqual(7 + 5);
+      expect(component.duration).toBeLessThan(50 + 5);
+    });
+  });
 
   describe('loadSources', () => {
     it('passes source options', async () => {
@@ -195,36 +195,36 @@ describe('Entropy source utilities', () => {
         foo: jasmine.createSpy(),
         bar: jasmine.createSpy(),
         baz: jasmine.createSpy(),
-      }
+      };
 
-      const loadedSources = loadSources(sources, '12345', [])
-      await loadedSources()
-      expect(sources.foo).toHaveBeenCalledWith('12345')
-      expect(sources.bar).toHaveBeenCalledWith('12345')
-      expect(sources.baz).toHaveBeenCalledWith('12345')
-    })
+      const loadedSources = loadSources(sources, '12345', []);
+      await loadedSources();
+      expect(sources.foo).toHaveBeenCalledWith('12345');
+      expect(sources.bar).toHaveBeenCalledWith('12345');
+      expect(sources.baz).toHaveBeenCalledWith('12345');
+    });
 
     it("returns sources' values and errors", async () => {
       const sources = {
         success: () => wait(10, 'qwerty'),
         loadFail: async () => {
-          await wait(5)
-          throw new Error('Failed to load')
+          await wait(5);
+          throw new Error('Failed to load');
         },
         getFail: () => async () => {
-          await wait(15)
-          throw 'Failed to get'
+          await wait(15);
+          throw 'Failed to get';
         },
-      }
+      };
 
-      const loadedSources = loadSources(sources, undefined, [])
-      const components = await loadedSources()
+      const loadedSources = loadSources(sources, undefined, []);
+      const components = await loadedSources();
       expect(components).toEqual({
         success: { value: 'qwerty', duration: jasmine.anything() },
         loadFail: { error: new Error('Failed to load'), duration: jasmine.anything() },
         getFail: { error: { message: 'Failed to get' }, duration: jasmine.anything() },
-      })
-    })
+      });
+    });
 
     it("keeps the sources' order", async () => {
       const sources = {
@@ -232,12 +232,12 @@ describe('Entropy source utilities', () => {
         two: () => wait(5, () => wait(15, '')),
         three: () => wait(10, () => wait(5, '')),
         four: () => wait(5, () => wait(5, '')),
-      }
+      };
 
-      const loadedSources = loadSources(sources, undefined, [])
-      const components = await loadedSources()
-      expect(Object.keys(components)).toEqual(['one', 'two', 'three', 'four'])
-    })
+      const loadedSources = loadSources(sources, undefined, []);
+      const components = await loadedSources();
+      expect(Object.keys(components)).toEqual(['one', 'two', 'three', 'four']);
+    });
 
     it('excludes', async () => {
       const sources = {
@@ -246,64 +246,64 @@ describe('Entropy source utilities', () => {
         three: jasmine.createSpy().and.returnValue(3),
         four: jasmine.createSpy().and.returnValue(4),
         five: jasmine.createSpy().and.returnValue(5),
-      }
+      };
 
-      const loadedSources = loadSources(sources, undefined, ['four', 'two'])
-      const components = await loadedSources()
+      const loadedSources = loadSources(sources, undefined, ['four', 'two']);
+      const components = await loadedSources();
       expect(components).toEqual({
         one: { value: 1, duration: jasmine.anything() },
         three: { value: 3, duration: jasmine.anything() },
         five: { value: 5, duration: jasmine.anything() },
-      })
-      expect(sources.one).toHaveBeenCalledTimes(1)
-      expect(sources.two).not.toHaveBeenCalled()
-      expect(sources.three).toHaveBeenCalledTimes(1)
-      expect(sources.four).not.toHaveBeenCalled()
-      expect(sources.five).toHaveBeenCalledTimes(1)
-    })
+      });
+      expect(sources.one).toHaveBeenCalledTimes(1);
+      expect(sources.two).not.toHaveBeenCalled();
+      expect(sources.three).toHaveBeenCalledTimes(1);
+      expect(sources.four).not.toHaveBeenCalled();
+      expect(sources.five).toHaveBeenCalledTimes(1);
+    });
 
     it('runs sources\' "load" phase once in total and "get" phase once per each getter call', async () => {
       const sourceGetters = {
         foo: jasmine.createSpy().and.returnValues('one', 'two', 'three'),
         bar: jasmine.createSpy().and.returnValues(1, 2, 3),
-      }
+      };
       const sourceLoaders = {
         foo: jasmine.createSpy().and.returnValue(sourceGetters.foo),
         bar: jasmine.createSpy().and.returnValue(sourceGetters.bar),
-      }
+      };
 
-      const loadedSources = loadSources(sourceLoaders, undefined, [])
-      await wait(5)
-      expect(sourceLoaders.foo).toHaveBeenCalledTimes(1)
-      expect(sourceLoaders.bar).toHaveBeenCalledTimes(1)
-      expect(sourceGetters.foo).not.toHaveBeenCalled()
-      expect(sourceGetters.bar).not.toHaveBeenCalled()
+      const loadedSources = loadSources(sourceLoaders, undefined, []);
+      await wait(5);
+      expect(sourceLoaders.foo).toHaveBeenCalledTimes(1);
+      expect(sourceLoaders.bar).toHaveBeenCalledTimes(1);
+      expect(sourceGetters.foo).not.toHaveBeenCalled();
+      expect(sourceGetters.bar).not.toHaveBeenCalled();
 
       expect(await loadedSources()).toEqual({
         foo: { value: 'one', duration: jasmine.anything() },
         bar: { value: 1, duration: jasmine.anything() },
-      })
+      });
       expect(await loadedSources()).toEqual({
         foo: { value: 'two', duration: jasmine.anything() },
         bar: { value: 2, duration: jasmine.anything() },
-      })
+      });
       expect(await loadedSources()).toEqual({
         foo: { value: 'three', duration: jasmine.anything() },
         bar: { value: 3, duration: jasmine.anything() },
-      })
-      expect(sourceLoaders.foo).toHaveBeenCalledTimes(1)
-      expect(sourceLoaders.bar).toHaveBeenCalledTimes(1)
-      expect(sourceGetters.foo).toHaveBeenCalledTimes(3)
-      expect(sourceGetters.bar).toHaveBeenCalledTimes(3)
-    })
+      });
+      expect(sourceLoaders.foo).toHaveBeenCalledTimes(1);
+      expect(sourceLoaders.bar).toHaveBeenCalledTimes(1);
+      expect(sourceGetters.foo).toHaveBeenCalledTimes(3);
+      expect(sourceGetters.bar).toHaveBeenCalledTimes(3);
+    });
 
     it('releases the JS event loop for asynchronous events', async () => {
       const makeSource = () => () => {
-        holdLoop(10)
+        holdLoop(10);
         return () => {
-          holdLoop(10)
-        }
-      }
+          holdLoop(10);
+        };
+      };
       const sources = {
         0: makeSource(),
         1: makeSource(),
@@ -313,33 +313,33 @@ describe('Entropy source utilities', () => {
         5: makeSource(),
         6: makeSource(),
         7: makeSource(),
-      }
-      let intervalFireCounter = 0
-      const intervalId = setInterval(() => ++intervalFireCounter, 1)
+      };
+      let intervalFireCounter = 0;
+      const intervalId = setInterval(() => ++intervalFireCounter, 1);
       try {
-        const loadedSources = loadSources(sources, undefined, [])
-        await loadedSources()
+        const loadedSources = loadSources(sources, undefined, []);
+        await loadedSources();
       } finally {
-        clearInterval(intervalId)
+        clearInterval(intervalId);
       }
-      expect(intervalFireCounter).toBeGreaterThan(1)
-    })
+      expect(intervalFireCounter).toBeGreaterThan(1);
+    });
 
     it('runs source\'s "load" phase once even when a signal isn\'t loaded when getter is called', async () => {
       const sources = {
         one: () => {
           // This pause will cause `loadSources` to release the JS event loop
           // which will let the getter run before the next source starts loading
-          holdLoop(20)
-          return ''
+          holdLoop(20);
+          return '';
         },
         two: jasmine.createSpy(),
-      }
+      };
 
-      const loadedSources = loadSources(sources, undefined, [])
-      expect(sources.two).not.toHaveBeenCalled()
-      await Promise.all([loadedSources(), loadedSources(), loadedSources()])
-      expect(sources.two).toHaveBeenCalledTimes(1)
-    })
-  })
-})
+      const loadedSources = loadSources(sources, undefined, []);
+      expect(sources.two).not.toHaveBeenCalled();
+      await Promise.all([loadedSources(), loadedSources(), loadedSources()]);
+      expect(sources.two).toHaveBeenCalledTimes(1);
+    });
+  });
+});

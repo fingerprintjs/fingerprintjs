@@ -2,91 +2,91 @@
  * See docs/content_blockers.md
  */
 
-import * as path from 'path'
-import { promises as fsAsync } from 'fs'
-import * as rollup from 'rollup'
-import filterConfig, { FilterList } from './filters'
-import { fetchFilter } from './utils'
+import * as path from 'path';
+import { promises as fsAsync } from 'fs';
+import * as rollup from 'rollup';
+import filterConfig, { FilterList } from './filters';
+import { fetchFilter } from './utils';
 
-const inputScript = path.join(__dirname, 'selectors_tester.ts')
-const outputFile = path.join(__dirname, 'selectors_tester.html')
+const inputScript = path.join(__dirname, 'selectors_tester.ts');
+const outputFile = path.join(__dirname, 'selectors_tester.html');
 
 async function run() {
-  const uniqueSelectors = await fetchUniqueSelectors(filterConfig)
-  const testerHtml = await makeTesterHtml(uniqueSelectors)
-  await fsAsync.writeFile(outputFile, testerHtml)
+  const uniqueSelectors = await fetchUniqueSelectors(filterConfig);
+  const testerHtml = await makeTesterHtml(uniqueSelectors);
+  await fsAsync.writeFile(outputFile, testerHtml);
 }
 
 async function fetchUniqueSelectors(filterConfig: FilterList) {
-  const filters = Object.values(filterConfig)
-  const uniqueSelectors = new Set<string>()
-  let fetchedFiltersCount = 0
+  const filters = Object.values(filterConfig);
+  const uniqueSelectors = new Set<string>();
+  let fetchedFiltersCount = 0;
 
   const clearProgress = () => {
-    process.stdout.clearLine(0)
-    process.stdout.cursorTo(0)
-  }
+    process.stdout.clearLine(0);
+    process.stdout.cursorTo(0);
+  };
   const printProgress = () => {
-    clearProgress()
-    process.stdout.write(`Fetching filters: ${fetchedFiltersCount} of ${filters.length}`)
-  }
+    clearProgress();
+    process.stdout.write(`Fetching filters: ${fetchedFiltersCount} of ${filters.length}`);
+  };
 
-  printProgress()
+  printProgress();
 
-  let abort: (() => void) | undefined
-  const abortPromise = new Promise((resolve) => (abort = resolve))
+  let abort: (() => void) | undefined;
+  const abortPromise = new Promise((resolve) => (abort = resolve));
   try {
     await Promise.all(
       filters.map(async (filter) => {
-        let filterLines: string[]
+        let filterLines: string[];
         try {
-          filterLines = await fetchFilter(filter.file, abortPromise)
+          filterLines = await fetchFilter(filter.file, abortPromise);
         } catch (error) {
-          throw new Error(`Failed to fetch filter "${filter.title}" (${filter.file}): ${error.message}`)
+          throw new Error(`Failed to fetch filter "${filter.title}" (${filter.file}): ${error.message}`);
         }
         for (const line of filterLines) {
-          const selector = getSelectorFromFilterRule(line)
+          const selector = getSelectorFromFilterRule(line);
           if (selector) {
-            uniqueSelectors.add(selector)
+            uniqueSelectors.add(selector);
           }
         }
-        ++fetchedFiltersCount
-        printProgress()
+        ++fetchedFiltersCount;
+        printProgress();
       }),
-    )
+    );
   } finally {
-    abort?.()
-    clearProgress()
+    abort?.();
+    clearProgress();
   }
 
-  return uniqueSelectors
+  return uniqueSelectors;
 }
 
 function getSelectorFromFilterRule(rule: string): string | undefined {
-  const selectorMatch = /^##(.+)$/.exec(rule)
+  const selectorMatch = /^##(.+)$/.exec(rule);
   if (!selectorMatch) {
-    return
+    return;
   }
-  const selector = selectorMatch[1]
+  const selector = selectorMatch[1];
   // Leaves only selectors suitable for `parseSimpleCssSelector` and `offsetParent` usage
   if (/(^embed([^\w-]|$)|\\|\[src.*=|\[style\W?=[^[]*\bposition:\s*fixed\b|\[[^\]]*\[)/i.test(selector)) {
-    return
+    return;
   }
   // Exclude iframes because they produce unwanted side effects
   if (/^iframe([^\w-]|$)/i.test(selector)) {
-    return
+    return;
   }
-  const selectorWithoutAttributes = selector.trim().replace(/\[.*?\]/g, '[]')
+  const selectorWithoutAttributes = selector.trim().replace(/\[.*?\]/g, '[]');
   if (/[\s:]/.test(selectorWithoutAttributes)) {
-    return
+    return;
   }
-  return selector
+  return selector;
 }
 
 async function makeTesterHtml(selectors: { forEach: (callback: (selector: string) => void) => void }) {
-  const selectorsList: string[] = []
-  selectors.forEach((selector) => selectorsList.push(selector))
-  const jsCode = await getJsToDetectBlockedSelectors(selectorsList)
+  const selectorsList: string[] = [];
+  selectors.forEach((selector) => selectorsList.push(selector));
+  const jsCode = await getJsToDetectBlockedSelectors(selectorsList);
   return `<!DOCTYPE html>
 <html>
 <head>
@@ -100,7 +100,7 @@ async function makeTesterHtml(selectors: { forEach: (callback: (selector: string
     ${jsCode}
   </script>
 </body>
-</html>`
+</html>`;
 }
 
 async function getJsToDetectBlockedSelectors(selectors: readonly string[]) {
@@ -109,15 +109,15 @@ async function getJsToDetectBlockedSelectors(selectors: readonly string[]) {
     input: inputScript,
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     plugins: require('../../rollup.config')[0].plugins,
-  })
+  });
   const { output } = await bundle.generate({
     format: 'iife',
-  })
-  return output[0].code.replace(/\[\s*\/\*\s*selectors\s*\*\/\s*]/g, JSON.stringify(selectors))
+  });
+  return output[0].code.replace(/\[\s*\/\*\s*selectors\s*\*\/\s*]/g, JSON.stringify(selectors));
 }
 
 run().catch((error) => {
   // eslint-disable-next-line no-console
-  console.error(error)
-  process.exitCode = 1
-})
+  console.error(error);
+  process.exitCode = 1;
+});

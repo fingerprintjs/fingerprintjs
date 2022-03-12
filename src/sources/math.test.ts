@@ -1,4 +1,4 @@
-import getMathFingerprint from './math'
+import getMathFingerprint from './math';
 
 const expectedKeys = [
   'acos',
@@ -25,22 +25,22 @@ const expectedKeys = [
   'log1p',
   'log1pPf',
   'powPI',
-]
+];
 
 describe('Sources', () => {
   describe('math', () => {
     it('works correctly', () => {
-      const data = getMathFingerprint()
+      const data = getMathFingerprint();
 
-      let sum = 0
+      let sum = 0;
 
       for (const key of expectedKeys) {
-        const value = data[key]
-        expect(typeof value).toBe('number')
-        sum += value
+        const value = data[key];
+        expect(typeof value).toBe('number');
+        sum += value;
       }
 
-      expect(sum).not.toBe(0)
-    })
-  })
-})
+      expect(sum).not.toBe(0);
+    });
+  });
+});

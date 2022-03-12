@@ -1,10 +1,14 @@
-import { version } from '../package.json'
-import { requestIdleCallbackIfAvailable } from './utils/async'
-import { UnknownComponents } from './utils/entropy_source'
-import { x64hash128 } from './utils/hashing'
-import { errorToObject } from './utils/misc'
-import loadBuiltinSources, { BuiltinComponents } from './sources'
-import getConfidence, { Confidence } from './confidence'
+import Browser from 'bowser';
+
+const version = '1.0';
+import { UnknownComponents, IpInfo } from '@/utils/entropy_source';
+
+import loadBuiltinSources, { BuiltinComponents } from './sources';
+import getConfidence, { Confidence } from './confidence';
+import { getBrowserInfo } from '@/utils/browser';
+import { x64hash128 } from '@/utils/hashing';
+import { errorToObject } from '@/utils/misc';
+import { requestIdleCallbackIfAvailable } from '@/utils/async';
 
 /**
  * Options for Fingerprint class loading
@@ -15,17 +19,17 @@ export interface LoadOptions {
    * old Edge, because Chrome/Blink based browsers support `requestIdleCallback`. The value is in milliseconds.
    * @default 50
    */
-  delayFallback?: number
+  delayFallback?: number;
   /**
    * Whether to print debug messages to the console.
    * Required to ease investigations of problems.
    */
-  debug?: boolean
+  debug?: boolean;
   /**
    * Set `false` to disable the unpersonalized AJAX request that the agent sends to collect installation statistics.
    * It's always disabled in the version published to the FingerprintJS CDN.
    */
-  monitoring?: boolean
+  monitoring?: boolean;
 }
 
 /**
@@ -37,7 +41,7 @@ export interface GetOptions {
    *
    * @deprecated Use the `debug` option of `load()` instead
    */
-  debug?: boolean
+  debug?: boolean;
 }
 
 /**
@@ -47,11 +51,18 @@ export interface GetResult {
   /**
    * The visitor identifier
    */
-  visitorId: string
+  visitorId: string;
   /**
    * A confidence score that tells how much the agent is sure about the visitor identifier
    */
-  confidence: Confidence
+  confidence: Confidence;
+
+  ipInfo: IpInfo;
+
+  /**
+   * Browser human-readable data
+   */
+  browserInfo: Browser.Parser.ParsedResult;
   /**
    * List of components that has formed the visitor identifier.
    *
@@ -59,13 +70,13 @@ export interface GetResult {
    * within a major version. If you want to avoid breaking changes, treat the property as having type
    * `UnknownComponents` that is more generic but guarantees backward compatibility within a major version.
    */
-  components: BuiltinComponents
+  components: BuiltinComponents;
   /**
    * The fingerprinting algorithm version
    *
    * @see https://github.com/fingerprintjs/fingerprintjs#version-policy For more details
    */
-  version: string
+  version: string;
 }
 
 /**
@@ -75,17 +86,37 @@ export interface Agent {
   /**
    * Gets the visitor identifier
    */
-  get(options?: Readonly<GetOptions>): Promise<GetResult>
+  get(options?: Readonly<GetOptions>): Promise<GetResult>;
 }
 
-function componentsToCanonicalString(components: UnknownComponents) {
-  let result = ''
+function componentsToCanonicalString(
+  components: UnknownComponents,
+  browserInfo: Browser.Parser.ParsedResult,
+  ipInfo: IpInfo,
+) {
+  let result = '';
+  // console.log('componentsToCanonicalString', browserInfo, components);
   for (const componentKey of Object.keys(components).sort()) {
-    const component = components[componentKey]
-    const value = component.error ? 'error' : JSON.stringify(component.value)
-    result += `${result ? '|' : ''}${componentKey.replace(/([:|\\])/g, '\\$1')}:${value}`
+    const component = components[componentKey];
+    const value = component.error ? 'error' : JSON.stringify(component.value);
+    result += `${result ? '|' : ''}${componentKey.replace(/([:|\\])/g, '\\$1')}:${value}`;
   }
-  return result
+
+  const checkPath = (obj: any, paths: any[] = []) => {
+    paths.forEach((path) => {
+      result += obj && obj[path] ? JSON.stringify(obj[path]) : '';
+    });
+  };
+
+  const { browser, os, platform, engine } = browserInfo;
+  checkPath(browser, ['name', 'version']);
+  checkPath(os, ['name', 'version', 'versionName']);
+  checkPath(platform, ['type']);
+  checkPath(engine, ['name', 'version']);
+  const { ip } = ipInfo;
+  if (ip) result += JSON.stringify(ip);
+
+  return result;
 }
 
 export function componentsToDebugString(components: UnknownComponents): string {
@@ -93,43 +124,54 @@ export function componentsToDebugString(components: UnknownComponents): string {
     components,
     (_key, value) => {
       if (value instanceof Error) {
-        return errorToObject(value)
+        return errorToObject(value);
       }
-      return value
+      return value;
     },
     2,
-  )
+  );
 }
 
-export function hashComponents(components: UnknownComponents): string {
-  return x64hash128(componentsToCanonicalString(components))
+export function hashComponents(
+  components: UnknownComponents,
+  browserInfo: Browser.Parser.ParsedResult,
+  ipInfo: IpInfo,
+): string {
+  return x64hash128(componentsToCanonicalString(components, browserInfo, ipInfo));
 }
 
 /**
  * Makes a GetResult implementation that calculates the visitor id hash on demand.
  * Designed for optimisation.
  */
-function makeLazyGetResult(components: BuiltinComponents): GetResult {
-  let visitorIdCache: string | undefined
+function makeLazyGetResult(
+  components: BuiltinComponents,
+  browserInfo: Browser.Parser.ParsedResult,
+  ipInfo: IpInfo,
+): GetResult {
+  let visitorIdCache: string | undefined;
 
   // This function runs very fast, so there is no need to make it lazy
-  const confidence = getConfidence(components)
+  const confidence = getConfidence(components);
 
   // A plain class isn't used because its getters and setters aren't enumerable.
+
   return {
     get visitorId(): string {
       if (visitorIdCache === undefined) {
-        visitorIdCache = hashComponents(this.components)
+        visitorIdCache = hashComponents(this.components, this.browserInfo, this.ipInfo);
       }
-      return visitorIdCache
+      return visitorIdCache;
     },
     set visitorId(visitorId: string) {
-      visitorIdCache = visitorId
+      visitorIdCache = visitorId;
     },
     confidence,
     components,
+    browserInfo,
+    ipInfo,
     version,
-  }
+  };
 }
 
 /**
@@ -140,24 +182,25 @@ function makeLazyGetResult(components: BuiltinComponents): GetResult {
  */
 export function prepareForSources(delayFallback = 50): Promise<void> {
   // A proper deadline is unknown. Let it be twice the fallback timeout so that both cases have the same average time.
-  return requestIdleCallbackIfAvailable(delayFallback, delayFallback * 2)
+  return requestIdleCallbackIfAvailable(delayFallback, delayFallback * 2);
 }
 
 /**
- * The function isn't exported from the index file to not allow to call it without `load()`.
+ * The function isn't exported from the index.ts file to not allow to call it without `load()`.
  * The hiding gives more freedom for future non-breaking updates.
  *
  * A factory function is used instead of a class to shorten the attribute names in the minified code.
  * Native private class fields could've been used, but TypeScript doesn't allow them with `"target": "es5"`.
  */
-function makeAgent(getComponents: () => Promise<BuiltinComponents>, debug?: boolean): Agent {
-  const creationTime = Date.now()
+function makeAgent(ipInfo: IpInfo, getComponents: () => Promise<BuiltinComponents>, debug?: boolean): Agent {
+  const creationTime = Date.now();
 
   return {
     async get(options) {
-      const startTime = Date.now()
-      const components = await getComponents()
-      const result = makeLazyGetResult(components)
+      const startTime = Date.now();
+      const components = await getComponents();
+      const browserInfo = getBrowserInfo();
+      const result = makeLazyGetResult(components, browserInfo, ipInfo);
 
       if (debug || options?.debug) {
         // console.log is ok here because it's under a debug clause
@@ -170,12 +213,12 @@ userAgent: ${navigator.userAgent}
 timeBetweenLoadAndGet: ${startTime - creationTime}
 visitorId: ${result.visitorId}
 components: ${componentsToDebugString(components)}
-\`\`\``)
+\`\`\``);
       }
 
-      return result
+      return result;
     },
-  }
+  };
 }
 
 /**
@@ -183,28 +226,31 @@ components: ${componentsToDebugString(components)}
  */
 function monitor() {
   // The FingerprintJS CDN (https://github.com/fingerprintjs/cdn) replaces `window.__fpjs_d_m` with `true`
-  if (window.__fpjs_d_m || Math.random() >= 0.001) {
-    return
+  if (window.__fpjs_d_m || Math.random() >= 0.01) {
+    return;
   }
   try {
-    const request = new XMLHttpRequest()
-    request.open('get', `https://m1.openfpcdn.io/fingerprintjs/v${version}/npm-monitoring`, true)
-    request.send()
+    const request = new XMLHttpRequest();
+    request.open('get', `https://openfpcdn.io/fingerprintjs/v${version}/npm-monitoring`, true);
+    request.send();
   } catch (error) {
     // console.error is ok here because it's an unexpected error handler
     // eslint-disable-next-line no-console
-    console.error(error)
+    console.error(error);
   }
 }
 
 /**
  * Builds an instance of Agent and waits a delay required for a proper operation.
  */
-export async function load({ delayFallback, debug, monitoring = true }: Readonly<LoadOptions> = {}): Promise<Agent> {
+export async function load(
+  ipInfo: IpInfo,
+  { delayFallback, debug, monitoring = true }: Readonly<LoadOptions> = {},
+): Promise<Agent> {
   if (monitoring) {
-    monitor()
+    monitor();
   }
-  await prepareForSources(delayFallback)
-  const getComponents = loadBuiltinSources({ debug })
-  return makeAgent(getComponents, debug)
+  await prepareForSources(delayFallback);
+  const getComponents = loadBuiltinSources({ debug });
+  return makeAgent(ipInfo, getComponents, debug);
 }

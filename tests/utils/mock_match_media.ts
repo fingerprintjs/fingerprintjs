@@ -1,4 +1,4 @@
-import withMockProperties from './mock_properties'
+import withMockProperties from './mock_properties';
 
 /**
  * Mocks `matchMedia` function.
@@ -13,7 +13,7 @@ export default async function withMockMatchMedia<T>(
   failWhenOther: boolean,
   action: () => Promise<T> | T,
 ): Promise<T> {
-  const originalMatchMedia = window.matchMedia
+  const originalMatchMedia = window.matchMedia;
 
   return withMockProperties(
     window,
@@ -21,44 +21,44 @@ export default async function withMockMatchMedia<T>(
       matchMedia: {
         value: (query: string) => {
           // Parses queries like `(property-name: value)` and `(property-name)`
-          const match = /^\s*\(\s*(min-|max-)?([\w-]+)\s*(:\s*([\w-]+))?\s*\)\s*$/.exec(query)
+          const match = /^\s*\(\s*(min-|max-)?([\w-]+)\s*(:\s*([\w-]+))?\s*\)\s*$/.exec(query);
           if (!match) {
-            throw new Error(`Unexpected query syntax`)
+            throw new Error('Unexpected query syntax');
           }
-          const [, range, name, , queryFullValue] = match
+          const [, range, name, , queryFullValue] = match;
 
           if (!mockFeatures[name]) {
             if (failWhenOther) {
-              throw new Error(`The ${name} media feature isn't mocked`)
+              throw new Error(`The ${name} media feature isn't mocked`);
             } else {
-              return originalMatchMedia.call(window, query)
+              return originalMatchMedia.call(window, query);
             }
           }
 
           return {
             get matches() {
-              return doesQueryMatchMock(range as 'min-' | 'max-' | undefined, queryFullValue, mockFeatures[name])
+              return doesQueryMatchMock(range as 'min-' | 'max-' | undefined, queryFullValue, mockFeatures[name]);
             },
-          }
+          };
         },
       },
     },
     action,
-  )
+  );
 }
 
 function parseValue(value: string | number | undefined): [value: number | undefined, unit: string | undefined] {
   if (value === undefined) {
-    return [undefined, undefined]
+    return [undefined, undefined];
   }
   if (typeof value === 'number') {
-    return [value, undefined]
+    return [value, undefined];
   }
-  const match = /^\s*(\d+|\d*\.\d+)?\s*(.+?)?\s*$/.exec(value)
+  const match = /^\s*(\d+|\d*\.\d+)?\s*(.+?)?\s*$/.exec(value);
   if (!match) {
-    throw new Error('No way this can happen')
+    throw new Error('No way this can happen');
   }
-  return [match[1] ? Number(match[1]) : undefined, match[2]]
+  return [match[1] ? Number(match[1]) : undefined, match[2]];
 }
 
 function doesQueryMatchMock(
@@ -66,42 +66,42 @@ function doesQueryMatchMock(
   queryFullValue: string | undefined,
   mockValues: ReadonlyArray<string | number | undefined>,
 ) {
-  const [queryValue, queryUnit] = parseValue(queryFullValue)
+  const [queryValue, queryUnit] = parseValue(queryFullValue);
 
   return mockValues.some((mock) => {
-    const [mockValue, mockUnit] = parseValue(mock)
+    const [mockValue, mockUnit] = parseValue(mock);
 
     // Means that the browser doesn't know this media feature
     if (mockValue === undefined && !mockUnit) {
-      return false
+      return false;
     }
 
     // E.g. (monochrome)
     if (queryValue === undefined && !queryUnit) {
-      return mockValue !== 0
+      return mockValue !== 0;
     }
 
     // Compare numeric feature values
     if (mockValue !== undefined && queryValue !== undefined) {
       if (mockUnit !== queryUnit && !(mockValue === 0 && queryValue === 0)) {
-        throw new Error("The mock can't juxtapose different units")
+        throw new Error("The mock can't juxtapose different units");
       }
       switch (queryRange) {
         case 'min-':
-          return mockValue >= queryValue
+          return mockValue >= queryValue;
         case 'max-':
-          return mockValue <= queryValue
+          return mockValue <= queryValue;
         default:
-          return mockValue === queryValue
+          return mockValue === queryValue;
       }
     }
 
     // Compare discrete feature values
     if (mockValue === undefined && queryValue === undefined) {
-      return mockUnit === queryUnit
+      return mockUnit === queryUnit;
     }
 
     // Non-sense
-    return false
-  })
+    return false;
+  });
 }

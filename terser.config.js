@@ -5,4 +5,4 @@ module.exports = {
     comments: false,
   },
   safari10: true,
-}
+};
