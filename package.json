@@ -54,6 +54,7 @@
     "@rollup/plugin-typescript": "^6.0.0",
     "@types/jasmine": "^3.5.14",
     "@types/ua-parser-js": "^0.7.35",
+    "@types/webpack-env": "^1.16.3",
     "@typescript-eslint/eslint-plugin": "^4.4.1",
     "@typescript-eslint/parser": "^4.4.1",
     "clean-webpack-plugin": "^3.0.0",
@@ -87,6 +88,7 @@
     "ua-parser-js": "^0.7.24",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.3"
+    "webpack-dev-server": "^3.11.3",
+    "webpack-env": "^0.8.0"
   }
 }
