@@ -1,3 +1,3 @@
 export default function getOpenDatabase(): boolean {
-  return !!window.openDatabase
+  return !!window.openDatabase;
 }

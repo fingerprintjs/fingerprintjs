@@ -3,14 +3,14 @@
  */
 export default function areColorsForced(): boolean | undefined {
   if (doesMatch('active')) {
-    return true
+    return true;
   }
   if (doesMatch('none')) {
-    return false
+    return false;
   }
-  return undefined
+  return undefined;
 }
 
 function doesMatch(value: string) {
-  return matchMedia(`(forced-colors: ${value})`).matches
+  return matchMedia(`(forced-colors: ${value})`).matches;
 }

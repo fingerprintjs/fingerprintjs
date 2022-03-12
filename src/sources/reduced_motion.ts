@@ -3,14 +3,14 @@
  */
 export default function isMotionReduced(): boolean | undefined {
   if (doesMatch('reduce')) {
-    return true
+    return true;
   }
   if (doesMatch('no-preference')) {
-    return false
+    return false;
   }
-  return undefined
+  return undefined;
 }
 
 function doesMatch(value: string) {
-  return matchMedia(`(prefers-reduced-motion: ${value})`).matches
+  return matchMedia(`(prefers-reduced-motion: ${value})`).matches;
 }

@@ -1,11 +1,11 @@
-import { toInt } from '../utils/data'
+import { toInt } from '@/utils/data';
 
 export interface TouchSupport {
-  maxTouchPoints: number
+  maxTouchPoints: number;
   /** The success or failure of creating a TouchEvent */
-  touchEvent: boolean
+  touchEvent: boolean;
   /** The availability of the "ontouchstart" property */
-  touchStart: boolean
+  touchStart: boolean;
 }
 
 /**
@@ -16,25 +16,25 @@ export interface TouchSupport {
  * @see https://github.com/Modernizr/Modernizr/issues/548
  */
 export default function getTouchSupport(): TouchSupport {
-  const n = navigator
+  const n = navigator;
 
-  let maxTouchPoints = 0
-  let touchEvent: boolean
+  let maxTouchPoints = 0;
+  let touchEvent: boolean;
   if (n.maxTouchPoints !== undefined) {
-    maxTouchPoints = toInt(n.maxTouchPoints)
+    maxTouchPoints = toInt(n.maxTouchPoints);
   } else if (n.msMaxTouchPoints !== undefined) {
-    maxTouchPoints = n.msMaxTouchPoints
+    maxTouchPoints = n.msMaxTouchPoints;
   }
   try {
-    document.createEvent('TouchEvent')
-    touchEvent = true
+    document.createEvent('TouchEvent');
+    touchEvent = true;
   } catch {
-    touchEvent = false
+    touchEvent = false;
   }
-  const touchStart = 'ontouchstart' in window
+  const touchStart = 'ontouchstart' in window;
   return {
     maxTouchPoints,
     touchEvent,
     touchStart,
-  }
+  };
 }

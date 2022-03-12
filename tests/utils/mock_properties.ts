@@ -6,30 +6,30 @@ export default async function withMockProperties<T>(
   mockProperties: Record<string, PropertyDescriptor | undefined>,
   action: () => Promise<T> | T,
 ): Promise<T> {
-  const originalProperties: Record<string, PropertyDescriptor | undefined> = {}
+  const originalProperties: Record<string, PropertyDescriptor | undefined> = {};
 
   for (const property of Object.keys(mockProperties)) {
-    originalProperties[property] = Object.getOwnPropertyDescriptor(object, property)
-    const mockProperty = mockProperties[property]
+    originalProperties[property] = Object.getOwnPropertyDescriptor(object, property);
+    const mockProperty = mockProperties[property];
     if (mockProperty) {
       Object.defineProperty(object, property, {
         ...mockProperty,
         configurable: true, // Must be configurable, otherwise won't be able to revert
-      })
+      });
     } else {
-      delete (object as Record<keyof never, unknown>)[property]
+      delete (object as Record<keyof never, unknown>)[property];
     }
   }
 
   try {
-    return await action()
+    return await action();
   } finally {
     for (const property of Object.keys(originalProperties)) {
-      const propertyDescriptor = originalProperties[property]
+      const propertyDescriptor = originalProperties[property];
       if (propertyDescriptor === undefined) {
-        delete (object as Record<keyof never, unknown>)[property]
+        delete (object as Record<keyof never, unknown>)[property];
       } else {
-        Object.defineProperty(object, property, propertyDescriptor)
+        Object.defineProperty(object, property, propertyDescriptor);
       }
     }
   }

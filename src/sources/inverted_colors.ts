@@ -3,14 +3,14 @@
  */
 export default function areColorsInverted(): boolean | undefined {
   if (doesMatch('inverted')) {
-    return true
+    return true;
   }
   if (doesMatch('none')) {
-    return false
+    return false;
   }
-  return undefined
+  return undefined;
 }
 
 function doesMatch(value: string) {
-  return matchMedia(`(inverted-colors: ${value})`).matches
+  return matchMedia(`(inverted-colors: ${value})`).matches;
 }

@@ -3,7 +3,7 @@
  * Only somewhat popular browsers are considered.
  */
 export default function getVendorFlavors(): string[] {
-  const flavors: string[] = []
+  const flavors: string[] = [];
 
   for (const key of [
     // Blink and some browsers on iOS
@@ -46,11 +46,11 @@ export default function getVendorFlavors(): string[] {
     // UC on iOS and Opera on Android have no specific global variables
     // Edge for Android isn't checked
   ]) {
-    const value = ((window as unknown) as Record<string, unknown>)[key]
+    const value = ((window as unknown) as Record<string, unknown>)[key];
     if (value && typeof value === 'object') {
-      flavors.push(key)
+      flavors.push(key);
     }
   }
 
-  return flavors.sort()
+  return flavors.sort();
 }

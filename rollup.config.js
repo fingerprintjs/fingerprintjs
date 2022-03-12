@@ -1,14 +1,14 @@
-const path = require('path')
-const jsonPlugin = require('@rollup/plugin-json')
-const nodeResolvePlugin = require('@rollup/plugin-node-resolve').nodeResolve
-const typescriptPlugin = require('@rollup/plugin-typescript')
-const replacePlugin = require('@rollup/plugin-replace')
-const terserPlugin = require('rollup-plugin-terser').terser
-const dtsPlugin = require('rollup-plugin-dts').default
-const licensePlugin = require('rollup-plugin-license')
-const { dependencies } = require('./package.json')
+const path = require('path');
+const jsonPlugin = require('@rollup/plugin-json');
+const nodeResolvePlugin = require('@rollup/plugin-node-resolve').nodeResolve;
+const typescriptPlugin = require('@rollup/plugin-typescript');
+const replacePlugin = require('@rollup/plugin-replace');
+const terserPlugin = require('rollup-plugin-terser').terser;
+const dtsPlugin = require('rollup-plugin-dts').default;
+const licensePlugin = require('rollup-plugin-license');
+const { dependencies } = require('./package.json');
 
-const outputDirectory = 'dist'
+const outputDirectory = 'dist';
 
 const commonBanner = licensePlugin({
   banner: {
@@ -16,7 +16,7 @@ const commonBanner = licensePlugin({
       file: path.join(__dirname, 'resources', 'license_banner.txt'),
     },
   },
-})
+});
 
 const commonInput = {
   input: './src/index.ts',
@@ -28,14 +28,14 @@ const commonInput = {
     }),
     commonBanner,
   ],
-}
+};
 
 const commonOutput = {
   name: 'FingerprintJS',
   exports: 'named',
-}
+};
 
-const commonTerser = terserPlugin(require('./terser.config.js'))
+const commonTerser = terserPlugin(require('./terser.config.js'));
 
 module.exports = [
   // Browser bundles. They have all the dependencies included for convenience.
@@ -111,4 +111,4 @@ module.exports = [
       format: 'es',
     },
   },
-]
+];

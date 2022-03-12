@@ -1,3 +1,3 @@
 export default function getColorDepth(): number {
-  return window.screen.colorDepth
+  return window.screen.colorDepth;
 }

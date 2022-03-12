@@ -1,8 +1,18 @@
-import { countTruthy } from './data'
+import { countTruthy } from './data';
+
+import Browser from 'bowser';
 
 /*
  * Functions to help with features that vary through browsers
  */
+
+/**
+ * Returns detailed human-readable browser, engine, and os information
+ */
+
+export const getBrowserInfo = (userAgent: string = window.navigator.userAgent): Browser.Parser.ParsedResult => {
+  return Browser.parse(userAgent);
+};
 
 /**
  * Checks whether the browser is based on Trident (the Internet Explorer engine) without using user-agent.
@@ -11,8 +21,8 @@ import { countTruthy } from './data'
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function isTrident(): boolean {
-  const w = window
-  const n = navigator
+  const w = window;
+  const n = navigator;
 
   // The properties are checked to be in IE 10, IE 11 and not to be in other browsers in October 2020
   return (
@@ -23,7 +33,7 @@ export function isTrident(): boolean {
       'msMaxTouchPoints' in n,
       'msPointerEnabled' in n,
     ]) >= 4
-  )
+  );
 }
 
 /**
@@ -34,13 +44,13 @@ export function isTrident(): boolean {
  */
 export function isEdgeHTML(): boolean {
   // Based on research in October 2020
-  const w = window
-  const n = navigator
+  const w = window;
+  const n = navigator;
 
   return (
     countTruthy(['msWriteProfilerMark' in w, 'MSStream' in w, 'msLaunchUri' in n, 'msSaveBlob' in n]) >= 3 &&
     !isTrident()
-  )
+  );
 }
 
 /**
@@ -51,8 +61,8 @@ export function isEdgeHTML(): boolean {
  */
 export function isChromium(): boolean {
   // Based on research in October 2020. Tested to detect Chromium 42-86.
-  const w = window
-  const n = navigator
+  const w = window;
+  const n = navigator;
 
   return (
     countTruthy([
@@ -64,7 +74,7 @@ export function isChromium(): boolean {
       'webkitMediaStream' in w,
       'webkitSpeechGrammar' in w,
     ]) >= 5
-  )
+  );
 }
 
 /**
@@ -76,8 +86,8 @@ export function isChromium(): boolean {
  */
 export function isWebKit(): boolean {
   // Based on research in September 2020
-  const w = window
-  const n = navigator
+  const w = window;
+  const n = navigator;
 
   return (
     countTruthy([
@@ -88,7 +98,7 @@ export function isWebKit(): boolean {
       'getStorageUpdates' in n,
       'WebKitMediaKeys' in w,
     ]) >= 4
-  )
+  );
 }
 
 /**
@@ -98,7 +108,7 @@ export function isWebKit(): boolean {
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function isDesktopSafari(): boolean {
-  const w = window
+  const w = window;
 
   return (
     countTruthy([
@@ -107,7 +117,7 @@ export function isDesktopSafari(): boolean {
       !('ongestureend' in w),
       !('standalone' in navigator),
     ]) >= 3
-  )
+  );
 }
 
 /**
@@ -117,7 +127,7 @@ export function isDesktopSafari(): boolean {
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function isGecko(): boolean {
-  const w = window
+  const w = window;
 
   // Based on research in September 2020
   return (
@@ -129,7 +139,7 @@ export function isGecko(): boolean {
       'CSSMozDocumentRule' in w,
       'CanvasCaptureMediaStream' in w,
     ]) >= 4
-  )
+  );
 }
 
 /**
@@ -138,7 +148,7 @@ export function isGecko(): boolean {
  */
 export function isChromium86OrNewer(): boolean {
   // Checked in Chrome 85 vs Chrome 86 both on desktop and Android
-  const w = window
+  const w = window;
 
   return (
     countTruthy([
@@ -147,7 +157,7 @@ export function isChromium86OrNewer(): boolean {
       '' + w.Intl === '[object Intl]',
       '' + w.Reflect === '[object Reflect]',
     ]) >= 3
-  )
+  );
 }
 
 /**
@@ -158,7 +168,7 @@ export function isChromium86OrNewer(): boolean {
  */
 export function isWebKit606OrNewer(): boolean {
   // Checked in Safari 9–14
-  const w = window
+  const w = window;
 
   return (
     countTruthy([
@@ -167,7 +177,7 @@ export function isWebKit606OrNewer(): boolean {
       'SVGGeometryElement' in w,
       'ontransitioncancel' in w,
     ]) >= 3
-  )
+  );
 }
 
 /**
@@ -183,11 +193,11 @@ export function isIPad(): boolean {
 
   // Before iOS 13. Safari tampers the value in "request desktop site" mode since iOS 13.
   if (navigator.platform === 'iPad') {
-    return true
+    return true;
   }
 
-  const s = screen
-  const screenRatio = s.width / s.height
+  const s = screen;
+  const screenRatio = s.width / s.height;
 
   return (
     countTruthy([
@@ -196,7 +206,7 @@ export function isIPad(): boolean {
       // iPhone 4S that runs iOS 9 matches this. But it won't match the criteria above, so it won't be detected as iPad.
       screenRatio > 0.65 && screenRatio < 1.53,
     ]) >= 2
-  )
+  );
 }
 
 /**
@@ -204,14 +214,14 @@ export function isIPad(): boolean {
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function getFullscreenElement(): Element | null {
-  const d = document
-  return d.fullscreenElement || d.msFullscreenElement || d.mozFullScreenElement || d.webkitFullscreenElement || null
+  const d = document;
+  return d.fullscreenElement || d.msFullscreenElement || d.mozFullScreenElement || d.webkitFullscreenElement || null;
 }
 
 export function exitFullscreen(): Promise<void> {
-  const d = document
+  const d = document;
   // `call` is required because the function throws an error without a proper "this" context
-  return (d.exitFullscreen || d.msExitFullscreen || d.mozCancelFullScreen || d.webkitExitFullscreen).call(d)
+  return (d.exitFullscreen || d.msExitFullscreen || d.mozCancelFullScreen || d.webkitExitFullscreen).call(d);
 }
 
 /**
@@ -221,16 +231,16 @@ export function exitFullscreen(): Promise<void> {
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function isAndroid(): boolean {
-  const isItChromium = isChromium()
-  const isItGecko = isGecko()
+  const isItChromium = isChromium();
+  const isItGecko = isGecko();
 
   // Only 2 browser engines are presented on Android.
   // Actually, there is also Android 4.1 browser, but it's not worth detecting it at the moment.
   if (!isItChromium && !isItGecko) {
-    return false
+    return false;
   }
 
-  const w = window
+  const w = window;
 
   // Chrome removes all words "Android" from `navigator` when desktop version is requested
   // Firefox keeps "Android" in `navigator.appVersion` when desktop version is requested
@@ -241,5 +251,5 @@ export function isAndroid(): boolean {
       isItChromium && !('SharedWorker' in w),
       isItGecko && /android/i.test(navigator.appVersion),
     ]) >= 2
-  )
+  );
 }

@@ -1,4 +1,4 @@
-const makeLocalConfig = require('./karma.local.config')
+const makeLocalConfig = require('./karma.local.config');
 
 // The shapes of these objects are taken from:
 // https://github.com/SeleniumHQ/selenium/tree/d8ddb4d83972df0f565ef65264bcb733e7a94584/javascript/node/selenium-webdriver
@@ -8,7 +8,7 @@ const chromeIncognitoCapabilities = {
   'goog:chromeOptions': {
     args: ['--incognito'],
   },
-}
+};
 // eslint-disable-next-line no-unused-vars
 const firefoxIncognitoCapabilities = {
   'moz:firefoxOptions': {
@@ -16,7 +16,7 @@ const firefoxIncognitoCapabilities = {
       'browser.privatebrowsing.autostart': true,
     },
   },
-}
+};
 
 /*
  * You can find values for any supported browsers in the interactive form at
@@ -56,19 +56,19 @@ const browserstackBrowsers = {
 /* eslint-enable max-len */
 
 function makeBuildNumber() {
-  return `No CI ${Math.floor(Math.random() * 1e10)}`
+  return `No CI ${Math.floor(Math.random() * 1e10)}`;
 }
 
 module.exports = (config) => {
-  makeLocalConfig(config)
+  makeLocalConfig(config);
 
-  const customLaunchers = {}
+  const customLaunchers = {};
   for (const [key, data] of Object.entries(browserstackBrowsers)) {
     customLaunchers[key] = {
       base: 'BrowserStack',
       name: key.replace(/_/g, ' '),
       ...data,
-    }
+    };
   }
 
   config.set({
@@ -86,5 +86,5 @@ module.exports = (config) => {
       // The timeout is reduced for testing sessions to not hold the BrowserStack queue long in case of problems.
       timeout: 120,
     },
-  })
-}
+  });
+};

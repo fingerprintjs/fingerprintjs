@@ -1,19 +1,19 @@
-import { replaceNaN, round, toFloat } from '../utils/data'
-import { exitFullscreen, getFullscreenElement } from '../utils/browser'
+import { replaceNaN, round, toFloat } from '@/utils/data';
+import { exitFullscreen, getFullscreenElement } from '@/utils/browser';
 
 /**
  * The order matches the CSS side order: top, right, bottom, left.
  *
  * @ignore Named array elements aren't used because of multiple TypeScript compatibility complaints from users
  */
-export type FrameSize = [number | null, number | null, number | null, number | null]
+export type FrameSize = [number | null, number | null, number | null, number | null];
 
-export const screenFrameCheckInterval = 2500
-const roundingPrecision = 10
+export const screenFrameCheckInterval = 2500;
+const roundingPrecision = 10;
 
 // The type is readonly to protect from unwanted mutations
-let screenFrameBackup: Readonly<FrameSize> | undefined
-let screenFrameSizeTimeoutId: number | undefined
+let screenFrameBackup: Readonly<FrameSize> | undefined;
+let screenFrameSizeTimeoutId: number | undefined;
 
 /**
  * Starts watching the screen frame size. When a non-zero size appears, the size is saved and the watch is stopped.
@@ -24,18 +24,18 @@ let screenFrameSizeTimeoutId: number | undefined
  */
 function watchScreenFrame() {
   if (screenFrameSizeTimeoutId !== undefined) {
-    return
+    return;
   }
   const checkScreenFrame = () => {
-    const frameSize = getCurrentScreenFrame()
+    const frameSize = getCurrentScreenFrame();
     if (isFrameSizeNull(frameSize)) {
-      screenFrameSizeTimeoutId = (setTimeout as typeof window.setTimeout)(checkScreenFrame, screenFrameCheckInterval)
+      screenFrameSizeTimeoutId = (setTimeout as typeof window.setTimeout)(checkScreenFrame, screenFrameCheckInterval);
     } else {
-      screenFrameBackup = frameSize
-      screenFrameSizeTimeoutId = undefined
+      screenFrameBackup = frameSize;
+      screenFrameSizeTimeoutId = undefined;
     }
-  }
-  checkScreenFrame()
+  };
+  checkScreenFrame();
 }
 
 /**
@@ -43,45 +43,45 @@ function watchScreenFrame() {
  */
 export function resetScreenFrameWatch(): void {
   if (screenFrameSizeTimeoutId !== undefined) {
-    clearTimeout(screenFrameSizeTimeoutId)
-    screenFrameSizeTimeoutId = undefined
+    clearTimeout(screenFrameSizeTimeoutId);
+    screenFrameSizeTimeoutId = undefined;
   }
-  screenFrameBackup = undefined
+  screenFrameBackup = undefined;
 }
 
 /**
  * For tests only
  */
 export function hasScreenFrameBackup(): boolean {
-  return !!screenFrameBackup
+  return !!screenFrameBackup;
 }
 
 export function getScreenFrame(): () => Promise<FrameSize> {
-  watchScreenFrame()
+  watchScreenFrame();
 
   return async () => {
-    let frameSize = getCurrentScreenFrame()
+    let frameSize = getCurrentScreenFrame();
 
     if (isFrameSizeNull(frameSize)) {
       if (screenFrameBackup) {
-        return [...screenFrameBackup]
+        return [...screenFrameBackup];
       }
 
       if (getFullscreenElement()) {
         // Some browsers set the screen frame to zero when programmatic fullscreen is on.
         // There is a chance of getting a non-zero frame after exiting the fullscreen.
         // See more on this at https://github.com/fingerprintjs/fingerprintjs/issues/568
-        await exitFullscreen()
-        frameSize = getCurrentScreenFrame()
+        await exitFullscreen();
+        frameSize = getCurrentScreenFrame();
       }
     }
 
     if (!isFrameSizeNull(frameSize)) {
-      screenFrameBackup = frameSize
+      screenFrameBackup = frameSize;
     }
 
-    return frameSize
-  }
+    return frameSize;
+  };
 }
 
 /**
@@ -89,20 +89,21 @@ export function getScreenFrame(): () => Promise<FrameSize> {
  * shrinks to fit more icons when there is too little space. The rounding is used to mitigate the difference.
  */
 export function getRoundedScreenFrame(): () => Promise<FrameSize> {
-  const screenFrameGetter = getScreenFrame()
+  const screenFrameGetter = getScreenFrame();
 
   return async () => {
-    const frameSize = await screenFrameGetter()
-    const processSize = (sideSize: FrameSize[number]) => (sideSize === null ? null : round(sideSize, roundingPrecision))
+    const frameSize = await screenFrameGetter();
+    const processSize = (sideSize: FrameSize[number]) =>
+      sideSize === null ? null : round(sideSize, roundingPrecision);
 
     // It might look like I don't know about `for` and `map`.
     // In fact, such code is used to avoid TypeScript issues without using `as`.
-    return [processSize(frameSize[0]), processSize(frameSize[1]), processSize(frameSize[2]), processSize(frameSize[3])]
-  }
+    return [processSize(frameSize[0]), processSize(frameSize[1]), processSize(frameSize[2]), processSize(frameSize[3])];
+  };
 }
 
 function getCurrentScreenFrame(): FrameSize {
-  const s = screen
+  const s = screen;
 
   // Some browsers return screen resolution as strings, e.g. "1200", instead of a number, e.g. 1200.
   // I suspect it's done by certain plugins that randomize browser properties to prevent fingerprinting.
@@ -114,14 +115,14 @@ function getCurrentScreenFrame(): FrameSize {
     replaceNaN(toFloat(s.width) - toFloat(s.availWidth) - replaceNaN(toFloat(s.availLeft), 0), null),
     replaceNaN(toFloat(s.height) - toFloat(s.availHeight) - replaceNaN(toFloat(s.availTop), 0), null),
     replaceNaN(toFloat(s.availLeft), null),
-  ]
+  ];
 }
 
 function isFrameSizeNull(frameSize: FrameSize) {
   for (let i = 0; i < 4; ++i) {
     if (frameSize[i]) {
-      return false
+      return false;
     }
   }
-  return true
+  return true;
 }

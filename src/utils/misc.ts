@@ -9,5 +9,5 @@ export function errorToObject(error: Readonly<Error>): Record<string, unknown> {
     stack: error.stack?.split('\n'),
     // The fields are not enumerable, so TS is wrong saying that they will be overridden
     ...(error as Omit<Error, 'name' | 'message'>),
-  }
+  };
 }

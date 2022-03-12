@@ -1,18 +1,18 @@
-import { isChromium } from '../../tests/utils'
-import { selectorToElement } from '../utils/dom'
-import { parseSimpleCssSelector } from '../utils/data'
-import getDomBlockers, { filters, isApplicable } from './dom_blockers'
+import { isChromium } from '../../tests/utils';
+import { selectorToElement } from '../utils/dom';
+import { parseSimpleCssSelector } from '../utils/data';
+import getDomBlockers, { filters, isApplicable } from './dom_blockers';
 
 async function withBlockedSelectors<T>(selectors: string[], action: () => Promise<T> | T): Promise<T> {
-  const styleElement = document.createElement('style')
+  const styleElement = document.createElement('style');
 
   try {
-    styleElement.textContent = `${selectors.join(', ')} { display: none !important; }`
-    document.head.appendChild(styleElement)
+    styleElement.textContent = `${selectors.join(', ')} { display: none !important; }`;
+    document.head.appendChild(styleElement);
 
-    return await action()
+    return await action();
   } finally {
-    styleElement.parentNode?.removeChild(styleElement)
+    styleElement.parentNode?.removeChild(styleElement);
   }
 }
 
@@ -21,93 +21,93 @@ describe('Sources', () => {
     describe('the filter list', () => {
       const selectors = ([] as string[]).concat(
         ...Object.keys(filters).map((filterName) => filters[filterName as keyof typeof filters]),
-      )
+      );
 
       it('has no complex selectors', () => {
         for (const selector of selectors) {
-          const selectorWithNoAllowedSpaces = selector.trim().replace(/\[.*?\]/g, '[]')
+          const selectorWithNoAllowedSpaces = selector.trim().replace(/\[.*?\]/g, '[]');
           expect(selectorWithNoAllowedSpaces)
             .withContext(`Unexpected complex selector '${selector}'`)
-            .not.toContain(' ')
+            .not.toContain(' ');
         }
-      })
+      });
 
       it('has no selectors with duplicating attributes', () => {
         for (const selector of selectors) {
-          const [, attributes] = parseSimpleCssSelector(selector)
+          const [, attributes] = parseSimpleCssSelector(selector);
           for (const name of Object.keys(attributes)) {
             if (name !== 'class') {
               expect(attributes[name].length)
                 .withContext(
                   `Selector '${selector}' has a duplicating attribute '${name}'. ` +
-                    `Please rewrite it so that the attribute doesn't repeat ` +
-                    `and a DOM element created from the rewritten selector matches the original selector.`,
+                    "Please rewrite it so that the attribute doesn't repeat " +
+                    'and a DOM element created from the rewritten selector matches the original selector.',
                 )
-                .toBeLessThanOrEqual(1)
+                .toBeLessThanOrEqual(1);
             }
           }
         }
-      })
+      });
 
       it('has no duplicates', () => {
-        const uniqueSelectors = new Set<string>()
+        const uniqueSelectors = new Set<string>();
 
         for (const selector of selectors) {
-          expect(uniqueSelectors).withContext(`Duplicating selector '${selector}'`).not.toContain(selector)
-          uniqueSelectors.add(selector)
+          expect(uniqueSelectors).withContext(`Duplicating selector '${selector}'`).not.toContain(selector);
+          uniqueSelectors.add(selector);
         }
-      })
+      });
 
       it('has only reproducible selectors', () => {
         if (!isApplicable() && !isChromium()) {
-          pending('The case is for supported browsers and for Chrome (for local testing) only')
+          pending('The case is for supported browsers and for Chrome (for local testing) only');
         }
 
         for (const selector of selectors) {
-          const element = selectorToElement(selector)
-          document.body.appendChild(element)
-          const selectorMatches = document.querySelectorAll(selector)
-          document.body.removeChild(element)
+          const element = selectorToElement(selector);
+          document.body.appendChild(element);
+          const selectorMatches = document.querySelectorAll(selector);
+          document.body.removeChild(element);
 
           // We don't use `toContain` because it performs a deep comparison
-          let includesElement = false
+          let includesElement = false;
           for (let i = 0; i < selectorMatches.length; ++i) {
             if (selectorMatches[i] === element) {
-              includesElement = true
-              break
+              includesElement = true;
+              break;
             }
           }
 
           expect(includesElement)
             .withContext(`Can't make an element that matches the '${selector}' selector`)
-            .toBeTrue()
+            .toBeTrue();
         }
-      })
-    })
+      });
+    });
 
     it('returns `undefined` for unsupported browsers', async () => {
       if (isApplicable()) {
-        pending('The case is for unsupported browsers only')
+        pending('The case is for unsupported browsers only');
       }
 
-      expect(await getDomBlockers()).toBeUndefined()
-    })
+      expect(await getDomBlockers()).toBeUndefined();
+    });
 
     it('handles absence of blockers', async () => {
       if (!isApplicable()) {
-        pending('The case is for supported browsers only')
+        pending('The case is for supported browsers only');
       }
 
       expect(await getDomBlockers())
         .withContext(
           'The browser must have no content blocked in tests. Please disable the content blockers for Karma.',
         )
-        .toEqual([])
-    })
+        .toEqual([]);
+    });
 
     it('handles blocked selectors', async () => {
       if (!isApplicable()) {
-        pending('The case is for supported browsers only')
+        pending('The case is for supported browsers only');
       }
 
       await withBlockedSelectors(
@@ -122,9 +122,9 @@ describe('Sources', () => {
           ...filters.easyListCzechSlovak.slice(0, 2),
         ],
         async () => {
-          expect(await getDomBlockers()).toEqual(['adGuardBase', 'adGuardMobile', 'easyListCookie', 'listKr'])
+          expect(await getDomBlockers()).toEqual(['adGuardBase', 'adGuardMobile', 'easyListCookie', 'listKr']);
         },
-      )
-    })
-  })
-})
+      );
+    });
+  });
+});

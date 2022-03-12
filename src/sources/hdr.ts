@@ -3,14 +3,14 @@
  */
 export default function isHDR(): boolean | undefined {
   if (doesMatch('high')) {
-    return true
+    return true;
   }
   if (doesMatch('standard')) {
-    return false
+    return false;
   }
-  return undefined
+  return undefined;
 }
 
 function doesMatch(value: string) {
-  return matchMedia(`(dynamic-range: ${value})`).matches
+  return matchMedia(`(dynamic-range: ${value})`).matches;
 }

@@ -1,19 +1,19 @@
-import { isChromium, isWebKit } from '../utils/browser'
-import { withIframe } from '../utils/dom'
+import { withIframe } from '@/utils/dom';
+import { isChromium, isWebKit } from '@/utils/browser';
 
 type WritableCSSProperties = {
-  [K in keyof CSSStyleDeclaration]: CSSStyleDeclaration[K] extends string ? K : never
-}[Extract<keyof CSSStyleDeclaration, string>]
+  [K in keyof CSSStyleDeclaration]: CSSStyleDeclaration[K] extends string ? K : never;
+}[Extract<keyof CSSStyleDeclaration, string>];
 
-type WritableCSSStyles = Partial<Pick<CSSStyleDeclaration, WritableCSSProperties>>
+type WritableCSSStyles = Partial<Pick<CSSStyleDeclaration, WritableCSSProperties>>;
 
-type Preset = [style?: WritableCSSStyles, text?: string]
+type Preset = [style?: WritableCSSStyles, text?: string];
 
 /**
  * We use m or w because these two characters take up the maximum width.
  * Also there are a couple of ligatures.
  */
-const defaultText = 'mmMwWLliI0fiflO&1'
+const defaultText = 'mmMwWLliI0fiflO&1';
 
 /**
  * Settings of text blocks to measure. The keys are random but persistent words.
@@ -39,7 +39,7 @@ export const presets: Record<string, Preset> = {
   min: [{ fontSize: '1px' }],
   /** Tells one OS from another in desktop Chrome. */
   system: [{ fontFamily: 'system-ui' }],
-}
+};
 
 /**
  * The result is a dictionary of the width of the text samples.
@@ -52,37 +52,37 @@ export const presets: Record<string, Preset> = {
  */
 export default function getFontPreferences(): Promise<Record<string, number>> {
   return withNaturalFonts((document, container) => {
-    const elements: Record<string, HTMLElement> = {}
-    const sizes: Record<string, number> = {}
+    const elements: Record<string, HTMLElement> = {};
+    const sizes: Record<string, number> = {};
 
     // First create all elements to measure. If the DOM steps below are done in a single cycle,
     // browser will alternate tree modification and layout reading, that is very slow.
     for (const key of Object.keys(presets)) {
-      const [style = {}, text = defaultText] = presets[key]
+      const [style = {}, text = defaultText] = presets[key];
 
-      const element = document.createElement('span')
-      element.textContent = text
-      element.style.whiteSpace = 'nowrap'
+      const element = document.createElement('span');
+      element.textContent = text;
+      element.style.whiteSpace = 'nowrap';
 
       for (const name of Object.keys(style) as Array<keyof typeof style>) {
-        const value = style[name]
+        const value = style[name];
         if (value !== undefined) {
-          element.style[name] = value
+          element.style[name] = value;
         }
       }
 
-      elements[key] = element
-      container.appendChild(document.createElement('br'))
-      container.appendChild(element)
+      elements[key] = element;
+      container.appendChild(document.createElement('br'));
+      container.appendChild(element);
     }
 
     // Then measure the created elements
     for (const key of Object.keys(presets)) {
-      sizes[key] = elements[key].getBoundingClientRect().width
+      sizes[key] = elements[key].getBoundingClientRect().width;
     }
 
-    return sizes
-  })
+    return sizes;
+  });
 }
 
 /**
@@ -139,25 +139,25 @@ function withNaturalFonts<T>(
    * - IE 11, Edge 18: getBoundingClientRect = 100% reliable;
    */
   return withIframe((_, iframeWindow) => {
-    const iframeDocument = iframeWindow.document
-    const iframeBody = iframeDocument.body
+    const iframeDocument = iframeWindow.document;
+    const iframeBody = iframeDocument.body;
 
-    const bodyStyle = iframeBody.style
-    bodyStyle.width = `${containerWidthPx}px`
-    bodyStyle.webkitTextSizeAdjust = bodyStyle.textSizeAdjust = 'none'
+    const bodyStyle = iframeBody.style;
+    bodyStyle.width = `${containerWidthPx}px`;
+    bodyStyle.webkitTextSizeAdjust = bodyStyle.textSizeAdjust = 'none';
 
     // See the big comment above
     if (isChromium()) {
-      iframeBody.style.zoom = `${1 / iframeWindow.devicePixelRatio}`
+      iframeBody.style.zoom = `${1 / iframeWindow.devicePixelRatio}`;
     } else if (isWebKit()) {
-      iframeBody.style.zoom = 'reset'
+      iframeBody.style.zoom = 'reset';
     }
 
     // See the big comment above
-    const linesOfText = iframeDocument.createElement('div')
-    linesOfText.textContent = [...Array((containerWidthPx / 20) << 0)].map(() => 'word').join(' ')
-    iframeBody.appendChild(linesOfText)
+    const linesOfText = iframeDocument.createElement('div');
+    linesOfText.textContent = [...Array((containerWidthPx / 20) << 0)].map(() => 'word').join(' ');
+    iframeBody.appendChild(linesOfText);
 
-    return action(iframeDocument, iframeBody)
-  }, '<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1">')
+    return action(iframeDocument, iframeBody);
+  }, '<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1">');
 }
