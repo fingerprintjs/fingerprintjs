@@ -32,10 +32,10 @@ jobs:
       - name: Build
         run: yarn build
       - name: Check the distributive TypeScript declarations
-        run: yarn test:dts
+        run: yarn check:dts
         # Helps to prevent https://github.com/fingerprintjs/fingerprintjs/issues/602
       - name: Check the ability to work with server side rendering
-        run: yarn test:ssr
+        run: yarn check:ssr
       - name: Test on BrowserStack
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}

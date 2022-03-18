@@ -109,13 +109,13 @@ If you run the test command multiple times in parallel, BrowserStack will lose a
 To check the distributive TypeScript declarations, build the project and run:
 
 ```bash
-yarn test:dts
+yarn check:dts
 ```
 
 To check that the package is compatible with server side rendering, build the project and run:
 
 ```bash
-yarn test:ssr
+yarn check:ssr
 ```
 
 ### How to make an entropy source
