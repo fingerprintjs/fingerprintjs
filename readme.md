@@ -50,12 +50,12 @@ FingerprintJS is a browser fingerprinting library that queries browser attribute
 
 📕 [Full documentation](docs/api.md)
 
-## Upgrade to [Pro version](https://fingerprintjs.com/github/) to get 99.5% identification accuracy
+## Upgrade to the Pro version to get 99.5% identification accuracy
 
-FingerprintJS Pro is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
+[FingerprintJS Pro](https://fingerprintjs.com/github/) is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
 Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in the 99.5% identification accuracy.
 
-**You can try Pro without usage limits for 10 days - no credit card required.**
+**Pro plans start at $0/month - no credit card required.**
 
 <p align="center">
   <a href="https://fingerprintjs.com/github/">
@@ -131,7 +131,7 @@ Pro result example:
 
 🍿 [Live demo](https://fingerprintjs.com/demo)
 
-⏱ [How to upgrade from Open Source to Pro in 30 seconds](https://dev.fingerprintjs.com/v3/docs/migrating-from-previous-versions#from-fingerprintjs-open-source-version-3)
+⏱ [How to upgrade from Open Source to Pro in 30 seconds](https://dev.fingerprintjs.com/v3/docs/migrating-from-open-source-v3)
 
 📕 [FingerprintJS Pro documentation](https://dev.fingerprintjs.com)
 
@@ -146,16 +146,22 @@ Pro result example:
 
 See the compatibility policy for the API and visitor identifiers in the [version policy guide](docs/version_policy.md).
 
-## Browser support
+## Supported browsers
 
 The library supports all popular browsers.
 See more details and learn how to run the library in old browsers in the [browser support guide](docs/browser_support.md).
+
+## Where to get support
+
+Thanks to our [series B funding](https://fingerprintjs.com/blog/series-b/), we are happy to provide technical support for our open-source FingerprintJS library. We recommend using GitHub [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) to submit bugs or [Discussions](https://github.com/fingerprintjs/fingerprintjs/discussions) to ask questions.
+Using issues and discussions publicly will help the open-source community and other users with similar issues. 
+However, if you require private support, please email us at [oss-support@fingerprintjs.com](mailto:oss-support@fingerprintjs.com).
 
 ## Contributing
 
 See the [contributing guidelines](contributing.md) to learn how to start a playground, test and build.
 
-## Other projects by FingerprintJS
+## Other products by FingerprintJS
 
-* [BotD -- Easy to use JavaScript bot detection](https://github.com/fingerprintjs/botd)
+* [BotD -- Easy to use JavaScript bot detection](https://fingerprintjs.com/products/bot-detection/)
 * [AEV -- Android App Environment Verification API](https://github.com/fingerprintjs/aev)

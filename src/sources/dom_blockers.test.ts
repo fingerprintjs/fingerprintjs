@@ -1,3 +1,5 @@
+import { isChromium } from '../../tests/utils'
+import { selectorToElement } from '../utils/dom'
 import { parseSimpleCssSelector } from '../utils/data'
 import getDomBlockers, { filters, isApplicable } from './dom_blockers'
 
@@ -16,39 +18,69 @@ async function withBlockedSelectors<T>(selectors: string[], action: () => Promis
 
 describe('Sources', () => {
   describe('domBlockers', () => {
-    describe('filter list', () => {
-      it('has only valid selectors', () => {
-        for (const filterName of Object.keys(filters) as Array<keyof typeof filters>) {
-          for (const selector of filters[filterName]) {
-            const selectorWithNoAllowedSpaces = selector.trim().replace(/\[.*?\]/g, '[]')
-            expect(selectorWithNoAllowedSpaces)
-              .withContext(`Unexpected complex selector '${selector}'`)
-              .not.toContain(' ')
+    describe('the filter list', () => {
+      const selectors = ([] as string[]).concat(
+        ...Object.keys(filters).map((filterName) => filters[filterName as keyof typeof filters]),
+      )
 
-            const [, attributes] = parseSimpleCssSelector(selector)
-            for (const name of Object.keys(attributes)) {
-              if (name !== 'class') {
-                expect(attributes[name].length)
-                  .withContext(
-                    `Selector '${selector}' has a duplicating attribute '${name}'. ` +
-                      `Please rewrite it so that the attribute doesn't repeat ` +
-                      `and a DOM element created from the rewritten selector matches the original selector.`,
-                  )
-                  .toBeLessThanOrEqual(1)
-              }
+      it('has no complex selectors', () => {
+        for (const selector of selectors) {
+          const selectorWithNoAllowedSpaces = selector.trim().replace(/\[.*?\]/g, '[]')
+          expect(selectorWithNoAllowedSpaces)
+            .withContext(`Unexpected complex selector '${selector}'`)
+            .not.toContain(' ')
+        }
+      })
+
+      it('has no selectors with duplicating attributes', () => {
+        for (const selector of selectors) {
+          const [, attributes] = parseSimpleCssSelector(selector)
+          for (const name of Object.keys(attributes)) {
+            if (name !== 'class') {
+              expect(attributes[name].length)
+                .withContext(
+                  `Selector '${selector}' has a duplicating attribute '${name}'. ` +
+                    `Please rewrite it so that the attribute doesn't repeat ` +
+                    `and a DOM element created from the rewritten selector matches the original selector.`,
+                )
+                .toBeLessThanOrEqual(1)
             }
           }
         }
       })
 
       it('has no duplicates', () => {
-        const selectors = new Set<string>()
+        const uniqueSelectors = new Set<string>()
 
-        for (const filterName of Object.keys(filters) as Array<keyof typeof filters>) {
-          for (const selector of filters[filterName]) {
-            expect(selectors.has(selector)).withContext(`Duplicating selector '${selector}'`).toBe(false)
-            selectors.add(selector)
+        for (const selector of selectors) {
+          expect(uniqueSelectors).withContext(`Duplicating selector '${selector}'`).not.toContain(selector)
+          uniqueSelectors.add(selector)
+        }
+      })
+
+      it('has only reproducible selectors', () => {
+        if (!isApplicable() && !isChromium()) {
+          pending('The case is for supported browsers and for Chrome (for local testing) only')
+        }
+
+        for (const selector of selectors) {
+          const element = selectorToElement(selector)
+          document.body.appendChild(element)
+          const selectorMatches = document.querySelectorAll(selector)
+          document.body.removeChild(element)
+
+          // We don't use `toContain` because it performs a deep comparison
+          let includesElement = false
+          for (let i = 0; i < selectorMatches.length; ++i) {
+            if (selectorMatches[i] === element) {
+              includesElement = true
+              break
+            }
           }
+
+          expect(includesElement)
+            .withContext(`Can't make an element that matches the '${selector}' selector`)
+            .toBeTrue()
         }
       })
     })
