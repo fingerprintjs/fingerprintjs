@@ -1,5 +1,5 @@
 {
-  "name": "@jitpomi/fingerprintjs",
+  "name": "@samson.s/fingerprintjs",
   "description": "Browser fingerprinting library with the highest accuracy and stability",
   "version": "3.4.0",
   "keywords": [
