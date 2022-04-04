@@ -1,7 +1,7 @@
 {
   "name": "@samson.s/fingerprintjs",
   "description": "Browser fingerprinting library with the highest accuracy and stability",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "keywords": [
     "fraud",
     "fraud detection",
