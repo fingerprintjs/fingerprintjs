@@ -38,4 +38,4 @@ export {
   isGecko,
   isDesktopSafari,
 } from './utils/browser'
-export { loadSources, SourcesToComponents } from './utils/entropy_source'
+export { loadSources, Source, SourcesToComponents, UnknownSources } from './utils/entropy_source'
