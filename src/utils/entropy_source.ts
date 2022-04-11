@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { awaitIfAsync, forEachWithBreaks, MaybePromise, wait } from './async'
+import { awaitIfAsync, forEachWithBreaks, isPromise, MaybePromise, wait } from './async'
 import { excludes } from './data'
 
 /**
@@ -57,6 +57,10 @@ function ensureErrorWithMessage(error: unknown): { message: unknown } {
   return error && typeof error === 'object' && 'message' in error ? (error as { message: unknown }) : { message: error }
 }
 
+function isFinalResultLoaded<TValue>(loadResult: TValue | (() => MaybePromise<TValue>)): loadResult is TValue {
+  return typeof loadResult !== 'function'
+}
+
 /**
  * Loads the given entropy source. Returns a function that gets an entropy component from the source.
  *
@@ -67,10 +71,6 @@ export function loadSource<TOptions, TValue>(
   source: Source<TOptions, TValue>,
   sourceOptions: TOptions,
 ): () => Promise<Component<TValue>> {
-  const isFinalResultLoaded = (loadResult: TValue | (() => MaybePromise<TValue>)): loadResult is TValue => {
-    return typeof loadResult !== 'function'
-  }
-
   const sourceLoadPromise = new Promise<() => MaybePromise<Component<TValue>>>((resolveLoad) => {
     const loadStartTime = Date.now()
 
@@ -173,5 +173,43 @@ export function loadSources<TSourceOptions, TSources extends UnknownSources<TSou
 
     await Promise.all(componentPromises)
     return components
+  }
+}
+
+/**
+ * Modifies an entropy source by transforming its returned value with the given function.
+ * Keeps the source properties: sync/async, 1/2 stages.
+ *
+ * @todo Make a test
+ *
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
+ */
+export function transformSourceValue<TOptions, TValueBefore, TValueAfter>(
+  source: Source<TOptions, TValueBefore>,
+  transform: (result: TValueBefore) => TValueAfter,
+): Source<TOptions, TValueAfter> {
+  const transformLoadResult = (loadResult: TValueBefore | (() => MaybePromise<TValueBefore>)) => {
+    if (isFinalResultLoaded(loadResult)) {
+      return transform(loadResult)
+    }
+
+    const getResult = loadResult()
+
+    if (isPromise(getResult)) {
+      return getResult.then(transform)
+    }
+
+    return transform(getResult)
+  }
+
+  return (options) => {
+    const loadResult = source(options)
+
+    if (isPromise(loadResult)) {
+      return loadResult.then(transformLoadResult)
+    }
+
+    return transformLoadResult(loadResult)
   }
 }
