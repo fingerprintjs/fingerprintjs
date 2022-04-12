@@ -42,6 +42,6 @@ export {
   loadSources,
   Source,
   SourcesToComponents,
-  transformSourceValue, // Not used here but adds only 222 uncompressed (60 compressed) bytes of code
+  transformSource, // Not used here but adds only 222 uncompressed (60 compressed) bytes of code
   UnknownSources,
 } from './utils/entropy_source'

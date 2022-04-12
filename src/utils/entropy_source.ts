@@ -185,22 +185,22 @@ export function loadSources<TSourceOptions, TSources extends UnknownSources<TSou
  * Warning for package users:
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
-export function transformSourceValue<TOptions, TValueBefore, TValueAfter>(
+export function transformSource<TOptions, TValueBefore, TValueAfter>(
   source: Source<TOptions, TValueBefore>,
-  transform: (result: TValueBefore) => TValueAfter,
+  transformValue: (value: TValueBefore) => TValueAfter,
 ): Source<TOptions, TValueAfter> {
   const transformLoadResult = (loadResult: TValueBefore | (() => MaybePromise<TValueBefore>)) => {
     if (isFinalResultLoaded(loadResult)) {
-      return transform(loadResult)
+      return transformValue(loadResult)
     }
 
     const getResult = loadResult()
 
     if (isPromise(getResult)) {
-      return getResult.then(transform)
+      return getResult.then(transformValue)
     }
 
-    return transform(getResult)
+    return transformValue(getResult)
   }
 
   return (options) => {
