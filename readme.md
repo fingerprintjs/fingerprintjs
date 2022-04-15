@@ -93,7 +93,7 @@ Full product comparison:
     <tr><td colspan="3"><h4>Operations</h4></td></tr>
     <tr><td><b>Data security</b></td><td align="center">Your infrastructure</td><td align="center">Encrypted at rest</td></tr>
     <tr><td><b>Storage</b></td><td align="center">Your infrastructure</td><td align="center">Unlimited up to 1 yr</td></tr>
-    <tr><td><b>Regions</b></td><td align="center">Your infrastructure</td><td align="center">Hosting in US and EU</td></tr>
+    <tr><td><b>Regions</b></td><td align="center">Your infrastructure</td><td align="center">Hosting in US, EU and Mumbai</td></tr>
     <tr><td><b>Compliance</b></td><td align="center">Your infrastructure</td><td align="center">GDPR, CCPA compliant<sup>3</sup></td></tr>
     <tr><td><b>SLA</b></td><td align="center">No SLA</td><td align="center">99.9% Uptime</td></tr>
     <tr><td><b>Support</b></td><td align="center">GitHub community</td><td align="center">Support team via email, chat, and call-back within 1 business day</td></tr>
