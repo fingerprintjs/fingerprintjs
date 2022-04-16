@@ -85,10 +85,10 @@ function setupLocal(config) {
     },
 
     specReporter: {
+      suppressSummary: true,
       suppressErrorSummary: true,
       suppressPassed: true,
       suppressSkipped: true,
-      // todo: Suppress the summary completely when https://github.com/mlex/karma-spec-reporter/issues/83 is solved
     },
 
     summaryReporter: {

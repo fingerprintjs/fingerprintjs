@@ -67,7 +67,7 @@
     "karma-chrome-launcher": "^3.1.0",
     "karma-firefox-launcher": "^2.1.0",
     "karma-jasmine": "^4.0.1",
-    "karma-spec-reporter": "^0.0.32",
+    "karma-spec-reporter": "^0.0.34",
     "karma-summary-reporter": "^2.0.2",
     "karma-typescript": "^5.5.1",
     "prettier": "^2.1.2",
