@@ -43,6 +43,7 @@ module.exports = (env, { mode = 'development' }) => ({
   },
   devServer: {
     host: '0.0.0.0',
+    disableHostCheck: true,
   },
   plugins: [
     new CleanWebpackPlugin(),
