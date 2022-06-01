@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { awaitIfAsync, forEachWithBreaks, isPromise, MaybePromise, wait } from './async'
+import {
+  awaitIfAsync,
+  forEachWithBreaks,
+  isPromise,
+  MaybePromise,
+  suppressUnhandledRejectionWarning,
+  wait,
+} from './async'
 import { excludes } from './data'
 
 /**
@@ -113,6 +120,8 @@ export function loadSource<TOptions, TValue>(
     })
   })
 
+  suppressUnhandledRejectionWarning(sourceLoadPromise)
+
   return function getComponent() {
     return sourceLoadPromise.then((finalizeSource) => finalizeSource())
   }
@@ -159,7 +168,9 @@ export function loadSources<TSourceOptions, TSources extends UnknownSources<TSou
         if (!componentPromises[index]) {
           // `sourceGetters` may be incomplete at this point of execution because `forEachWithBreaks` is asynchronous
           if (sourceGetters[index]) {
-            componentPromises[index] = sourceGetters[index]().then((component) => (components[sourceKey] = component))
+            const componentPromise = sourceGetters[index]().then((component) => (components[sourceKey] = component))
+            suppressUnhandledRejectionWarning(componentPromise)
+            componentPromises[index] = componentPromise
           } else {
             hasAllComponentPromises = false
           }

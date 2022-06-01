@@ -1,4 +1,5 @@
 import { isDesktopSafari, isWebKit, isWebKit606OrNewer } from '../utils/browser'
+import { suppressUnhandledRejectionWarning } from '../utils/async'
 
 export const enum SpecialFingerprint {
   /** Making a fingerprint is skipped because the browser is known to always suspend audio context */
@@ -64,7 +65,7 @@ export default function getAudioFingerprint(): number | (() => Promise<number>) 
   )
 
   // Suppresses the console error message in case when the fingerprint fails before requested
-  fingerprintPromise.catch(() => undefined)
+  suppressUnhandledRejectionWarning(fingerprintPromise)
 
   return () => {
     finishRendering()

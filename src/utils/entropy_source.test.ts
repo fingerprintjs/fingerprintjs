@@ -187,6 +187,17 @@ describe('Entropy source utilities', () => {
       expect(component.duration).toBeGreaterThanOrEqual(7 + 5)
       expect(component.duration).toBeLessThan(50 + 5)
     })
+
+    it('throws in case of an unexpected error outside the source', async () => {
+      const source = ({
+        bind() {
+          throw new Error('Artificial')
+        },
+      } as unknown) as Source<undefined, never>
+      const loadedSource = loadSource(source, undefined)
+      await wait(1) // To let potential unhandled promise rejections happen
+      await expectAsync(loadedSource()).toBeRejectedWith(new Error('Artificial'))
+    })
   })
 
   describe('loadSources', () => {
@@ -340,6 +351,19 @@ describe('Entropy source utilities', () => {
       expect(sources.two).not.toHaveBeenCalled()
       await Promise.all([loadedSources(), loadedSources(), loadedSources()])
       expect(sources.two).toHaveBeenCalledTimes(1)
+    })
+
+    it('throws in case of an unexpected error outside the source', async () => {
+      const sources = {
+        corrupt: ({
+          bind() {
+            throw new Error('Artificial')
+          },
+        } as unknown) as Source<undefined, never>,
+      }
+      const loadedSources = loadSources(sources, undefined, [])
+      await wait(1) // To let potential unhandled promise rejections happen
+      await expectAsync(loadedSources()).toBeRejectedWith(new Error('Artificial'))
     })
   })
 })
