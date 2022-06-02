@@ -191,8 +191,6 @@ export function loadSources<TSourceOptions, TSources extends UnknownSources<TSou
  * Modifies an entropy source by transforming its returned value with the given function.
  * Keeps the source properties: sync/async, 1/2 stages.
  *
- * @todo Make a test
- *
  * Warning for package users:
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
@@ -205,13 +203,15 @@ export function transformSource<TOptions, TValueBefore, TValueAfter>(
       return transformValue(loadResult)
     }
 
-    const getResult = loadResult()
+    return () => {
+      const getResult = loadResult()
 
-    if (isPromise(getResult)) {
-      return getResult.then(transformValue)
+      if (isPromise(getResult)) {
+        return getResult.then(transformValue)
+      }
+
+      return transformValue(getResult)
     }
-
-    return transformValue(getResult)
   }
 
   return (options) => {
