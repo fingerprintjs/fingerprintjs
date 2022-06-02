@@ -50,7 +50,7 @@ FingerprintJS is a browser fingerprinting library that queries browser attribute
 
 📕 [Full documentation](docs/api.md)
 
-## Upgrade to the Pro version to get 99.5% identification accuracy
+## Use the free Pro version to get 99.5% identification accuracy
 
 [FingerprintJS Pro](https://fingerprintjs.com/github/) is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
 Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in the 99.5% identification accuracy.
