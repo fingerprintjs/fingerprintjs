@@ -104,7 +104,7 @@ Full product comparison:
 
 <sub>2. VisitorIDs, in comparison to fingerprints, include server side techniques, are deduplicated and utilize fuzzy matching to result in a more accurate and stable identifier. Fingerprint hashes rely on an exact match across all browser attributes, making them less stable across > 4 week time intervals.</sub>
 
-<sub>3. FingerprintJS Pro is GDPR and CCPA compliant as the data processor. You still need to be compliant as the data controller and use the identification for fraud under legitimate interest or ask for user consent.</sub>
+<sub>3. Fingerprint Pro is GDPR and CCPA compliant as the data processor. You still need to be compliant as the data controller and use the identification for fraud under legitimate interest or ask for user consent.</sub>
 
 Pro result example:
 
@@ -130,13 +130,13 @@ Pro result example:
 }
 ```
 
-🍿 [Live demo](https://fingerprintjs.com/demo)
+🍿 [Live demo](https://fingerprint.com/demo)
 
 ⏱ [How to upgrade from Open Source to Pro in 30 seconds](https://dev.fingerprintjs.com/v3/docs/migrating-from-open-source-v3)
 
-📕 [FingerprintJS Pro documentation](https://dev.fingerprintjs.com)
+📕 [Fingerprint Pro documentation](https://dev.fingerprintjs.com)
 
-▶️ [Video: use FingerprintJS Pro to prevent multiple signups](https://www.youtube.com/watch?v=jWX9P5_jZn8)
+▶️ [Video: use Fingerprint Pro to prevent multiple signups](https://www.youtube.com/watch?v=jWX9P5_jZn8)
 
 ## Migrating from v2
 
@@ -154,9 +154,9 @@ See more details and learn how to run the library in old browsers in the [browse
 
 ## Where to get support
 
-Thanks to our [series B funding](https://fingerprintjs.com/blog/series-b/), we are happy to provide technical support for our open-source FingerprintJS library. We recommend using GitHub [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) to submit bugs or [Discussions](https://github.com/fingerprintjs/fingerprintjs/discussions) to ask questions.
+Thanks to our [series B funding](https://fingerprint.com/blog/series-b/), we are happy to provide technical support for our open-source FingerprintJS library. We recommend using GitHub [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) to submit bugs or [Discussions](https://github.com/fingerprintjs/fingerprintjs/discussions) to ask questions.
 Using issues and discussions publicly will help the open-source community and other users with similar issues. 
-However, if you require private support, please email us at [oss-support@fingerprintjs.com](mailto:oss-support@fingerprintjs.com).
+However, if you require private support, please email us at [oss-support@fingerprint.com](mailto:oss-support@fingerprint.com).
 
 ## Contributing
 
@@ -164,5 +164,5 @@ See the [contributing guidelines](contributing.md) to learn how to start a playg
 
 ## Other products by FingerprintJS
 
-* [BotD -- Easy to use JavaScript bot detection](https://fingerprintjs.com/products/bot-detection/)
+* [BotD -- Easy to use JavaScript bot detection](https://fingerprint.com/products/bot-detection/)
 * [AEV -- Android App Environment Verification API](https://github.com/fingerprintjs/aev)
