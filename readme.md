@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://fingerprintjs.com">
+  <a href="https://fingerprint.com">
     <img src="resources/logo.svg" alt="FingerprintJS" width="312px" />
   </a>
 </p>
@@ -58,7 +58,7 @@ Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addr
 **Pro plans start at $0/month - no credit card required.**
 
 <p align="center">
-  <a href="https://fingerprintjs.com/github/">
+  <a href="https://fingerprint.com/github/">
     <img src="resources/pro_screenshot.png" alt="Pro screenshot" width="697px" />
   </a>
 </p>
@@ -132,9 +132,9 @@ Pro result example:
 
 🍿 [Live demo](https://fingerprint.com/demo)
 
-⏱ [How to upgrade from Open Source to Pro in 30 seconds](https://dev.fingerprintjs.com/v3/docs/migrating-from-open-source-v3)
+⏱ [How to upgrade from Open Source to Pro in 30 seconds](https://dev.fingerprint.com/v3/docs/migrating-from-open-source-v3)
 
-📕 [Fingerprint Pro documentation](https://dev.fingerprintjs.com)
+📕 [Fingerprint Pro documentation](https://dev.fingerprint.com)
 
 ▶️ [Video: use Fingerprint Pro to prevent multiple signups](https://www.youtube.com/watch?v=jWX9P5_jZn8)
 
@@ -162,7 +162,7 @@ However, if you require private support, please email us at [oss-support@fingerp
 
 See the [contributing guidelines](contributing.md) to learn how to start a playground, test and build.
 
-## Other products by FingerprintJS
+## Other products by Fingerprint
 
 * [BotD -- Easy to use JavaScript bot detection](https://fingerprint.com/products/bot-detection/)
 * [AEV -- Android App Environment Verification API](https://github.com/fingerprintjs/aev)
