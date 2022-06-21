@@ -243,3 +243,13 @@ export function isAndroid(): boolean {
     ]) >= 2
   )
 }
+
+/**
+ * Checks whether the browser is Brave.
+ *
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
+ */
+export function isBrave(): boolean {
+  return !!navigator.brave
+}
