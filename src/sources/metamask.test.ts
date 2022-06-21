@@ -7,12 +7,12 @@ describe('Sources', () => {
       await withMockProperties(
         window,
         {
-          ethereum: { get: () => Object.create(null) }
+          ethereum: { get: () => Object.create(null) },
         },
         () => {
           console.log(window.ethereum)
           expect(isMetaMaskIsntalled()).toBe(true)
-        }
+        },
       )
     })
 
@@ -20,11 +20,11 @@ describe('Sources', () => {
       await withMockProperties(
         navigator,
         {
-          brave: { get: () => Object.create(null) }
+          brave: { get: () => Object.create(null) },
         },
         () => {
           expect(isMetaMaskIsntalled()).toBe(false)
-        }
+        },
       )
     })
   })
