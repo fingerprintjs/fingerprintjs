@@ -29,6 +29,7 @@ import getMonochromeDepth from './monochrome'
 import getContrastPreference from './contrast'
 import isMotionReduced from './reduced_motion'
 import isHDR from './hdr'
+import isMetaMaskInstalled from './metamask'
 import getMathFingerprint from './math'
 import getFontPreferences from './font_preferences'
 
@@ -77,6 +78,7 @@ export const sources = {
   contrast: getContrastPreference,
   reducedMotion: isMotionReduced,
   hdr: isHDR,
+  metamask: isMetaMaskInstalled,
   math: getMathFingerprint,
 }
 
