@@ -11,6 +11,7 @@ interface Window {
   webkitOfflineAudioContext?: OfflineAudioContext
   openDatabase?(...args: unknown[]): void
   __fpjs_d_m?: unknown
+  ethereum?: object
 }
 
 interface Navigator {
@@ -20,6 +21,7 @@ interface Navigator {
   systemLanguage?: string
   deviceMemory?: number
   cpuClass?: string
+  brave?: object
 }
 
 interface Document {
