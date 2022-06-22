@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "es2020"
+  },
+  "include": [
+    "rollup.config.ts"
+  ]
+}
