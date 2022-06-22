@@ -1,4 +1,4 @@
-import { withMockProperties } from '../../tests/utils'
+import { withMockProperties } from '../../../tests/utils'
 import isMetaMaskIsntalled from './metamask'
 
 describe('Sources', () => {

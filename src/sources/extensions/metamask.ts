@@ -1,4 +1,4 @@
-import { isBrave } from '../utils/browser'
+import { isBrave } from '../../utils/browser'
 
 /**
  * Detects if the {@link https://metamask.io/ MetaMask} extension is installed

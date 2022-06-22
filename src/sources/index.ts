@@ -29,9 +29,10 @@ import getMonochromeDepth from './monochrome'
 import getContrastPreference from './contrast'
 import isMotionReduced from './reduced_motion'
 import isHDR from './hdr'
-import isMetaMaskInstalled from './metamask'
 import getMathFingerprint from './math'
 import getFontPreferences from './font_preferences'
+
+import getExtensions from './extensions'
 
 /**
  * The list of entropy sources used to make visitor identifiers.
@@ -78,8 +79,10 @@ export const sources = {
   contrast: getContrastPreference,
   reducedMotion: isMotionReduced,
   hdr: isHDR,
-  metamask: isMetaMaskInstalled,
   math: getMathFingerprint,
+
+  // Browser extension list as entropy sources
+  extensions: getExtensions,
 }
 
 /**
