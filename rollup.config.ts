@@ -25,11 +25,6 @@ const commonInput = {
   plugins: [nodeResolvePlugin(), jsonPlugin(), typescriptPlugin(), commonBanner],
 }
 
-const undocumentedInput = {
-  ...commonInput,
-  input: './src/index_undocumented.ts',
-}
-
 const commonOutput: OutputOptions = {
   name: 'FingerprintJS',
   exports: 'named',
@@ -39,7 +34,6 @@ const commonTerser = terserPlugin(terserConfig)
 
 const config: RollupOptions[] = [
   // Browser bundles. They have all the dependencies included for convenience.
-  // The names of these files must be preserved in v3 to keep compatibility with the old jsDelivr installation methods.
   {
     ...commonInput,
     plugins: [
@@ -83,9 +77,8 @@ const config: RollupOptions[] = [
   },
 
   // NPM bundles. They have all the dependencies excluded for end code size optimization.
-  // They also include the private undocumented API.
   {
-    ...undocumentedInput,
+    ...commonInput,
     external: Object.keys(dependencies),
     output: [
       // CJS for usage with `require()`
@@ -106,21 +99,10 @@ const config: RollupOptions[] = [
 
   // TypeScript definition
   {
-    ...undocumentedInput,
+    ...commonInput,
     plugins: [dtsPlugin(), commonBanner],
     output: {
       file: `${outputDirectory}/fp.d.ts`,
-      format: 'esm',
-    },
-  },
-
-  // An ESM bundle for CDN: https://github.com/fingerprintjs/cdn. It excludes only the "tslib" dependency.
-  {
-    ...commonInput,
-    external: ['tslib'],
-    output: {
-      ...commonOutput,
-      file: `${outputDirectory}/fp.cdn.esm.js`,
       format: 'esm',
     },
   },

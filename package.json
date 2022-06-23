@@ -26,7 +26,6 @@
   "homepage": "https://github.com/fingerprintjs/fingerprintjs",
   "main": "dist/fp.cjs.js",
   "module": "dist/fp.esm.js",
-  "fp:cdn:esm": "dist/fp.cdn.esm.js",
   "types": "dist/fp.d.ts",
   "sideEffects": false,
   "files": [
