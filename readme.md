@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://fingerprintjs.com">
+  <a href="https://fingerprint.com">
     <img src="resources/logo.svg" alt="FingerprintJS" width="312px" />
   </a>
 </p>
@@ -50,15 +50,15 @@ FingerprintJS is a browser fingerprinting library that queries browser attribute
 
 📕 [Full documentation](docs/api.md)
 
-## Upgrade to the Pro version to get 99.5% identification accuracy
+## Use the free Pro version to get 99.5% identification accuracy
 
-[FingerprintJS Pro](https://fingerprintjs.com/github/) is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
-Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in the 99.5% identification accuracy.
+[Fingerprint Pro](https://fingerprint.com/github/) is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
+Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in the 99.5% identification accuracy. Fingerprint Pro is available for Web, Android, iOS and other platforms.
 
 **Pro plans start at $0/month - no credit card required.**
 
 <p align="center">
-  <a href="https://fingerprintjs.com/github/">
+  <a href="https://fingerprint.com/github/">
     <img src="resources/pro_screenshot.png" alt="Pro screenshot" width="697px" />
   </a>
 </p>
@@ -93,7 +93,7 @@ Full product comparison:
     <tr><td colspan="3"><h4>Operations</h4></td></tr>
     <tr><td><b>Data security</b></td><td align="center">Your infrastructure</td><td align="center">Encrypted at rest</td></tr>
     <tr><td><b>Storage</b></td><td align="center">Your infrastructure</td><td align="center">Unlimited up to 1 yr</td></tr>
-    <tr><td><b>Regions</b></td><td align="center">Your infrastructure</td><td align="center">Hosting in US and EU</td></tr>
+    <tr><td><b>Regions</b></td><td align="center">Your infrastructure</td><td align="center">Hosting in US, EU and Mumbai</td></tr>
     <tr><td><b>Compliance</b></td><td align="center">Your infrastructure</td><td align="center">GDPR, CCPA compliant<sup>3</sup></td></tr>
     <tr><td><b>SLA</b></td><td align="center">No SLA</td><td align="center">99.9% Uptime</td></tr>
     <tr><td><b>Support</b></td><td align="center">GitHub community</td><td align="center">Support team via email, chat, and call-back within 1 business day</td></tr>
@@ -104,7 +104,7 @@ Full product comparison:
 
 <sub>2. VisitorIDs, in comparison to fingerprints, include server side techniques, are deduplicated and utilize fuzzy matching to result in a more accurate and stable identifier. Fingerprint hashes rely on an exact match across all browser attributes, making them less stable across > 4 week time intervals.</sub>
 
-<sub>3. FingerprintJS Pro is GDPR and CCPA compliant as the data processor. You still need to be compliant as the data controller and use the identification for fraud under legitimate interest or ask for user consent.</sub>
+<sub>3. Fingerprint Pro is GDPR and CCPA compliant as the data processor. You still need to be compliant as the data controller and use the identification for fraud under legitimate interest or ask for user consent.</sub>
 
 Pro result example:
 
@@ -130,13 +130,13 @@ Pro result example:
 }
 ```
 
-🍿 [Live demo](https://fingerprintjs.com/demo)
+🍿 [Live demo](https://fingerprint.com/demo)
 
-⏱ [How to upgrade from Open Source to Pro in 30 seconds](https://dev.fingerprintjs.com/v3/docs/migrating-from-open-source-v3)
+⏱ [How to upgrade from Open Source to Pro in 30 seconds](https://dev.fingerprint.com/v3/docs/migrating-from-open-source-v3)
 
-📕 [FingerprintJS Pro documentation](https://dev.fingerprintjs.com)
+📕 [Fingerprint Pro documentation](https://dev.fingerprint.com)
 
-▶️ [Video: use FingerprintJS Pro to prevent multiple signups](https://www.youtube.com/watch?v=jWX9P5_jZn8)
+▶️ [Video: use Fingerprint Pro to prevent multiple signups](https://www.youtube.com/watch?v=jWX9P5_jZn8)
 
 ## Migrating from v2
 
@@ -154,15 +154,15 @@ See more details and learn how to run the library in old browsers in the [browse
 
 ## Where to get support
 
-Thanks to our [series B funding](https://fingerprintjs.com/blog/series-b/), we are happy to provide technical support for our open-source FingerprintJS library. We recommend using GitHub [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) to submit bugs or [Discussions](https://github.com/fingerprintjs/fingerprintjs/discussions) to ask questions.
+Thanks to our [series B funding](https://fingerprint.com/blog/series-b/), we are happy to provide technical support for our open-source FingerprintJS library. We recommend using GitHub [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) to submit bugs or [Discussions](https://github.com/fingerprintjs/fingerprintjs/discussions) to ask questions.
 Using issues and discussions publicly will help the open-source community and other users with similar issues. 
-However, if you require private support, please email us at [oss-support@fingerprintjs.com](mailto:oss-support@fingerprintjs.com).
+However, if you require private support, please email us at [oss-support@fingerprint.com](mailto:oss-support@fingerprint.com).
 
 ## Contributing
 
 See the [contributing guidelines](contributing.md) to learn how to start a playground, test and build.
 
-## Other products by FingerprintJS
+## Other products by Fingerprint
 
-* [BotD -- Easy to use JavaScript bot detection](https://fingerprintjs.com/products/bot-detection/)
+* [BotD -- Easy to use JavaScript bot detection](https://fingerprint.com/products/bot-detection/)
 * [AEV -- Android App Environment Verification API](https://github.com/fingerprintjs/aev)

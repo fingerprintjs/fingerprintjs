@@ -52,7 +52,7 @@ const configurationFactory: ConfigurationFactory = (_env, { mode = 'development'
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: './index.html',
-      title: `FingerprintJS ${mode === 'development' ? 'Playground' : 'Demo'}`,
+      title: `FingerprintJS Open Source ${mode === 'development' ? 'Playground' : 'Demo'}`,
     }),
   ],
 })
