@@ -9,8 +9,40 @@ export * from './index'
 /** Not documented, out of Semantic Versioning, usage is at your own risk */
 export const murmurX64Hash128 = x64hash128
 export { prepareForSources } from './agent'
-export { sources } from './sources'
-export { getScreenFrame } from './sources/screen_frame'
+export {
+  getAudioFingerprint,
+  getFonts,
+  getPlugins,
+  getCanvasFingerprint,
+  getTouchSupport,
+  getOsCpu,
+  getLanguages,
+  getColorDepth,
+  getDeviceMemory,
+  getScreenResolution,
+  getScreenFrame,
+  getHardwareConcurrency,
+  getTimezone,
+  getSessionStorage,
+  getLocalStorage,
+  getIndexedDB,
+  getOpenDatabase,
+  getCpuClass,
+  getPlatform,
+  getVendor,
+  getVendorFlavors,
+  areCookiesEnabled,
+  getDomBlockers,
+  getColorGamut,
+  areColorsInverted,
+  areColorsForced,
+  getMonochromeDepth,
+  getContrastPreference,
+  isMotionReduced,
+  isHDR,
+  getMathFingerprint,
+  getFontPreferences,
+} from './sources'
 export {
   getFullscreenElement,
   isAndroid,

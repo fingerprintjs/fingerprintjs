@@ -9,7 +9,7 @@ import getLanguages from './languages'
 import getColorDepth from './color_depth'
 import getDeviceMemory from './device_memory'
 import getScreenResolution from './screen_resolution'
-import { getRoundedScreenFrame } from './screen_frame'
+import { getScreenFrame, getRoundedScreenFrame } from './screen_frame'
 import getHardwareConcurrency from './hardware_concurrency'
 import getTimezone from './timezone'
 import getSessionStorage from './session_storage'
@@ -32,11 +32,44 @@ import isHDR from './hdr'
 import getMathFingerprint from './math'
 import getFontPreferences from './font_preferences'
 
+export {
+  getAudioFingerprint,
+  getFonts,
+  getPlugins,
+  getCanvasFingerprint,
+  getTouchSupport,
+  getOsCpu,
+  getLanguages,
+  getColorDepth,
+  getDeviceMemory,
+  getScreenResolution,
+  getScreenFrame,
+  getRoundedScreenFrame,
+  getHardwareConcurrency,
+  getTimezone,
+  getSessionStorage,
+  getLocalStorage,
+  getIndexedDB,
+  getOpenDatabase,
+  getCpuClass,
+  getPlatform,
+  getVendor,
+  getVendorFlavors,
+  areCookiesEnabled,
+  getDomBlockers,
+  getColorGamut,
+  areColorsInverted,
+  areColorsForced,
+  getMonochromeDepth,
+  getContrastPreference,
+  isMotionReduced,
+  isHDR,
+  getMathFingerprint,
+  getFontPreferences,
+}
+
 /**
- * The list of entropy sources used to make visitor identifiers.
- *
- * This value isn't restricted by Semantic Versioning, i.e. it may be changed without bumping minor or major version of
- * this package.
+ * The list of entropy sources used to make visitor identifiers
  */
 export const sources = {
   // READ FIRST:
