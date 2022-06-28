@@ -254,7 +254,7 @@ export const filters = {
   ],
 }
 
-interface Options {
+type Options = {
   debug?: boolean
 }
 

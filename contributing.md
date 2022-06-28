@@ -79,6 +79,9 @@ const var4 = { [Enum.Member]: 'foo' }
 
 The `include` parameter of `tsconfig.json` files may contain only the entry files and the `.d.ts` files.
 
+Some `interface`s are replaced with `type`s in the entropy sources to help to avoid
+["cannot be named" errors](https://github.com/microsoft/TypeScript/issues/5711) in projects using FingerprintJS.
+
 ### How to test
 
 There are automatic tests.

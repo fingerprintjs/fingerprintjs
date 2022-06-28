@@ -1,6 +1,6 @@
 import { toInt } from '../utils/data'
 
-export interface TouchSupport {
+export type TouchSupport = {
   maxTouchPoints: number
   /** The success or failure of creating a TouchEvent */
   touchEvent: boolean
