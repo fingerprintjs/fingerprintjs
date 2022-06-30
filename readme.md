@@ -1,6 +1,10 @@
 <p align="center">
   <a href="https://fingerprint.com">
-    <img src="resources/logo.svg" alt="FingerprintJS" width="312px" />
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="resources/logo_light.svg" />
+      <source media="(prefers-color-scheme: light)" srcset="resources/logo_dark.svg" />
+      <img src="resources/logo_dark.svg" alt="FingerprintJS logo" width="312px" />
+    </picture>
   </a>
 </p>
 <p align="center">
@@ -155,7 +159,7 @@ See more details and learn how to run the library in old browsers in the [browse
 ## Where to get support
 
 Thanks to our [series B funding](https://fingerprint.com/blog/series-b/), we are happy to provide technical support for our open-source FingerprintJS library. We recommend using GitHub [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) to submit bugs or [Discussions](https://github.com/fingerprintjs/fingerprintjs/discussions) to ask questions.
-Using issues and discussions publicly will help the open-source community and other users with similar issues. 
+Using issues and discussions publicly will help the open-source community and other users with similar issues.
 However, if you require private support, please email us at [oss-support@fingerprint.com](mailto:oss-support@fingerprint.com).
 
 ## Contributing
