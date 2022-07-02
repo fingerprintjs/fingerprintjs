@@ -75,8 +75,9 @@ Full product comparison:
   </thead>
   <tbody>
     <tr><td colspan="3"><h4>Core Features</h4></td></tr>
-    <tr><td>100% Open-source</td><td align="center">yes</td><td align="center">no<sup>1</sup></td></tr>
-    <tr><td>Accuracy</td><td align="center">up to 60%</td><td align="center">99.5%</td></tr>
+    <tr><td>100% open source</td><td align="center">yes</td><td align="center">no<sup>1</sup></td></tr>
+    <tr><td>Accuracy</td><td align="center">up to 60%</td><td align="center"><b>99.5%</b></td></tr>
+    <tr><td><b>Mobile Native SDKs</b><br/><i>Android, iOS, Flutter, React Native and more</i></td><td align="center">-</td><td align="center"><b>✓</b></td></tr>
     <tr><td><b>Standard fingerprint signals</b><br/><i>screen, os, device name</i></td><td align="center">✓</td><td align="center">✓</td></tr>
     <tr><td><b>Advanced fingerprint signals</b><br/><i>canvas, audio, fonts</i></td><td align="center">✓</td><td align="center">✓</td></tr>
     <tr><td><b>ID type</b></td><td align="center">fingerprint</td><td align="center">visitorID<sup>2</sup></td></tr>
