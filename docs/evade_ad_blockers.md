@@ -1,7 +1,7 @@
-# Bypass ad blockers
+# Evade ad blockers
 
 Some ad blockers might detect and block this library because of the known CDN URL or the script name.
-To bypass the specific detection, one needs to check the applied rules.
+To evade the specific detection, one needs to check the applied rules.
 Here are some generic options to circumvent this behavior.
 
 ## Open-source alternatives
