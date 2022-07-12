@@ -82,6 +82,6 @@ export async function forEachWithBreaks<T>(
  *
  * Otherwise, promise emits a console warning unless it has a `catch` listener.
  */
-export function suppressUnhandledRejectionWarning(promise: Promise<unknown>): void {
-  promise.catch(() => undefined) // .catch with no function affects nothing
+export function suppressUnhandledRejectionWarning(promise: PromiseLike<unknown>): void {
+  promise.then(undefined, () => undefined)
 }
