@@ -1,4 +1,4 @@
-import { wait } from './async'
+import { MaybePromise, wait } from './async'
 import { parseSimpleCssSelector } from './data'
 
 /**
@@ -12,7 +12,7 @@ import { parseSimpleCssSelector } from './data'
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export async function withIframe<T>(
-  action: (iframe: HTMLIFrameElement, iWindow: Window) => Promise<T> | T,
+  action: (iframe: HTMLIFrameElement, iWindow: Window) => MaybePromise<T>,
   initialHtml?: string,
   domPollInterval = 50,
 ): Promise<T> {
