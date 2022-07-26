@@ -16,7 +16,7 @@ const enum InnerErrorName {
 }
 
 /**
- * A deep description: https://fingerprintjs.com/blog/audio-fingerprinting/
+ * A deep description: https://fingerprint.com/blog/audio-fingerprinting/
  * Inspired by and based on https://github.com/cozylife/audio-fingerprint
  */
 export default function getAudioFingerprint(): number | (() => Promise<number>) {
