@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master
+      - hotfix/demo-build
 jobs:
   publish:
     name: Publish the demo
