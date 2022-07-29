@@ -1,9 +1,9 @@
-export interface PluginMimeTypeData {
+type PluginMimeTypeData = {
   type: string
   suffixes: string
 }
 
-export interface PluginData {
+type PluginData = {
   name: string
   description: string
   mimeTypes: PluginMimeTypeData[]

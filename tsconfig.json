@@ -7,6 +7,7 @@
     "resolveJsonModule": true,
     "importHelpers": true,
     "noErrorTruncation": true,
+    "declaration": false,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -15,6 +16,7 @@
   "exclude": [
     "dist",
     "node_modules",
-    "**/*.test.ts"
+    "**/*.test.ts",
+    "tests"
   ]
 }

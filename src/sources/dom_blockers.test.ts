@@ -1,9 +1,10 @@
 import { isChromium } from '../../tests/utils'
 import { selectorToElement } from '../utils/dom'
 import { parseSimpleCssSelector } from '../utils/data'
+import { MaybePromise } from '../utils/async'
 import getDomBlockers, { filters, isApplicable } from './dom_blockers'
 
-async function withBlockedSelectors<T>(selectors: string[], action: () => Promise<T> | T): Promise<T> {
+async function withBlockedSelectors<T>(selectors: string[], action: () => MaybePromise<T>): Promise<T> {
   const styleElement = document.createElement('style')
 
   try {

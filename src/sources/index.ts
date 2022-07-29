@@ -37,6 +37,9 @@ import getFontPreferences from './font_preferences'
  *
  * This value isn't restricted by Semantic Versioning, i.e. it may be changed without bumping minor or major version of
  * this package.
+ *
+ * Note: Rollup and Webpack are smart enough to remove unused properties of this object during tree-shaking, so there is
+ * no need to export the sources individually.
  */
 export const sources = {
   // READ FIRST:

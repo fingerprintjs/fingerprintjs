@@ -10,7 +10,7 @@ export const enum ContrastPreference {
  * @see https://www.w3.org/TR/mediaqueries-5/#prefers-contrast
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-contrast
  */
-export default function getContrastPreference(): ContrastPreference | undefined {
+export default function getContrastPreference(): number | undefined {
   if (doesMatch('no-preference')) {
     return ContrastPreference.None
   }
