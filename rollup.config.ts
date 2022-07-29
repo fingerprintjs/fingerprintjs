@@ -3,7 +3,6 @@ import type { RollupOptions, OutputOptions } from 'rollup'
 import jsonPlugin from '@rollup/plugin-json'
 import nodeResolvePlugin from '@rollup/plugin-node-resolve'
 import typescriptPlugin from '@rollup/plugin-typescript'
-import replacePlugin from '@rollup/plugin-replace'
 import { terser as terserPlugin } from 'rollup-plugin-terser'
 import dtsPlugin from 'rollup-plugin-dts'
 import licensePlugin from 'rollup-plugin-license'
@@ -36,17 +35,6 @@ const config: RollupOptions[] = [
   // Browser bundles. They have all the dependencies included for convenience.
   {
     ...commonInput,
-    plugins: [
-      ...commonInput.plugins,
-      // The monitoring is disabled in the browser bundles temporarily because these bundles are served from jsDelivr,
-      // and we don't want the script to send monitoring requests unexpectedly for the website owners.
-      // todo: Remove this plugin when there are more downloads from our CDN than from jsDelivr, or after 2022-02-11
-      replacePlugin({
-        values: { 'window.__fpjs_d_m': 'true' },
-        preventAssignment: true,
-        exclude: '**/node_modules/**',
-      }),
-    ],
     output: [
       // IIFE for users who use Require.js or Electron and want to just call `window.FingerprintJS.load()`
       {
