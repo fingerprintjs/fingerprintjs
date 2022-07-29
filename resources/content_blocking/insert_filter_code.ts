@@ -20,16 +20,24 @@ async function run() {
     fsAsync.readFile(uniqueSelectorsFile, 'utf8').then<Filters>(JSON.parse),
     parseCurrentFilters(codeFile),
   ])
+  const newFilters = actualizeFilters(currentFilters, uniqueSelectors)
+  await insertNewFilters(codeFile, newFilters)
+  await runCommand(`eslint --fix ${JSON.stringify(codeFile)}`, [], { shell: true })
+}
 
+function actualizeFilters(currentFilters: Filters, availableRules: Filters) {
+  const newFilterNames = Array.from(
+    new Set<string>([...Object.keys(currentFilters), ...Object.keys(availableRules)]),
+  ).sort()
   const newFilters: Filters = {}
-  for (const [filterName, currentSelectors] of Object.entries(currentFilters)) {
-    if (uniqueSelectors[filterName]) {
-      newFilters[filterName] = actualizeRules(currentSelectors, uniqueSelectors[filterName])
+
+  for (const filterName of newFilterNames) {
+    if (availableRules[filterName]) {
+      newFilters[filterName] = actualizeRules(currentFilters[filterName] ?? [], availableRules[filterName])
     }
   }
 
-  await insertNewFilters(codeFile, newFilters)
-  await runCommand(`eslint --fix ${JSON.stringify(codeFile)}`, [], { shell: true })
+  return newFilters
 }
 
 /**

@@ -72,6 +72,9 @@ Runs this command to insert the unique selectors into `src/sources/dom_blockers.
 ./node_modules/.bin/ts-node --compiler-options '{"module": "CommonJS"}' ./resources/content_blocking/insert_filter_code.ts
 ```
 
+Take a look into the changes of the `src/sources/dom_blockers.ts` file.
+Make sure that no excess filters are added, renamed or removed.
+
 #### 4. EasyList Android case
 
 AdGuard on Android blocks slightly different selectors than AdGuard on iOS.
