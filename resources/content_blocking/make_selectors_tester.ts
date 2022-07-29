@@ -5,6 +5,7 @@
 import * as path from 'path'
 import { promises as fsAsync } from 'fs'
 import * as rollup from 'rollup'
+import rollupConfig from '../../rollup.config'
 import filterConfig, { FilterList } from './filters'
 import { fetchFilter } from './utils'
 
@@ -108,7 +109,7 @@ async function getJsToDetectBlockedSelectors(selectors: readonly string[]) {
   const bundle = await rollup.rollup({
     input: inputScript,
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    plugins: require('../../rollup.config')[0].plugins,
+    plugins: rollupConfig[0].plugins,
   })
   const { output } = await bundle.generate({
     format: 'iife',

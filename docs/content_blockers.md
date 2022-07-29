@@ -28,7 +28,7 @@ The open a terminal, go to the repository root and run:
 
 ```bash
 yarn install
-./node_modules/.bin/ts-node --compiler-options '{"module": "CommonJS"}' ./resources/content_blocking/make_selectors_tester.ts
+./node_modules/.bin/ts-node --compiler-options '{"module": "CommonJS", "esModuleInterop": true}' ./resources/content_blocking/make_selectors_tester.ts
 ```
 
 It will download all the filters and
