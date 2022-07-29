@@ -4,7 +4,7 @@
 
 import * as path from 'path'
 import { promises as fsAsync } from 'fs'
-import { runCommand } from '../../../../shared/script_utils'
+import { runCommand } from './utils'
 
 const uniqueSelectorsFile = path.join(__dirname, 'unique_filter_selectors.json')
 const codeFile = path.join(__dirname, '..', '..', 'src', 'sources', 'dom_blockers.ts')
@@ -22,7 +22,7 @@ async function run() {
   ])
   const newFilters = actualizeFilters(currentFilters, uniqueSelectors)
   await insertNewFilters(codeFile, newFilters)
-  await runCommand(`eslint --fix ${JSON.stringify(codeFile)}`, [], { shell: true })
+  await runCommand(`eslint --fix ${JSON.stringify(codeFile)}`)
 }
 
 function actualizeFilters(currentFilters: Filters, availableRules: Filters) {
