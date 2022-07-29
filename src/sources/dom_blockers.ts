@@ -116,7 +116,7 @@ export const filters = {
     '#aafoot.top_box',
   ],
   easyListCookie: [
-    '.rodo-accept[style*="bottom"]',
+    '#AdaCompliance.app-notice',
     '.text-center.rgpd',
     '.panel--cookie',
     '.js-cookies-andromeda',
