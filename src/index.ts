@@ -38,4 +38,10 @@ export {
   isGecko,
   isDesktopSafari,
 } from './utils/browser'
-export { loadSources, SourcesToComponents } from './utils/entropy_source'
+export {
+  loadSources,
+  Source,
+  SourcesToComponents,
+  transformSource, // Not used here but adds only 222 uncompressed (60 compressed) bytes of code
+  UnknownSources,
+} from './utils/entropy_source'

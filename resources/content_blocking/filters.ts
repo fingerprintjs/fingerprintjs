@@ -184,7 +184,7 @@ const filters: FilterList = {
   },
   ruAd: {
     title: 'RU AdList',
-    note: "Sometimes doesn't work in AdGuard for some reason",
+    note: 'Not in the default AdGuard list, add manually',
     file: 'https://easylist-downloads.adblockplus.org/advblock.txt',
   },
   icelandicAbp: {
@@ -197,6 +197,7 @@ const filters: FilterList = {
   },
   thaiAds: {
     title: 'Thai Ads Filters',
+    note: 'Renamed to "EasyList Thailand"',
     file: 'https://adblock-thai.github.io/thai-ads-filter/subscription.txt',
   },
   hungarian: {

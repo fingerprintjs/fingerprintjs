@@ -77,6 +77,11 @@ const var3 = var1.prop
 const var4 = { [Enum.Member]: 'foo' }
 ```
 
+The `include` parameter of `tsconfig.json` files may contain only the entry files and the `.d.ts` files.
+
+Some `interface`s are replaced with `type`s in the entropy sources to help to avoid
+["cannot be named" errors](https://github.com/microsoft/TypeScript/issues/5711) in projects using FingerprintJS.
+
 ### How to test
 
 There are automatic tests.
@@ -109,13 +114,13 @@ If you run the test command multiple times in parallel, BrowserStack will lose a
 To check the distributive TypeScript declarations, build the project and run:
 
 ```bash
-yarn test:dts
+yarn check:dts
 ```
 
 To check that the package is compatible with server side rendering, build the project and run:
 
 ```bash
-yarn test:ssr
+yarn check:ssr
 ```
 
 ### How to make an entropy source

@@ -75,3 +75,13 @@ export async function forEachWithBreaks<T>(
     }
   }
 }
+
+/**
+ * Makes the given promise never emit an unhandled promise rejection console warning.
+ * The promise will still pass errors to the next promises.
+ *
+ * Otherwise, promise emits a console warning unless it has a `catch` listener.
+ */
+export function suppressUnhandledRejectionWarning(promise: PromiseLike<unknown>): void {
+  promise.then(undefined, () => undefined)
+}

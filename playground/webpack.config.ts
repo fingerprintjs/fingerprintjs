@@ -1,8 +1,10 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
+import type { ConfigurationFactory } from 'webpack'
+import * as HtmlWebpackPlugin from 'html-webpack-plugin'
+import { CleanWebpackPlugin } from 'clean-webpack-plugin'
+import * as TerserPlugin from 'terser-webpack-plugin'
+import terserConfig from '../terser.config'
 
-module.exports = (env, { mode = 'development' }) => ({
+const configurationFactory: ConfigurationFactory = (_env, { mode = 'development' }) => ({
   entry: './index.ts',
   mode,
   resolve: {
@@ -15,6 +17,7 @@ module.exports = (env, { mode = 'development' }) => ({
         loader: 'ts-loader',
         exclude: /node_modules/,
         options: {
+          configFile: '../tsconfig.json', // The `./tsconfig.json` file is made for the webpack.config.ts file itself
           compilerOptions: {
             sourceMap: true,
           },
@@ -33,7 +36,7 @@ module.exports = (env, { mode = 'development' }) => ({
   optimization: {
     minimizer: [
       new TerserPlugin({
-        terserOptions: require('../terser.config.js'),
+        terserOptions: terserConfig,
       }),
     ],
   },
@@ -43,12 +46,15 @@ module.exports = (env, { mode = 'development' }) => ({
   },
   devServer: {
     host: '0.0.0.0',
+    disableHostCheck: true,
   },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: './index.html',
-      title: `FingerprintJS ${mode === 'development' ? 'Playground' : 'Demo'}`,
+      title: `FingerprintJS Open Source ${mode === 'development' ? 'Playground' : 'Demo'}`,
     }),
   ],
 })
+
+export default configurationFactory

@@ -5,6 +5,7 @@
 import * as path from 'path'
 import { promises as fsAsync } from 'fs'
 import * as rollup from 'rollup'
+import rollupConfig from '../../rollup.config'
 import filterConfig, { FilterList } from './filters'
 import { fetchFilter } from './utils'
 
@@ -104,11 +105,11 @@ async function makeTesterHtml(selectors: { forEach: (callback: (selector: string
 }
 
 async function getJsToDetectBlockedSelectors(selectors: readonly string[]) {
-  // The first configuration from rollup.config.js is supposed to make a JS file with dependencies included
+  // The first configuration from rollup.config.ts is supposed to make a JS file with dependencies included
   const bundle = await rollup.rollup({
     input: inputScript,
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    plugins: require('../../rollup.config')[0].plugins,
+    plugins: rollupConfig[0].plugins,
   })
   const { output } = await bundle.generate({
     format: 'iife',

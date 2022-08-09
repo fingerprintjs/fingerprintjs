@@ -28,7 +28,7 @@ The open a terminal, go to the repository root and run:
 
 ```bash
 yarn install
-./node_modules/.bin/ts-node --compiler-options '{"module": "CommonJS"}' ./resources/content_blocking/make_selectors_tester.ts
+./node_modules/.bin/ts-node --compiler-options '{"module": "CommonJS", "esModuleInterop": true}' ./resources/content_blocking/make_selectors_tester.ts
 ```
 
 It will download all the filters and
@@ -49,6 +49,7 @@ For each filter in the list mentioned above, do the following steps:
 
 1. Go to the ab blocker settings, turn on only this filter, make sure the new filter set is applied (click the refresh button in the ad blocker settings and wait a couple seconds).
 2. Return to the browser, refresh the page (make sure the field content has changed). It will show which CSS selectors are blocked by the current filter.
+    If the list is empty, try refreshing the page or opening it on another platform.
 3. Save the content of the field to a `.txt` file in the `resources/content_blocking/blocked_selectors` directory.
     The file names will be names of the filters in the entropy source; see its source code to know the correct names.
 
@@ -65,9 +66,14 @@ Open a terminal, go to the repository root and run:
 A JSON file will be created at `resources/content_blocking/unique_filter_selectors.json`.
 This file contains unique blocked selectors for each of the filters.
 
-Take 5 random selectors for each filter from the file and copy them to `src/sources/dom_blockers.ts`.
-I prefer selectors that depict features of filters (e.g. have foreign words or domains in case of regional filters),
-they increase the stability of selectors.
+Runs this command to insert the unique selectors into `src/sources/dom_blockers.ts`:
+
+```bash
+./node_modules/.bin/ts-node --compiler-options '{"module": "CommonJS"}' ./resources/content_blocking/insert_filter_code.ts
+```
+
+Take a look into the changes of the `src/sources/dom_blockers.ts` file.
+Make sure that no excess filters are added, renamed or removed.
 
 #### 4. EasyList Android case
 
@@ -75,7 +81,7 @@ AdGuard on Android blocks slightly different selectors than AdGuard on iOS.
 Sometimes it leads to false positive EasyList detection when AdGuard Base filter is used.
 
 To solve it, you need an Android device or emulator with AdGuard installed.
-Do the step 4, but instead of 5, copy all the selectors of EasyList.
+Do the step 3, but copy all the selectors of EasyList to `src/sources/dom_blockers.ts` manually.
 On the device, enable AdGuard, open the settings and enable a few filters including AdGuard Base but not including EasyList.
 Start the playground, connect Chrome (or any other browser) debugger to the device, open the device browser console,
 check which of the selectors are passed (see more detail about the debugging below) and copy 5 of them to the entropy source code.

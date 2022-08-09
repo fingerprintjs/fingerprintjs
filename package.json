@@ -1,7 +1,7 @@
 {
   "name": "@fingerprintjs/fingerprintjs",
   "description": "Browser fingerprinting library with the highest accuracy and stability",
-  "version": "3.3.2",
+  "version": "3.3.4",
   "keywords": [
     "fraud",
     "fraud detection",
@@ -14,7 +14,7 @@
     "device fingerprint",
     "privacy"
   ],
-  "author": "FingerprintJS, Inc (https://fingerprintjs.com)",
+  "author": "FingerprintJS, Inc (https://fingerprint.com)",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -32,26 +32,26 @@
     "dist"
   ],
   "scripts": {
-    "build": "rimraf dist && rollup -c",
+    "build": "rimraf dist && rollup -c rollup.config.ts --configPlugin '@rollup/plugin-typescript={tsconfig:`tsconfig.rollupConfig.json`}'",
     "build:watch": "yarn build --watch",
     "playground:start": "cd playground && webpack-dev-server --mode development",
     "playground:build": "cd playground && webpack --mode production",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore --max-warnings 0 .",
     "lint:fix": "yarn lint --fix",
-    "test:local": "karma start tests/karma.local.config.js --single-run",
-    "test:browserstack": "karma start tests/karma.browserstack.config.js --single-run",
-    "test:dts": "tsc --noEmit dist/fp.d.ts",
-    "test:ssr": "node --require './dist/fp.cjs.js' --eval '' || (echo \"The distributive files can't be used with server side rendering. Make sure the code doesn't use browser API until an exported function is called.\" && exit 1)"
+    "test:local": "karma start --preset local --single-run",
+    "test:browserstack": "karma start --preset browserstack --single-run",
+    "check:dts": "tsc --isolatedModules --noEmit dist/fp.d.ts",
+    "check:ssr": "node --require './dist/fp.cjs.js' --eval '' || (echo \"The distributive files can't be used with server side rendering. Make sure the code doesn't use browser API until an exported function is called.\" && exit 1)"
   },
   "dependencies": {
     "tslib": "^2.0.1"
   },
   "devDependencies": {
     "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^9.0.0",
-    "@rollup/plugin-replace": "^3.0.0",
-    "@rollup/plugin-typescript": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-typescript": "^8.3.1",
     "@types/jasmine": "^3.5.14",
+    "@types/terser-webpack-plugin": "^4.2.2",
     "@types/ua-parser-js": "^0.7.35",
     "@typescript-eslint/eslint-plugin": "^4.4.1",
     "@typescript-eslint/parser": "^4.4.1",
@@ -67,15 +67,15 @@
     "karma-chrome-launcher": "^3.1.0",
     "karma-firefox-launcher": "^2.1.0",
     "karma-jasmine": "^4.0.1",
-    "karma-spec-reporter": "^0.0.32",
+    "karma-spec-reporter": "^0.0.34",
     "karma-summary-reporter": "^2.0.2",
     "karma-typescript": "^5.5.1",
     "prettier": "^2.1.2",
     "promise-polyfill": "^8.2.0",
     "rimraf": "^3.0.2",
-    "rollup": "^2.28.2",
+    "rollup": "^2.52.0",
     "rollup-plugin-dts": "^1.4.13",
-    "rollup-plugin-license": "^2.6.0",
+    "rollup-plugin-license": "^2.8.0",
     "rollup-plugin-terser": "^7.0.2",
     "terser-webpack-plugin": "^4.2.3",
     "ts-loader": "^8.0.7",

@@ -7,7 +7,7 @@ Use undocumented features at your own risk.
 
 The library tries to keep visitor identifiers the same within a minor version (i.e. when the first 2 numbers of the version don't change).
 Some visitor identifiers may change within a minor version due to stability fixes.
-To get identifiers that remain stable up to 1 year, please consider [upgrading to pro](https://dashboard.fingerprintjs.com).
+To get identifiers that remain stable up to 1 year, please consider [upgrading to pro](https://dashboard.fingerprint.com).
 
 Agent `get()` function returns the version together with the visitor identifier.
 You can use it to decide whether a couple of identifiers can be matched together.

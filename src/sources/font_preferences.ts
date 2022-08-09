@@ -1,5 +1,6 @@
 import { isChromium, isWebKit } from '../utils/browser'
 import { withIframe } from '../utils/dom'
+import { MaybePromise } from '../utils/async'
 
 type WritableCSSProperties = {
   [K in keyof CSSStyleDeclaration]: CSSStyleDeclaration[K] extends string ? K : never
@@ -91,7 +92,7 @@ export default function getFontPreferences(): Promise<Record<string, number>> {
  * Don't put a content to measure inside an absolutely positioned element.
  */
 function withNaturalFonts<T>(
-  action: (document: Document, container: HTMLElement) => Promise<T> | T,
+  action: (document: Document, container: HTMLElement) => MaybePromise<T>,
   containerWidthPx = 4000,
 ): Promise<T> {
   /*

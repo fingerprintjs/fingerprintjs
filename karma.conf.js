@@ -1,5 +1,3 @@
-const makeLocalConfig = require('./karma.local.config')
-
 // The shapes of these objects are taken from:
 // https://github.com/SeleniumHQ/selenium/tree/d8ddb4d83972df0f565ef65264bcb733e7a94584/javascript/node/selenium-webdriver
 // It doesn't work, trying to work it out with BrowserStack support. Todo: solve it with the support.
@@ -59,8 +57,48 @@ function makeBuildNumber() {
   return `No CI ${Math.floor(Math.random() * 1e10)}`
 }
 
-module.exports = (config) => {
-  makeLocalConfig(config)
+function setupLocal(config) {
+  config.set({
+    frameworks: ['jasmine', 'karma-typescript'],
+    files: [
+      // The polyfills are required for old supported browsers.
+      // They should be removed when the old browser support is dropped.
+      'node_modules/promise-polyfill/dist/polyfill.js',
+
+      'src/**/*.ts',
+      'tests/**/*.ts',
+      'dist/fp.min.js',
+    ],
+    preprocessors: {
+      '**/*.ts': 'karma-typescript',
+    },
+    reporters: ['spec', 'summary'],
+    browsers: ['ChromeHeadless', 'FirefoxHeadless'],
+    concurrency: 3,
+
+    karmaTypescriptConfig: {
+      compilerOptions: {
+        ...require('./tsconfig.json').compilerOptions,
+        module: 'commonjs',
+        sourceMap: true,
+      },
+    },
+
+    specReporter: {
+      suppressSummary: true,
+      suppressErrorSummary: true,
+      suppressPassed: true,
+      suppressSkipped: true,
+    },
+
+    summaryReporter: {
+      show: 'skipped', // To know that some tests are skipped exactly where they are supposed to be skipped
+    },
+  })
+}
+
+function setupBrowserstack(config) {
+  setupLocal(config)
 
   const customLaunchers = {}
   for (const [key, data] of Object.entries(browserstackBrowsers)) {
@@ -87,4 +125,18 @@ module.exports = (config) => {
       timeout: 120,
     },
   })
+}
+
+/**
+ * Add `--preset local` or `--preset browserstack` to the Karma command to choose where to run the tests.
+ */
+module.exports = (config) => {
+  switch (config.preset) {
+    case 'local':
+      return setupLocal(config)
+    case 'browserstack':
+      return setupBrowserstack(config)
+    default:
+      throw new Error('No --preset option is set or an unknown value is set')
+  }
 }

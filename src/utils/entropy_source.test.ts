@@ -1,6 +1,6 @@
 import { holdLoop } from '../../tests/utils'
-import { wait } from './async'
-import { loadSource, loadSources, Source } from './entropy_source'
+import { isPromise, wait } from './async'
+import { Component, loadSource, loadSources, Source, transformSource } from './entropy_source'
 
 describe('Entropy source utilities', () => {
   describe('loadSource', () => {
@@ -18,7 +18,7 @@ describe('Entropy source utilities', () => {
       async function checkSource(source: Source<undefined, 'unpredictable value'>) {
         const loadedSource = loadSource(source, undefined)
         const component = await loadedSource()
-        expect(component).toEqual({ value: 'unpredictable value', duration: jasmine.anything() })
+        expect(component).toEqual({ value: 'unpredictable value', duration: jasmine.any(Number) })
       }
 
       describe('synchronous "load" phase', () => {
@@ -62,7 +62,7 @@ describe('Entropy source utilities', () => {
         const component = await loadedSource()
         expect(component).toEqual({
           error: jasmine.objectContaining({ message: 'Fail' }),
-          duration: jasmine.anything(),
+          duration: jasmine.any(Number),
         })
       }
 
@@ -125,9 +125,9 @@ describe('Entropy source utilities', () => {
       expect(sourceLoader).toHaveBeenCalledTimes(1)
       expect(sourceGetter).not.toHaveBeenCalled()
 
-      expect(await loadedSource()).toEqual({ value: 'one', duration: jasmine.anything() })
-      expect(await loadedSource()).toEqual({ value: 'two', duration: jasmine.anything() })
-      expect(await loadedSource()).toEqual({ value: 'three', duration: jasmine.anything() })
+      expect(await loadedSource()).toEqual({ value: 'one', duration: jasmine.any(Number) })
+      expect(await loadedSource()).toEqual({ value: 'two', duration: jasmine.any(Number) })
+      expect(await loadedSource()).toEqual({ value: 'three', duration: jasmine.any(Number) })
       expect(sourceLoader).toHaveBeenCalledTimes(1)
       expect(sourceGetter).toHaveBeenCalledTimes(3)
     })
@@ -142,7 +142,7 @@ describe('Entropy source utilities', () => {
 
       const loadedSource = loadSource(source, undefined)
       expect(isSourceReallyLoaded).toBeFalse()
-      expect(await loadedSource()).toEqual({ value: 'unpredictable value', duration: jasmine.anything() })
+      expect(await loadedSource()).toEqual({ value: 'unpredictable value', duration: jasmine.any(Number) })
       expect(isSourceReallyLoaded).toBeTrue()
     })
 
@@ -187,6 +187,17 @@ describe('Entropy source utilities', () => {
       expect(component.duration).toBeGreaterThanOrEqual(7 + 5)
       expect(component.duration).toBeLessThan(50 + 5)
     })
+
+    it('throws in case of an unexpected error outside the source', async () => {
+      const source = ({
+        bind() {
+          throw new Error('Artificial')
+        },
+      } as unknown) as Source<undefined, never>
+      const loadedSource = loadSource(source, undefined)
+      await wait(1) // To let potential unhandled promise rejections happen
+      await expectAsync(loadedSource()).toBeRejectedWith(new Error('Artificial'))
+    })
   })
 
   describe('loadSources', () => {
@@ -220,9 +231,9 @@ describe('Entropy source utilities', () => {
       const loadedSources = loadSources(sources, undefined, [])
       const components = await loadedSources()
       expect(components).toEqual({
-        success: { value: 'qwerty', duration: jasmine.anything() },
-        loadFail: { error: new Error('Failed to load'), duration: jasmine.anything() },
-        getFail: { error: { message: 'Failed to get' }, duration: jasmine.anything() },
+        success: { value: 'qwerty', duration: jasmine.any(Number) },
+        loadFail: { error: new Error('Failed to load'), duration: jasmine.any(Number) },
+        getFail: { error: { message: 'Failed to get' }, duration: jasmine.any(Number) },
       })
     })
 
@@ -251,9 +262,9 @@ describe('Entropy source utilities', () => {
       const loadedSources = loadSources(sources, undefined, ['four', 'two'])
       const components = await loadedSources()
       expect(components).toEqual({
-        one: { value: 1, duration: jasmine.anything() },
-        three: { value: 3, duration: jasmine.anything() },
-        five: { value: 5, duration: jasmine.anything() },
+        one: { value: 1, duration: jasmine.any(Number) },
+        three: { value: 3, duration: jasmine.any(Number) },
+        five: { value: 5, duration: jasmine.any(Number) },
       })
       expect(sources.one).toHaveBeenCalledTimes(1)
       expect(sources.two).not.toHaveBeenCalled()
@@ -280,16 +291,16 @@ describe('Entropy source utilities', () => {
       expect(sourceGetters.bar).not.toHaveBeenCalled()
 
       expect(await loadedSources()).toEqual({
-        foo: { value: 'one', duration: jasmine.anything() },
-        bar: { value: 1, duration: jasmine.anything() },
+        foo: { value: 'one', duration: jasmine.any(Number) },
+        bar: { value: 1, duration: jasmine.any(Number) },
       })
       expect(await loadedSources()).toEqual({
-        foo: { value: 'two', duration: jasmine.anything() },
-        bar: { value: 2, duration: jasmine.anything() },
+        foo: { value: 'two', duration: jasmine.any(Number) },
+        bar: { value: 2, duration: jasmine.any(Number) },
       })
       expect(await loadedSources()).toEqual({
-        foo: { value: 'three', duration: jasmine.anything() },
-        bar: { value: 3, duration: jasmine.anything() },
+        foo: { value: 'three', duration: jasmine.any(Number) },
+        bar: { value: 3, duration: jasmine.any(Number) },
       })
       expect(sourceLoaders.foo).toHaveBeenCalledTimes(1)
       expect(sourceLoaders.bar).toHaveBeenCalledTimes(1)
@@ -340,6 +351,126 @@ describe('Entropy source utilities', () => {
       expect(sources.two).not.toHaveBeenCalled()
       await Promise.all([loadedSources(), loadedSources(), loadedSources()])
       expect(sources.two).toHaveBeenCalledTimes(1)
+    })
+
+    it('throws in case of an unexpected error outside the source', async () => {
+      const sources = {
+        corrupt: ({
+          bind() {
+            throw new Error('Artificial')
+          },
+        } as unknown) as Source<undefined, never>,
+      }
+      const loadedSources = loadSources(sources, undefined, [])
+      await wait(1) // To let potential unhandled promise rejections happen
+      await expectAsync(loadedSources()).toBeRejectedWith(new Error('Artificial'))
+    })
+  })
+
+  describe('transformSource', () => {
+    const transformValue = (value: number) => value * 2
+    const sourceError = new Error('Testing')
+
+    describe('keeps the source properties', () => {
+      function transformComponentValue<T1, T2>(component: Component<T1>, transformValue: (value: T1) => T2) {
+        return component.error ? component : { ...component, value: transformValue(component.value) }
+      }
+
+      function removeDuration<T>(component: Component<T>) {
+        const { duration, ...withoutDuration } = component
+        return withoutDuration
+      }
+
+      /** Gets the entropy source structure description (number of phases, whether each phase is sync/async) */
+      async function getExecutionTrace<T extends unknown[]>(func: (...a: T) => unknown, ...args: T): Promise<string> {
+        let trace = 'executing function, '
+
+        let returned: unknown
+        try {
+          returned = func(...args)
+        } catch {
+          return `${trace}function failed`
+        }
+
+        let resolved: unknown
+        if (isPromise(returned)) {
+          trace += 'resolving promise, '
+          try {
+            resolved = await returned
+          } catch {
+            return `${trace}promise rejected`
+          }
+        } else {
+          resolved = returned
+        }
+
+        if (typeof resolved === 'function') {
+          return `${trace}${await getExecutionTrace(resolved as () => unknown)}`
+        }
+        return `${trace}returning result`
+      }
+
+      /** Checks that the entropy source is identical to it's transformed version in every aspect except the result */
+      async function checkSource(source: Source<undefined, number>) {
+        const options = undefined
+        const transformedSource = transformSource(source, transformValue)
+        const transformedComponent = removeDuration(await loadSource(transformedSource, options)())
+        const expectedComponent = removeDuration(
+          transformComponentValue(await loadSource(source, options)(), transformValue),
+        )
+        expect(transformedComponent).toEqual(expectedComponent)
+        expect(await getExecutionTrace(transformedSource, options)).toEqual(await getExecutionTrace(source, options))
+      }
+
+      describe('synchronous "load" phase', () => {
+        it('with no "get" phase', async () => {
+          await checkSource(() => 3)
+          await checkSource(() => {
+            throw sourceError
+          })
+        })
+
+        it('with synchronous "get" phase', async () => {
+          await checkSource(() => () => 3)
+          await checkSource(() => () => {
+            throw sourceError
+          })
+        })
+
+        it('with asynchronous "get" phase', async () => {
+          await checkSource(() => () => Promise.resolve(3))
+          await checkSource(() => () => Promise.reject(sourceError))
+        })
+      })
+
+      describe('asynchronous "load" phase', () => {
+        it('with no "get" phase', async () => {
+          await checkSource(() => Promise.resolve(3))
+          await checkSource(() => Promise.reject(sourceError))
+        })
+
+        it('with synchronous "get" phase', async () => {
+          await checkSource(() => Promise.resolve(() => 3))
+          await checkSource(() =>
+            Promise.resolve(() => {
+              throw sourceError
+            }),
+          )
+        })
+
+        it('with asynchronous "get" phase', async () => {
+          await checkSource(() => Promise.resolve(() => Promise.resolve(3)))
+          await checkSource(() => Promise.resolve(() => Promise.reject(sourceError)))
+        })
+      })
+    })
+
+    it('passes source options', async () => {
+      const source = jasmine.createSpy()
+      const transformedSource = transformSource(source, transformValue)
+      const options = { foo: 'bar' }
+      transformedSource(options)
+      expect(source.calls.allArgs()).toEqual([[options]])
     })
   })
 })
