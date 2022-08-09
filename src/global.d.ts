@@ -20,6 +20,7 @@ interface Navigator {
   systemLanguage?: string
   deviceMemory?: number
   cpuClass?: string
+  pdfViewerEnabled?: boolean
 }
 
 interface Document {
