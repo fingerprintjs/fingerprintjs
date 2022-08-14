@@ -71,7 +71,7 @@ debugOutput.textContent = FingerprintJS.componentsToDebugString(components)
 ## Canvas stabilization
 
 The [canvas entropy source](https://github.com/fingerprintjs/fingerprintjs/blob/master/src/sources/canvas.ts) consists of 2 images.
-The first (with a geometry only) is move stable, the second (with a text) gives more entropy.
+The first (with a geometry only) is more stable, the second (with a text) gives more entropy.
 Agent uses both the images by default.
 If you need more stability, you can exclude the text image.
 Example:
