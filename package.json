@@ -43,9 +43,6 @@
     "check:dts": "tsc --isolatedModules --noEmit dist/fp.d.ts",
     "check:ssr": "node --require './dist/fp.cjs.js' --eval '' || (echo \"The distributive files can't be used with server side rendering. Make sure the code doesn't use browser API until an exported function is called.\" && exit 1)"
   },
-  "dependencies": {
-    "tslib": "^2.0.1"
-  },
   "devDependencies": {
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
@@ -79,6 +76,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "terser-webpack-plugin": "^4.2.3",
     "ts-loader": "^8.0.7",
+    "tslib": "^2.0.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.0.3",
     "ua-parser-js": "^0.7.24",
