@@ -12,6 +12,7 @@ const codeFile = path.join(__dirname, '..', '..', 'src', 'sources', 'dom_blocker
 const primeNumber = 1234577
 const maxSelectorsCount = 5
 const filterCodeRegex = /(?<=\n(?:export )?const filters(?:: [\w<>,\s]+)? = )\{[\s\S]+?\n}/
+const base64DecodeFunctionName = 'decodeBase64'
 
 type Filters = Record<string, string[]>
 
@@ -76,13 +77,44 @@ async function parseCurrentFilters(filePath: string) {
     throw new Error(`The ${JSON.stringify(filePath)} doesn't have the expected pattern of the filter code`)
   }
 
-  return new Function(`return ${codeMatch[0]}`)() as Filters
+  return new Function(`var ${base64DecodeFunctionName} = atob; return ${codeMatch[0]}`)() as Filters
 }
 
 async function insertNewFilters(filePath: string, filters: Filters) {
   const fileContent = await fsAsync.readFile(filePath, 'utf8')
-  const newFileContent = fileContent.replace(filterCodeRegex, JSON.stringify(filters, null, 2))
+  const newFileContent = fileContent.replace(filterCodeRegex, filtersToJs(filters))
   await fsAsync.writeFile(filePath, newFileContent)
+}
+
+function filtersToJs(filters: Filters) {
+  let code = '{\n'
+
+  for (const [name, selectors] of Object.entries(filters)) {
+    code += `  ${JSON.stringify(name)}: [\n`
+
+    for (const selector of selectors) {
+      code += '    '
+      code += isInappropriateSelector(selector)
+        ? `${base64DecodeFunctionName}(${JSON.stringify(btoa(selector))})`
+        : JSON.stringify(selector)
+      code += ',\n'
+    }
+
+    code += '  ],\n'
+  }
+
+  return `${code}}`
+}
+
+function isInappropriateSelector(selector: string) {
+  const probes = [
+    /"[^"]*[a-z0-9]{2,}\.[a-z0-9]{2,}/i, // A domain name
+    /(^|[^a-z])ad(vert|[sv]?([^a-z]|contain|$))/i, // A form of word "ad" separated from other words
+    /[a-z]Ad(vert|[sv]?([^a-z]|$))/, // A camel-cased word "ad"
+    /(poker|sponsor|banner|google|adfox|re[ck]lam|werbung)/i, // Simple keywords
+  ]
+
+  return probes.some((probe) => probe.test(selector))
 }
 
 run().catch((error) => {
