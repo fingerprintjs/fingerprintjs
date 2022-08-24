@@ -11,8 +11,7 @@ const codeFile = path.join(__dirname, '..', '..', 'src', 'sources', 'dom_blocker
 
 const primeNumber = 1234577
 const maxSelectorsCount = 5
-const filterCodeRegex = /(?<=\n(?:export )?const filters(?:: [\w<>,\s]+)? = )\{[\s\S]+?\n}/
-const base64DecodeFunctionName = 'decodeBase64'
+const filterCodeRegex = /(\n(?:export )?function getFilters\(\)(?:: [\w<>,\s]+)? \{)([\s\S]+?)(\n})/
 
 type Filters = Record<string, string[]>
 
@@ -77,30 +76,34 @@ async function parseCurrentFilters(filePath: string) {
     throw new Error(`The ${JSON.stringify(filePath)} doesn't have the expected pattern of the filter code`)
   }
 
-  return new Function(`var ${base64DecodeFunctionName} = atob; return ${codeMatch[0]}`)() as Filters
+  return new Function(codeMatch[2])() as Filters
 }
 
 async function insertNewFilters(filePath: string, filters: Filters) {
   const fileContent = await fsAsync.readFile(filePath, 'utf8')
-  const newFileContent = fileContent.replace(filterCodeRegex, filtersToJs(filters))
+  const newFileContent = fileContent.replace(
+    filterCodeRegex,
+    (_whole, prefix, _code, suffix) => `${prefix}${filtersToJs(filters)}${suffix}`,
+  )
   await fsAsync.writeFile(filePath, newFileContent)
 }
 
 function filtersToJs(filters: Filters) {
-  let code = '{\n'
+  const decodeBase64Function = 'fromB64'
+  let code = `const ${decodeBase64Function} = atob // Just for better minification\n\n`
+  code += 'return {'
 
   for (const [name, selectors] of Object.entries(filters)) {
-    code += `  ${JSON.stringify(name)}: [\n`
+    code += `${JSON.stringify(name)}: [`
 
     for (const selector of selectors) {
-      code += '    '
       code += isInappropriateSelector(selector)
-        ? `${base64DecodeFunctionName}(${JSON.stringify(btoa(selector))})`
+        ? `${decodeBase64Function}(${JSON.stringify(btoa(selector))})`
         : JSON.stringify(selector)
-      code += ',\n'
+      code += ','
     }
 
-    code += '  ],\n'
+    code += '],'
   }
 
   return `${code}}`

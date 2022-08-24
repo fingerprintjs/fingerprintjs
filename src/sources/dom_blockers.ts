@@ -3,7 +3,7 @@ import { selectorToElement } from '../utils/dom'
 import { countTruthy } from '../utils/data'
 import { wait } from '../utils/async'
 
-const decodeBase64 = atob // Just for better minification
+type Filters = Record<string, string[]>
 
 /**
  * Only single element selector are supported (no operators like space, +, >, etc).
@@ -11,298 +11,309 @@ const decodeBase64 = atob // Just for better minification
  * Avoid `iframe` and anything with `[src=]` because they produce excess HTTP requests.
  *
  * The "inappropriate" selectors are obfuscated. See https://github.com/fingerprintjs/fingerprintjs/issues/734.
+ * A function is used instead of a plain object to help tree-shaking.
  *
- * See docs/content_blockers.md to learn how to make the list
+ * The function code is generated automatically. See docs/content_blockers.md to learn how to make the list.
  */
-export const filters = {
-  abpIndo: [
-    '#Iklan-Melayang',
-    '#Kolom-Iklan-728',
-    '#SidebarIklan-wrapper',
-    decodeBase64('YVt0aXRsZT0iN25hZ2EgcG9rZXIiIGld'),
-    '[title="ALIENBOLA" i]',
-  ],
-  abpvn: [
-    '#quangcaomb',
-    decodeBase64('Lmlvc0Fkc2lvc0Fkcy1sYXlvdXQ='),
-    '.quangcao',
-    decodeBase64('W2hyZWZePSJodHRwczovL3I4OC52bi8iXQ=='),
-    decodeBase64('W2hyZWZePSJodHRwczovL3piZXQudm4vIl0='),
-  ],
-  adBlockFinland: [
-    '.mainostila',
-    decodeBase64('LnNwb25zb3JpdA=='),
-    '.ylamainos',
-    decodeBase64('YVtocmVmKj0iL2NsaWNrdGhyZ2guYXNwPyJd'),
-    decodeBase64('YVtocmVmXj0iaHR0cHM6Ly9hcHAucmVhZHBlYWsuY29tL2FkcyJd'),
-  ],
-  adBlockPersian: ['#navbar_notice_50', '.kadr', 'TABLE[width="140px"]', '#divAgahi', decodeBase64('I2FkMl9pbmxpbmU=')],
-  adBlockWarningRemoval: [
-    '#adblock-honeypot',
-    '.adblocker-root',
-    '.wp_adblock_detect',
-    decodeBase64('LmhlYWRlci1ibG9ja2VkLWFk'),
-    decodeBase64('I2FkX2Jsb2NrZXI='),
-  ],
-  adGuardAnnoyances: ['amp-embed[type="zen"]', '.hs-sosyal', '#cookieconsentdiv', 'div[class^="app_gdpr"]', '.as-oil'],
-  adGuardBase: [
-    '.BetterJsPopOverlay',
-    decodeBase64('I2FkXzMwMFgyNTA='),
-    decodeBase64('I2Jhbm5lcmZsb2F0MjI='),
-    decodeBase64('I2FkLWJhbm5lcg=='),
-    decodeBase64('I2NhbXBhaWduLWJhbm5lcg=='),
-  ],
-  adGuardChinese: [
-    decodeBase64('LlppX2FkX2FfSA=='),
-    decodeBase64('YVtocmVmKj0iL29kMDA1LmNvbSJd'),
-    decodeBase64('YVtocmVmKj0iLmh0aGJldDM0LmNvbSJd'),
-    '.qq_nr_lad',
-    '#widget-quan',
-  ],
-  adGuardFrench: [
-    decodeBase64('I2Jsb2NrLXZpZXdzLWFkcy1zaWRlYmFyLWJsb2NrLWJsb2Nr'),
-    '#pavePub',
-    decodeBase64('LmFkLWRlc2t0b3AtcmVjdGFuZ2xl'),
-    '.mobile_adhesion',
-    '.widgetadv',
-  ],
-  adGuardGerman: [
-    decodeBase64('LmJhbm5lcml0ZW13ZXJidW5nX2hlYWRfMQ=='),
-    decodeBase64('LmJveHN0YXJ0d2VyYnVuZw=='),
-    decodeBase64('LndlcmJ1bmcz'),
-    decodeBase64('YVtocmVmXj0iaHR0cDovL3d3dy5laXMuZGUvaW5kZXgucGh0bWw/cmVmaWQ9Il0='),
-    decodeBase64('YVtocmVmXj0iaHR0cHM6Ly93d3cudGlwaWNvLmNvbS8/YWZmaWxpYXRlSWQ9Il0='),
-  ],
-  adGuardJapanese: [
-    '#kauli_yad_1',
-    decodeBase64('YVtocmVmXj0iaHR0cDovL2FkMi50cmFmZmljZ2F0ZS5uZXQvIl0='),
-    decodeBase64('Ll9wb3BJbl9pbmZpbml0ZV9hZA=='),
-    decodeBase64('LmFkZ29vZ2xl'),
-    decodeBase64('LmFkX3JlZ3VsYXIz'),
-  ],
-  adGuardMobile: [
-    decodeBase64('YW1wLWF1dG8tYWRz'),
-    decodeBase64('LmFtcF9hZA=='),
-    'amp-embed[type="24smi"]',
-    '#mgid_iframe1',
-    decodeBase64('I2FkX2ludmlld19hcmVh'),
-  ],
-  adGuardRussian: [
-    decodeBase64('YVtocmVmXj0iaHR0cHM6Ly9hZC5sZXRtZWFkcy5jb20vIl0='),
-    decodeBase64('LnJlY2xhbWE='),
-    'div[id^="smi2adblock"]',
-    decodeBase64('ZGl2W2lkXj0iQWRGb3hfYmFubmVyXyJd'),
-    decodeBase64('I2FkX3NxdWFyZQ=='),
-  ],
-  adGuardSocial: [
-    decodeBase64('YVtocmVmXj0iLy93d3cuc3R1bWJsZXVwb24uY29tL3N1Ym1pdD91cmw9Il0='),
-    decodeBase64('YVtocmVmXj0iLy90ZWxlZ3JhbS5tZS9zaGFyZS91cmw/Il0='),
-    '.etsy-tweet',
-    '#inlineShare',
-    '.popup-social',
-  ],
-  adGuardSpanishPortuguese: [
-    '#barraPublicidade',
-    '#Publicidade',
-    '#publiEspecial',
-    '#queTooltip',
-    decodeBase64('W2hyZWZePSJodHRwOi8vYWRzLmdsaXNwYS5jb20vIl0='),
-  ],
-  adGuardTrackingProtection: [
-    '#qoo-counter',
-    decodeBase64('YVtocmVmXj0iaHR0cDovL2NsaWNrLmhvdGxvZy5ydS8iXQ=='),
-    decodeBase64('YVtocmVmXj0iaHR0cDovL2hpdGNvdW50ZXIucnUvdG9wL3N0YXQucGhwIl0='),
-    decodeBase64('YVtocmVmXj0iaHR0cDovL3RvcC5tYWlsLnJ1L2p1bXAiXQ=='),
-    '#top100counter',
-  ],
-  adGuardTurkish: [
-    '#backkapat',
-    decodeBase64('I3Jla2xhbWk='),
-    decodeBase64('YVtocmVmXj0iaHR0cDovL2Fkc2Vydi5vbnRlay5jb20udHIvIl0='),
-    decodeBase64('YVtocmVmXj0iaHR0cDovL2l6bGVuemkuY29tL2NhbXBhaWduLyJd'),
-    decodeBase64('YVtocmVmXj0iaHR0cDovL3d3dy5pbnN0YWxsYWRzLm5ldC8iXQ=='),
-  ],
-  bulgarian: [
-    decodeBase64('dGQjZnJlZW5ldF90YWJsZV9hZHM='),
-    '#ea_intext_div',
-    '.lapni-pop-over',
-    '#xenium_hot_offers',
-    decodeBase64('I25ld0Fk'),
-  ],
-  easyList: [
-    decodeBase64('I0FEX0NPTlRST0xfMjg='),
-    decodeBase64('LnNlY29uZC1wb3N0LWFkcy13cmFwcGVy'),
-    '.universalboxADVBOX03',
-    decodeBase64('LmFkdmVydGlzZW1lbnQtNzI4eDkw'),
-    decodeBase64('LnNxdWFyZV9hZHM='),
-  ],
-  easyListChina: [
-    decodeBase64('YVtocmVmKj0iLndlbnNpeHVldGFuZy5jb20vIl0='),
-    decodeBase64('LmFwcGd1aWRlLXdyYXBbb25jbGljayo9ImJjZWJvcy5jb20iXQ=='),
-    decodeBase64('LmZyb250cGFnZUFkdk0='),
-    '#taotaole',
-    '#aafoot.top_box',
-  ],
-  easyListCookie: [
-    '#AdaCompliance.app-notice',
-    '.text-center.rgpd',
-    '.panel--cookie',
-    '.js-cookies-andromeda',
-    '.elxtr-consent',
-  ],
-  easyListCzechSlovak: [
-    '#onlajny-stickers',
-    decodeBase64('I3Jla2xhbW5pLWJveA=='),
-    decodeBase64('LnJla2xhbWEtbWVnYWJvYXJk'),
-    '.sklik',
-    decodeBase64('W2lkXj0ic2tsaWtSZWtsYW1hIl0='),
-  ],
-  easyListDutch: [
-    decodeBase64('I2FkdmVydGVudGll'),
-    decodeBase64('I3ZpcEFkbWFya3RCYW5uZXJCbG9jaw=='),
-    '.adstekst',
-    decodeBase64('YVtocmVmXj0iaHR0cHM6Ly94bHR1YmUubmwvY2xpY2svIl0='),
-    '#semilo-lrectangle',
-  ],
-  easyListGermany: [
-    decodeBase64('I0FkX1dpbjJkYXk='),
-    decodeBase64('I3dlcmJ1bmdzYm94MzAw'),
-    decodeBase64('YVtocmVmXj0iaHR0cDovL3d3dy5yb3RsaWNodGthcnRlaS5jb20vP3NjPSJd'),
-    decodeBase64('I3dlcmJ1bmdfd2lkZXNreXNjcmFwZXJfc2NyZWVu'),
-    decodeBase64('YVtocmVmXj0iaHR0cDovL2xhbmRpbmcucGFya3BsYXR6a2FydGVpLmNvbS8/YWc9Il0='),
-  ],
-  easyListItaly: [
-    decodeBase64('LmJveF9hZHZfYW5udW5jaQ=='),
-    '.sb-box-pubbliredazionale',
-    decodeBase64('YVtocmVmXj0iaHR0cDovL2FmZmlsaWF6aW9uaWFkcy5zbmFpLml0LyJd'),
-    decodeBase64('YVtocmVmXj0iaHR0cHM6Ly9hZHNlcnZlci5odG1sLml0LyJd'),
-    decodeBase64('YVtocmVmXj0iaHR0cHM6Ly9hZmZpbGlhemlvbmlhZHMuc25haS5pdC8iXQ=='),
-  ],
-  easyListLithuania: [
-    decodeBase64('LnJla2xhbW9zX3RhcnBhcw=='),
-    decodeBase64('LnJla2xhbW9zX251b3JvZG9z'),
-    decodeBase64('aW1nW2FsdD0iUmVrbGFtaW5pcyBza3lkZWxpcyJd'),
-    decodeBase64('aW1nW2FsdD0iRGVkaWt1b3RpLmx0IHNlcnZlcmlhaSJd'),
-    decodeBase64('aW1nW2FsdD0iSG9zdGluZ2FzIFNlcnZlcmlhaS5sdCJd'),
-  ],
-  estonian: [decodeBase64('QVtocmVmKj0iaHR0cDovL3BheTRyZXN1bHRzMjQuZXUiXQ==')],
-  fanboyAnnoyances: [
-    '#feedback-tab',
-    '#taboola-below-article',
-    '.feedburnerFeedBlock',
-    '.widget-feedburner-counter',
-    '[title="Subscribe to our blog"]',
-  ],
-  fanboyAntiFacebook: ['.util-bar-module-firefly-visible'],
-  fanboyEnhancedTrackers: [
-    '.open.pushModal',
-    '#issuem-leaky-paywall-articles-zero-remaining-nag',
-    '#sovrn_container',
-    'div[class$="-hide"][zoompage-fontsize][style="display: block;"]',
-    '.BlockNag__Card',
-  ],
-  fanboySocial: [
-    '.td-tags-and-social-wrapper-box',
-    '.twitterContainer',
-    '.youtube-social',
-    'a[title^="Like us on Facebook"]',
-    'img[alt^="Share on Digg"]',
-  ],
-  frellwitSwedish: [
-    decodeBase64('YVtocmVmKj0iY2FzaW5vcHJvLnNlIl1bdGFyZ2V0PSJfYmxhbmsiXQ=='),
-    decodeBase64('YVtocmVmKj0iZG9rdG9yLXNlLm9uZWxpbmsubWUiXQ=='),
-    'article.category-samarbete',
-    decodeBase64('ZGl2LmhvbGlkQWRz'),
-    'ul.adsmodern',
-  ],
-  greekAdBlock: [
-    decodeBase64('QVtocmVmKj0iYWRtYW4ub3RlbmV0LmdyL2NsaWNrPyJd'),
-    decodeBase64('QVtocmVmKj0iaHR0cDovL2F4aWFiYW5uZXJzLmV4b2R1cy5nci8iXQ=='),
-    decodeBase64('QVtocmVmKj0iaHR0cDovL2ludGVyYWN0aXZlLmZvcnRobmV0LmdyL2NsaWNrPyJd'),
-    'DIV.agores300',
-    'TABLE.advright',
-  ],
-  hungarian: [
-    '#cemp_doboz',
-    '.optimonk-iframe-container',
-    decodeBase64('LmFkX19tYWlu'),
-    decodeBase64('W2NsYXNzKj0iR29vZ2xlQWRzIl0='),
-    '#hirdetesek_box',
-  ],
-  iDontCareAboutCookies: [
-    '.alert-info[data-block-track*="CookieNotice"]',
-    '.ModuleTemplateCookieIndicator',
-    '.o--cookies--container',
-    '.cookie-msg-info-container',
-    '#cookies-policy-sticky',
-  ],
-  icelandicAbp: [decodeBase64('QVtocmVmXj0iL2ZyYW1ld29yay9yZXNvdXJjZXMvZm9ybXMvYWRzLmFzcHgiXQ==')],
-  latvian: [
-    decodeBase64(
-      'YVtocmVmPSJodHRwOi8vd3d3LnNhbGlkemluaS5sdi8iXVtzdHlsZT0iZGlzcGxheTogYmxvY2s7IHdpZHRoOiAxMjBweDsgaGVpZ2h0OiA0M' +
-        'HB4OyBvdmVyZmxvdzogaGlkZGVuOyBwb3NpdGlvbjogcmVsYXRpdmU7Il0=',
-    ),
-    decodeBase64(
-      'YVtocmVmPSJodHRwOi8vd3d3LnNhbGlkemluaS5sdi8iXVtzdHlsZT0iZGlzcGxheTogYmxvY2s7IHdpZHRoOiA4OHB4OyBoZWlnaHQ6IDMxc' +
-        'Hg7IG92ZXJmbG93OiBoaWRkZW47IHBvc2l0aW9uOiByZWxhdGl2ZTsiXQ==',
-    ),
-  ],
-  listKr: [
-    decodeBase64('YVtocmVmKj0iLy9hZC5wbGFuYnBsdXMuY28ua3IvIl0='),
-    decodeBase64('I2xpdmVyZUFkV3JhcHBlcg=='),
-    decodeBase64('YVtocmVmKj0iLy9hZHYuaW1hZHJlcC5jby5rci8iXQ=='),
-    decodeBase64('aW5zLmZhc3R2aWV3LWFk'),
-    '.revenue_unit_item.dable',
-  ],
-  listeAr: [
-    decodeBase64('LmdlbWluaUxCMUFk'),
-    '.right-and-left-sponsers',
-    decodeBase64('YVtocmVmKj0iLmFmbGFtLmluZm8iXQ=='),
-    decodeBase64('YVtocmVmKj0iYm9vcmFxLm9yZyJd'),
-    decodeBase64('YVtocmVmKj0iZHViaXp6bGUuY29tL2FyLz91dG1fc291cmNlPSJd'),
-  ],
-  listeFr: [
-    decodeBase64('YVtocmVmXj0iaHR0cDovL3Byb21vLnZhZG9yLmNvbS8iXQ=='),
-    decodeBase64('I2FkY29udGFpbmVyX3JlY2hlcmNoZQ=='),
-    decodeBase64('YVtocmVmKj0id2Vib3JhbWEuZnIvZmNnaS1iaW4vIl0='),
-    '.site-pub-interstitiel',
-    'div[id^="crt-"][data-criteo-id]',
-  ],
-  officialPolish: [
-    '#ceneo-placeholder-ceneo-12',
-    decodeBase64('W2hyZWZePSJodHRwczovL2FmZi5zZW5kaHViLnBsLyJd'),
-    decodeBase64('YVtocmVmXj0iaHR0cDovL2Fkdm1hbmFnZXIudGVjaGZ1bi5wbC9yZWRpcmVjdC8iXQ=='),
-    decodeBase64('YVtocmVmXj0iaHR0cDovL3d3dy50cml6ZXIucGwvP3V0bV9zb3VyY2UiXQ=='),
-    decodeBase64('ZGl2I3NrYXBpZWNfYWQ='),
-  ],
-  ro: [
-    decodeBase64('YVtocmVmXj0iLy9hZmZ0cmsuYWx0ZXgucm8vQ291bnRlci9DbGljayJd'),
-    'a[href^="/magazin/"]',
-    decodeBase64('YVtocmVmXj0iaHR0cHM6Ly9ibGFja2ZyaWRheXNhbGVzLnJvL3Ryay9zaG9wLyJd'),
-    decodeBase64('YVtocmVmXj0iaHR0cHM6Ly9ldmVudC4ycGVyZm9ybWFudC5jb20vZXZlbnRzL2NsaWNrIl0='),
-    decodeBase64('YVtocmVmXj0iaHR0cHM6Ly9sLnByb2ZpdHNoYXJlLnJvLyJd'),
-  ],
-  ruAd: [
-    decodeBase64('YVtocmVmKj0iLy9mZWJyYXJlLnJ1LyJd'),
-    decodeBase64('YVtocmVmKj0iLy91dGltZy5ydS8iXQ=='),
-    decodeBase64('YVtocmVmKj0iOi8vY2hpa2lkaWtpLnJ1Il0='),
-    '#pgeldiz',
-    '.yandex-rtb-block',
-  ],
-  thaiAds: [
-    'a[href*=macau-uta-popup]',
-    decodeBase64('I2Fkcy1nb29nbGUtbWlkZGxlX3JlY3RhbmdsZS1ncm91cA=='),
-    decodeBase64('LmFkczMwMHM='),
-    '.bumq',
-    '.img-kosana',
-  ],
-  webAnnoyancesUltralist: [
-    '#mod-social-share-2',
-    '#social-tools',
-    decodeBase64('LmN0cGwtZnVsbGJhbm5lcg=='),
-    '.zergnet-recommend',
-    '.yt.btn-link.btn-md.btn',
-  ],
+export function getFilters(): Filters {
+  const fromB64 = atob // Just for better minification
+
+  return {
+    abpIndo: [
+      '#Iklan-Melayang',
+      '#Kolom-Iklan-728',
+      '#SidebarIklan-wrapper',
+      fromB64('YVt0aXRsZT0iN25hZ2EgcG9rZXIiIGld'),
+      '[title="ALIENBOLA" i]',
+    ],
+    abpvn: [
+      '#quangcaomb',
+      fromB64('Lmlvc0Fkc2lvc0Fkcy1sYXlvdXQ='),
+      '.quangcao',
+      fromB64('W2hyZWZePSJodHRwczovL3I4OC52bi8iXQ=='),
+      fromB64('W2hyZWZePSJodHRwczovL3piZXQudm4vIl0='),
+    ],
+    adBlockFinland: [
+      '.mainostila',
+      fromB64('LnNwb25zb3JpdA=='),
+      '.ylamainos',
+      fromB64('YVtocmVmKj0iL2NsaWNrdGhyZ2guYXNwPyJd'),
+      fromB64('YVtocmVmXj0iaHR0cHM6Ly9hcHAucmVhZHBlYWsuY29tL2FkcyJd'),
+    ],
+    adBlockPersian: ['#navbar_notice_50', '.kadr', 'TABLE[width="140px"]', '#divAgahi', fromB64('I2FkMl9pbmxpbmU=')],
+    adBlockWarningRemoval: [
+      '#adblock-honeypot',
+      '.adblocker-root',
+      '.wp_adblock_detect',
+      fromB64('LmhlYWRlci1ibG9ja2VkLWFk'),
+      fromB64('I2FkX2Jsb2NrZXI='),
+    ],
+    adGuardAnnoyances: [
+      'amp-embed[type="zen"]',
+      '.hs-sosyal',
+      '#cookieconsentdiv',
+      'div[class^="app_gdpr"]',
+      '.as-oil',
+    ],
+    adGuardBase: [
+      '.BetterJsPopOverlay',
+      fromB64('I2FkXzMwMFgyNTA='),
+      fromB64('I2Jhbm5lcmZsb2F0MjI='),
+      fromB64('I2FkLWJhbm5lcg=='),
+      fromB64('I2NhbXBhaWduLWJhbm5lcg=='),
+    ],
+    adGuardChinese: [
+      fromB64('LlppX2FkX2FfSA=='),
+      fromB64('YVtocmVmKj0iL29kMDA1LmNvbSJd'),
+      fromB64('YVtocmVmKj0iLmh0aGJldDM0LmNvbSJd'),
+      '.qq_nr_lad',
+      '#widget-quan',
+    ],
+    adGuardFrench: [
+      fromB64('I2Jsb2NrLXZpZXdzLWFkcy1zaWRlYmFyLWJsb2NrLWJsb2Nr'),
+      '#pavePub',
+      fromB64('LmFkLWRlc2t0b3AtcmVjdGFuZ2xl'),
+      '.mobile_adhesion',
+      '.widgetadv',
+    ],
+    adGuardGerman: [
+      fromB64('LmJhbm5lcml0ZW13ZXJidW5nX2hlYWRfMQ=='),
+      fromB64('LmJveHN0YXJ0d2VyYnVuZw=='),
+      fromB64('LndlcmJ1bmcz'),
+      fromB64('YVtocmVmXj0iaHR0cDovL3d3dy5laXMuZGUvaW5kZXgucGh0bWw/cmVmaWQ9Il0='),
+      fromB64('YVtocmVmXj0iaHR0cHM6Ly93d3cudGlwaWNvLmNvbS8/YWZmaWxpYXRlSWQ9Il0='),
+    ],
+    adGuardJapanese: [
+      '#kauli_yad_1',
+      fromB64('YVtocmVmXj0iaHR0cDovL2FkMi50cmFmZmljZ2F0ZS5uZXQvIl0='),
+      fromB64('Ll9wb3BJbl9pbmZpbml0ZV9hZA=='),
+      fromB64('LmFkZ29vZ2xl'),
+      fromB64('LmFkX3JlZ3VsYXIz'),
+    ],
+    adGuardMobile: [
+      fromB64('YW1wLWF1dG8tYWRz'),
+      fromB64('LmFtcF9hZA=='),
+      'amp-embed[type="24smi"]',
+      '#mgid_iframe1',
+      fromB64('I2FkX2ludmlld19hcmVh'),
+    ],
+    adGuardRussian: [
+      fromB64('YVtocmVmXj0iaHR0cHM6Ly9hZC5sZXRtZWFkcy5jb20vIl0='),
+      fromB64('LnJlY2xhbWE='),
+      'div[id^="smi2adblock"]',
+      fromB64('ZGl2W2lkXj0iQWRGb3hfYmFubmVyXyJd'),
+      fromB64('I2FkX3NxdWFyZQ=='),
+    ],
+    adGuardSocial: [
+      fromB64('YVtocmVmXj0iLy93d3cuc3R1bWJsZXVwb24uY29tL3N1Ym1pdD91cmw9Il0='),
+      fromB64('YVtocmVmXj0iLy90ZWxlZ3JhbS5tZS9zaGFyZS91cmw/Il0='),
+      '.etsy-tweet',
+      '#inlineShare',
+      '.popup-social',
+    ],
+    adGuardSpanishPortuguese: [
+      '#barraPublicidade',
+      '#Publicidade',
+      '#publiEspecial',
+      '#queTooltip',
+      fromB64('W2hyZWZePSJodHRwOi8vYWRzLmdsaXNwYS5jb20vIl0='),
+    ],
+    adGuardTrackingProtection: [
+      '#qoo-counter',
+      fromB64('YVtocmVmXj0iaHR0cDovL2NsaWNrLmhvdGxvZy5ydS8iXQ=='),
+      fromB64('YVtocmVmXj0iaHR0cDovL2hpdGNvdW50ZXIucnUvdG9wL3N0YXQucGhwIl0='),
+      fromB64('YVtocmVmXj0iaHR0cDovL3RvcC5tYWlsLnJ1L2p1bXAiXQ=='),
+      '#top100counter',
+    ],
+    adGuardTurkish: [
+      '#backkapat',
+      fromB64('I3Jla2xhbWk='),
+      fromB64('YVtocmVmXj0iaHR0cDovL2Fkc2Vydi5vbnRlay5jb20udHIvIl0='),
+      fromB64('YVtocmVmXj0iaHR0cDovL2l6bGVuemkuY29tL2NhbXBhaWduLyJd'),
+      fromB64('YVtocmVmXj0iaHR0cDovL3d3dy5pbnN0YWxsYWRzLm5ldC8iXQ=='),
+    ],
+    bulgarian: [
+      fromB64('dGQjZnJlZW5ldF90YWJsZV9hZHM='),
+      '#ea_intext_div',
+      '.lapni-pop-over',
+      '#xenium_hot_offers',
+      fromB64('I25ld0Fk'),
+    ],
+    easyList: [
+      fromB64('I0FEX0NPTlRST0xfMjg='),
+      fromB64('LnNlY29uZC1wb3N0LWFkcy13cmFwcGVy'),
+      '.universalboxADVBOX03',
+      fromB64('LmFkdmVydGlzZW1lbnQtNzI4eDkw'),
+      fromB64('LnNxdWFyZV9hZHM='),
+    ],
+    easyListChina: [
+      fromB64('YVtocmVmKj0iLndlbnNpeHVldGFuZy5jb20vIl0='),
+      fromB64('LmFwcGd1aWRlLXdyYXBbb25jbGljayo9ImJjZWJvcy5jb20iXQ=='),
+      fromB64('LmZyb250cGFnZUFkdk0='),
+      '#taotaole',
+      '#aafoot.top_box',
+    ],
+    easyListCookie: [
+      '#AdaCompliance.app-notice',
+      '.text-center.rgpd',
+      '.panel--cookie',
+      '.js-cookies-andromeda',
+      '.elxtr-consent',
+    ],
+    easyListCzechSlovak: [
+      '#onlajny-stickers',
+      fromB64('I3Jla2xhbW5pLWJveA=='),
+      fromB64('LnJla2xhbWEtbWVnYWJvYXJk'),
+      '.sklik',
+      fromB64('W2lkXj0ic2tsaWtSZWtsYW1hIl0='),
+    ],
+    easyListDutch: [
+      fromB64('I2FkdmVydGVudGll'),
+      fromB64('I3ZpcEFkbWFya3RCYW5uZXJCbG9jaw=='),
+      '.adstekst',
+      fromB64('YVtocmVmXj0iaHR0cHM6Ly94bHR1YmUubmwvY2xpY2svIl0='),
+      '#semilo-lrectangle',
+    ],
+    easyListGermany: [
+      fromB64('I0FkX1dpbjJkYXk='),
+      fromB64('I3dlcmJ1bmdzYm94MzAw'),
+      fromB64('YVtocmVmXj0iaHR0cDovL3d3dy5yb3RsaWNodGthcnRlaS5jb20vP3NjPSJd'),
+      fromB64('I3dlcmJ1bmdfd2lkZXNreXNjcmFwZXJfc2NyZWVu'),
+      fromB64('YVtocmVmXj0iaHR0cDovL2xhbmRpbmcucGFya3BsYXR6a2FydGVpLmNvbS8/YWc9Il0='),
+    ],
+    easyListItaly: [
+      fromB64('LmJveF9hZHZfYW5udW5jaQ=='),
+      '.sb-box-pubbliredazionale',
+      fromB64('YVtocmVmXj0iaHR0cDovL2FmZmlsaWF6aW9uaWFkcy5zbmFpLml0LyJd'),
+      fromB64('YVtocmVmXj0iaHR0cHM6Ly9hZHNlcnZlci5odG1sLml0LyJd'),
+      fromB64('YVtocmVmXj0iaHR0cHM6Ly9hZmZpbGlhemlvbmlhZHMuc25haS5pdC8iXQ=='),
+    ],
+    easyListLithuania: [
+      fromB64('LnJla2xhbW9zX3RhcnBhcw=='),
+      fromB64('LnJla2xhbW9zX251b3JvZG9z'),
+      fromB64('aW1nW2FsdD0iUmVrbGFtaW5pcyBza3lkZWxpcyJd'),
+      fromB64('aW1nW2FsdD0iRGVkaWt1b3RpLmx0IHNlcnZlcmlhaSJd'),
+      fromB64('aW1nW2FsdD0iSG9zdGluZ2FzIFNlcnZlcmlhaS5sdCJd'),
+    ],
+    estonian: [fromB64('QVtocmVmKj0iaHR0cDovL3BheTRyZXN1bHRzMjQuZXUiXQ==')],
+    fanboyAnnoyances: [
+      '#feedback-tab',
+      '#taboola-below-article',
+      '.feedburnerFeedBlock',
+      '.widget-feedburner-counter',
+      '[title="Subscribe to our blog"]',
+    ],
+    fanboyAntiFacebook: ['.util-bar-module-firefly-visible'],
+    fanboyEnhancedTrackers: [
+      '.open.pushModal',
+      '#issuem-leaky-paywall-articles-zero-remaining-nag',
+      '#sovrn_container',
+      'div[class$="-hide"][zoompage-fontsize][style="display: block;"]',
+      '.BlockNag__Card',
+    ],
+    fanboySocial: [
+      '.td-tags-and-social-wrapper-box',
+      '.twitterContainer',
+      '.youtube-social',
+      'a[title^="Like us on Facebook"]',
+      'img[alt^="Share on Digg"]',
+    ],
+    frellwitSwedish: [
+      fromB64('YVtocmVmKj0iY2FzaW5vcHJvLnNlIl1bdGFyZ2V0PSJfYmxhbmsiXQ=='),
+      fromB64('YVtocmVmKj0iZG9rdG9yLXNlLm9uZWxpbmsubWUiXQ=='),
+      'article.category-samarbete',
+      fromB64('ZGl2LmhvbGlkQWRz'),
+      'ul.adsmodern',
+    ],
+    greekAdBlock: [
+      fromB64('QVtocmVmKj0iYWRtYW4ub3RlbmV0LmdyL2NsaWNrPyJd'),
+      fromB64('QVtocmVmKj0iaHR0cDovL2F4aWFiYW5uZXJzLmV4b2R1cy5nci8iXQ=='),
+      fromB64('QVtocmVmKj0iaHR0cDovL2ludGVyYWN0aXZlLmZvcnRobmV0LmdyL2NsaWNrPyJd'),
+      'DIV.agores300',
+      'TABLE.advright',
+    ],
+    hungarian: [
+      '#cemp_doboz',
+      '.optimonk-iframe-container',
+      fromB64('LmFkX19tYWlu'),
+      fromB64('W2NsYXNzKj0iR29vZ2xlQWRzIl0='),
+      '#hirdetesek_box',
+    ],
+    iDontCareAboutCookies: [
+      '.alert-info[data-block-track*="CookieNotice"]',
+      '.ModuleTemplateCookieIndicator',
+      '.o--cookies--container',
+      '.cookie-msg-info-container',
+      '#cookies-policy-sticky',
+    ],
+    icelandicAbp: [fromB64('QVtocmVmXj0iL2ZyYW1ld29yay9yZXNvdXJjZXMvZm9ybXMvYWRzLmFzcHgiXQ==')],
+    latvian: [
+      fromB64(
+        'YVtocmVmPSJodHRwOi8vd3d3LnNhbGlkemluaS5sdi8iXVtzdHlsZT0iZGlzcGxheTogYmxvY2s7IHdpZHRoOiAxMjBweDsgaGVpZ2h0O' +
+          'iA0MHB4OyBvdmVyZmxvdzogaGlkZGVuOyBwb3NpdGlvbjogcmVsYXRpdmU7Il0=',
+      ),
+      fromB64(
+        'YVtocmVmPSJodHRwOi8vd3d3LnNhbGlkemluaS5sdi8iXVtzdHlsZT0iZGlzcGxheTogYmxvY2s7IHdpZHRoOiA4OHB4OyBoZWlnaHQ6I' +
+          'DMxcHg7IG92ZXJmbG93OiBoaWRkZW47IHBvc2l0aW9uOiByZWxhdGl2ZTsiXQ==',
+      ),
+    ],
+    listKr: [
+      fromB64('YVtocmVmKj0iLy9hZC5wbGFuYnBsdXMuY28ua3IvIl0='),
+      fromB64('I2xpdmVyZUFkV3JhcHBlcg=='),
+      fromB64('YVtocmVmKj0iLy9hZHYuaW1hZHJlcC5jby5rci8iXQ=='),
+      fromB64('aW5zLmZhc3R2aWV3LWFk'),
+      '.revenue_unit_item.dable',
+    ],
+    listeAr: [
+      fromB64('LmdlbWluaUxCMUFk'),
+      '.right-and-left-sponsers',
+      fromB64('YVtocmVmKj0iLmFmbGFtLmluZm8iXQ=='),
+      fromB64('YVtocmVmKj0iYm9vcmFxLm9yZyJd'),
+      fromB64('YVtocmVmKj0iZHViaXp6bGUuY29tL2FyLz91dG1fc291cmNlPSJd'),
+    ],
+    listeFr: [
+      fromB64('YVtocmVmXj0iaHR0cDovL3Byb21vLnZhZG9yLmNvbS8iXQ=='),
+      fromB64('I2FkY29udGFpbmVyX3JlY2hlcmNoZQ=='),
+      fromB64('YVtocmVmKj0id2Vib3JhbWEuZnIvZmNnaS1iaW4vIl0='),
+      '.site-pub-interstitiel',
+      'div[id^="crt-"][data-criteo-id]',
+    ],
+    officialPolish: [
+      '#ceneo-placeholder-ceneo-12',
+      fromB64('W2hyZWZePSJodHRwczovL2FmZi5zZW5kaHViLnBsLyJd'),
+      fromB64('YVtocmVmXj0iaHR0cDovL2Fkdm1hbmFnZXIudGVjaGZ1bi5wbC9yZWRpcmVjdC8iXQ=='),
+      fromB64('YVtocmVmXj0iaHR0cDovL3d3dy50cml6ZXIucGwvP3V0bV9zb3VyY2UiXQ=='),
+      fromB64('ZGl2I3NrYXBpZWNfYWQ='),
+    ],
+    ro: [
+      fromB64('YVtocmVmXj0iLy9hZmZ0cmsuYWx0ZXgucm8vQ291bnRlci9DbGljayJd'),
+      'a[href^="/magazin/"]',
+      fromB64('YVtocmVmXj0iaHR0cHM6Ly9ibGFja2ZyaWRheXNhbGVzLnJvL3Ryay9zaG9wLyJd'),
+      fromB64('YVtocmVmXj0iaHR0cHM6Ly9ldmVudC4ycGVyZm9ybWFudC5jb20vZXZlbnRzL2NsaWNrIl0='),
+      fromB64('YVtocmVmXj0iaHR0cHM6Ly9sLnByb2ZpdHNoYXJlLnJvLyJd'),
+    ],
+    ruAd: [
+      fromB64('YVtocmVmKj0iLy9mZWJyYXJlLnJ1LyJd'),
+      fromB64('YVtocmVmKj0iLy91dGltZy5ydS8iXQ=='),
+      fromB64('YVtocmVmKj0iOi8vY2hpa2lkaWtpLnJ1Il0='),
+      '#pgeldiz',
+      '.yandex-rtb-block',
+    ],
+    thaiAds: [
+      'a[href*=macau-uta-popup]',
+      fromB64('I2Fkcy1nb29nbGUtbWlkZGxlX3JlY3RhbmdsZS1ncm91cA=='),
+      fromB64('LmFkczMwMHM='),
+      '.bumq',
+      '.img-kosana',
+    ],
+    webAnnoyancesUltralist: [
+      '#mod-social-share-2',
+      '#social-tools',
+      fromB64('LmN0cGwtZnVsbGJhbm5lcg=='),
+      '.zergnet-recommend',
+      '.yt.btn-link.btn-md.btn',
+    ],
+  }
 }
 
 type Options = {
@@ -323,12 +334,13 @@ export default async function getDomBlockers({ debug }: Options = {}): Promise<s
     return undefined
   }
 
+  const filters = getFilters()
   const filterNames = Object.keys(filters) as Array<keyof typeof filters>
   const allSelectors = ([] as string[]).concat(...filterNames.map((filterName) => filters[filterName]))
   const blockedSelectors = await getBlockedSelectors(allSelectors)
 
   if (debug) {
-    printDebug(blockedSelectors)
+    printDebug(filters, blockedSelectors)
   }
 
   const activeBlockers = filterNames.filter((filterName) => {
@@ -390,12 +402,12 @@ function forceShow(element: HTMLElement) {
   element.style.setProperty('display', 'block', 'important')
 }
 
-function printDebug(blockedSelectors: { [K in string]?: true }) {
+function printDebug(filters: Filters, blockedSelectors: { [K in string]?: true }) {
   let message = 'DOM blockers debug:\n```'
   for (const filterName of Object.keys(filters) as Array<keyof typeof filters>) {
     message += `\n${filterName}:`
     for (const selector of filters[filterName]) {
-      message += `\n  ${selector} ${blockedSelectors[selector] ? '🚫' : '➡️'}`
+      message += `\n  ${blockedSelectors[selector] ? '🚫' : '➡️'} ${selector}`
     }
   }
   // console.log is ok here because it's under a debug clause

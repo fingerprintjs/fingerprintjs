@@ -2,7 +2,7 @@ import { isChromium } from '../../tests/utils'
 import { selectorToElement } from '../utils/dom'
 import { parseSimpleCssSelector } from '../utils/data'
 import { MaybePromise } from '../utils/async'
-import getDomBlockers, { filters, isApplicable } from './dom_blockers'
+import getDomBlockers, { getFilters, isApplicable } from './dom_blockers'
 
 async function withBlockedSelectors<T>(selectors: string[], action: () => MaybePromise<T>): Promise<T> {
   const styleElement = document.createElement('style')
@@ -19,6 +19,8 @@ async function withBlockedSelectors<T>(selectors: string[], action: () => MaybeP
 
 describe('Sources', () => {
   describe('domBlockers', () => {
+    const filters = getFilters()
+
     describe('the filter list', () => {
       const selectors = ([] as string[]).concat(
         ...Object.keys(filters).map((filterName) => filters[filterName as keyof typeof filters]),
