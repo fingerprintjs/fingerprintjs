@@ -6,20 +6,37 @@ export interface CanvasFingerprint {
 
 // https://www.browserleaks.com/canvas#how-does-it-work
 export default function getCanvasFingerprint(): CanvasFingerprint {
+  let winding = false
+  let geometry: string
+  let text: string
+
   const [canvas, context] = makeCanvasContext()
   if (!isSupported(canvas, context)) {
-    return { winding: false, geometry: '', text: '' }
+    geometry = text = '' // The value will be 'unsupported' in v3.4
+  } else {
+    winding = doesSupportWinding(context)
+
+    renderTextImage(canvas, context)
+    const textImage1 = canvasToString(canvas)
+    const textImage2 = canvasToString(canvas) // It's slightly faster to double-encode the text image
+
+    // Some browsers add a noise to the canvas: https://github.com/fingerprintjs/fingerprintjs/issues/791
+    // The canvas is excluded from the fingerprint in this case
+    if (textImage1 !== textImage2) {
+      geometry = text = 'unstable'
+    } else {
+      text = textImage1
+
+      // Text is unstable:
+      // https://github.com/fingerprintjs/fingerprintjs/issues/583
+      // https://github.com/fingerprintjs/fingerprintjs/issues/103
+      // Therefore it's extracted into a separate image.
+      renderGeometryImage(canvas, context)
+      geometry = canvasToString(canvas)
+    }
   }
 
-  return {
-    winding: doesSupportWinding(context),
-    geometry: makeGeometryImage(canvas, context),
-    // Text is unstable:
-    // https://github.com/fingerprintjs/fingerprintjs/issues/583
-    // https://github.com/fingerprintjs/fingerprintjs/issues/103
-    // Therefore it's extracted into a separate image.
-    text: makeTextImage(canvas, context),
-  }
+  return { winding, geometry, text }
 }
 
 function makeCanvasContext() {
@@ -33,7 +50,6 @@ function isSupported(
   canvas: HTMLCanvasElement,
   context?: CanvasRenderingContext2D | null,
 ): context is CanvasRenderingContext2D {
-  // TODO: look into: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob
   return !!(context && canvas.toDataURL)
 }
 
@@ -45,7 +61,7 @@ function doesSupportWinding(context: CanvasRenderingContext2D) {
   return !context.isPointInPath(5, 5, 'evenodd')
 }
 
-function makeTextImage(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+function renderTextImage(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
   // Resizing the canvas cleans it
   canvas.width = 240
   canvas.height = 60
@@ -69,11 +85,9 @@ function makeTextImage(canvas: HTMLCanvasElement, context: CanvasRenderingContex
   context.fillStyle = 'rgba(102, 204, 0, 0.2)'
   context.font = '18pt Arial'
   context.fillText(printedText, 4, 45)
-
-  return save(canvas)
 }
 
-function makeGeometryImage(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+function renderGeometryImage(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
   // Resizing the canvas cleans it
   canvas.width = 122
   canvas.height = 110
@@ -101,11 +115,8 @@ function makeGeometryImage(canvas: HTMLCanvasElement, context: CanvasRenderingCo
   context.arc(60, 60, 60, 0, Math.PI * 2, true)
   context.arc(60, 60, 20, 0, Math.PI * 2, true)
   context.fill('evenodd')
-
-  return save(canvas)
 }
 
-function save(canvas: HTMLCanvasElement) {
-  // TODO: look into: https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob
+function canvasToString(canvas: HTMLCanvasElement) {
   return canvas.toDataURL()
 }
