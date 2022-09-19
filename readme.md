@@ -144,6 +144,8 @@ Pro result example:
 
 ▶️ [Video: use Fingerprint Pro to prevent multiple signups](https://www.youtube.com/watch?v=jWX9P5_jZn8)
 
+🤖 [Sample usage with React on the StackBlitz platform](https://stackblitz.com/edit/fingerprintjs-react-demo)
+
 ## Migrating from v2
 
 - [Migration guide](docs/migrating_v2_v3.md)
