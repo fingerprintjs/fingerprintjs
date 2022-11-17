@@ -35,7 +35,7 @@ async function fetchUniqueSelectors(filterConfig: FilterList) {
   printProgress()
 
   let abort: (() => void) | undefined
-  const abortPromise = new Promise((resolve) => (abort = resolve))
+  const abortPromise = new Promise<void>((resolve) => (abort = resolve))
   try {
     await Promise.all(
       filters.map(async (filter) => {
@@ -43,7 +43,7 @@ async function fetchUniqueSelectors(filterConfig: FilterList) {
         try {
           filterLines = await fetchFilter(filter.file, abortPromise)
         } catch (error) {
-          throw new Error(`Failed to fetch filter "${filter.title}" (${filter.file}): ${error.message}`)
+          throw new Error(`Failed to fetch filter "${filter.title}" (${filter.file}): ${error}`)
         }
         for (const line of filterLines) {
           const selector = getSelectorFromFilterRule(line)

@@ -52,7 +52,7 @@ ${FingerprintJS.componentsToDebugString(components)}
 \`\`\``)
   } catch (error) {
     const totalTime = Date.now() - startTime
-    const errorData = errorToObject(error)
+    const errorData = error instanceof Error ? errorToObject(error) : error
     output.innerHTML = ''
     addOutputSection({ output, header: 'Unexpected error:', content: JSON.stringify(errorData, null, 2) })
     addOutputSection({ output, header: 'Time passed before the error:', content: `${totalTime}ms`, size: 'big' })

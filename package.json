@@ -44,12 +44,13 @@
     "check:ssr": "node --require './dist/fp.cjs.js' --eval '' || (echo \"The distributive files can't be used with server side rendering. Make sure the code doesn't use browser API until an exported function is called.\" && exit 1)"
   },
   "dependencies": {
-    "tslib": "^2.0.1"
+    "tslib": "^2.4.1"
   },
   "devDependencies": {
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^13.3.0",
-    "@rollup/plugin-typescript": "^8.3.1",
+    "@rollup/plugin-json": "^5.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.1.0",
+    "@rollup/plugin-typescript": "^9.0.2",
     "@types/jasmine": "^3.5.14",
     "@types/terser-webpack-plugin": "^4.2.2",
     "@types/ua-parser-js": "^0.7.35",
@@ -73,14 +74,13 @@
     "prettier": "^2.1.2",
     "promise-polyfill": "^8.2.0",
     "rimraf": "^3.0.2",
-    "rollup": "^2.52.0",
-    "rollup-plugin-dts": "^1.4.13",
-    "rollup-plugin-license": "^2.8.0",
-    "rollup-plugin-terser": "^7.0.2",
+    "rollup": "^3.3.0",
+    "rollup-plugin-dts": "^5.0.0",
+    "rollup-plugin-license": "^3.0.1",
     "terser-webpack-plugin": "^4.2.3",
     "ts-loader": "^8.0.7",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.0.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.3",
     "ua-parser-js": "^0.7.24",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",

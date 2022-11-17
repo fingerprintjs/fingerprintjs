@@ -13,10 +13,11 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true
   },
+  "include": [
+    "src/**/*.ts",
+    "resources/**/*.ts"
+  ],
   "exclude": [
-    "dist",
-    "node_modules",
     "**/*.test.ts",
-    "tests"
   ]
 }

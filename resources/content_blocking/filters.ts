@@ -16,7 +16,7 @@ const filters: FilterList = {
    */
   adGuardBase: {
     title: 'AdGuard Base',
-    file: 'https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_2_English/filter.txt',
+    file: 'https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_2_Base/filter.txt',
   },
   adGuardMobile: {
     title: 'AdGuard Mobile Ads',

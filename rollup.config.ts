@@ -1,26 +1,28 @@
+import * as fs from 'fs'
 import * as path from 'path'
 import type { RollupOptions, OutputOptions } from 'rollup'
 import jsonPlugin from '@rollup/plugin-json'
 import nodeResolvePlugin from '@rollup/plugin-node-resolve'
 import typescriptPlugin from '@rollup/plugin-typescript'
-import { terser as terserPlugin } from 'rollup-plugin-terser'
+import terserPlugin from '@rollup/plugin-terser'
 import dtsPlugin from 'rollup-plugin-dts'
 import licensePlugin from 'rollup-plugin-license'
 import terserConfig from './terser.config'
-import { dependencies } from './package.json'
+
+const { dependencies } = JSON.parse(fs.readFileSync('package.json', 'utf8'))
 
 const outputDirectory = 'dist'
 
 const commonBanner = licensePlugin({
   banner: {
     content: {
-      file: path.join(__dirname, 'resources', 'license_banner.txt'),
+      file: path.join('resources', 'license_banner.txt'),
     },
   },
 })
 
 const commonInput = {
-  input: './src/index.ts',
+  input: 'src/index.ts',
   plugins: [nodeResolvePlugin(), jsonPlugin(), typescriptPlugin(), commonBanner],
 }
 

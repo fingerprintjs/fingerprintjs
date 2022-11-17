@@ -49,6 +49,6 @@ setTimeout(async () => {
       }
     }
   } catch (error) {
-    display.value = `${error}\n${error.stack}`
+    display.value = `${error}${error instanceof Error ? `\n${error.stack}` : ''}`
   }
 }, 10)

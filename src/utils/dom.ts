@@ -26,7 +26,7 @@ export async function withIframe<T>(
   const iframe = d.createElement('iframe')
 
   try {
-    await new Promise((_resolve, _reject) => {
+    await new Promise<void>((_resolve, _reject) => {
       let isComplete = false
       const resolve = () => {
         isComplete = true
