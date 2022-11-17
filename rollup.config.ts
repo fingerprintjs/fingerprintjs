@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import type { RollupOptions, OutputOptions } from 'rollup'
+import type { RollupOptions } from 'rollup'
 import jsonPlugin from '@rollup/plugin-json'
 import nodeResolvePlugin from '@rollup/plugin-node-resolve'
 import typescriptPlugin from '@rollup/plugin-typescript'
@@ -13,22 +13,23 @@ const { dependencies } = JSON.parse(fs.readFileSync('package.json', 'utf8'))
 
 const outputDirectory = 'dist'
 
-const commonBanner = licensePlugin({
-  banner: {
-    content: {
-      file: path.join('resources', 'license_banner.txt'),
-    },
-  },
-})
-
 const commonInput = {
   input: 'src/index.ts',
-  plugins: [nodeResolvePlugin(), jsonPlugin(), typescriptPlugin(), commonBanner],
+  plugins: [nodeResolvePlugin(), jsonPlugin(), typescriptPlugin()],
 }
 
-const commonOutput: OutputOptions = {
+const commonOutput = {
   name: 'FingerprintJS',
-  exports: 'named',
+  exports: 'named' as const,
+  plugins: [
+    licensePlugin({
+      banner: {
+        content: {
+          file: path.join('resources', 'license_banner.txt'),
+        },
+      },
+    }),
+  ],
 }
 
 const commonTerser = terserPlugin(terserConfig)
@@ -48,7 +49,7 @@ const config: RollupOptions[] = [
         ...commonOutput,
         file: `${outputDirectory}/fp.min.js`,
         format: 'iife',
-        plugins: [commonTerser],
+        plugins: [commonTerser, ...commonOutput.plugins],
       },
 
       // UMD for users who use Require.js or Electron and want to leverage them
@@ -61,7 +62,7 @@ const config: RollupOptions[] = [
         ...commonOutput,
         file: `${outputDirectory}/fp.umd.min.js`,
         format: 'umd',
-        plugins: [commonTerser],
+        plugins: [commonTerser, ...commonOutput.plugins],
       },
     ],
   },
@@ -90,8 +91,9 @@ const config: RollupOptions[] = [
   // TypeScript definition
   {
     ...commonInput,
-    plugins: [dtsPlugin(), commonBanner],
+    plugins: [dtsPlugin()],
     output: {
+      ...commonOutput,
       file: `${outputDirectory}/fp.d.ts`,
       format: 'esm',
     },
