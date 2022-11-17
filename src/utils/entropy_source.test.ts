@@ -189,11 +189,11 @@ describe('Entropy source utilities', () => {
     })
 
     it('throws in case of an unexpected error outside the source', async () => {
-      const source = ({
+      const source = {
         bind() {
           throw new Error('Artificial')
         },
-      } as unknown) as Source<undefined, never>
+      } as unknown as Source<undefined, never>
       const loadedSource = loadSource(source, undefined)
       await wait(1) // To let potential unhandled promise rejections happen
       await expectAsync(loadedSource()).toBeRejectedWith(new Error('Artificial'))
@@ -355,11 +355,11 @@ describe('Entropy source utilities', () => {
 
     it('throws in case of an unexpected error outside the source', async () => {
       const sources = {
-        corrupt: ({
+        corrupt: {
           bind() {
             throw new Error('Artificial')
           },
-        } as unknown) as Source<undefined, never>,
+        } as unknown as Source<undefined, never>,
       }
       const loadedSources = loadSources(sources, undefined, [])
       await wait(1) // To let potential unhandled promise rejections happen
