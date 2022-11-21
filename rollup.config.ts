@@ -1,5 +1,4 @@
 import * as fs from 'fs'
-import * as path from 'path'
 import type { RollupOptions } from 'rollup'
 import jsonPlugin from '@rollup/plugin-json'
 import nodeResolvePlugin from '@rollup/plugin-node-resolve'
@@ -25,7 +24,7 @@ const commonOutput = {
     licensePlugin({
       banner: {
         content: {
-          file: path.join('resources', 'license_banner.txt'),
+          file: 'resources/license_banner.txt',
         },
       },
     }),
