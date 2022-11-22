@@ -58,18 +58,19 @@ function makeBuildNumber() {
 }
 
 function setupLocal(config) {
-  const tsFilesToInclude = ['src/**/*.ts', 'tests/**/*.ts']
+  const files = [
+    // The polyfills are required for old supported browsers.
+    // They should be removed when the old browser support is dropped.
+    'node_modules/promise-polyfill/dist/polyfill.js',
+
+    'src/**/*.ts',
+    'tests/**/*.ts',
+    'dist/fp.min.js',
+  ]
 
   config.set({
     frameworks: ['jasmine', 'karma-typescript'],
-    files: [
-      // The polyfills are required for old supported browsers.
-      // They should be removed when the old browser support is dropped.
-      'node_modules/promise-polyfill/dist/polyfill.js',
-
-      ...tsFilesToInclude,
-      'dist/fp.min.js',
-    ],
+    files,
     preprocessors: {
       '**/*.ts': 'karma-typescript',
     },
@@ -83,7 +84,7 @@ function setupLocal(config) {
         module: 'commonjs',
         sourceMap: true,
       },
-      include: tsFilesToInclude,
+      include: files,
     },
 
     specReporter: {

@@ -14,10 +14,8 @@
     "noImplicitReturns": true
   },
   "include": [
-    "src/**/*.ts",
-    "resources/**/*.ts"
-  ],
-  "exclude": [
-    "**/*.test.ts"
+    "src/index.ts",
+    "src/**/*.d.ts",
+    "resources/content_blocking/selectors_tester.ts"
   ]
 }

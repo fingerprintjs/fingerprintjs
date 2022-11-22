@@ -108,7 +108,6 @@ async function getJsToDetectBlockedSelectors(selectors: readonly string[]) {
   // The first configuration from rollup.config.ts is supposed to make a JS file with dependencies included
   const bundle = await rollup.rollup({
     input: inputScript,
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     plugins: rollupConfig[0].plugins,
   })
   const { output } = await bundle.generate({
