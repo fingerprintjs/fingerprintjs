@@ -35,7 +35,7 @@ async function fetchUniqueSelectors(filterConfig: FilterList) {
   printProgress()
 
   let abort: (() => void) | undefined
-  const abortPromise = new Promise((resolve) => (abort = resolve))
+  const abortPromise = new Promise<void>((resolve) => (abort = resolve))
   try {
     await Promise.all(
       filters.map(async (filter) => {
@@ -43,7 +43,7 @@ async function fetchUniqueSelectors(filterConfig: FilterList) {
         try {
           filterLines = await fetchFilter(filter.file, abortPromise)
         } catch (error) {
-          throw new Error(`Failed to fetch filter "${filter.title}" (${filter.file}): ${error.message}`)
+          throw new Error(`Failed to fetch filter "${filter.title}" (${filter.file}): ${error}`)
         }
         for (const line of filterLines) {
           const selector = getSelectorFromFilterRule(line)
@@ -108,7 +108,6 @@ async function getJsToDetectBlockedSelectors(selectors: readonly string[]) {
   // The first configuration from rollup.config.ts is supposed to make a JS file with dependencies included
   const bundle = await rollup.rollup({
     input: inputScript,
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     plugins: rollupConfig[0].plugins,
   })
   const { output } = await bundle.generate({

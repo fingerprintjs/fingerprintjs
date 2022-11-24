@@ -16,7 +16,7 @@ const filters: FilterList = {
    */
   adGuardBase: {
     title: 'AdGuard Base',
-    file: 'https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_2_English/filter.txt',
+    file: 'https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_2_Base/filter.txt',
   },
   adGuardMobile: {
     title: 'AdGuard Mobile Ads',
@@ -32,8 +32,7 @@ const filters: FilterList = {
   },
   adGuardAnnoyances: {
     title: 'AdGuard Annoyances',
-    file:
-      'https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_14_Annoyances/filter.txt',
+    file: 'https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_14_Annoyances/filter.txt',
   },
   adGuardRussian: {
     title: 'AdGuard Russian',
@@ -226,8 +225,7 @@ const filters: FilterList = {
   },
   adBlockFinland: {
     title: 'Adblock List for Finland',
-    file:
-      'https://raw.githubusercontent.com/finnish-easylist-addition/finnish-easylist-addition/master/Finland_adb.txt',
+    file: 'https://raw.githubusercontent.com/finnish-easylist-addition/finnish-easylist-addition/master/Finland_adb.txt',
   },
   frellwitSwedish: {
     title: "Frellwit's Swedish Filter",

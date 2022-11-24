@@ -1,13 +1,6 @@
 /* Browser APIs not described by TypeScript */
 
-interface IdleDeadline {
-  readonly didTimeout: boolean
-  timeRemaining: () => number
-}
-
 interface Window {
-  requestIdleCallback?(idleCallback: (deadline: IdleDeadline) => void, options?: { timeout?: number }): number
-  cancelIdleCallback?(handle: number): void
   webkitOfflineAudioContext?: OfflineAudioContext
   openDatabase?(...args: unknown[]): void
   __fpjs_d_m?: unknown
@@ -20,6 +13,7 @@ interface Navigator {
   systemLanguage?: string
   deviceMemory?: number
   cpuClass?: string
+  readonly msMaxTouchPoints?: number
 }
 
 interface Document {
@@ -42,6 +36,7 @@ interface Element {
 }
 
 interface CSSStyleDeclaration {
+  zoom: string
   textSizeAdjust: string
   webkitTextSizeAdjust: string
 }

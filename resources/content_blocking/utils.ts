@@ -83,7 +83,7 @@ export async function fetchFilter(
         // We expect no recursion in actual filters
         subFilterLines = await fetchFilter(subFilterURL, abort, true)
       } catch (error) {
-        throw new Error(`Failed to fetch a sub-filter (${subFilterURL}): ${error.message}`)
+        throw new Error(`Failed to fetch a sub-filter (${subFilterURL}): ${error}`)
       }
       filterLines.push(...subFilterLines)
     }),

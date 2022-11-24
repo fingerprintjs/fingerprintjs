@@ -13,10 +13,9 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true
   },
-  "exclude": [
-    "dist",
-    "node_modules",
-    "**/*.test.ts",
-    "tests"
+  "include": [
+    "src/index.ts",
+    "src/**/*.d.ts",
+    "resources/content_blocking/selectors_tester.ts"
   ]
 }
