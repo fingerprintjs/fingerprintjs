@@ -1,8 +1,8 @@
 import { loadSources, SourcesToComponents } from '../utils/entropy_source'
-import getAudioFingerprint from './audio'
+//import getAudioFingerprint from './audio'
 import getFonts from './fonts'
-import getPlugins from './plugins'
-import getCanvasFingerprint from './canvas'
+//import getPlugins from './plugins'
+//import getCanvasFingerprint from './canvas'
 import getTouchSupport from './touch_support'
 import getOsCpu from './os_cpu'
 import getLanguages from './languages'
@@ -29,8 +29,8 @@ import getMonochromeDepth from './monochrome'
 import getContrastPreference from './contrast'
 import isMotionReduced from './reduced_motion'
 import isHDR from './hdr'
-import getMathFingerprint from './math'
-import getFontPreferences from './font_preferences'
+//import getMathFingerprint from './math'
+//import getFontPreferences from './font_preferences'
 
 /**
  * The list of entropy sources used to make visitor identifiers.
@@ -50,8 +50,8 @@ export const sources = {
   // The asynchronous sources are at the start to run in parallel with other sources.
   fonts: getFonts,
   domBlockers: getDomBlockers,
-  fontPreferences: getFontPreferences,
-  audio: getAudioFingerprint,
+  //fontPreferences: getFontPreferences,
+  //audio: getAudioFingerprint,
   screenFrame: getRoundedScreenFrame,
 
   osCpu: getOsCpu,
@@ -67,8 +67,8 @@ export const sources = {
   openDatabase: getOpenDatabase,
   cpuClass: getCpuClass,
   platform: getPlatform,
-  plugins: getPlugins,
-  canvas: getCanvasFingerprint,
+  //plugins: getPlugins,
+  //canvas: getCanvasFingerprint,
   touchSupport: getTouchSupport,
   vendor: getVendor,
   vendorFlavors: getVendorFlavors,
@@ -80,7 +80,7 @@ export const sources = {
   contrast: getContrastPreference,
   reducedMotion: isMotionReduced,
   hdr: isHDR,
-  math: getMathFingerprint,
+  //math: getMathFingerprint,
 }
 
 /**
