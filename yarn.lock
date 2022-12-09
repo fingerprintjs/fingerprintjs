@@ -471,6 +471,35 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.11.tgz#d421b6c527a3037f7c84433fd2c4229e016863d3"
   integrity sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==
 
+"@types/karma-browserstack-launcher@^1.6.1":
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/@types/karma-browserstack-launcher/-/karma-browserstack-launcher-1.6.1.tgz#e7eae876cdd22b0b44a20f72ad840e23696177b4"
+  integrity sha512-LxLebd1V0r5xjMVgfKoGrj3A2RqEPGJh/IiYQ2SoJTFVsxvOv3j6TefBNCSUKNXVTuEj8P1YjxLjvKW16ZX3ZQ==
+  dependencies:
+    "@types/karma" "*"
+
+"@types/karma-spec-reporter@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@types/karma-spec-reporter/-/karma-spec-reporter-0.0.3.tgz#f70bad339e2f84ad3dac995f41f67c74a68308cf"
+  integrity sha512-ol9pUJxw5hHyNOGaAhJULMNXEhUyJUh5G7sLTMvWzMmEgRsqX+nOMfwGluftJd++6Vu6f4SS7LPuMF6TKlQ5Dw==
+  dependencies:
+    "@types/karma" "*"
+
+"@types/karma-summary-reporter@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@types/karma-summary-reporter/-/karma-summary-reporter-3.1.0.tgz#78770cdb689506eb649042c951a13ad5327c2bcf"
+  integrity sha512-pO+qcPpYx/MakkH9XzOMPNKrlv5LFU6o4vgVHGFNAMf1ptQ+FXvbQ4FUQ36RmtztBqIXG5Asglgzwf2bAFZUEw==
+  dependencies:
+    "@types/karma" "*"
+
+"@types/karma@*", "@types/karma@^6.3.3":
+  version "6.3.3"
+  resolved "https://registry.yarnpkg.com/@types/karma/-/karma-6.3.3.tgz#fc48cc53d13ec9beeea3a2a47a2036ed7647ba29"
+  integrity sha512-nRMec4mTCt+tkpRqh5/pAxmnjzEgAaalIq7mdfLFH88gSRC8+bxejLiSjHMMT/vHIhJHqg4GPIGCnCFbwvDRww==
+  dependencies:
+    "@types/node" "*"
+    log4js "^6.4.1"
+
 "@types/keyv@^3.1.4":
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/@types/keyv/-/keyv-3.1.4.tgz#3ccdb1c6751b0c7e52300bcdacd5bcbf8faa75b6"
