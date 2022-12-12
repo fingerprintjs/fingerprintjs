@@ -53,7 +53,7 @@
     "@rollup/plugin-typescript": "^9.0.2",
     "@types/jasmine": "^3.10.3",
     "@types/karma": "^6.3.3",
-    "@types/karma-browserstack-launcher": "^1.6.1",
+    "@types/karma-browserstack-launcher": "^1.6.2",
     "@types/karma-spec-reporter": "^0.0.3",
     "@types/karma-summary-reporter": "^3.1.0",
     "@types/terser-webpack-plugin": "^4.2.2",

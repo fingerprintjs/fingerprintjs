@@ -471,10 +471,10 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.11.tgz#d421b6c527a3037f7c84433fd2c4229e016863d3"
   integrity sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==
 
-"@types/karma-browserstack-launcher@^1.6.1":
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/@types/karma-browserstack-launcher/-/karma-browserstack-launcher-1.6.1.tgz#e7eae876cdd22b0b44a20f72ad840e23696177b4"
-  integrity sha512-LxLebd1V0r5xjMVgfKoGrj3A2RqEPGJh/IiYQ2SoJTFVsxvOv3j6TefBNCSUKNXVTuEj8P1YjxLjvKW16ZX3ZQ==
+"@types/karma-browserstack-launcher@^1.6.2":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@types/karma-browserstack-launcher/-/karma-browserstack-launcher-1.6.2.tgz#c2dd6b6af06f10266b78f1a5e579c134bc1d1c41"
+  integrity sha512-RqRMEn4JqqtoJhgFVUe4dksNsrUKejt1nZ9sAdNebs3rIkDcgHLoHI53Bo0ifTwFFzvmHbyRJ08tW4RGWn/H2Q==
   dependencies:
     "@types/karma" "*"
 

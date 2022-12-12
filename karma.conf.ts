@@ -133,9 +133,6 @@ function setupBrowserstack(config: Config) {
     concurrency: 5,
 
     browserStack: {
-      // The credentials are required by TypeScript. A PR for fixing it: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/63551
-      username: '',
-      accessKey: '',
       project: 'FingerprintJS',
       // A build number is required to group testing sessions in the BrowserStack UI.
       // GitHub Actions will add a value for GITHUB_RUN_ID. More on the environment variables:
