@@ -12,9 +12,9 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: nodemodules-${{ hashFiles('yarn.lock') }}
@@ -24,12 +24,12 @@ jobs:
       - name: Build the demo
         run: yarn playground:build
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@3.7.1
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: playground/dist
-          CLEAN: true
-          SINGLE_COMMIT: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: playground/dist
+          clean: true
+          single-commit: true
       - name: Print the demo URL
         run: echo "✅ The demo has been deployed to https://$(cut -d'/' -f1 <<< $GITHUB_REPOSITORY).github.io/$(cut -d'/' -f2 <<< $GITHUB_REPOSITORY)/"

@@ -18,9 +18,9 @@ jobs:
     steps:
       # TypeScript types are checked during building and testing so there is no need for a separate step for the check
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: node_modules
           key: nodemodules-${{ hashFiles('yarn.lock') }}
