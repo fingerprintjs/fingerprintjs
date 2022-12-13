@@ -1,7 +1,8 @@
+// Used by Rollup to load its own configuration file
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "es2020"
+    "module": "esnext"
   },
   "include": [
     "rollup.config.ts"

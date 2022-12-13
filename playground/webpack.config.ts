@@ -17,7 +17,7 @@ const configurationFactory: ConfigurationFactory = (_env, { mode = 'development'
         loader: 'ts-loader',
         exclude: /node_modules/,
         options: {
-          configFile: '../tsconfig.json', // The `./tsconfig.json` file is made for the webpack.config.ts file itself
+          configFile: '../tsconfig.browser.json',
           compilerOptions: {
             sourceMap: true,
           },

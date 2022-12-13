@@ -28,7 +28,7 @@ The open a terminal, go to the repository root and run:
 
 ```bash
 yarn install
-./node_modules/.bin/ts-node --compiler-options '{"module": "CommonJS", "esModuleInterop": true}' ./resources/content_blocking/make_selectors_tester.ts
+./node_modules/.bin/ts-node --compiler-options '{"esModuleInterop": true}' ./resources/content_blocking/make_selectors_tester.ts
 ```
 
 It will download all the filters and
@@ -60,7 +60,7 @@ After that, you will get the list of files that matches the current list of filt
 Open a terminal, go to the repository root and run:
 
 ```bash
-./node_modules/.bin/ts-node --compiler-options '{"module": "CommonJS"}' ./resources/content_blocking/get_unique_filter_selectors.ts
+./node_modules/.bin/ts-node ./resources/content_blocking/get_unique_filter_selectors.ts
 ```
 
 A JSON file will be created at `resources/content_blocking/unique_filter_selectors.json`.
@@ -69,7 +69,7 @@ This file contains unique blocked selectors for each of the filters.
 Runs this command to insert the unique selectors into `src/sources/dom_blockers.ts`:
 
 ```bash
-./node_modules/.bin/ts-node --compiler-options '{"module": "CommonJS"}' ./resources/content_blocking/insert_filter_code.ts
+./node_modules/.bin/ts-node ./resources/content_blocking/insert_filter_code.ts
 ```
 
 Take a look into the changes of the `src/sources/dom_blockers.ts` file.

@@ -1,13 +1,26 @@
+import { Config, CustomLauncher } from 'karma'
+import { KarmaTypescriptConfig } from 'karma-typescript/dist/api/configuration'
+
+declare module 'karma' {
+  interface ConfigOptions {
+    karmaTypescriptConfig?: KarmaTypescriptConfig | undefined
+  }
+
+  interface Config {
+    preset?: string
+    reporters: ConfigOptions['reporters']
+  }
+}
+
 // The shapes of these objects are taken from:
 // https://github.com/SeleniumHQ/selenium/tree/d8ddb4d83972df0f565ef65264bcb733e7a94584/javascript/node/selenium-webdriver
 // It doesn't work, trying to work it out with BrowserStack support. Todo: solve it with the support.
-// eslint-disable-next-line no-unused-vars
+/*
 const chromeIncognitoCapabilities = {
   'goog:chromeOptions': {
     args: ['--incognito'],
   },
 }
-// eslint-disable-next-line no-unused-vars
 const firefoxIncognitoCapabilities = {
   'moz:firefoxOptions': {
     prefs: {
@@ -15,6 +28,7 @@ const firefoxIncognitoCapabilities = {
     },
   },
 }
+*/
 
 /*
  * You can find values for any supported browsers in the interactive form at
@@ -57,7 +71,7 @@ function makeBuildNumber() {
   return `No CI ${Math.floor(Math.random() * 1e10)}`
 }
 
-function setupLocal(config) {
+function setupLocal(config: Config) {
   const files = [
     // The polyfills are required for old supported browsers.
     // They should be removed when the old browser support is dropped.
@@ -79,8 +93,8 @@ function setupLocal(config) {
     concurrency: 3,
 
     karmaTypescriptConfig: {
+      tsconfig: 'tsconfig.browser.json',
       compilerOptions: {
-        ...require('./tsconfig.json').compilerOptions,
         module: 'commonjs',
         sourceMap: true,
       },
@@ -100,10 +114,10 @@ function setupLocal(config) {
   })
 }
 
-function setupBrowserstack(config) {
+function setupBrowserstack(config: Config) {
   setupLocal(config)
 
-  const customLaunchers = {}
+  const customLaunchers: Record<string, CustomLauncher> = {}
   for (const [key, data] of Object.entries(browserstackBrowsers)) {
     customLaunchers[key] = {
       base: 'BrowserStack',
@@ -113,7 +127,7 @@ function setupBrowserstack(config) {
   }
 
   config.set({
-    reporters: [...config.reporters, 'BrowserStack'],
+    reporters: [...(config.reporters || []), 'BrowserStack'],
     browsers: Object.keys(customLaunchers),
     customLaunchers,
     concurrency: 5,
@@ -133,7 +147,7 @@ function setupBrowserstack(config) {
 /**
  * Add `--preset local` or `--preset browserstack` to the Karma command to choose where to run the tests.
  */
-module.exports = (config) => {
+module.exports = (config: Config) => {
   switch (config.preset) {
     case 'local':
       return setupLocal(config)

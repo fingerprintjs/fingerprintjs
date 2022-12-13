@@ -1,21 +1,16 @@
+// Common style settings and default options for ts-node use-cases
 {
   "compilerOptions": {
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
-    "target": "es5",
+    "target": "es2021",
     "removeComments": false,
     "resolveJsonModule": true,
     "importHelpers": true,
     "noErrorTruncation": true,
-    "declaration": false,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true
-  },
-  "include": [
-    "src/index.ts",
-    "src/**/*.d.ts",
-    "resources/content_blocking/selectors_tester.ts"
-  ]
+  }
 }
