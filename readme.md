@@ -77,6 +77,8 @@ FingerprintJS is 100% open-source, but its accuracy is limited because it's only
 
 📕 [Full documentation](docs/api.md)
 
+⚛️ [Sample usage with React on the StackBlitz platform](https://stackblitz.com/edit/fingerprintjs-react-demo)
+
 ## Use the free Pro version to get 99.5% identification accuracy
 
 [Fingerprint Pro](https://fingerprint.com/github/) is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
@@ -171,8 +173,6 @@ Pro result example:
 📕 [Fingerprint Pro documentation](https://dev.fingerprint.com)
 
 ▶️ [Video: use Fingerprint Pro to prevent multiple signups](https://www.youtube.com/watch?v=jWX9P5_jZn8)
-
-🤖 [Sample usage with React on the StackBlitz platform](https://stackblitz.com/edit/fingerprintjs-react-demo)
 
 ## Migrating from v2
 
