@@ -142,7 +142,8 @@ Full product comparison:
 
 <sub>3. Fingerprint Pro is GDPR and CCPA compliant as the data processor. You still need to be compliant as the data controller and use the identification for fraud prevention under legitimate interest or ask for user consent.</sub>
 
-Pro result example:
+<details>
+<summary>Pro result example</summary>
 
 ```js
 {
@@ -162,9 +163,19 @@ Pro result example:
     "latitude": 37.409657,
     "longitude": -121.965467
     // ...
+  },
+  "firstSeenAt": {
+    "global": "2022-03-16T11:26:45.362Z",
+    "subscription": "2022-03-16T11:31:01.101Z"
+  },
+  "lastSeenAt": {
+    "global": "2022-05-21T18:05:43.023Z",
+    "subscription": "2022-05-20T05:41:29.926Z"
   }
 }
 ```
+
+</details>
 
 🍿 [Live demo](https://fingerprint.com/demo)
 
