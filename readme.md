@@ -28,6 +28,7 @@
 </p>
 
 FingerprintJS is a browser fingerprinting library that queries browser attributes and computes a hashed visitor identifier from them. Unlike cookies and local storage, a fingerprint stays the same in incognito/private mode and even when browser data is purged.
+
 FingerprintJS is 100% open-source, but its accuracy is limited because it's only a client-side library without a backend.
 
 <table>
