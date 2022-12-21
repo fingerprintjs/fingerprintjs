@@ -29,6 +29,9 @@
 
 FingerprintJS is a browser fingerprinting library that queries browser attributes and computes a hashed visitor identifier from them. Unlike cookies and local storage, a fingerprint stays the same in incognito/private mode and even when browser data is purged.
 
+FingerprintJS has limited accuracy (40% - 60%) and functionality, because it's not possible to do many things without a backend. 
+[Fingerprint Pro](https://fingerprint.com/github/) is a high-scale device identity platform that has both client-side and server-side components and identifies browsers and mobile devices with a 99.5% accuracy. Fingerprint Pro is free for developers, production plans start at $200/mo.
+
 [View Our Demo](https://fingerprintjs.github.io/fingerprintjs/).
 
 ## Quick start
