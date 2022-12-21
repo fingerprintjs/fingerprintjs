@@ -85,7 +85,7 @@ Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addr
 
 <p align="center">
   <a href="https://fingerprint.com/github/">
-    <img src="resources/pro_screenshot.png" alt="Pro screenshot" width="697px" />
+    <img src="resources/github-landing.png" alt="Pro screenshot" />
   </a>
 </p>
 
