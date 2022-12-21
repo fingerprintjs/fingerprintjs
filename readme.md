@@ -103,13 +103,18 @@ Full product comparison:
     <tr><td colspan="3"><h4>Core Features</h4></td></tr>
     <tr><td>100% open source</td><td align="center">yes</td><td align="center">no<sup>1</sup></td></tr>
     <tr><td>Accuracy</td><td align="center">up to 60%</td><td align="center"><b>99.5%</b></td></tr>
-    <tr><td><b>Mobile Native SDKs</b><br/><i>Android, iOS, Flutter, React Native and more</i></td><td align="center">-</td><td align="center"><b>✓</b></td></tr>
     <tr><td><b>Standard fingerprint signals</b><br/><i>screen, os, device name</i></td><td align="center">✓</td><td align="center">✓</td></tr>
     <tr><td><b>Advanced fingerprint signals</b><br/><i>canvas, audio, fonts</i></td><td align="center">✓</td><td align="center">✓</td></tr>
     <tr><td><b>ID type</b></td><td align="center">fingerprint</td><td align="center">visitorID<sup>2</sup></td></tr>
     <tr><td><b>ID lifetime</b></td><td align="center">several weeks</td><td align="center">months/years</td></tr>
     <tr><td><b>ID origin</b></td><td align="center">client</td><td align="center">server</td></tr>
     <tr><td><b>ID collisions</b></td><td align="center">common</td><td align="center">rare</td></tr>
+    <!-- -->
+    <tr><td colspan="3"><h4>Mobile Native SDKs</h4></td></tr>
+    <tr><td>Android</td><td align="center">✓</td><td align="center"><b>✓</b></td></tr>
+    <tr><td>iOS</td><td align="center">✓</td><td align="center"><b>✓</b></td></tr>
+    <tr><td>Flutter</td><td align="center">-</td><td align="center"><b>✓</b></td></tr>
+    <tr><td>React Native</td><td align="center">-</td><td align="center"><b>✓</b></td></tr>
     <!-- -->
     <tr><td colspan="3"><h4>Additional Features</h4></td></tr>
     <tr><td><b>Incognito mode detection</b><br/><i>works in all modern browsers - see our full list of <a href="https://dev.fingerprint.com/docs/browser-support/" target="_blank">browsers supported</a></i></td><td align="center">–</td><td align="center">✓</td></tr>
