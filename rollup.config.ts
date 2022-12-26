@@ -11,16 +11,11 @@ import terserConfig from './terser.config'
 const { dependencies } = JSON.parse(fs.readFileSync('package.json', 'utf8'))
 
 const outputDirectory = 'dist'
+const tsconfig = 'tsconfig.browser.json'
 
 const commonInput = {
   input: 'src/index.ts',
-  plugins: [
-    nodeResolvePlugin(),
-    jsonPlugin(),
-    typescriptPlugin({
-      tsconfig: 'tsconfig.browser.json',
-    }),
-  ],
+  plugins: [nodeResolvePlugin(), jsonPlugin(), typescriptPlugin({ tsconfig })],
 }
 
 const commonOutput = {
@@ -96,7 +91,7 @@ const config: RollupOptions[] = [
   // TypeScript definition
   {
     ...commonInput,
-    plugins: [dtsPlugin()],
+    plugins: [dtsPlugin({ tsconfig })],
     output: {
       ...commonOutput,
       file: `${outputDirectory}/fp.d.ts`,

@@ -79,7 +79,7 @@
     "promise-polyfill": "^8.2.3",
     "rimraf": "^3.0.2",
     "rollup": "^3.3.0",
-    "rollup-plugin-dts": "^5.0.0",
+    "rollup-plugin-dts": "^5.1.0",
     "rollup-plugin-license": "^3.0.1",
     "terser-webpack-plugin": "^4.2.3",
     "ts-loader": "^8.4.0",
