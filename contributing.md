@@ -27,12 +27,6 @@ yarn playground:build
 
 The result will appear at `playground/dist`.
 
-If the commands fail with `Error: error:0308010C:digital envelope routines::unsupported`, use a workaround:
-```bash
-# For Linux, macOS and WSL (Linux on Windows)
-NODE_OPTIONS=--openssl-legacy-provider yarn ...put the command name here...
-```
-
 ### Code style
 
 The code style is controlled by [ESLint](https://eslint.org) and [Prettier](https://prettier.io).
