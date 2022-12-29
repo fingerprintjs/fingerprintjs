@@ -1,4 +1,3 @@
-import 'promise-polyfill/src/polyfill'
 import * as FingerprintJS from '../src'
 import { errorToObject } from '../src/utils/misc'
 

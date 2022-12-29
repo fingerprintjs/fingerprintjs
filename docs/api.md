@@ -22,8 +22,23 @@ The library supports all the popular installation methods:
 
 [Run this code](https://stackblitz.com/edit/fpjs-3-cdn?file=index.html&devtoolsheight=100)
 
-For browsers that don't support [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
-see the [browser support guide](browser_support.md#import-support).
+### Browser `<script>` tag
+
+A synchronous code that pauses the other scripts during loading and therefore not recommended:
+
+```html
+<!-- Note that we use iife.min.js -->
+<script src="https://openfpcdn.io/fingerprintjs/v3/iife.min.js"></script>
+<script>
+  // Initialize the agent at application startup.
+  var fpPromise = FingerprintJS.load()
+
+  // Analyze the visitor when necessary.
+  fpPromise
+    .then(fp => fp.get())
+    .then(result => console.log(result.visitorId))
+</script>
+```
 
 ### UMD
 

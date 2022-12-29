@@ -40,30 +40,30 @@ const firefoxIncognitoCapabilities = {
 /* eslint-disable max-len */
 // prettier-ignore
 const browserstackBrowsers = {
-  IE11: { os: 'Windows', os_version: '7', browser: 'IE', browser_version: '11.0' },
-  Windows11_EdgeLatest: { os: 'Windows', os_version: '11', browser: 'Edge', browser_version: 'latest-beta' },
-  Windows10_Chrome49: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: '49.0' },
-  // Windows10_Chrome49_Incognito: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: '49.0', ...chromeIncognitoCapabilities },
+  Windows10_Chrome57: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: '57' },
+  // Windows10_Chrome57_Incognito: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: '57', ...chromeIncognitoCapabilities },
   Windows11_ChromeLatest: { os: 'Windows', os_version: '11', browser: 'Chrome', browser_version: 'latest-beta' },
   // Windows11_ChromeLatest_Incognito: { os: 'Windows', os_version: '11', browser: 'Chrome', browser_version: 'latest-beta, ...chromeIncognitoCapabilities },
-  Windows10_Firefox52: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: '52.0' },
-  // Windows10_Firefox52_Incognito: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: '52.0', ...firefoxIncognitoCapabilities },
+  Windows10_Firefox67: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: '67' },
+  // Windows10_Firefox67_Incognito: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: '67', ...firefoxIncognitoCapabilities },
   Windows11_FirefoxLatest: { os: 'Windows', os_version: '11', browser: 'Firefox', browser_version: 'latest-beta' },
   // Windows11_FirefoxLatest_Incognito: { os: 'Windows', os_version: '11', browser: 'Firefox', browser_version: 'latest-beta, ...firefoxIncognitoCapabilities },
-  OSXMojave_Safari12: { os: 'OS X', os_version: 'Mojave', browser: 'Safari', browser_version: '12.1' },
-  OSXMonterey_Safari15: { os: 'OS X', os_version: 'Monterey', browser: 'Safari', browser_version: '15.0' },
-  OSXMonterey_ChromeLatest: { os: 'OS X', os_version: 'Monterey', browser: 'Chrome', browser_version: 'latest-beta' },
-  // OSXMonterey_ChromeLatest_Incognito: { os: 'OS X', os_version: 'Monterey', browser: 'Chrome', browser_version: 'latest-beta, ...chromeIncognitoCapabilities },
-  OSXMonterey_FirefoxLatest: { os: 'OS X', os_version: 'Monterey', browser: 'Firefox', browser_version: 'latest-beta' },
-  // OSXMonterey_FirefoxLatest_Incognito: { os: 'OS X', os_version: 'Monterey', browser: 'Firefox', browser_version: 'latest-beta, ...firefoxIncognitoCapabilities },
-  OSXMonterey_EdgeLatest: { os: 'OS X', os_version: 'Monterey', browser: 'Edge', browser_version: 'latest-beta' },
-  Android11_ChromeLatest: { device: 'Google Pixel 4', os: 'Android', os_version: '11.0', browser: 'Chrome', browser_version: 'latest-beta' },
-  iOS10_Safari: { device: 'iPhone 7', os: 'iOS', os_version: '10', browser: 'Safari' },
+  Windows11_EdgeLatest: { os: 'Windows', os_version: '11', browser: 'Edge', browser_version: 'latest-beta' },
+  'OSX10.14_Safari12': { os: 'OS X', os_version: 'Mojave', browser: 'Safari', browser_version: '12' },
+  OSX12_Safari15: { os: 'OS X', os_version: 'Monterey', browser: 'Safari', browser_version: '15' },
+  OSX13_Safari16: { os: 'OS X', os_version: 'Ventura', browser: 'Safari', browser_version: '16' },
+  OSX13_ChromeLatest: { os: 'OS X', os_version: 'Ventura', browser: 'Chrome', browser_version: 'latest-beta' },
+  // OSX13_ChromeLatest_Incognito: { os: 'OS X', os_version: 'Ventura', browser: 'Chrome', browser_version: 'latest-beta, ...chromeIncognitoCapabilities },
+  OSX13_FirefoxLatest: { os: 'OS X', os_version: 'Ventura', browser: 'Firefox', browser_version: 'latest-beta' },
+  // OSX13_FirefoxLatest_Incognito: { os: 'OS X', os_version: 'Ventura', browser: 'Firefox', browser_version: 'latest-beta, ...firefoxIncognitoCapabilities },
+  OSX13_EdgeLatest: { os: 'OS X', os_version: 'Ventura', browser: 'Edge', browser_version: 'latest-beta' },
+  Android13_ChromeLatest: { device: 'Google Pixel 7', os: 'Android', os_version: '13.0', browser: 'Chrome', browser_version: 'latest-beta' },
   iOS11_Safari: { device: 'iPhone 8 Plus', os: 'iOS', os_version: '11', browser: 'Safari' },
   iOS12_Safari: { device: 'iPhone XS', os: 'iOS', os_version: '12', browser: 'Safari' },
   iOS13_Safari: { device: 'iPhone 11 Pro', os: 'iOS', os_version: '13', browser: 'Safari' },
   iOS14_Safari: { device: 'iPhone 11', os: 'iOS', os_version: '14', browser: 'Safari' },
-  iOS15_Safari: { device: 'iPhone 11 Pro', os: 'iOS', os_version: '15', browser: 'Safari' },
+  iOS15_Safari: { device: 'iPhone 13', os: 'iOS', os_version: '15', browser: 'Safari' },
+  iOS16_Safari: { device: 'iPhone 14', os: 'iOS', os_version: '16', browser: 'Safari' },
 }
 /* eslint-enable max-len */
 
@@ -72,15 +72,7 @@ function makeBuildNumber() {
 }
 
 function setupLocal(config: Config) {
-  const files = [
-    // The polyfills are required for old supported browsers.
-    // They should be removed when the old browser support is dropped.
-    'node_modules/promise-polyfill/dist/polyfill.js',
-
-    'src/**/*.ts',
-    'tests/**/*.ts',
-    'dist/fp.min.js',
-  ]
+  const files = ['src/**/*.ts', 'tests/**/*.ts', 'dist/fp.min.js']
 
   config.set({
     frameworks: ['jasmine', 'karma-typescript'],

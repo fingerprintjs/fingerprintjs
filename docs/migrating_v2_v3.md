@@ -4,9 +4,8 @@ This guide shows how to migrate your code from FingerprintJS version 2 to versio
 
 ## Browser support
 
-The support of Internet Explorer 10 and older has been dropped.
-Some old browsers like Internet Explorer 11 and Android Browser 4.4 require a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) polyfill;
-see the [browser support guide](browser_support.md#old-browsers-requirements) to learn more about usage with these browsers.
+The support of Internet Explorer and some other browsers has been dropped.
+See the list of supported browsers in the [browser support guide](browser_support.md).
 
 ## Installation
 
