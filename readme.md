@@ -28,6 +28,7 @@
 </p>
 
 FingerprintJS is a browser fingerprinting library that queries browser attributes and computes a hashed visitor identifier from them. Unlike cookies and local storage, a fingerprint stays the same in incognito/private mode and even when browser data is purged.
+
 FingerprintJS is 100% open-source, but its accuracy is limited because it's only a client-side library without a backend.
 
 <table>
@@ -76,6 +77,8 @@ FingerprintJS is 100% open-source, but its accuracy is limited because it's only
 
 📕 [Full documentation](docs/api.md)
 
+⚛️ [Sample usage with React on the StackBlitz platform](https://stackblitz.com/edit/fingerprintjs-react-demo)
+
 ## Use the free Pro version to get 99.5% identification accuracy
 
 [Fingerprint Pro](https://fingerprint.com/github/) is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
@@ -85,7 +88,7 @@ Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addr
 
 <p align="center">
   <a href="https://fingerprint.com/github/">
-    <img src="resources/github-landing.png" alt="Pro screenshot" />
+    <img src="resources/github_landing.png" alt="Pro screenshot" />
   </a>
 </p>
 
@@ -139,7 +142,8 @@ Full product comparison:
 
 <sub>3. Fingerprint Pro is GDPR and CCPA compliant as the data processor. You still need to be compliant as the data controller and use the identification for fraud prevention under legitimate interest or ask for user consent.</sub>
 
-Pro result example:
+<details>
+<summary>Pro result example</summary>
 
 ```js
 {
@@ -159,9 +163,19 @@ Pro result example:
     "latitude": 37.409657,
     "longitude": -121.965467
     // ...
+  },
+  "firstSeenAt": {
+    "global": "2022-03-16T11:26:45.362Z",
+    "subscription": "2022-03-16T11:31:01.101Z"
+  },
+  "lastSeenAt": {
+    "global": "2022-05-21T18:05:43.023Z",
+    "subscription": "2022-05-20T05:41:29.926Z"
   }
 }
 ```
+
+</details>
 
 🍿 [Live demo](https://fingerprint.com/demo)
 
@@ -170,8 +184,6 @@ Pro result example:
 📕 [Fingerprint Pro documentation](https://dev.fingerprint.com)
 
 ▶️ [Video: use Fingerprint Pro to prevent multiple signups](https://www.youtube.com/watch?v=jWX9P5_jZn8)
-
-🤖 [Sample usage with React on the StackBlitz platform](https://stackblitz.com/edit/fingerprintjs-react-demo)
 
 ## Migrating from v2
 
