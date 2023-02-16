@@ -5,25 +5,11 @@ import { karmaPlugin, setHttpsAndServerForKarma } from '@fpjs-incubator/broyster
 declare module 'karma' {
   interface ConfigOptions {
     karmaTypescriptConfig?: KarmaTypescriptConfig | undefined
-    browserStack?: {
-      project: string
-      build: string | number
-      idleTimeout?: number
-      queueTimeout?: number
-    }
   }
 
   interface Config {
     preset?: string
     reporters: ConfigOptions['reporters']
-  }
-
-  interface CustomLauncher {
-    osVersion: string
-    deviceNameName?: string | string[] | undefined
-    browserVersion?: string | null | undefined
-    firefoxCapabilities?: Array<[string, string | number | boolean]>
-    useHttps: boolean
   }
 }
 
