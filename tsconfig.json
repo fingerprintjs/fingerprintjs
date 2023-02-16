@@ -2,7 +2,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "target": "es2021",
     "removeComments": false,
     "resolveJsonModule": true,
@@ -12,5 +12,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true
-  }
+  },
+  "files": [
+    "node_modules/@fpjs-incubator/broyster/dist/index_node.d.ts"
+  ]
 }

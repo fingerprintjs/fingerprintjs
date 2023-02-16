@@ -47,13 +47,13 @@
     "tslib": "^2.4.1"
   },
   "devDependencies": {
+    "@fpjs-incubator/broyster": "^0.1.0",
     "@rollup/plugin-json": "^5.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-terser": "^0.2.1",
     "@rollup/plugin-typescript": "^10.0.1",
     "@types/jasmine": "^3.10.3",
     "@types/karma": "^6.3.3",
-    "@types/karma-browserstack-launcher": "^1.6.2",
     "@types/karma-spec-reporter": "^0.0.3",
     "@types/karma-summary-reporter": "^3.1.0",
     "@types/ua-parser-js": "^0.7.36",
@@ -66,7 +66,6 @@
     "got": "^11.8.5",
     "html-webpack-plugin": "^5.5.0",
     "karma": "^6.4.1",
-    "karma-browserstack-launcher": "^1.6.0",
     "karma-chrome-launcher": "^3.1.1",
     "karma-firefox-launcher": "^2.1.2",
     "karma-jasmine": "^4.0.2",
