@@ -69,7 +69,6 @@ const browserstackBrowsers = {
 /* eslint-enable max-len */
 
 function makeBuildNumber() {
-  return 'danger zone'
   return `No CI ${Math.floor(Math.random() * 1e10)}`
 }
 
