@@ -12,8 +12,5 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true
-  },
-  "files": [
-    "node_modules/@fpjs-incubator/broyster/dist/index_node.d.ts"
-  ]
+  }
 }

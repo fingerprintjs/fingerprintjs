@@ -36,7 +36,7 @@ const firefoxIncognitoCapabilities = {
  * https://www.browserstack.com/docs/automate/javascript-testing/configure-test-run-options
  * The keys are arbitrary values.
  *
- * Only Chrome is supported on Android, only Safari is supported on iplatform: https://www.browserstack.com/question/659
+ * Only Chrome is supported on Android, only Safari is supported on iOS: https://www.browserstack.com/question/659
  */
 /* eslint-disable max-len */
 // prettier-ignore
@@ -58,13 +58,47 @@ const browserstackBrowsers = {
   OSX13_FirefoxLatest: { platform: 'OS X', osVersion: 'Ventura', browserName: 'Firefox', browserVersion: 'latest-beta', useHttps: true },
   // OSX13_FirefoxLatest_Incognito: { platform: 'OS X', osVersion: 'Ventura', browserName: 'Firefox', browserVersion: 'latest-beta, ...firefoxIncognitoCapabilities },
   OSX13_EdgeLatest: { platform: 'OS X', osVersion: 'Ventura', browserName: 'Edge', browserVersion: 'latest-beta', useHttps: true },
-  Android13_ChromeLatest: { deviceName: 'Google Pixel 7', platform: 'Android', osVersion: '13.0', browserName: 'Chrome', browserVersion: 'latest-beta', useHttps: true },
-  iOS11_Safari: { deviceName: 'iPhone 8 Plus', platform: 'iOS', osVersion: '11', browserName: 'Safari', useHttps: true },
-  iOS12_Safari: { deviceName: 'iPhone XS', platform: 'iOS', osVersion: '12', browserName: 'Safari', useHttps: true },
-  iOS13_Safari: { deviceName: 'iPhone 11 Pro', platform: 'iOS', osVersion: '13', browserName: 'Safari', useHttps: true },
-  iOS14_Safari: { deviceName: 'iPhone 11', platform: 'iOS', osVersion: '14', browserName: 'Safari', useHttps: true },
-  iOS15_Safari: { deviceName: 'iPhone 13', platform: 'iOS', osVersion: '15', browserName: 'Safari', useHttps: true },
-  iOS16_Safari: { deviceName: 'iPhone 14', platform: 'iOS', osVersion: '16', browserName: 'Safari', useHttps: true },
+  Android13_ChromeLatest: { deviceName: ['Google Pixel 7', 'Google Pixel 7 Pro', 'Google Pixel 6 Pro'], platform: 'Android', osVersion: '13.0', browserName: 'Chrome', browserVersion: 'latest-beta', useHttps: true },
+  iOS11_Safari: { deviceName: ['iPhone 8 Plus', 'iPhone 6S', 'iPhone 8', 'iPhone 6'], platform: 'iOS', osVersion: '11', browserName: 'Safari', useHttps: true },
+  iOS12_Safari: { deviceName: ['iPhone XS', 'iPhone 6S', 'iPhone 8 Plus', 'iPhone XR'], platform: 'iOS', osVersion: '12', browserName: 'Safari', useHttps: true },
+  iOS13_Safari: {
+    deviceName: ['iPhone 11 Pro', 'iPhone 8', 'iPhone XS', 'iPhone 11 Pro Max'],
+    platform: 'iOS',
+    osVersion: '13',
+    browserName: 'Safari',
+    useHttps: true,
+  },
+  iOS14_Safari: {
+    deviceName: ['iPhone 11', 'iPhone XS', 'iPhone 12 Pro', 'iPhone 12 mini'],
+    platform: 'iOS',
+    osVersion: '14',
+    browserName: 'Safari',
+    useHttps: true,
+  },
+  iOS15_Safari: {
+    deviceName: [
+      'iPhone 13',
+      'iPhone 13 Mini',
+      'iPhone 11 Pro',
+      'iPhone 11',
+    ],
+    platform: 'iOS',
+    osVersion: '15',
+    browserName: 'Safari',
+    useHttps: true,
+  },
+  iOS16_Safari: {
+    deviceName: [
+      'iPhone 14',
+      'iPhone 14 Pro Max',
+      'iPhone 14 Pro',
+      'iPhone 14 Plus'
+    ],
+    platform: 'iOS',
+    osVersion: '16',
+    browserName: 'Safari',
+    useHttps: true,
+  },
 }
 /* eslint-enable max-len */
 
