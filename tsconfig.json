@@ -1,4 +1,3 @@
-// Common style settings and default options for ts-node use-cases
 {
   "compilerOptions": {
     "module": "esnext",
