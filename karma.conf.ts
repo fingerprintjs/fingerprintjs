@@ -85,7 +85,7 @@ function setupLocal(config: Config) {
     concurrency: 3,
 
     karmaTypescriptConfig: {
-      tsconfig: 'tsconfig.browser.json',
+      tsconfig: 'tsconfig.json',
       compilerOptions: {
         module: 'commonjs',
         sourceMap: true,
