@@ -17,7 +17,6 @@ const configurationFactory: ConfigOptions = (_env, { mode = 'development' }) => 
         loader: 'ts-loader',
         exclude: /node_modules/,
         options: {
-          configFile: '../tsconfig.json',
           compilerOptions: {
             sourceMap: true,
           },
