@@ -1,9 +1,6 @@
 // Used by Rollup to load its own configuration file
 {
   "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "module": "esnext"
-  },
   "include": [
     "rollup.config.ts"
   ]

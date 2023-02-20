@@ -1,13 +1,6 @@
 // For compiling files that will run in browser
 {
   "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "module": "esnext",
-    "target": "es5"
-  },
-
-  // It must include everything that Rollup will encounter,
-  // and preferably nothing else in order not to compile excess files
   "include": [
     "src/index.ts",
     "src/**/*.d.ts",
