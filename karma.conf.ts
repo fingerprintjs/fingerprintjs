@@ -1,5 +1,6 @@
 import { Config, CustomLauncher } from 'karma'
 import { KarmaTypescriptConfig } from 'karma-typescript/dist/api/configuration'
+import { karmaPlugin, setHttpsAndServerForKarma } from '@fpjs-incubator/broyster/node'
 
 declare module 'karma' {
   interface ConfigOptions {
@@ -40,30 +41,30 @@ const firefoxIncognitoCapabilities = {
 /* eslint-disable max-len */
 // prettier-ignore
 const browserstackBrowsers = {
-  Windows10_Chrome57: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: '57' },
-  // Windows10_Chrome57_Incognito: { os: 'Windows', os_version: '10', browser: 'Chrome', browser_version: '57', ...chromeIncognitoCapabilities },
-  Windows11_ChromeLatest: { os: 'Windows', os_version: '11', browser: 'Chrome', browser_version: 'latest-beta' },
-  // Windows11_ChromeLatest_Incognito: { os: 'Windows', os_version: '11', browser: 'Chrome', browser_version: 'latest-beta, ...chromeIncognitoCapabilities },
-  Windows10_Firefox67: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: '67' },
-  // Windows10_Firefox67_Incognito: { os: 'Windows', os_version: '10', browser: 'Firefox', browser_version: '67', ...firefoxIncognitoCapabilities },
-  Windows11_FirefoxLatest: { os: 'Windows', os_version: '11', browser: 'Firefox', browser_version: 'latest-beta' },
-  // Windows11_FirefoxLatest_Incognito: { os: 'Windows', os_version: '11', browser: 'Firefox', browser_version: 'latest-beta, ...firefoxIncognitoCapabilities },
-  Windows11_EdgeLatest: { os: 'Windows', os_version: '11', browser: 'Edge', browser_version: 'latest-beta' },
-  'OSX10.14_Safari12': { os: 'OS X', os_version: 'Mojave', browser: 'Safari', browser_version: '12' },
-  OSX12_Safari15: { os: 'OS X', os_version: 'Monterey', browser: 'Safari', browser_version: '15' },
-  OSX13_Safari16: { os: 'OS X', os_version: 'Ventura', browser: 'Safari', browser_version: '16' },
-  OSX13_ChromeLatest: { os: 'OS X', os_version: 'Ventura', browser: 'Chrome', browser_version: 'latest-beta' },
-  // OSX13_ChromeLatest_Incognito: { os: 'OS X', os_version: 'Ventura', browser: 'Chrome', browser_version: 'latest-beta, ...chromeIncognitoCapabilities },
-  OSX13_FirefoxLatest: { os: 'OS X', os_version: 'Ventura', browser: 'Firefox', browser_version: 'latest-beta' },
-  // OSX13_FirefoxLatest_Incognito: { os: 'OS X', os_version: 'Ventura', browser: 'Firefox', browser_version: 'latest-beta, ...firefoxIncognitoCapabilities },
-  OSX13_EdgeLatest: { os: 'OS X', os_version: 'Ventura', browser: 'Edge', browser_version: 'latest-beta' },
-  Android13_ChromeLatest: { device: 'Google Pixel 7', os: 'Android', os_version: '13.0', browser: 'Chrome', browser_version: 'latest-beta' },
-  iOS11_Safari: { device: 'iPhone 8 Plus', os: 'iOS', os_version: '11', browser: 'Safari' },
-  iOS12_Safari: { device: 'iPhone XS', os: 'iOS', os_version: '12', browser: 'Safari' },
-  iOS13_Safari: { device: 'iPhone 11 Pro', os: 'iOS', os_version: '13', browser: 'Safari' },
-  iOS14_Safari: { device: 'iPhone 11', os: 'iOS', os_version: '14', browser: 'Safari' },
-  iOS15_Safari: { device: 'iPhone 13', os: 'iOS', os_version: '15', browser: 'Safari' },
-  iOS16_Safari: { device: 'iPhone 14', os: 'iOS', os_version: '16', browser: 'Safari' },
+  Windows10_Chrome57: { platform: 'Windows', osVersion: '10', browserName: 'Chrome', browserVersion: '57', useHttps: true },
+  // Windows10_Chrome57_Incognito: { platform: 'Windows', osVersion: '10', browserName: 'Chrome', browserVersion: '57', ...chromeIncognitoCapabilities },
+  Windows11_ChromeLatest: { platform: 'Windows', osVersion: '11', browserName: 'Chrome', browserVersion: 'latest-beta', useHttps: true },
+  // Windows11_ChromeLatest_Incognito: { platform: 'Windows', osVersion: '11', browserName: 'Chrome', browserVersion: 'latest-beta, ...chromeIncognitoCapabilities },
+  Windows10_Firefox67: { platform: 'Windows', osVersion: '10', browserName: 'Firefox', browserVersion: '67', useHttps: true },
+  // Windows10_Firefox67_Incognito: { platform: 'Windows', osVersion: '10', browserName: 'Firefox', browserVersion: '67', ...firefoxIncognitoCapabilities },
+  Windows11_FirefoxLatest: { platform: 'Windows', osVersion: '11', browserName: 'Firefox', browserVersion: 'latest-beta', useHttps: true },
+  // Windows11_FirefoxLatest_Incognito: { platform: 'Windows', osVersion: '11', browserName: 'Firefox', browserVersion: 'latest-beta, ...firefoxIncognitoCapabilities },
+  Windows11_EdgeLatest: { platform: 'Windows', osVersion: '11', browserName: 'Edge', browserVersion: 'latest-beta', useHttps: true },
+  'OSX10.14_Safari12': { platform: 'OS X', osVersion: 'Mojave', browserName: 'Safari', browserVersion: '12', useHttps: true },
+  OSX12_Safari15: { platform: 'OS X', osVersion: 'Monterey', browserName: 'Safari', browserVersion: '15', useHttps: false },
+  OSX13_Safari16: { platform: 'OS X', osVersion: 'Ventura', browserName: 'Safari', browserVersion: '16', useHttps: false },
+  OSX13_ChromeLatest: { platform: 'OS X', osVersion: 'Ventura', browserName: 'Chrome', browserVersion: 'latest-beta', useHttps: true },
+  // OSX13_ChromeLatest_Incognito: { platform: 'OS X', osVersion: 'Ventura', browserName: 'Chrome', browserVersion: 'latest-beta, ...chromeIncognitoCapabilities },
+  OSX13_FirefoxLatest: { platform: 'OS X', osVersion: 'Ventura', browserName: 'Firefox', browserVersion: 'latest-beta', useHttps: true },
+  // OSX13_FirefoxLatest_Incognito: { platform: 'OS X', osVersion: 'Ventura', browserName: 'Firefox', browserVersion: 'latest-beta, ...firefoxIncognitoCapabilities },
+  OSX13_EdgeLatest: { platform: 'OS X', osVersion: 'Ventura', browserName: 'Edge', browserVersion: 'latest-beta', useHttps: true },
+  Android13_ChromeLatest: { deviceName: ['Google Pixel 7', 'Google Pixel 7 Pro', 'Google Pixel 6 Pro'], platform: 'Android', osVersion: '13.0', browserName: 'Chrome', browserVersion: 'latest-beta', useHttps: true },
+  iOS11_Safari: { deviceName: ['iPhone 8 Plus', 'iPhone 6S', 'iPhone 8', 'iPhone 6'], platform: 'iOS', osVersion: '11', browserName: 'Safari', useHttps: true },
+  iOS12_Safari: { deviceName: ['iPhone XS', 'iPhone 6S', 'iPhone 8 Plus', 'iPhone XR'], platform: 'iOS', osVersion: '12', browserName: 'Safari', useHttps: true },
+  iOS13_Safari: { deviceName: ['iPhone 11 Pro', 'iPhone 8', 'iPhone XS', 'iPhone 11 Pro Max'], platform: 'iOS', osVersion: '13', browserName: 'Safari', useHttps: true },
+  iOS14_Safari: { deviceName: ['iPhone 11', 'iPhone XS', 'iPhone 12 Pro', 'iPhone 12 mini'], platform: 'iOS', osVersion: '14', browserName: 'Safari', useHttps: true },
+  iOS15_Safari: { deviceName: ['iPhone 13', 'iPhone 13 Mini', 'iPhone 11 Pro', 'iPhone 11'], platform: 'iOS', osVersion: '15', browserName: 'Safari', useHttps: true },
+  iOS16_Safari: { deviceName: ['iPhone 14', 'iPhone 14 Pro Max', 'iPhone 14 Pro', 'iPhone 14 Plus'], platform: 'iOS', osVersion: '16', browserName: 'Safari', useHttps: true},
 }
 /* eslint-enable max-len */
 
@@ -120,10 +121,12 @@ function setupBrowserstack(config: Config) {
 
   config.set({
     reporters: [...(config.reporters || []), 'BrowserStack'],
+    plugins: [karmaPlugin, 'karma-*'],
     browsers: Object.keys(customLaunchers),
     customLaunchers,
     concurrency: 5,
-
+    retryLimit: 3,
+    captureTimeout: 15_000,
     browserStack: {
       project: 'FingerprintJS',
       // A build number is required to group testing sessions in the BrowserStack UI.
@@ -131,9 +134,11 @@ function setupBrowserstack(config: Config) {
       // https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables#default-environment-variables
       build: process.env.GITHUB_RUN_ID || makeBuildNumber(),
       // The timeout is reduced for testing sessions to not hold the BrowserStack queue long in case of problems.
-      timeout: 120,
+      idleTimeout: 20_000,
+      queueTimeout: 300_000,
     },
   })
+  setHttpsAndServerForKarma(config)
 }
 
 /**

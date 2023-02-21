@@ -2,7 +2,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "target": "es2021",
     "removeComments": false,
     "resolveJsonModule": true,
