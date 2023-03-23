@@ -43,7 +43,7 @@ yarn remove @types/fingerprintjs__fingerprintjs
 
 ## Initialization
 
-Version 3 doesn't require you to call `requiestIdleCallback` or `setTimeout` manually.
+Version 3 doesn't require you to call `requestIdleCallback` or `setTimeout` manually.
 Instead, you must call `FingerprintJS.load()`.
 This function returns a promise that resolves with an agent object.
 The agent has a `get` method that you will use instead of calling `Fingerprint2.get` directly:
