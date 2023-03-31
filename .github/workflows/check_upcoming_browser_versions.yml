@@ -1,0 +1,49 @@
+# Reference on this file: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+# You need to add BrowserStack access keys in order for the tests to work. Get a BrowserStack automate account, then go
+# to the repository settings, the Secrets page and add secrets: BROWSERSTACK_USERNAME, BROWSERSTACK_ACCESS_KEY.
+# The Slackbot 'BetaBot' will inform the team if this job fails and will link to the specific run
+# It can be congifured under https://fingerprintjs.slack.com/apps/A050S8ALJUS-betabot
+# The token for the bot only changes if you uninstall and install it again, following the above link
+name: Check upcoming browser versions
+on:
+  schedule:
+    - cron: '0 17 ? * MON-FRI'
+env:
+  BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+  BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+  SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+  SLACK_CHANEL: ${{ secrets.SLACK_CHANNEL }}
+
+jobs:
+  unit_tests:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency: browserstack
+    steps:
+      # This action contains the common steps for the jobs and stays in this repository: .github/actions/build_share/action.yml
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Cache the Node modules
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: nodemodules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: nodemodules-
+      - name: Install Node packages
+        run: yarn install
+      - name: Build the engaged submodules
+        run: yarn submodules refresh
+      - name: Build
+        run: yarn build
+      - name: Run unit tests
+        run: yarn test:browserstack:beta
+      - name: Post to a Slack channel
+        id: slack
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: ${{ env.SLACK_CHANEL }}
+          slack-message: "An issue was found when running unit tests against beta versions of the browsers.\nPlease check the build:\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        if: ${{ failure() }}
