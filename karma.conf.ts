@@ -7,9 +7,8 @@ declare module 'karma' {
     karmaTypescriptConfig?: KarmaTypescriptConfig | undefined
   }
 
-  interface Config {
+  interface Config extends ConfigOptions {
     preset?: string
-    reporters: ConfigOptions['reporters']
   }
 }
 
@@ -141,6 +140,29 @@ function setupBrowserstack(config: Config) {
   setHttpsAndServerForKarma(config)
 }
 
+function setupBrowserStackBetaBuilds(config: Config) {
+  setupBrowserstack(config)
+
+  const customLaunchers: Record<string, CustomLauncher> = {}
+  for (const [key, data] of Object.entries(browserstackBrowsers)) {
+    if ('browserVersion' in data && data['browserVersion'].includes('beta')) {
+      customLaunchers[key] = {
+        base: 'BrowserStack',
+        name: key.replace(/_/g, ' '),
+        ...data,
+      }
+    }
+  }
+
+  config.set({
+    browsers: Object.keys(customLaunchers),
+    customLaunchers,
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    browserStack: { ...config.browserStack!, project: 'Monitoring' },
+  })
+}
+
 /**
  * Add `--preset local` or `--preset browserstack` to the Karma command to choose where to run the tests.
  */
@@ -150,6 +172,8 @@ module.exports = (config: Config) => {
       return setupLocal(config)
     case 'browserstack':
       return setupBrowserstack(config)
+    case 'browserstack-beta':
+      return setupBrowserStackBetaBuilds(config)
     default:
       throw new Error('No --preset option is set or an unknown value is set')
   }

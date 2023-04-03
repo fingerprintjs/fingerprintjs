@@ -32,7 +32,7 @@ jobs:
       - name: Build
         run: yarn build
       - name: Run unit tests
-        run: yarn test:browserstack
+        run: yarn test:browserstack:beta
       - name: Post to a Slack channel
         id: slack
         uses: slackapi/slack-github-action@v1.23.0
