@@ -6,9 +6,7 @@
 
 name: Check upcoming browser versions
 
-on:
-  schedule:
-    - cron: '0 17 ? * MON-FRI'
+on: [push, pull_request]
 env:
   BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
   BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
@@ -34,7 +32,7 @@ jobs:
       - name: Build
         run: yarn build
       - name: Run unit tests
-        run: yarn test:browserstack
+        run: yarn test:browserstack:beta
       - name: Post to a Slack channel
         id: slack
         uses: slackapi/slack-github-action@v1.23.0
