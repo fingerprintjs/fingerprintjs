@@ -40,7 +40,6 @@
     "lint:fix": "yarn lint --fix",
     "test:local": "karma start --preset local --single-run",
     "test:browserstack": "karma start --preset browserstack --single-run",
-    "test:browserstack:beta": "karma start --preset browserstack-beta --single-run",
     "check:dts": "tsc --isolatedModules --noEmit dist/fp.d.ts",
     "check:ssr": "node --require './dist/fp.cjs.js' --eval '' || (echo \"The distributive files can't be used with server side rendering. Make sure the code doesn't use browser API until an exported function is called.\" && exit 1)"
   },
