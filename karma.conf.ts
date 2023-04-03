@@ -73,7 +73,7 @@ function makeBuildNumber() {
 }
 
 function setupLocal(config: Config) {
-  const files = ['src/**/*.ts', 'tests/**/*.ts', 'dist/fp.min.js']
+  const files = ['tests/utils/karma_global_setup.ts', 'src/**/*.ts', 'tests/**/*.ts', 'dist/fp.min.js']
 
   config.set({
     frameworks: ['jasmine', 'karma-typescript'],
