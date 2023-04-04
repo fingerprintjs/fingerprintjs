@@ -222,10 +222,10 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@fpjs-incubator/broyster@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@fpjs-incubator/broyster/-/broyster-0.1.2.tgz#43bfd5f701fb36a56cf273f60e23723e7692739f"
-  integrity sha512-nCLgGinzjxIyYagEvDf1iHQj3fsDCCJj5ovD7wrrC6y9LJKFc35pRLkFbKVbj2SQOeHzDOnFBXTXrZDDboUG4A==
+"@fpjs-incubator/broyster@^0.1.3":
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/@fpjs-incubator/broyster/-/broyster-0.1.3.tgz#4f0218df290bdd8a548d6d98fc70a94a023fd508"
+  integrity sha512-zjvaNa/rpxHZaX/0S0lqQk/78KcFBNdlfI7ItKEnYydu6k1RGTkXCJ1wjH8lyEhFSGEunxDJfS9jEVXbx5fhAA==
   dependencies:
     async-lock "^1.4.0"
     browserstack "~1.5.1"
