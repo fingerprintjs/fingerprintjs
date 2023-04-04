@@ -15,6 +15,7 @@ jobs:
     name: Lint and test
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    concurrency: browserstack
     steps:
       # TypeScript types are checked during building and testing so there is no need for a separate step for the check
       - name: Checkout
