@@ -26,8 +26,8 @@ jobs:
       - name: Cache the Node modules
         uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: nodemodules-${{ hashFiles('**/yarn.lock') }}
+          path: node_modules
+          key: nodemodules-${{ hashFiles('yarn.lock') }}
           restore-keys: nodemodules-
       - name: Install Node packages
         run: yarn install
