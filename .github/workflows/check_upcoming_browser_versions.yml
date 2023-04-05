@@ -34,7 +34,7 @@ jobs:
       - name: Build
         run: yarn build
       - name: Run unit tests
-        run: yarn test:browserstack:beta
+        run: yarn test:browserstack:beta --log-level ${{ github.run_attempt == 1 && 'info' || 'debug' }}
       - name: Post to a Slack channel
         id: slack
         uses: slackapi/slack-github-action@v1.23.0
