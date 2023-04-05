@@ -126,7 +126,7 @@ function setupBrowserstack(config: Config) {
     concurrency: 5,
     retryLimit: 3,
     captureTimeout: 15_000,
-    browserDisconnectTolerance: 2,
+    browserDisconnectTolerance: 1,
     browserStack: {
       project: 'FingerprintJS',
       // A build number is required to group testing sessions in the BrowserStack UI.
