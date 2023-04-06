@@ -43,7 +43,7 @@ FingerprintJS is 100% open-source, but its accuracy is limited because it's only
       <td>FingerprintJS has limited accuracy (40% - 60%) and functionality, because it's not possible to do many things without a backend.</td>
       <td>
         <a href="https://fingerprint.com/github">Fingerprint Pro</a> is a high-scale device identity platform that has both client-side and server-side components and identifies browsers and mobile devices with a 99.5% accuracy. 
-        Fingerprint Pro is free for developers, production plans start at $200/mo.
+        Fingerprint Pro starts at $200/mo for up to 100K API calls.
       </td>
     </tr>
      <tr>
@@ -79,7 +79,7 @@ FingerprintJS is 100% open-source, but its accuracy is limited because it's only
 
 ⚛️ [Sample usage with React on the StackBlitz platform](https://stackblitz.com/edit/fingerprintjs-react-demo)
 
-## Use the free Pro version to get 99.5% identification accuracy
+## Use Fingerprint Pro to get 99.5% identification accuracy
 
 [Fingerprint Pro](https://fingerprint.com/github/) is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
 Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in the 99.5% identification accuracy. Fingerprint Pro is available for Web, Android, iOS and other platforms.
