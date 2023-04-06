@@ -1,12 +1,9 @@
 import * as FPJS from '../src'
-import { retryFailedTests } from '@fpjs-incubator/broyster/browser'
 
 /*
  * Checks that the distributive file works in a browser.
  * Build the minified script before running this test.
  */
-
-retryFailedTests(3, 100)
 
 declare const FingerprintJS: typeof FPJS
 
