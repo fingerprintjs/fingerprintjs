@@ -1,5 +1,5 @@
 import { isDesktopSafari, isWebKit, isWebKit606OrNewer } from '../utils/browser'
-import { suppressUnhandledRejectionWarning } from '../utils/async'
+import { isPromise, suppressUnhandledRejectionWarning } from '../utils/async'
 
 export const enum SpecialFingerprint {
   /** Making a fingerprint is skipped because the browser is known to always suspend audio context */
@@ -107,7 +107,13 @@ function startRenderingAudio(context: OfflineAudioContext) {
 
     const tryRender = () => {
       try {
-        context.startRendering()
+        const renderingPromise = context.startRendering()
+
+        // `context.startRendering` has two APIs: Promise and callback, we check that it's really a promise just in case
+        if (isPromise(renderingPromise)) {
+          // Suppresses all unhadled rejections in case of scheduled redundant retries after successful rendering
+          suppressUnhandledRejectionWarning(renderingPromise)
+        }
 
         switch (context.state) {
           case 'running':
