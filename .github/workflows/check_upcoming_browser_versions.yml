@@ -6,7 +6,9 @@
 
 name: Check upcoming browser versions
 
-on: [push, pull_request]
+on: 
+  schedule:
+    - cron: '0 17 ? * MON-FRI'
 env:
   BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
   BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
