@@ -16,7 +16,7 @@ jobs:
   unit_tests:
     name: Run unit tests
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     concurrency: browserstack
     steps:
       - name: Checkout
@@ -34,6 +34,7 @@ jobs:
       - name: Run unit tests
         uses: nick-fields/retry@v2
         with:
+          timeout_minutes: 5
           max_attempts: 2
           retry_on: error
           command: yarn test:browserstack:beta
