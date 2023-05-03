@@ -12,5 +12,5 @@ You can find scripts on the following URLs (you can replace the version with the
   - UMD download URL: `https://openfpcdn.io/fingerprintjs/v3/umd.min.js`.
 
 ## Commercial alternatives
-- Use the [free tier for Fingerprint Pro](https://dashboard.fingerprint.com/signup), which allows making up to 20K identification events per month. This option supports both the CDN and NPM installation options as well as a [custom subdomain](https://dev.fingerprint.com/docs/subdomain-integration) that will prevent the ad blocker blocking.
+- Sign up for a [14-day free trial](https://dashboard.fingerprint.com/signup) of Fingerprint Pro, which includes unlimited API calls. This includes both the CDN and NPM installation options as well as a [custom subdomain](https://dev.fingerprint.com/docs/subdomain-integration) that will prevent blocking of ad blockers.
 - Use the [paid tier for Fingerprint Pro](https://dashboard.fingerprint.com/signup), which allows making an unlimited number of identification events per month. This option supports both CDN and NPM installation options and the [custom subdomain](https://dev.fingerprint.com/docs/subdomain-integration) functionality too.
