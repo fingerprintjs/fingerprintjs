@@ -6,7 +6,7 @@
 
 name: Check upcoming browser versions
 
-on:
+on: 
   schedule:
     - cron: '0 17 ? * MON-FRI'
 env:
@@ -18,7 +18,7 @@ jobs:
   unit_tests:
     name: Run unit tests
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     concurrency: browserstack
     steps:
       - name: Checkout
@@ -34,7 +34,13 @@ jobs:
       - name: Build
         run: yarn build
       - name: Run unit tests
-        run: yarn test:browserstack:beta --log-level ${{ github.run_attempt == 1 && 'info' || 'debug' }}
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 2
+          retry_on: error
+          command: yarn test:browserstack:beta
+          new_command_on_retry: yarn test:browserstack:beta --log-level debug
       - name: Post to a Slack channel
         id: slack
         uses: slackapi/slack-github-action@v1.23.0
