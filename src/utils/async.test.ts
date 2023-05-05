@@ -1,5 +1,5 @@
 import { holdLoop } from '../../tests/utils'
-import { awaitIfAsync, forEachWithBreaks, wait } from './async'
+import { awaitIfAsync, mapWithBreaks, wait } from './async'
 
 describe('Async utilities', () => {
   describe('awaitIfAsync', () => {
@@ -97,32 +97,35 @@ describe('Async utilities', () => {
   })
 
   describe('forEachWithBreaks', () => {
-    it('invokes the callback for every item', async () => {
+    it('invokes the callback for every item and returns the results', async () => {
       const items = [3, 1, 4, 1, 5, 9, 2]
+      const transformation = (value: number) => value ** 2
       const invokedIndices: number[] = []
       const invokedItems: number[] = []
-      await forEachWithBreaks(
+      const results = await mapWithBreaks(
         items,
         (item, index) => {
           invokedIndices.push(index)
           invokedItems.push(item)
           holdLoop(1)
+          return transformation(item)
         },
         2,
       )
       expect(invokedIndices).toEqual([0, 1, 2, 3, 4, 5, 6])
       expect(invokedItems).toEqual(items)
+      expect(results).toEqual(items.map(transformation))
     })
 
     it("doesn't change the input array", async () => {
-      await forEachWithBreaks(Object.freeze([3, 1, 4, 1, 5, 9, 2]), () => undefined)
+      await mapWithBreaks(Object.freeze([3, 1, 4, 1, 5, 9, 2]), () => undefined)
     })
 
     it('releases the JS event loop for asynchronous events', async () => {
       let intervalFireCounter = 0
       const intervalId = setInterval(() => ++intervalFireCounter, 1)
       try {
-        await forEachWithBreaks(Array(13), () => holdLoop(1), 3)
+        await mapWithBreaks(Array(13), () => holdLoop(1), 3)
       } finally {
         clearInterval(intervalId)
       }
@@ -131,11 +134,20 @@ describe('Async utilities', () => {
 
     it("doesn't wait for asynchronous callback", async () => {
       let hasAsyncCallbackCompleted = false
-      await forEachWithBreaks(['foo', 'bar'], async () => {
+      await mapWithBreaks(['foo', 'bar'], async () => {
         await wait(5)
         hasAsyncCallbackCompleted = true
       })
       expect(hasAsyncCallbackCompleted).toBeFalse()
+    })
+
+    it('rejects if a callback throws', async () => {
+      const error = new Error('Test')
+      await expectAsync(
+        mapWithBreaks([1, 2], () => {
+          throw error
+        }),
+      ).toBeRejectedWith(error)
     })
   })
 })
