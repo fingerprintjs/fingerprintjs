@@ -2,7 +2,7 @@ import getCanvasFingerprint from './canvas'
 
 describe('Sources', () => {
   describe('canvas', () => {
-    it('returns stable results', () => {
+    it('returns stable values', () => {
       const first = getCanvasFingerprint()
       const second = getCanvasFingerprint()
 

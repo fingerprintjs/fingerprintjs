@@ -239,6 +239,13 @@ async function entropySource() {
 
 When you complete an entropy source, add it to [src/sources/index.ts](src/sources/index.ts).
 
+Every entropy source needs to be covered with unit tests.
+These tests are meant to verify that the entropy source returns expected values across all supported browsers.
+In the event of significant changes or deprecation of underlying APIs, these tests should start to fail in future browser versions.
+Additionally, if deemed necessary, it's recommended to include a test to ensure that the entropy source remains stable.
+
+For inspiration see existing tests in [src/sources/](src/sources/).  
+
 ### How to publish
 
 This section is for repository maintainers.

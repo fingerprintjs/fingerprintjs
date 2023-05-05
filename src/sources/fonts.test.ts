@@ -1,4 +1,13 @@
-import { isAndroid, isChromium, isGecko, isMacOS, isMobile, isWebKit, isWindows } from '../../tests/utils'
+import {
+  getBrowserMajorVersion,
+  isAndroid,
+  isChromium,
+  isGecko,
+  isMacOS,
+  isMobile,
+  isWebKit,
+  isWindows,
+} from '../../tests/utils'
 import getFonts from './fonts'
 
 describe('Sources', () => {
@@ -20,12 +29,12 @@ describe('Sources', () => {
 
       if (isWindows()) {
         if (isGecko()) {
-          expect(
-            isSubset(
-              ['Calibri', 'Franklin Gothic', 'HELV', 'MS UI Gothic', 'Marlett', 'Segoe UI Light', 'Small Fonts'],
-              result,
-            ),
-          ).toBeTrue()
+          const expectedFonts =
+            (getBrowserMajorVersion() ?? 0) < 89
+              ? ['Calibri', 'Franklin Gothic', 'MS UI Gothic', 'Marlett', 'Segoe UI Light', 'Small Fonts']
+              : ['Calibri', 'Franklin Gothic', 'HELV', 'MS UI Gothic', 'Marlett', 'Segoe UI Light', 'Small Fonts']
+
+          expect(isSubset(expectedFonts, result)).toBeTrue()
           return
         }
         if (isChromium()) {
@@ -34,6 +43,8 @@ describe('Sources', () => {
           ).toBeTrue()
           return
         }
+
+        return
       }
 
       if (isAndroid()) {
