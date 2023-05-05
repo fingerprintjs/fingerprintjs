@@ -77,6 +77,18 @@ export function getBrowserMajorVersion(): number | undefined {
   return parseInt(version.split('.')[0])
 }
 
+export function getBrowserVersion(): { major: number; minor: number } | undefined {
+  const version = new UAParser().getBrowser().version
+  if (version === undefined) {
+    return undefined
+  }
+
+  return {
+    major: parseInt(version.split('.')[0]),
+    minor: parseInt(version.split('.')[1]),
+  }
+}
+
 export function getBrowserEngineMajorVersion(): number | undefined {
   const version = new UAParser().getEngine().version
   if (version === undefined) {

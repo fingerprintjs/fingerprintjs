@@ -17,34 +17,30 @@ describe('Sources', () => {
 
       // macOS (Firefox, Chromium, Safari)
       if (isMacOS()) {
-        expect(isSubset(['Arial Unicode MS', 'Gill Sans', 'Helvetica Neue', 'Menlo'], result)).toBeTrue()
+        containsExpectedFonts(['Arial Unicode MS', 'Gill Sans', 'Helvetica Neue', 'Menlo'], result)
         return
       }
 
       // iOS (Safari)
       if (isWebKit() && isMobile()) {
-        expect(isSubset(['Gill Sans', 'Helvetica Neue', 'Menlo'], result)).toBeTrue()
+        containsExpectedFonts(['Gill Sans', 'Helvetica Neue', 'Menlo'], result)
         return
       }
 
       if (isWindows()) {
         if (isGecko()) {
-          const expectedFonts =
+          const expected =
             (getBrowserMajorVersion() ?? 0) < 89
               ? ['Calibri', 'Franklin Gothic', 'MS UI Gothic', 'Marlett', 'Segoe UI Light', 'Small Fonts']
               : ['Calibri', 'Franklin Gothic', 'HELV', 'MS UI Gothic', 'Marlett', 'Segoe UI Light', 'Small Fonts']
 
-          expect(isSubset(expectedFonts, result)).toBeTrue()
+          containsExpectedFonts(expected, result)
           return
         }
         if (isChromium()) {
-          expect(
-            isSubset(['Calibri', 'Franklin Gothic', 'MS UI Gothic', 'Marlett', 'Segoe UI Light'], result),
-          ).toBeTrue()
+          containsExpectedFonts(['Calibri', 'Franklin Gothic', 'MS UI Gothic', 'Marlett', 'Segoe UI Light'], result)
           return
         }
-
-        return
       }
 
       if (isAndroid()) {
@@ -54,7 +50,7 @@ describe('Sources', () => {
         }
 
         if (isChromium()) {
-          expect(isSubset(['sans-serif-thin'], result)).toBeTrue()
+          containsExpectedFonts(['sans-serif-thin'], result)
           return
         }
       }
@@ -71,6 +67,8 @@ describe('Sources', () => {
   })
 })
 
-function isSubset(first: string[], second: string[]) {
-  return first.every((f) => second.includes(f))
+function containsExpectedFonts(expected: string[], actual: string[]) {
+  for (const font of expected) {
+    expect(actual).toContain(font)
+  }
 }
