@@ -169,5 +169,12 @@ describe('Sources', () => {
         jasmine.clock().uninstall()
       }
     })
+
+    it('returns stable values', async () => {
+      const first = screenFrame.getRoundedScreenFrame()
+      const second = screenFrame.getRoundedScreenFrame()
+
+      expect(await second()).toEqual(await first())
+    })
   })
 })

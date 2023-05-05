@@ -23,5 +23,12 @@ describe('Sources', () => {
         expect(resultAfter).toEqual(resultBefore)
       })
     })
+
+    it('returns stable values', async () => {
+      const first = await getFontPreferences()
+      const second = await getFontPreferences()
+
+      expect(second).toEqual(first)
+    })
   })
 })
