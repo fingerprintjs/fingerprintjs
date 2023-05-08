@@ -7,8 +7,6 @@ describe('Sources', () => {
       const result = getAudioFingerprint()
 
       if (isUnsupportedBrowser()) {
-        // WebKit has stopped telling its real version in the user-agent string since version 605.1.15,
-        // therefore the browser version has to be checked instead of the engine version.
         expect(result).toBe(SpecialFingerprint.KnownToSuspend)
       } else {
         // A type guard
@@ -23,23 +21,24 @@ describe('Sources', () => {
     })
 
     it('returns a stable value', async () => {
-      const result = getAudioFingerprint()
-
       if (isUnsupportedBrowser()) {
         return
-      } else {
-        if (typeof result !== 'function') {
-          throw new Error('Expected to be a function')
-        }
-
-        const first = await result()
-        const second = await result()
-        expect(second).toBe(first)
       }
+
+      const first = getAudioFingerprint()
+      const second = getAudioFingerprint()
+
+      if (typeof first !== 'function' || typeof second !== 'function') {
+        throw new Error('Expected to be a function')
+      }
+
+      expect(await second()).toBe(await first())
     })
   })
 })
 
 function isUnsupportedBrowser() {
+  // WebKit has stopped telling its real version in the user-agent string since version 605.1.15,
+  // therefore the browser version has to be checked instead of the engine version.
   return isSafari() && isMobile() && (getBrowserMajorVersion() ?? 0) < 12
 }
