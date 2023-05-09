@@ -13,5 +13,12 @@ describe('Sources', () => {
       await withMockMatchMedia({ monochrome: [8] }, true, () => expect(getMonochromeDepth()).toBe(8))
       await withMockMatchMedia({ monochrome: [10] }, true, () => expect(getMonochromeDepth()).toBe(10))
     })
+
+    it('returns a stable value', () => {
+      const first = getMonochromeDepth()
+      const second = getMonochromeDepth()
+
+      expect(second).toBe(first)
+    })
   })
 })

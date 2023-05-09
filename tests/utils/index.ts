@@ -26,6 +26,10 @@ export function isChromium(): boolean {
   return new UAParser().getEngine().name === 'Blink'
 }
 
+export function isHeadlessChrome(): boolean {
+  return navigator.userAgent.includes('HeadlessChrome')
+}
+
 export function isGecko(): boolean {
   return new UAParser().getEngine().name === 'Gecko'
 }
@@ -71,6 +75,18 @@ export function getBrowserMajorVersion(): number | undefined {
     return undefined
   }
   return parseInt(version.split('.')[0])
+}
+
+export function getBrowserVersion(): { major: number; minor: number } | undefined {
+  const version = new UAParser().getBrowser().version
+  if (version === undefined) {
+    return undefined
+  }
+
+  return {
+    major: parseInt(version.split('.')[0]),
+    minor: parseInt(version.split('.')[1]),
+  }
 }
 
 export function getBrowserEngineMajorVersion(): number | undefined {

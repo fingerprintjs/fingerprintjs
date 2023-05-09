@@ -42,5 +42,12 @@ describe('Sources', () => {
 
       expect(sum).not.toBe(0)
     })
+
+    it('returns stable values', () => {
+      const first = getMathFingerprint()
+      const second = getMathFingerprint()
+
+      expect(second).toEqual(first)
+    })
   })
 })
