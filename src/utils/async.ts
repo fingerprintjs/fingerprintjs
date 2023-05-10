@@ -57,15 +57,16 @@ export function awaitIfAsync<TResult, TError = unknown>(
  * (e.g. completing a network request, rendering the page) won't be able to happen.
  * This function allows running many synchronous tasks such way that asynchronous tasks can run too in background.
  */
-export async function forEachWithBreaks<T>(
+export async function mapWithBreaks<T, U>(
   items: readonly T[],
-  callback: (item: T, index: number) => unknown,
+  callback: (item: T, index: number) => U,
   loopReleaseInterval = 16,
-): Promise<void> {
+): Promise<U[]> {
+  const results = Array<U>(items.length)
   let lastLoopReleaseTime = Date.now()
 
   for (let i = 0; i < items.length; ++i) {
-    callback(items[i], i)
+    results[i] = callback(items[i], i)
 
     const now = Date.now()
     if (now >= lastLoopReleaseTime + loopReleaseInterval) {
@@ -74,6 +75,8 @@ export async function forEachWithBreaks<T>(
       await wait(0)
     }
   }
+
+  return results
 }
 
 /**

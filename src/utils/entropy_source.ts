@@ -1,12 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  awaitIfAsync,
-  forEachWithBreaks,
-  isPromise,
-  MaybePromise,
-  suppressUnhandledRejectionWarning,
-  wait,
-} from './async'
+import { awaitIfAsync, isPromise, mapWithBreaks, MaybePromise, suppressUnhandledRejectionWarning } from './async'
 import { excludes } from './data'
 
 /**
@@ -145,44 +138,29 @@ export function loadSources<TSourceOptions, TSources extends UnknownSources<TSou
     keyof TSources,
     TExclude
   >[]
-  const sourceGetters = Array<() => Promise<Component<any>>>(includedSources.length)
-
-  // Using `forEachWithBreaks` allows asynchronous sources to complete between synchronous sources
+  // Using `mapWithBreaks` allows asynchronous sources to complete between synchronous sources
   // and measure the duration correctly
-  forEachWithBreaks(includedSources, (sourceKey, index) => {
-    sourceGetters[index] = loadSource(sources[sourceKey], sourceOptions)
-  })
+  const sourceGettersPromise = mapWithBreaks(includedSources, (sourceKey) =>
+    loadSource(sources[sourceKey], sourceOptions),
+  )
+  suppressUnhandledRejectionWarning(sourceGettersPromise)
 
   return async function getComponents() {
-    // Add the keys immediately to keep the component keys order the same as the source keys order
+    const sourceGetters = await sourceGettersPromise
+
+    const componentPromises = await mapWithBreaks(sourceGetters, (sourceGetter) => {
+      const componentPromise = sourceGetter()
+      suppressUnhandledRejectionWarning(componentPromise)
+      return componentPromise
+    })
+
+    const componentArray = await Promise.all(componentPromises)
+    // Keeping the component keys order the same as the source keys order
     const components = {} as Omit<SourcesToComponents<TSources>, TExclude>
-    for (const sourceKey of includedSources) {
-      components[sourceKey] = undefined as any
+    for (let index = 0; index < includedSources.length; ++index) {
+      components[includedSources[index]] = componentArray[index] as Component<any>
     }
 
-    const componentPromises = Array<Promise<unknown>>(includedSources.length)
-
-    for (;;) {
-      let hasAllComponentPromises = true
-      await forEachWithBreaks(includedSources, (sourceKey, index) => {
-        if (!componentPromises[index]) {
-          // `sourceGetters` may be incomplete at this point of execution because `forEachWithBreaks` is asynchronous
-          if (sourceGetters[index]) {
-            const componentPromise = sourceGetters[index]().then((component) => (components[sourceKey] = component))
-            suppressUnhandledRejectionWarning(componentPromise)
-            componentPromises[index] = componentPromise
-          } else {
-            hasAllComponentPromises = false
-          }
-        }
-      })
-      if (hasAllComponentPromises) {
-        break
-      }
-      await wait(1) // Lets the source load loop continue
-    }
-
-    await Promise.all(componentPromises)
     return components
   }
 }
