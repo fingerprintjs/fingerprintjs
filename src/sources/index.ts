@@ -34,6 +34,7 @@ import getFontPreferences from './font_preferences'
 import getVideoCard from './video_card'
 import isPdfViewerEnabled from './pdf_viewer_enabled'
 import getArchitecture from './architecture'
+import getMediaRecorderSupportedTypes from './media_recorder'
 
 /**
  * The list of entropy sources used to make visitor identifiers.
@@ -87,6 +88,7 @@ export const sources = {
   videoCard: getVideoCard,
   pdfViewerEnabled: isPdfViewerEnabled,
   architecture: getArchitecture,
+  supportedMediaRecorderTypes: getMediaRecorderSupportedTypes,
 }
 
 /**
