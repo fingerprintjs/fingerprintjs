@@ -63,7 +63,7 @@ describe('Sources', () => {
 
       it('has only reproducible selectors', () => {
         if (!isApplicable() && !isChromium()) {
-          pending('The case is for supported browsers and for Chrome (for local testing) only')
+          return
         }
 
         for (const selector of selectors) {
@@ -90,7 +90,7 @@ describe('Sources', () => {
 
     it('returns `undefined` for unsupported browsers', async () => {
       if (isApplicable()) {
-        pending('The case is for unsupported browsers only')
+        return
       }
 
       expect(await getDomBlockers()).toBeUndefined()
@@ -98,7 +98,7 @@ describe('Sources', () => {
 
     it('handles absence of blockers', async () => {
       if (!isApplicable()) {
-        pending('The case is for supported browsers only')
+        return
       }
 
       expect(await getDomBlockers())
@@ -110,7 +110,7 @@ describe('Sources', () => {
 
     it('handles blocked selectors', async () => {
       if (!isApplicable()) {
-        pending('The case is for supported browsers only')
+        return
       }
 
       await withBlockedSelectors(

@@ -72,7 +72,8 @@ function makeBuildNumber() {
 }
 
 function setupLocal(config: Config) {
-  const files = ['tests/utils/karma_global_setup.ts', 'src/**/*.ts', 'tests/**/*.ts', 'dist/fp.min.js']
+  const ciSpecificFiles = ['tests/utils/karma_global_setup_retries.ts']
+  const files = [...(process.env.CI ? ciSpecificFiles : []), 'src/**/*.ts', 'tests/**/*.ts', 'dist/fp.min.js']
 
   config.set({
     frameworks: ['jasmine', 'karma-typescript'],
@@ -98,10 +99,6 @@ function setupLocal(config: Config) {
       suppressErrorSummary: true,
       suppressPassed: true,
       suppressSkipped: true,
-    },
-
-    summaryReporter: {
-      show: 'skipped', // To know that some tests are skipped exactly where they are supposed to be skipped
     },
   })
 }

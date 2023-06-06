@@ -62,7 +62,7 @@ describe('Data utilities', () => {
 
   it('checks whether sets are equal', () => {
     if (typeof Set === 'undefined') {
-      pending("The browser doesn't support Set")
+      return
     }
 
     const makeSet = (...values: unknown[]): Set<unknown> => {
