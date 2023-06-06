@@ -72,7 +72,7 @@ function makeBuildNumber() {
 }
 
 function setupLocal(config: Config) {
-  const ciSpecificFiles = ['tests/utils/karma_global_setup_retries.ts']
+  const ciSpecificFiles = ['resources/karma/karma_global_setup_retries.ts']
   const files = [...(process.env.CI ? ciSpecificFiles : []), 'src/**/*.ts', 'tests/**/*.ts', 'dist/fp.min.js']
 
   config.set({
