@@ -42,7 +42,7 @@ FingerprintJS is 100% open-source, but its accuracy is limited because it's only
     <tr>
       <td>FingerprintJS has limited accuracy (40% - 60%) and functionality, because it's not possible to do many things without a backend.</td>
       <td>
-        <a href="https://fingerprint.com/github">Fingerprint Pro</a> is a high-scale device identity platform that has both client-side and server-side components and identifies browsers and mobile devices with a 99.5% accuracy. 
+        <a href="https://fingerprint.com/github">Fingerprint Pro</a> is a high-scale device identity platform that has both client-side and server-side components and identifies browsers and mobile devices with a 99.5% accuracy.
         Fingerprint Pro starts at $200/mo for up to 100K API calls.
       </td>
     </tr>
@@ -84,6 +84,9 @@ FingerprintJS is 100% open-source, but its accuracy is limited because it's only
 [Fingerprint Pro](https://fingerprint.com/github/) is a professional visitor identification service that processes all information server-side and transmits it securely to your servers using server-to-server APIs.
 Pro combines browser fingerprinting with vast amounts of auxiliary data (IP addresses, time of visit patterns, URL changes and more) to be able to reliably deduplicate different users that have identical devices, resulting in the 99.5% identification accuracy. Fingerprint Pro is available for Web, Android, iOS and other platforms.
 
+Fingerprint Pro pricing starts at $200 per month for up to 100K API calls. Additional API calls are $2 per month for 1,000 API calls.
+A two-week free trial is available — no credit card is required. Sign up at https://dashboard.fingerprint.com/signup.
+
 **Pro plans start at $0/month - no credit card required.**
 
 <p align="center">
@@ -98,29 +101,30 @@ Full product comparison:
   <thead>
     <tr>
       <th></th>
-      <th align="center">Open Source</th>
-      <th align="center">Pro</th>
+      <th align="center">Open Source FingerprintJS</th>
+      <th align="center">Fingerprint Pro and Pro Plus</th>
     </tr>
   </thead>
   <tbody>
     <tr><td colspan="3"><h4>Core Features</h4></td></tr>
-    <tr><td>100% open source</td><td align="center">yes</td><td align="center">no<sup>1</sup></td></tr>
+    <tr><td>100% open source</td><td align="center">Yes</td><td align="center">No<sup>1</sup></td></tr>
     <tr><td>Accuracy</td><td align="center">up to 60%</td><td align="center"><b>99.5%</b></td></tr>
-    <tr><td><b>Standard fingerprint signals</b><br/><i>screen, os, device name</i></td><td align="center">✓</td><td align="center">✓</td></tr>
-    <tr><td><b>Advanced fingerprint signals</b><br/><i>canvas, audio, fonts</i></td><td align="center">✓</td><td align="center">✓</td></tr>
-    <tr><td><b>ID type</b></td><td align="center">fingerprint</td><td align="center">visitorID<sup>2</sup></td></tr>
-    <tr><td><b>ID lifetime</b></td><td align="center">several weeks</td><td align="center">months/years</td></tr>
-    <tr><td><b>ID origin</b></td><td align="center">client</td><td align="center">server</td></tr>
-    <tr><td><b>ID collisions</b></td><td align="center">common</td><td align="center">rare</td></tr>
+    <tr><td><b>Standard identification signals</b><br/><i>Screen, OS, and device name</i></td><td align="center">✓</td><td align="center">✓</td></tr>
+    <tr><td><b>Advanced identification signals</b><br/><i>Canvas, audio, fonts</i></td><td align="center">✓</td><td align="center">✓</td></tr>
+    <tr><td><b>Smart signals</b><br/><i>Bot detection, device, network, and user behavior</i></td><td align="center"></td><td align="center">✓</td></tr>
+    <tr><td><b>ID type</b></td><td align="center">Fingerprint</td><td align="center">Visitor ID<sup>2</sup></td></tr>
+    <tr><td><b>ID lifetime</b></td><td align="center">Several weeks</td><td align="center">Months/years</td></tr>
+    <tr><td><b>ID origin</b></td><td align="center">Client</td><td align="center">Server</td></tr>
+    <tr><td><b>ID collisions</b></td><td align="center">Common</td><td align="center">Rare</td></tr>
     <!-- -->
-    <tr><td colspan="3"><h4>Mobile Native SDKs</h4></td></tr>
+    <tr><td colspan="3"><h4>Mobile native SDKs</h4></td></tr>
     <tr><td>Android</td><td align="center">✓</td><td align="center"><b>✓</b></td></tr>
     <tr><td>iOS</td><td align="center">✓</td><td align="center"><b>✓</b></td></tr>
-    <tr><td>Flutter</td><td align="center">-</td><td align="center"><b>✓</b></td></tr>
-    <tr><td>React Native</td><td align="center">-</td><td align="center"><b>✓</b></td></tr>
+    <tr><td>Flutter</td><td align="center"></td><td align="center"><b>✓</b></td></tr>
+    <tr><td>React Native</td><td align="center"></td><td align="center"><b>✓</b></td></tr>
     <!-- -->
     <tr><td colspan="3"><h4>Additional Features</h4></td></tr>
-    <tr><td><b>Incognito mode detection</b><br/><i>works in all modern browsers - see our full list of <a href="https://dev.fingerprint.com/docs/browser-support/" target="_blank">browsers supported</a></i></td><td align="center">–</td><td align="center">✓</td></tr>
+    <tr><td><b>Incognito mode detection</b><br/><i>Works in all modern browsers - see our full list of <a href="https://dev.fingerprint.com/docs/browser-support/" target="_blank">browsers supported</a></i></td><td align="center"></td><td align="center">✓</td></tr>
     <tr><td><b>Server-side accuracy increase</b><br/><i>based on additional server-side signals, such as TLS crypto support, ipv4/v6 data and others</i></td><td align="center">–</td><td align="center">✓</td></tr>
     <tr><td><b>Query API & realtime Webhooks</b><br/><i>build flexible workflows</i></td><td align="center">–</td><td align="center">✓</td></tr>
     <tr><td><b>Ability to evade ad blockers</b></td><td align="center"><a href="docs/evade_ad_blockers.md" target="_blank">supported (NPM, own hosting)</a></td><td align="center"><a href="https://dev.fingerprint.com/docs/subdomain-integration" target="_blank">supported (NPM + subdomain)</a></td></tr>
