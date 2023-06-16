@@ -125,26 +125,26 @@ Full product comparison:
     <!-- -->
     <tr><td colspan="3"><h4>Additional Features</h4></td></tr>
     <tr><td><b>Incognito mode detection</b><br/><i>Works in all modern browsers - see our full list of <a href="https://dev.fingerprint.com/docs/browser-support/" target="_blank">browsers supported</a></i></td><td align="center"></td><td align="center">✓</td></tr>
-    <tr><td><b>Server-side accuracy increase</b><br/><i>based on additional server-side signals, such as TLS crypto support, ipv4/v6 data and others</i></td><td align="center">–</td><td align="center">✓</td></tr>
-    <tr><td><b>Query API & realtime Webhooks</b><br/><i>build flexible workflows</i></td><td align="center">–</td><td align="center">✓</td></tr>
-    <tr><td><b>Ability to evade ad blockers</b></td><td align="center"><a href="docs/evade_ad_blockers.md" target="_blank">supported (NPM, own hosting)</a></td><td align="center"><a href="https://dev.fingerprint.com/docs/subdomain-integration" target="_blank">supported (NPM + subdomain)</a></td></tr>
-    <tr><td><b>Geolocation</b><br/><i>based on IP address</i></td><td align="center">–</td><td align="center">✓</td></tr>
+    <tr><td><b>Server-side accuracy increase</b><br/><i>Based on additional server-side signals, such as TLS crypto support, ipv4/v6 data, and others</i></td><td align="center"></td><td align="center">✓</td></tr>
+    <tr><td><b>Query API & realtime Webhooks</b><br/><i>build flexible workflows</i></td><td align="center"></td><td align="center">✓</td></tr>
+    <tr><td><b>Ability to evade ad blockers</b></td><td align="center"><a href="docs/evade_ad_blockers.md" target="_blank">Supported (NPM, own hosting)</a></td><td align="center"><a href="https://dev.fingerprint.com/docs/subdomain-integration" target="_blank">Supported (NPM + subdomain)</a></td></tr>
+    <tr><td><b>Geolocation</b><br/><i>based on IP address</i></td><td align="center"></td><td align="center">✓</td></tr>
     <!-- -->
     <tr><td colspan="3"><h4>Operations</h4></td></tr>
     <tr><td><b>Data security</b></td><td align="center">Your infrastructure</td><td align="center">Encrypted at rest</td></tr>
     <tr><td><b>Storage</b></td><td align="center">Your infrastructure</td><td align="center">Unlimited up to 1 yr</td></tr>
-    <tr><td><b>Regions</b></td><td align="center">Your infrastructure</td><td align="center">Hosting in US, EU and Mumbai</td></tr>
-    <tr><td><b>Compliance</b></td><td align="center">Your infrastructure</td><td align="center">GDPR, CCPA compliant<sup>3</sup></td></tr>
-    <tr><td><b>SLA</b></td><td align="center">No SLA</td><td align="center">99.9% Uptime</td></tr>
-    <tr><td><b>Support</b></td><td align="center">GitHub community</td><td align="center">Support team via email, chat, and call-back within 1 business day</td></tr>
+    <tr><td><b>Regions</b></td><td align="center">Your infrastructure</td><td align="center">Hosting in US, EU and APAC</td></tr>
+    <tr><td><b>Compliance</b></td><td align="center">Your infrastructure</td><td align="center">GDPR, CCPA, and SOC 2 Type II compliant<sup>3</sup></td></tr>
+    <tr><td><b>SLA</b></td><td align="center">No SLA</td><td align="center">99.8% uptime</td></tr>
+    <tr><td><b>Support</b></td><td align="center">GitHub community</td><td align="center">Basic and advanced support options available</td></tr>
   </tbody>
 </table>
 
-<sub>1. Pro uses the open source fingerprinting library as well as proprietary technology for increased accuracy and identifier stability.</sub>
+<sub>1. Fingerprint Pro uses the open source fingerprinting library as well as proprietary technology for increased accuracy and identifier stability.</sub>
 
-<sub>2. VisitorIDs, in comparison to fingerprints, include server side techniques, are deduplicated and utilize fuzzy matching to result in a more accurate and stable identifier. Fingerprint hashes rely on an exact match across all browser attributes, making them less stable across > 4 week time intervals.</sub>
+<sub>2. Visitor IDs, in comparison to fingerprints, include server-side techniques, are deduplicated, and utilize fuzzy matching to result in a more accurate and stable identifier. Fingerprint hashes rely on an exact match across all browser attributes, making them less stable across > 4-week time intervals.</sub>
 
-<sub>3. Fingerprint Pro is GDPR and CCPA compliant as the data processor. You still need to be compliant as the data controller and use the identification for fraud prevention under legitimate interest or ask for user consent.</sub>
+<sub>3. Fingerprint Pro is GDPR and CCPA compliant, ISO 27001 certified, and SOC 2 Type II compliant. You still need to be compliant as the data controller and use the identification for fraud prevention under legitimate interest or ask for user consent.</sub>
 
 <details>
 <summary>Pro result example</summary>
@@ -178,12 +178,13 @@ Full product comparison:
   }
 }
 ```
-
 </details>
+
+### Resources
 
 🍿 [Live demo](https://fingerprint.com/demo)
 
-⏱ [How to upgrade from Open Source to Pro in 30 seconds](https://dev.fingerprint.com/v3/docs/migrating-from-open-source-v3)
+⏱ [How to upgrade from open source FingerprintJS to Fingerprint Pro in 30 seconds](https://dev.fingerprint.com/v3/docs/migrating-from-open-source-v3)
 
 📕 [Fingerprint Pro documentation](https://dev.fingerprint.com)
 
@@ -205,15 +206,12 @@ See more details and learn how to run the library in old browsers in the [browse
 
 ## Where to get support
 
-Thanks to our [series B funding](https://fingerprint.com/blog/series-b/), we are happy to provide technical support for our open-source FingerprintJS library. We recommend using GitHub [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) to submit bugs or [Discussions](https://github.com/fingerprintjs/fingerprintjs/discussions) to ask questions.
+We are happy to provide technical support for our open-source FingerprintJS library. We recommend using GitHub [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) to submit bugs or [Discussions](https://github.com/fingerprintjs/fingerprintjs/discussions) to ask questions.
 Using issues and discussions publicly will help the open-source community and other users with similar issues.
 However, if you require private support, please email us at [oss-support@fingerprint.com](mailto:oss-support@fingerprint.com).
 
 ## Contributing
 
-See the [contributing guidelines](contributing.md) to learn how to start a playground, test and build.
+See the [contribution guidelines](contributing.md) to learn how to start a playground, test, and build.
 
-## Other products by Fingerprint
 
-* [BotD -- Easy to use JavaScript bot detection](https://fingerprint.com/products/bot-detection/)
-* [AEV -- Android App Environment Verification API](https://github.com/fingerprintjs/aev)
