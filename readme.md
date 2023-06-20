@@ -206,8 +206,7 @@ See more details and learn how to run the library in old browsers in the [browse
 
 ## Where to get support
 
-We are happy to provide technical support for our open-source FingerprintJS library. We recommend using GitHub [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) to submit bugs or [Discussions](https://github.com/fingerprintjs/fingerprintjs/discussions) to ask questions.
-Using issues and discussions publicly will help the open-source community and other users with similar issues.
+Using [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) and [Discussions](https://github.com/fingerprintjs/fingerprintjs/discussions) publicly will help the open-source community and other users with similar issues.
 However, if you require private support, please email us at [oss-support@fingerprint.com](mailto:oss-support@fingerprint.com).
 
 ## Contributing
