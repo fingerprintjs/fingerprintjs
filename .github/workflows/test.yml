@@ -37,13 +37,12 @@ jobs:
         # Helps to prevent https://github.com/fingerprintjs/fingerprintjs/issues/602
       - name: Check the ability to work with server side rendering
         run: yarn check:ssr
-      - name: print
-        env:  
-          GITHUB_CONTEXT: ${{ toJson(env.ACTIONS_RUNNER_DEBUG) }}
+      - name: debugging
+        if:  runner.debug == '1'
         run: |
-         echo "$GITHUB_CONTEXT"
+            echo this is debugging
       - name: Test on BrowserStack
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-        run: yarn test:browserstack --log-level ${{ env.ACTIONS_RUNNER_DEBUG == 1 && 'debug' || 'info' }}
+        run: yarn test:browserstack --log-level ${{ runner.debug == '1' && 'debug' || 'info' }}
