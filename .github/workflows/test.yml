@@ -38,6 +38,8 @@ jobs:
       - name: Check the ability to work with server side rendering
         run: yarn check:ssr
       - name: print
+        env:  
+          GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
          echo "$GITHUB_CONTEXT"
       - name: Test on BrowserStack
