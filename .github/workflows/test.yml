@@ -41,4 +41,4 @@ jobs:
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-        run: yarn test:browserstack --log-level ${{ github.run_attempt == 1 && 'info' || 'debug' }}
+        run: yarn test:browserstack --log-level ${{ env.RUNNER_DEBUG == 1 && 'debug' || 'info' }}
