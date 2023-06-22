@@ -39,12 +39,7 @@ jobs:
         run: yarn check:ssr
       - name: print
         run: |
-          echo {{ env.RUNNER_DEBUG }}
-          echo env.RUNNER_DEBUG
-          echo $env.RUNNER_DEBUG
-          echo $"env.RUNNER_DEBUG"
-          echo $"RUNNER_DEBUG"
-          echo $"{{ env.RUNNER_DEBUG }}"
+         echo "$GITHUB_CONTEXT"
       - name: Test on BrowserStack
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
