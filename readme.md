@@ -109,7 +109,7 @@ Full product comparison:
     <tr><td colspan="3"><h4>Core Features</h4></td></tr>
     <tr><td>100% open source</td><td align="center">Yes</td><td align="center">No<sup>1</sup></td></tr>
     <tr><td>Accuracy</td><td align="center">up to 60%</td><td align="center"><b>99.5%</b></td></tr>
-    <tr><td><b>Standard identification signals</b><br/><i>Screen, OS, and device name</i></td><td align="center">✓</td><td align="center">✓</td></tr>
+    <tr><td><b>Standard identification signals</b><br/><i>Browser, operating system</i></td><td align="center">✓</td><td align="center">✓</td></tr>
     <tr><td><b>Advanced identification signals</b><br/><i>Canvas, audio, fonts</i></td><td align="center">✓</td><td align="center">✓</td></tr>
     <tr><td><b>Smart signals</b><br/><i>Bot detection, device, network, and user behavior</i></td><td align="center"></td><td align="center">✓</td></tr>
     <tr><td><b>ID type</b></td><td align="center">Fingerprint</td><td align="center">Visitor ID<sup>2</sup></td></tr>
