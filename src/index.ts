@@ -45,3 +45,4 @@ export {
   transformSource, // Not used here but adds only 222 uncompressed (60 compressed) bytes of code
   UnknownSources,
 } from './utils/entropy_source'
+export { withIframe } from './utils/dom'
