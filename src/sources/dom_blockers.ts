@@ -136,7 +136,7 @@ export function getFilters(): Filters {
       '.cfa_popup',
     ],
     easyListCookie: [
-      '.rodo-accept[style*="bottom"]',
+      '.ezmob-footer',
       '.cc-CookieWarning',
       '[data-cookie-number]',
       fromB64('LmF3LWNvb2tpZS1iYW5uZXI='),
