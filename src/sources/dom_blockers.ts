@@ -370,6 +370,9 @@ export async function getBlockedSelectors<T extends string>(selectors: readonly 
   // browser will alternate tree modification and layout reading, that is very slow.
   for (let i = 0; i < selectors.length; ++i) {
     const element = selectorToElement(selectors[i])
+    if (element.tagName === 'DIALOG') {
+      ;(element as HTMLDialogElement).show()
+    }
     const holder = d.createElement('div') // Protects from unwanted effects of `+` and `~` selectors of filters
     forceShow(holder)
     holder.appendChild(element)

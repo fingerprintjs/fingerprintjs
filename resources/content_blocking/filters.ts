@@ -221,7 +221,7 @@ const filters: FilterList = {
   },
   listKr: {
     title: 'List-KR',
-    file: 'https://raw.githubusercontent.com/List-KR/List-KR/master/filter.txt',
+    file: 'https://raw.githubusercontent.com/List-KR/List-KR/master/filter-uBlockOrigin.txt',
   },
   adBlockFinland: {
     title: 'Adblock List for Finland',
