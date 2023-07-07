@@ -1,6 +1,6 @@
 import { isChromium, isWebKit } from '../utils/browser'
+import { MaybePromise, mapWithBreaks } from '../utils/async'
 import { withIframe } from '../utils/dom'
-import { MaybePromise } from '../utils/async'
 
 type WritableCSSProperties = {
   [K in keyof CSSStyleDeclaration]: CSSStyleDeclaration[K] extends string ? K : never
@@ -52,13 +52,14 @@ export const presets: Record<string, Preset> = {
  * The "min" and the "mono" (only on Windows) value may change when the page is zoomed in Firefox 87.
  */
 export default function getFontPreferences(): Promise<Record<string, number>> {
-  return withNaturalFonts((document, container) => {
+  return withNaturalFonts(async (document, body) => {
     const elements: Record<string, HTMLElement> = {}
     const sizes: Record<string, number> = {}
+    const container = document.createElement('div')
 
     // First create all elements to measure. If the DOM steps below are done in a single cycle,
     // browser will alternate tree modification and layout reading, that is very slow.
-    for (const key of Object.keys(presets)) {
+    await mapWithBreaks(Object.keys(presets), async (key) => {
       const [style = {}, text = defaultText] = presets[key]
 
       const element = document.createElement('span')
@@ -75,7 +76,9 @@ export default function getFontPreferences(): Promise<Record<string, number>> {
       elements[key] = element
       container.appendChild(document.createElement('br'))
       container.appendChild(element)
-    }
+    })
+
+    body.appendChild(container)
 
     // Then measure the created elements
     for (const key of Object.keys(presets)) {
@@ -92,7 +95,7 @@ export default function getFontPreferences(): Promise<Record<string, number>> {
  * Don't put a content to measure inside an absolutely positioned element.
  */
 function withNaturalFonts<T>(
-  action: (document: Document, container: HTMLElement) => MaybePromise<T>,
+  action: (document: Document, body: HTMLElement) => MaybePromise<T>,
   containerWidthPx = 4000,
 ): Promise<T> {
   /*

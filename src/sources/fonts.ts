@@ -1,3 +1,4 @@
+import { mapWithBreaks } from '../utils/async'
 import { withIframe } from '../utils/dom'
 
 // We use m or w because these two characters take up the maximum width.
@@ -68,11 +69,11 @@ const fontList = [
 ] as const
 
 // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
-export default function getFonts(): Promise<string[]> {
+export default async function getFonts(): Promise<string[]> {
   // Running the script in an iframe makes it not affect the page look and not be affected by the page CSS. See:
   // https://github.com/fingerprintjs/fingerprintjs/issues/592
   // https://github.com/fingerprintjs/fingerprintjs/issues/628
-  return withIframe((_, { document }) => {
+  return withIframe(async (_, { document }) => {
     const holder = document.body
     holder.style.fontSize = textSize
 
@@ -102,16 +103,16 @@ export default function getFonts(): Promise<string[]> {
 
     // creates spans for the base fonts and adds them to baseFontsDiv
     const initializeBaseFontsSpans = () => {
-      return baseFonts.map(createSpan)
+      return mapWithBreaks(baseFonts, createSpan)
     }
 
     // creates spans for the fonts to detect and adds them to fontsDiv
-    const initializeFontsSpans = () => {
+    const initializeFontsSpans = async () => {
       // Stores {fontName : [spans for that font]}
       const spans: Record<string, HTMLSpanElement[]> = {}
 
       for (const font of fontList) {
-        spans[font] = baseFonts.map((baseFont) => createSpanWithFonts(font, baseFont))
+        spans[font] = await mapWithBreaks(baseFonts, (baseFont) => createSpanWithFonts(font, baseFont))
       }
 
       return spans
@@ -127,10 +128,10 @@ export default function getFonts(): Promise<string[]> {
     }
 
     // create spans for base fonts
-    const baseFontsSpans = initializeBaseFontsSpans()
+    const baseFontsSpans = await initializeBaseFontsSpans()
 
     // create spans for fonts to detect
-    const fontsSpans = initializeFontsSpans()
+    const fontsSpans = await initializeFontsSpans()
 
     // add all the spans to the DOM
     holder.appendChild(spansContainer)
