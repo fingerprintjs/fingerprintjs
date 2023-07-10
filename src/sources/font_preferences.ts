@@ -55,6 +55,8 @@ export default function getFontPreferences(): Promise<Record<string, number>> {
   return withNaturalFonts(async (document, body) => {
     const elements: Record<string, HTMLElement> = {}
     const sizes: Record<string, number> = {}
+    // Intermediate container is needed to avoid iframe body updates on each iteration
+    // (caused by appending new elements) because it will trigger layout recalculation / reflow.
     const container = document.createElement('div')
 
     // First create all elements to measure. If the DOM steps below are done in a single cycle,
