@@ -38,5 +38,4 @@ interface Element {
 interface CSSStyleDeclaration {
   zoom: string
   textSizeAdjust: string
-  webkitTextSizeAdjust: string
 }

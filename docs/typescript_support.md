@@ -13,17 +13,17 @@ yarn add @fingerprintjs/fingerprintjs
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
 ```
 
-FingerprintJS officially supports TypeScript version 4.9,
+FingerprintJS officially supports TypeScript version 5.1,
 but may work with newer and older versions of TypeScript.
 If you face a TypeScript error that occurs in a `.d.ts` file provided by FingerprintJS
 ([example 1](https://github.com/fingerprintjs/fingerprintjs/issues/651), [example 2](https://github.com/fingerprintjs/fingerprintjs/issues/653)),
 consider any of these solutions:
 
-- Update the TypeScript package in your project to version 4.9 or newer
+- Update the TypeScript package in your project to version 5.1 or newer
     ```bash
-    npm i typescript@^4.9
+    npm i typescript@^5.1
     # or
-    yarn add typescript@^4.9
+    yarn add typescript@^5.1
     ```
 - Prevent TypeScript from using the library types. To do it, replace
     ```ts
