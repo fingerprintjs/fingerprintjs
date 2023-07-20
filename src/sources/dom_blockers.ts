@@ -1,7 +1,7 @@
 import { isAndroid, isWebKit } from '../utils/browser'
 import { selectorToElement } from '../utils/dom'
 import { countTruthy } from '../utils/data'
-import { wait } from '../utils/async'
+import { releaseEventLoop, wait } from '../utils/async'
 
 type Filters = Record<string, string[]>
 
@@ -355,6 +355,8 @@ export async function getBlockedSelectors<T extends string>(selectors: readonly 
     await wait(50)
   }
   d.body.appendChild(root)
+
+  await releaseEventLoop()
 
   try {
     // Then check which of the elements are blocked

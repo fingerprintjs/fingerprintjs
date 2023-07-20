@@ -1,6 +1,6 @@
 import { isChromium, isWebKit } from '../utils/browser'
 import { withIframe } from '../utils/dom'
-import { MaybePromise } from '../utils/async'
+import { MaybePromise, releaseEventLoop } from '../utils/async'
 
 type WritableCSSProperties = {
   [K in keyof CSSStyleDeclaration]: CSSStyleDeclaration[K] extends string ? K : never
@@ -52,7 +52,7 @@ export const presets: Record<string, Preset> = {
  * The "min" and the "mono" (only on Windows) value may change when the page is zoomed in Firefox 87.
  */
 export default function getFontPreferences(): Promise<Record<string, number>> {
-  return withNaturalFonts((document, container) => {
+  return withNaturalFonts(async (document, container) => {
     const elements: Record<string, HTMLElement> = {}
     const sizes: Record<string, number> = {}
 
@@ -76,6 +76,8 @@ export default function getFontPreferences(): Promise<Record<string, number>> {
       container.appendChild(document.createElement('br'))
       container.appendChild(element)
     }
+
+    await releaseEventLoop()
 
     // Then measure the created elements
     for (const key of Object.keys(presets)) {

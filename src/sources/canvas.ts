@@ -1,3 +1,5 @@
+import { releaseEventLoop } from '../utils/async'
+
 export interface CanvasFingerprint {
   winding: boolean
   geometry: string
@@ -5,7 +7,7 @@ export interface CanvasFingerprint {
 }
 
 // https://www.browserleaks.com/canvas#how-does-it-work
-export default function getCanvasFingerprint(): CanvasFingerprint {
+export default async function getCanvasFingerprint(): Promise<CanvasFingerprint> {
   let winding = false
   let geometry: string
   let text: string
@@ -17,6 +19,7 @@ export default function getCanvasFingerprint(): CanvasFingerprint {
     winding = doesSupportWinding(context)
 
     renderTextImage(canvas, context)
+    await releaseEventLoop()
     const textImage1 = canvasToString(canvas)
     const textImage2 = canvasToString(canvas) // It's slightly faster to double-encode the text image
 
@@ -32,6 +35,7 @@ export default function getCanvasFingerprint(): CanvasFingerprint {
       // https://github.com/fingerprintjs/fingerprintjs/issues/103
       // Therefore it's extracted into a separate image.
       renderGeometryImage(canvas, context)
+      await releaseEventLoop()
       geometry = canvasToString(canvas)
     }
   }
