@@ -79,6 +79,7 @@ export default function getFonts(): Promise<string[]> {
 
     // div to load spans for the default fonts and the fonts to detect
     const spansContainer = document.createElement('div')
+    spansContainer.style.setProperty('visibility', 'hidden', 'important')
 
     const defaultWidth: Partial<Record<string, number>> = {}
     const defaultHeight: Partial<Record<string, number>> = {}

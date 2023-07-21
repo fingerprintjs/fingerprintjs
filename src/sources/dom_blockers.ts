@@ -374,6 +374,7 @@ export async function getBlockedSelectors<T extends string>(selectors: readonly 
 }
 
 function forceShow(element: HTMLElement) {
+  element.style.setProperty('visibility', 'hidden', 'important')
   element.style.setProperty('display', 'block', 'important')
 }
 
