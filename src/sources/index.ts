@@ -56,6 +56,7 @@ export const sources = {
   fontPreferences: getFontPreferences,
   audio: getAudioFingerprint,
   screenFrame: getRoundedScreenFrame,
+  canvas: getCanvasFingerprint,
 
   osCpu: getOsCpu,
   languages: getLanguages,
@@ -71,7 +72,6 @@ export const sources = {
   cpuClass: getCpuClass,
   platform: getPlatform,
   plugins: getPlugins,
-  canvas: getCanvasFingerprint,
   touchSupport: getTouchSupport,
   vendor: getVendor,
   vendorFlavors: getVendorFlavors,
