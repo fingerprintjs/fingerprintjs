@@ -51,7 +51,7 @@ const configurationFactory: ConfigOptions = (_env, { mode = 'development' }) => 
   plugins: [
     new HtmlWebpackPlugin({
       template: './index.html',
-      title: `FingerprintJS Open Source ${mode === 'development' ? 'Playground' : 'Demo'}`,
+      title: `FingerprintJS ${mode === 'development' ? 'Playground' : 'Demo'}`,
     }),
   ],
   // https://stackoverflow.com/a/71739898/1118709

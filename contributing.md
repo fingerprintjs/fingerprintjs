@@ -244,7 +244,7 @@ These tests are meant to verify that the entropy source returns expected values 
 In the event of significant changes or deprecation of underlying APIs, these tests should start to fail in future browser versions.
 Additionally, if deemed necessary, it's recommended to include a test to ensure that the entropy source remains stable.
 
-For inspiration see existing tests in [src/sources/](src/sources/).  
+For inspiration see existing tests in [src/sources/](src/sources/).
 
 ### How to publish
 
@@ -262,4 +262,4 @@ This section is for repository maintainers.
     ```
 5. Push the changes to the repository, and a version tag like `v1.3.4` to the commit.
 6. Describe the version changes at the [releases section](https://github.com/fingerprintjs/fingerprintjs/releases).
-7. Update agent at https://stackblitz.com/edit/fpjs-3-npm (find "dependencies" and click the round arrow)
+7. Update agent at https://stackblitz.com/edit/fpjs-4-npm (find "dependencies" and click the round arrow)

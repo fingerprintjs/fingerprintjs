@@ -9,8 +9,8 @@ The library supports all the popular installation methods:
 ```html
 <script>
   // Initialize the agent at application startup.
-  // You can also use https://openfpcdn.io/fingerprintjs/v3/esm.min.js
-  const fpPromise = import('https://openfpcdn.io/fingerprintjs/v3')
+  // You can also use https://openfpcdn.io/fingerprintjs/v4/esm.min.js
+  const fpPromise = import('https://openfpcdn.io/fingerprintjs/v4')
     .then(FingerprintJS => FingerprintJS.load())
 
   // Get the visitor identifier when you need it.
@@ -20,7 +20,7 @@ The library supports all the popular installation methods:
 </script>
 ```
 
-[Run this code](https://stackblitz.com/edit/fpjs-3-cdn?file=index.html&devtoolsheight=100)
+[Run this code](https://stackblitz.com/edit/fpjs-4-cdn?file=index.html&devtoolsheight=100)
 
 ### Browser `<script>` tag
 
@@ -28,7 +28,7 @@ A synchronous code that pauses the other scripts during loading and therefore no
 
 ```html
 <!-- Note that we use iife.min.js -->
-<script src="https://openfpcdn.io/fingerprintjs/v3/iife.min.js"></script>
+<script src="https://openfpcdn.io/fingerprintjs/v4/iife.min.js"></script>
 <script>
   // Initialize the agent at application startup.
   var fpPromise = FingerprintJS.load()
@@ -44,7 +44,7 @@ A synchronous code that pauses the other scripts during loading and therefore no
 
 ```js
 require(
-  ['https://openfpcdn.io/fingerprintjs/v3/umd.min.js'],
+  ['https://openfpcdn.io/fingerprintjs/v4/umd.min.js'],
   FingerprintJS => {
     // Initialize the agent at application startup.
     const fpPromise = FingerprintJS.load()
@@ -80,7 +80,7 @@ const fpPromise = FingerprintJS.load()
 })()
 ```
 
-[Run this code](https://stackblitz.com/edit/fpjs-3-npm?file=index.js&devtoolsheight=100)
+[Run this code](https://stackblitz.com/edit/fpjs-4-npm?file=index.js&devtoolsheight=100)
 
 **When you run FingerprintJS installed with NPM or Yarn, the library will send AJAX requests to FingerprintJS servers to collect usage statistics.**
 When the `load` function runs, there is a 0.1% chance of sending a request.
