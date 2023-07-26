@@ -4,6 +4,8 @@ interface Window {
   webkitOfflineAudioContext?: OfflineAudioContext
   openDatabase?(...args: unknown[]): void
   __fpjs_d_m?: unknown
+  /* Is used for js version  */
+  bc1ef781503449e5964fce8c9dd3b8a9?: string
 }
 
 interface Navigator {
