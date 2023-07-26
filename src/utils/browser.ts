@@ -103,10 +103,12 @@ export function isDesktopSafari(): boolean {
   return (
     countTruthy([
       'safari' in w, // Always false in Karma and BrowserStack Automate
-      !('DeviceMotionEvent' in w),
       !('ongestureend' in w),
-      !('standalone' in navigator),
-    ]) >= 3
+      !('TouchEvent' in w),
+      !('orientation' in w),
+      'HTMLElement' in w && !('autocapitalize' in HTMLElement.prototype),
+      'Document' in w && 'pointerLockElement' in Document.prototype,
+    ]) >= 4
   )
 }
 
