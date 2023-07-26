@@ -56,6 +56,10 @@ export function hasScreenFrameBackup(): boolean {
   return !!screenFrameBackup
 }
 
+/**
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
+ */
 export function getScreenFrame(): () => Promise<FrameSize> {
   watchScreenFrame()
 
