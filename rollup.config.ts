@@ -28,6 +28,9 @@ const commonOutput = {
         content: {
           file: 'resources/license_banner.txt',
         },
+        data: {
+          license: fs.readFileSync('LICENSE', 'utf8').trim(),
+        },
       },
     }),
   ],
