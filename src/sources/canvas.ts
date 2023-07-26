@@ -14,7 +14,7 @@ export default async function getCanvasFingerprint(): Promise<CanvasFingerprint>
 
   const [canvas, context] = makeCanvasContext()
   if (!isSupported(canvas, context)) {
-    geometry = text = '' // The value will be 'unsupported' in v3.4
+    geometry = text = 'unsupported'
   } else {
     winding = doesSupportWinding(context)
 
