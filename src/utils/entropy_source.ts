@@ -26,13 +26,9 @@ export type SourceValue<TSource extends Source<any, any>> = TSource extends Sour
 export type Component<T> = (
   | {
       value: T
-      error?: undefined
     }
   | {
-      value?: undefined
-      // The property type must by truthy
-      // so that an expression like `if (!component.error)` tells TypeScript that `component.value` is defined
-      error: Error | { message: unknown }
+      error: unknown
     }
 ) & {
   duration: number
@@ -51,10 +47,6 @@ export type UnknownComponents = Record<string, Component<unknown>>
  */
 export type SourcesToComponents<TSources extends UnknownSources<any>> = {
   [K in keyof TSources]: Component<SourceValue<TSources[K]>>
-}
-
-function ensureErrorWithMessage(error: unknown): { message: unknown } {
-  return error && typeof error === 'object' && 'message' in error ? (error as { message: unknown }) : { message: error }
 }
 
 function isFinalResultLoaded<TValue>(loadResult: TValue | (() => MaybePromise<TValue>)): loadResult is TValue {
@@ -81,7 +73,7 @@ export function loadSource<TOptions, TValue>(
 
       // Source loading failed
       if (!loadArgs[0]) {
-        return resolveLoad(() => ({ error: ensureErrorWithMessage(loadArgs[1]), duration: loadDuration }))
+        return resolveLoad(() => ({ error: loadArgs[1], duration: loadDuration }))
       }
 
       const loadResult = loadArgs[1]
@@ -102,7 +94,7 @@ export function loadSource<TOptions, TValue>(
 
               // Source getting failed
               if (!getArgs[0]) {
-                return resolveGet({ error: ensureErrorWithMessage(getArgs[1]), duration })
+                return resolveGet({ error: getArgs[1], duration })
               }
 
               // Source getting succeeded

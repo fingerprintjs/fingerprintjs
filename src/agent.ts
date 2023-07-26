@@ -82,7 +82,7 @@ function componentsToCanonicalString(components: UnknownComponents) {
   let result = ''
   for (const componentKey of Object.keys(components).sort()) {
     const component = components[componentKey]
-    const value = component.error ? 'error' : JSON.stringify(component.value)
+    const value = 'error' in component ? 'error' : JSON.stringify(component.value)
     result += `${result ? '|' : ''}${componentKey.replace(/([:|\\])/g, '\\$1')}:${value}`
   }
   return result

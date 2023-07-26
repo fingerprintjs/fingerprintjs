@@ -35,7 +35,7 @@ function getOpenConfidenceScore(components: Pick<BuiltinComponents, 'platform'>)
     return isDesktopSafari() ? 0.5 : 0.3
   }
 
-  const platform = components.platform.value || ''
+  const platform = 'value' in components.platform ? components.platform.value : ''
 
   // Windows
   if (/^Win/.test(platform)) {

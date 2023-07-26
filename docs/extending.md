@@ -81,17 +81,8 @@ Example:
 
 let { components } = await fp.get()
 
-if (components.canvas.value) {
-  components = {
-    ...components,
-    canvas: {
-      ...components.canvas,
-      value: {
-        ...components.canvas.value,
-        text: '',
-      },
-    },
-  }
+if ('value' in components.canvas) {
+  components.canvas.value.text = ''
 }
 
 // Optionally, you can make a visitor identifier from your custom list of components
