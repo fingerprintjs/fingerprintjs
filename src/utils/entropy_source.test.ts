@@ -15,74 +15,78 @@ describe('Entropy source utilities', () => {
     })
 
     describe('result handling', () => {
-      async function checkSource(source: Source<undefined, 'unpredictable value'>) {
+      const value = 'unpredictable value'
+
+      async function checkSource(source: Source<undefined, unknown>) {
         const loadedSource = loadSource(source, undefined)
         const component = await loadedSource()
-        expect(component).toEqual({ value: 'unpredictable value', duration: jasmine.any(Number) })
+        expect(component).toEqual({ value, duration: jasmine.any(Number) })
       }
 
       describe('synchronous "load" phase', () => {
         it('with no "get" phase', async () => {
-          const source = () => 'unpredictable value' as const
+          const source = () => value
           await checkSource(source)
         })
 
         it('with synchronous "get" phase', async () => {
-          const source = () => () => 'unpredictable value' as const
+          const source = () => () => value
           await checkSource(source)
         })
 
         it('with asynchronous "get" phase', async () => {
-          const source = () => () => wait(5, 'unpredictable value' as const)
+          const source = () => () => wait(5, value)
           await checkSource(source)
         })
       })
 
       describe('asynchronous "load" phase', () => {
         it('with no "get" phase', async () => {
-          const source = () => wait(5, 'unpredictable value' as const)
+          const source = () => wait(5, value)
           await checkSource(source)
         })
 
         it('with synchronous "get" phase', async () => {
-          const source = () => wait(5, () => 'unpredictable value' as const)
+          const source = () => wait(5, () => value)
           await checkSource(source)
         })
 
         it('with asynchronous "get" phase', async () => {
-          const source = () => wait(5, () => wait(5, 'unpredictable value' as const))
+          const source = () => wait(5, () => wait(5, value))
           await checkSource(source)
         })
       })
     })
 
     describe('error handling', () => {
+      const error = new Error('Fail')
+
       async function checkSource(source: Source<undefined, never>) {
         const loadedSource = loadSource(source, undefined)
         const component = await loadedSource()
-        expect(component).toEqual({
-          error: jasmine.objectContaining({ message: 'Fail' }),
-          duration: jasmine.any(Number),
-        })
+        expect(component).toEqual({ error: jasmine.anything(), duration: jasmine.any(Number) })
+        if ('error' in component) {
+          expect(component.error).toBe(error)
+        }
       }
 
       describe('synchronous "load" phase', () => {
         it('with no "get" phase', async () => {
           await checkSource(() => {
-            throw 'Fail'
+            throw error
           })
         })
 
         it('with synchronous "get" phase', async () => {
           await checkSource(() => () => {
-            throw 'Fail'
+            throw error
           })
         })
 
         it('with asynchronous "get" phase', async () => {
           await checkSource(() => async () => {
             await wait(5)
-            throw new Error('Fail')
+            throw error
           })
         })
       })
@@ -91,7 +95,7 @@ describe('Entropy source utilities', () => {
         it('with no "get" phase', async () => {
           await checkSource(async () => {
             await wait(5)
-            throw new Error('Fail')
+            throw error
           })
         })
 
@@ -99,7 +103,7 @@ describe('Entropy source utilities', () => {
           await checkSource(async () => {
             await wait(5)
             return () => {
-              throw new Error('Fail')
+              throw error
             }
           })
         })
@@ -109,10 +113,27 @@ describe('Entropy source utilities', () => {
             await wait(5)
             return async () => {
               await wait(5)
-              throw new Error('Fail')
+              throw error
             }
           })
         })
+      })
+
+      it('throws exotic error types as is', async () => {
+        async function checkSource(phase: 'load' | 'get', error: unknown, context = '') {
+          const source = phase === 'load' ? () => Promise.reject(error) : () => () => Promise.reject(error)
+          const loadedSource = loadSource(source, undefined)
+          const component = await loadedSource()
+          expect(component)
+            .withContext(context)
+            .toEqual({ error, duration: jasmine.any(Number) })
+        }
+
+        await checkSource('load', 'Just a string')
+        await checkSource('get', 1234, 'A number')
+        await checkSource('load', '', 'An empty string, which is a falsy value')
+        await checkSource('get', false)
+        await checkSource('load', undefined)
       })
     })
 
@@ -233,7 +254,7 @@ describe('Entropy source utilities', () => {
       expect(components).toEqual({
         success: { value: 'qwerty', duration: jasmine.any(Number) },
         loadFail: { error: new Error('Failed to load'), duration: jasmine.any(Number) },
-        getFail: { error: { message: 'Failed to get' }, duration: jasmine.any(Number) },
+        getFail: { error: 'Failed to get', duration: jasmine.any(Number) },
       })
     })
 
@@ -373,7 +394,7 @@ describe('Entropy source utilities', () => {
 
     describe('keeps the source properties', () => {
       function transformComponentValue<T1, T2>(component: Component<T1>, transformValue: (value: T1) => T2) {
-        return component.error ? component : { ...component, value: transformValue(component.value) }
+        return 'error' in component ? component : { ...component, value: transformValue(component.value) }
       }
 
       function removeDuration<T>(component: Component<T>) {

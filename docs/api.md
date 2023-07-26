@@ -146,7 +146,7 @@ interface GetResult {
   components: {
     [key: string]:
       { value: any, duration: number } |
-      { error: object, duration: number }
+      { error: any, duration: number }
   }
   version: string
 }
