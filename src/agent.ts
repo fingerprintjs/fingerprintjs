@@ -205,6 +205,6 @@ export async function load({ delayFallback, debug, monitoring = true }: Readonly
     monitor()
   }
   await prepareForSources(delayFallback)
-  const getComponents = loadBuiltinSources({ debug })
+  const getComponents = loadBuiltinSources({ cache: {}, debug })
   return makeAgent(getComponents, debug)
 }
