@@ -101,7 +101,7 @@ Fingerprint Identification is available for Web, Android, iOS, and other platfor
 
 🗂️ [Sample responses for the different Fingerprint Identification plans](https://fingerprinthub.com/playground)
 
-⏱ [How to upgrade from FingerprintJS to Fingerprint Identification in 30 seconds](https://dev.fingerprint.com/v3/docs/migrating-from-source-available-v4)
+⏱️ [How to upgrade from FingerprintJS to Fingerprint Identification in 30 seconds](https://dev.fingerprint.com/v3/docs/migrating-from-source-available-v4)
 
 📕 [Fingerprint Identification documentation](https://dev.fingerprint.com)
 
