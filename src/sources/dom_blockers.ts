@@ -1,7 +1,7 @@
 import { isAndroid, isWebKit } from '../utils/browser'
 import { selectorToElement } from '../utils/dom'
 import { countTruthy } from '../utils/data'
-import { wait } from '../utils/async'
+import { releaseEventLoop, wait } from '../utils/async'
 
 type Filters = Record<string, string[]>
 
@@ -356,6 +356,8 @@ export async function getBlockedSelectors<T extends string>(selectors: readonly 
   }
   d.body.appendChild(root)
 
+  await releaseEventLoop()
+
   try {
     // Then check which of the elements are blocked
     for (let i = 0; i < selectors.length; ++i) {
@@ -372,6 +374,7 @@ export async function getBlockedSelectors<T extends string>(selectors: readonly 
 }
 
 function forceShow(element: HTMLElement) {
+  element.style.setProperty('visibility', 'hidden', 'important')
   element.style.setProperty('display', 'block', 'important')
 }
 

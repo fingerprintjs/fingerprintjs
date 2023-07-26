@@ -2,9 +2,9 @@ import getCanvasFingerprint from './canvas'
 
 describe('Sources', () => {
   describe('canvas', () => {
-    it('returns stable values', () => {
-      const first = getCanvasFingerprint()
-      const second = getCanvasFingerprint()
+    it('returns stable values', async () => {
+      const first = await getCanvasFingerprint()
+      const second = await getCanvasFingerprint()
 
       expect(isDataURL(first.geometry)).toBeTrue()
       expect(isDataURL(first.text)).toBeTrue()
