@@ -32,7 +32,7 @@ FingerprintJS is a source-available, client-side, browser fingerprinting library
 ## License
 
 Starting version 4.0.0, FingerprintJS is licensed under [Business Source License 1.1](LICENSE).
-The BSL allows use only for non-production purposes.
+The BSL allows use only for non-production purposes. You can learn more details in our [announcement](https://fingerprint.com/blog/fingerprintjs-license-change/).
 
 | Use Case | Is a commercial license required?|
 |----------|-----------|
