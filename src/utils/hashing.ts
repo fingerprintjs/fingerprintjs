@@ -108,12 +108,45 @@ function x64Fmix(h: number[]) {
   return h
 }
 
+function encode(text: string): Uint8Array {
+  // Benchmark: https://jsbench.me/b6klaaxgwq/1
+  // If you want to just count bytes, see solutions at https://jsbench.me/ehklab415e/1
+  if (typeof TextEncoder === 'function') {
+    return new TextEncoder().encode(text) // From https://stackoverflow.com/a/11411402/1118709
+  }
+
+  // From https://stackoverflow.com/a/18722848/1118709
+  const binaryText = unescape(encodeURI(text))
+  const bytes = new Uint8Array(binaryText.length)
+
+  for (let i = 0; i < binaryText.length; ++i) {
+    bytes[i] = binaryText.charCodeAt(i)
+  }
+
+  return bytes
+}
+
+function getUTF8Bytes(input: string) {
+  const result = new Uint8Array(input.length)
+  for (let i = 0; i < input.length; i++) {
+    // `charCode` is faster than encoding so we prefer that when it's possible
+    const charCode = input.charCodeAt(i)
+
+    // In case of non-ASCII symbols we use proper encoding
+    if (charCode < 0 || charCode > 127) {
+      return encode(input)
+    }
+    result[i] = charCode
+  }
+  return result
+}
+
 //
 // Given a string and an optional seed as an int, returns a 128 bit
 // hash using the x64 flavor of MurmurHash3, as an unsigned hex.
 //
-export function x64hash128(key: string, seed?: number): string {
-  key = key || ''
+export function x64hash128(input: string, seed?: number): string {
+  const key = getUTF8Bytes(input)
   seed = seed || 0
   const remainder = key.length % 16
   const bytes = key.length - remainder
@@ -126,24 +159,12 @@ export function x64hash128(key: string, seed?: number): string {
   let i: number
   for (i = 0; i < bytes; i = i + 16) {
     k1 = [
-      (key.charCodeAt(i + 4) & 0xff) |
-        ((key.charCodeAt(i + 5) & 0xff) << 8) |
-        ((key.charCodeAt(i + 6) & 0xff) << 16) |
-        ((key.charCodeAt(i + 7) & 0xff) << 24),
-      (key.charCodeAt(i) & 0xff) |
-        ((key.charCodeAt(i + 1) & 0xff) << 8) |
-        ((key.charCodeAt(i + 2) & 0xff) << 16) |
-        ((key.charCodeAt(i + 3) & 0xff) << 24),
+      key[i + 4] | (key[i + 5] << 8) | (key[i + 6] << 16) | (key[i + 7] << 24),
+      key[i] | (key[i + 1] << 8) | (key[i + 2] << 16) | (key[i + 3] << 24),
     ]
     k2 = [
-      (key.charCodeAt(i + 12) & 0xff) |
-        ((key.charCodeAt(i + 13) & 0xff) << 8) |
-        ((key.charCodeAt(i + 14) & 0xff) << 16) |
-        ((key.charCodeAt(i + 15) & 0xff) << 24),
-      (key.charCodeAt(i + 8) & 0xff) |
-        ((key.charCodeAt(i + 9) & 0xff) << 8) |
-        ((key.charCodeAt(i + 10) & 0xff) << 16) |
-        ((key.charCodeAt(i + 11) & 0xff) << 24),
+      key[i + 12] | (key[i + 13] << 8) | (key[i + 14] << 16) | (key[i + 15] << 24),
+      key[i + 8] | (key[i + 9] << 8) | (key[i + 10] << 16) | (key[i + 11] << 24),
     ]
     k1 = x64Multiply(k1, c1)
     k1 = x64Rotl(k1, 31)
@@ -164,53 +185,53 @@ export function x64hash128(key: string, seed?: number): string {
   k2 = [0, 0]
   switch (remainder) {
     case 15:
-      k2 = x64Xor(k2, x64LeftShift([0, key.charCodeAt(i + 14)], 48))
+      k2 = x64Xor(k2, x64LeftShift([0, key[i + 14]], 48))
     // fallthrough
     case 14:
-      k2 = x64Xor(k2, x64LeftShift([0, key.charCodeAt(i + 13)], 40))
+      k2 = x64Xor(k2, x64LeftShift([0, key[i + 13]], 40))
     // fallthrough
     case 13:
-      k2 = x64Xor(k2, x64LeftShift([0, key.charCodeAt(i + 12)], 32))
+      k2 = x64Xor(k2, x64LeftShift([0, key[i + 12]], 32))
     // fallthrough
     case 12:
-      k2 = x64Xor(k2, x64LeftShift([0, key.charCodeAt(i + 11)], 24))
+      k2 = x64Xor(k2, x64LeftShift([0, key[i + 11]], 24))
     // fallthrough
     case 11:
-      k2 = x64Xor(k2, x64LeftShift([0, key.charCodeAt(i + 10)], 16))
+      k2 = x64Xor(k2, x64LeftShift([0, key[i + 10]], 16))
     // fallthrough
     case 10:
-      k2 = x64Xor(k2, x64LeftShift([0, key.charCodeAt(i + 9)], 8))
+      k2 = x64Xor(k2, x64LeftShift([0, key[i + 9]], 8))
     // fallthrough
     case 9:
-      k2 = x64Xor(k2, [0, key.charCodeAt(i + 8)])
+      k2 = x64Xor(k2, [0, key[i + 8]])
       k2 = x64Multiply(k2, c2)
       k2 = x64Rotl(k2, 33)
       k2 = x64Multiply(k2, c1)
       h2 = x64Xor(h2, k2)
     // fallthrough
     case 8:
-      k1 = x64Xor(k1, x64LeftShift([0, key.charCodeAt(i + 7)], 56))
+      k1 = x64Xor(k1, x64LeftShift([0, key[i + 7]], 56))
     // fallthrough
     case 7:
-      k1 = x64Xor(k1, x64LeftShift([0, key.charCodeAt(i + 6)], 48))
+      k1 = x64Xor(k1, x64LeftShift([0, key[i + 6]], 48))
     // fallthrough
     case 6:
-      k1 = x64Xor(k1, x64LeftShift([0, key.charCodeAt(i + 5)], 40))
+      k1 = x64Xor(k1, x64LeftShift([0, key[i + 5]], 40))
     // fallthrough
     case 5:
-      k1 = x64Xor(k1, x64LeftShift([0, key.charCodeAt(i + 4)], 32))
+      k1 = x64Xor(k1, x64LeftShift([0, key[i + 4]], 32))
     // fallthrough
     case 4:
-      k1 = x64Xor(k1, x64LeftShift([0, key.charCodeAt(i + 3)], 24))
+      k1 = x64Xor(k1, x64LeftShift([0, key[i + 3]], 24))
     // fallthrough
     case 3:
-      k1 = x64Xor(k1, x64LeftShift([0, key.charCodeAt(i + 2)], 16))
+      k1 = x64Xor(k1, x64LeftShift([0, key[i + 2]], 16))
     // fallthrough
     case 2:
-      k1 = x64Xor(k1, x64LeftShift([0, key.charCodeAt(i + 1)], 8))
+      k1 = x64Xor(k1, x64LeftShift([0, key[i + 1]], 8))
     // fallthrough
     case 1:
-      k1 = x64Xor(k1, [0, key.charCodeAt(i)])
+      k1 = x64Xor(k1, [0, key[i]])
       k1 = x64Multiply(k1, c1)
       k1 = x64Rotl(k1, 31)
       k1 = x64Multiply(k1, c2)

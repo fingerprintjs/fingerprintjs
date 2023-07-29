@@ -26,7 +26,15 @@ const longText =
 
 describe('Murmur3', () => {
   it('makes x64 128 bit hash', () => {
-    expect(x64hash128('Hello, world')).toBe('ebd28b45027ab97477416103e3fff7b8')
+    const input = 'Hello, world, hi'
+    const nonAsciiInput = 'ňťŬŬůĬĠŷůŲŬŤĬĠŨũ' // 'Hello, world, hi' + 256 codepoints for each to make it non-ASCII
+    const shortInput = 'hello'
+
+    expect(x64hash128(input)).not.toBe(x64hash128(nonAsciiInput))
+
+    expect(x64hash128(input)).toBe('9a66b4567d520770dc8eaf9a508ecf1b')
+    expect(x64hash128(nonAsciiInput)).toBe('460892d2cab76edff07f62a97e106f6b')
+    expect(x64hash128(shortInput)).toBe('cbd8a7b341bd9b025b1e906a48ae1d19')
     expect(x64hash128(longText)).toBe('211a6f425b82e115fb52ccdc51edb290')
   })
 })
