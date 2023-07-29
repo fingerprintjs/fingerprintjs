@@ -9,19 +9,22 @@
 function x64Add(m: number[], n: number[]) {
   m = [m[0] >>> 16, m[0] & 0xffff, m[1] >>> 16, m[1] & 0xffff]
   n = [n[0] >>> 16, n[0] & 0xffff, n[1] >>> 16, n[1] & 0xffff]
-  const o = [0, 0, 0, 0]
-  o[3] += m[3] + n[3]
-  o[2] += o[3] >>> 16
-  o[3] &= 0xffff
-  o[2] += m[2] + n[2]
-  o[1] += o[2] >>> 16
-  o[2] &= 0xffff
-  o[1] += m[1] + n[1]
-  o[0] += o[1] >>> 16
-  o[1] &= 0xffff
-  o[0] += m[0] + n[0]
-  o[0] &= 0xffff
-  return [(o[0] << 16) | o[1], (o[2] << 16) | o[3]]
+  let o0 = 0,
+    o1 = 0,
+    o2 = 0,
+    o3 = 0
+  o3 += m[3] + n[3]
+  o2 += o3 >>> 16
+  o3 &= 0xffff
+  o2 += m[2] + n[2]
+  o1 += o2 >>> 16
+  o2 &= 0xffff
+  o1 += m[1] + n[1]
+  o0 += o1 >>> 16
+  o1 &= 0xffff
+  o0 += m[0] + n[0]
+  o0 &= 0xffff
+  return [(o0 << 16) | o1, (o2 << 16) | o3]
 }
 
 /**
@@ -31,28 +34,31 @@ function x64Add(m: number[], n: number[]) {
 function x64Multiply(m: number[], n: number[]) {
   m = [m[0] >>> 16, m[0] & 0xffff, m[1] >>> 16, m[1] & 0xffff]
   n = [n[0] >>> 16, n[0] & 0xffff, n[1] >>> 16, n[1] & 0xffff]
-  const o = [0, 0, 0, 0]
-  o[3] += m[3] * n[3]
-  o[2] += o[3] >>> 16
-  o[3] &= 0xffff
-  o[2] += m[2] * n[3]
-  o[1] += o[2] >>> 16
-  o[2] &= 0xffff
-  o[2] += m[3] * n[2]
-  o[1] += o[2] >>> 16
-  o[2] &= 0xffff
-  o[1] += m[1] * n[3]
-  o[0] += o[1] >>> 16
-  o[1] &= 0xffff
-  o[1] += m[2] * n[2]
-  o[0] += o[1] >>> 16
-  o[1] &= 0xffff
-  o[1] += m[3] * n[1]
-  o[0] += o[1] >>> 16
-  o[1] &= 0xffff
-  o[0] += m[0] * n[3] + m[1] * n[2] + m[2] * n[1] + m[3] * n[0]
-  o[0] &= 0xffff
-  return [(o[0] << 16) | o[1], (o[2] << 16) | o[3]]
+  let o0 = 0,
+    o1 = 0,
+    o2 = 0,
+    o3 = 0
+  o3 += m[3] * n[3]
+  o2 += o3 >>> 16
+  o3 &= 0xffff
+  o2 += m[2] * n[3]
+  o1 += o2 >>> 16
+  o2 &= 0xffff
+  o2 += m[3] * n[2]
+  o1 += o2 >>> 16
+  o2 &= 0xffff
+  o1 += m[1] * n[3]
+  o0 += o1 >>> 16
+  o1 &= 0xffff
+  o1 += m[2] * n[2]
+  o0 += o1 >>> 16
+  o1 &= 0xffff
+  o1 += m[3] * n[1]
+  o0 += o1 >>> 16
+  o1 &= 0xffff
+  o0 += m[0] * n[3] + m[1] * n[2] + m[2] * n[1] + m[3] * n[0]
+  o0 &= 0xffff
+  return [(o0 << 16) | o1, (o2 << 16) | o3]
 }
 
 /**
@@ -75,19 +81,20 @@ function x64Rotl(m: number[], bits: number): void {
   }
 }
 
-//
-// Given a 64bit int (as an array of two 32bit ints) and an int
-// representing a number of bit positions, returns the 64bit int (as an
-// array of two 32bit ints) shifted left by that number of positions.
-//
-function x64LeftShift(m: number[], n: number) {
-  n %= 64
-  if (n === 0) {
-    return m
-  } else if (n < 32) {
-    return [(m[0] << n) | (m[1] >>> (32 - n)), m[1] << n]
+/**
+ * Provides a left shift of the given int32 value (provided as tuple of [0, int32])
+ * by given number of bits. Result is written back to the value
+ */
+function x64LeftShift(m: number[], bits: number): void {
+  bits %= 64
+  if (bits === 0) {
+    return
+  } else if (bits < 32) {
+    m[0] = m[1] >>> (32 - bits)
+    m[1] = m[1] << bits
   } else {
-    return [m[1] << (n - 32), 0]
+    m[0] = m[1] << (bits - 32)
+    m[1] = 0
   }
 }
 //
@@ -185,24 +192,37 @@ export function x64hash128(input: string, seed?: number): string {
   k1[1] = 0
   k2[0] = 0
   k2[1] = 0
+  const val = [0, 0]
   switch (remainder) {
     case 15:
-      k2 = x64Xor(k2, x64LeftShift([0, key[i + 14]], 48))
+      val[1] = key[i + 14]
+      x64LeftShift(val, 48)
+      k2 = x64Xor(k2, val)
     // fallthrough
     case 14:
-      k2 = x64Xor(k2, x64LeftShift([0, key[i + 13]], 40))
+      val[1] = key[i + 13]
+      x64LeftShift(val, 40)
+      k2 = x64Xor(k2, val)
     // fallthrough
     case 13:
-      k2 = x64Xor(k2, x64LeftShift([0, key[i + 12]], 32))
+      val[1] = key[i + 12]
+      x64LeftShift(val, 32)
+      k2 = x64Xor(k2, val)
     // fallthrough
     case 12:
-      k2 = x64Xor(k2, x64LeftShift([0, key[i + 11]], 24))
+      val[1] = key[i + 11]
+      x64LeftShift(val, 24)
+      k2 = x64Xor(k2, val)
     // fallthrough
     case 11:
-      k2 = x64Xor(k2, x64LeftShift([0, key[i + 10]], 16))
+      val[1] = key[i + 10]
+      x64LeftShift(val, 16)
+      k2 = x64Xor(k2, val)
     // fallthrough
     case 10:
-      k2 = x64Xor(k2, x64LeftShift([0, key[i + 9]], 8))
+      val[1] = key[i + 9]
+      x64LeftShift(val, 8)
+      k2 = x64Xor(k2, val)
     // fallthrough
     case 9:
       k2 = x64Xor(k2, [0, key[i + 8]])
@@ -212,25 +232,39 @@ export function x64hash128(input: string, seed?: number): string {
       h2 = x64Xor(h2, k2)
     // fallthrough
     case 8:
-      k1 = x64Xor(k1, x64LeftShift([0, key[i + 7]], 56))
+      val[1] = key[i + 7]
+      x64LeftShift(val, 56)
+      k1 = x64Xor(k1, val)
     // fallthrough
     case 7:
-      k1 = x64Xor(k1, x64LeftShift([0, key[i + 6]], 48))
+      val[1] = key[i + 6]
+      x64LeftShift(val, 48)
+      k1 = x64Xor(k1, val)
     // fallthrough
     case 6:
-      k1 = x64Xor(k1, x64LeftShift([0, key[i + 5]], 40))
+      val[1] = key[i + 5]
+      x64LeftShift(val, 40)
+      k1 = x64Xor(k1, val)
     // fallthrough
     case 5:
-      k1 = x64Xor(k1, x64LeftShift([0, key[i + 4]], 32))
+      val[1] = key[i + 4]
+      x64LeftShift(val, 32)
+      k1 = x64Xor(k1, val)
     // fallthrough
     case 4:
-      k1 = x64Xor(k1, x64LeftShift([0, key[i + 3]], 24))
+      val[1] = key[i + 3]
+      x64LeftShift(val, 24)
+      k1 = x64Xor(k1, val)
     // fallthrough
     case 3:
-      k1 = x64Xor(k1, x64LeftShift([0, key[i + 2]], 16))
+      val[1] = key[i + 2]
+      x64LeftShift(val, 16)
+      k1 = x64Xor(k1, val)
     // fallthrough
     case 2:
-      k1 = x64Xor(k1, x64LeftShift([0, key[i + 1]], 8))
+      val[1] = key[i + 1]
+      x64LeftShift(val, 8)
+      k1 = x64Xor(k1, val)
     // fallthrough
     case 1:
       k1 = x64Xor(k1, [0, key[i]])
