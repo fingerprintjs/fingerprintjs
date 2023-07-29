@@ -24,10 +24,10 @@ function x64Add(m: number[], n: number[]) {
   return [(o[0] << 16) | o[1], (o[2] << 16) | o[3]]
 }
 
-//
-// Given two 64bit ints (as an array of two 32bit ints) returns the two
-// multiplied together as a 64bit int (as an array of two 32bit ints).
-//
+/**
+ * Multiplies two 64-bit values (provided as tuples of 32-bit values)
+ * and updates (mutates first value to write the result
+ */
 function x64Multiply(m: number[], n: number[]) {
   m = [m[0] >>> 16, m[0] & 0xffff, m[1] >>> 16, m[1] & 0xffff]
   n = [n[0] >>> 16, n[0] & 0xffff, n[1] >>> 16, n[1] & 0xffff]
@@ -55,20 +55,23 @@ function x64Multiply(m: number[], n: number[]) {
   return [(o[0] << 16) | o[1], (o[2] << 16) | o[3]]
 }
 
-//
-// Given a 64bit int (as an array of two 32bit ints) and an int
-// representing a number of bit positions, returns the 64bit int (as an
-// array of two 32bit ints) rotated left by that number of positions.
-//
-function x64Rotl(m: number[], n: number) {
-  n %= 64
-  if (n === 32) {
-    return [m[1], m[0]]
-  } else if (n < 32) {
-    return [(m[0] << n) | (m[1] >>> (32 - n)), (m[1] << n) | (m[0] >>> (32 - n))]
+/**
+ * Provides left rotation of the given int64 value (provided as tuple of two int32)
+ * by given number of bits
+ */
+function x64Rotl(m: number[], bits: number): void {
+  const m0 = m[0]
+  bits %= 64
+  if (bits === 32) {
+    m[0] = m[1]
+    m[1] = m0
+  } else if (bits < 32) {
+    m[0] = (m0 << bits) | (m[1] >>> (32 - bits))
+    m[1] = (m[1] << bits) | (m0 >>> (32 - bits))
   } else {
-    n -= 32
-    return [(m[1] << n) | (m[0] >>> (32 - n)), (m[0] << n) | (m[1] >>> (32 - n))]
+    bits -= 32
+    m[0] = (m[1] << bits) | (m0 >>> (32 - bits))
+    m[1] = (m0 << bits) | (m[1] >>> (32 - bits))
   }
 }
 
@@ -158,31 +161,30 @@ export function x64hash128(input: string, seed?: number): string {
   const c2 = [0x4cf5ad43, 0x2745937f]
   let i: number
   for (i = 0; i < bytes; i = i + 16) {
-    k1 = [
-      key[i + 4] | (key[i + 5] << 8) | (key[i + 6] << 16) | (key[i + 7] << 24),
-      key[i] | (key[i + 1] << 8) | (key[i + 2] << 16) | (key[i + 3] << 24),
-    ]
-    k2 = [
-      key[i + 12] | (key[i + 13] << 8) | (key[i + 14] << 16) | (key[i + 15] << 24),
-      key[i + 8] | (key[i + 9] << 8) | (key[i + 10] << 16) | (key[i + 11] << 24),
-    ]
+    k1[0] = key[i + 4] | (key[i + 5] << 8) | (key[i + 6] << 16) | (key[i + 7] << 24)
+    k1[1] = key[i] | (key[i + 1] << 8) | (key[i + 2] << 16) | (key[i + 3] << 24)
+    k2[0] = key[i + 12] | (key[i + 13] << 8) | (key[i + 14] << 16) | (key[i + 15] << 24)
+    k2[1] = key[i + 8] | (key[i + 9] << 8) | (key[i + 10] << 16) | (key[i + 11] << 24)
+
     k1 = x64Multiply(k1, c1)
-    k1 = x64Rotl(k1, 31)
+    x64Rotl(k1, 31)
     k1 = x64Multiply(k1, c2)
     h1 = x64Xor(h1, k1)
-    h1 = x64Rotl(h1, 27)
+    x64Rotl(h1, 27)
     h1 = x64Add(h1, h2)
     h1 = x64Add(x64Multiply(h1, [0, 5]), [0, 0x52dce729])
     k2 = x64Multiply(k2, c2)
-    k2 = x64Rotl(k2, 33)
+    x64Rotl(k2, 33)
     k2 = x64Multiply(k2, c1)
     h2 = x64Xor(h2, k2)
-    h2 = x64Rotl(h2, 31)
+    x64Rotl(h2, 31)
     h2 = x64Add(h2, h1)
     h2 = x64Add(x64Multiply(h2, [0, 5]), [0, 0x38495ab5])
   }
-  k1 = [0, 0]
-  k2 = [0, 0]
+  k1[0] = 0
+  k1[1] = 0
+  k2[0] = 0
+  k2[1] = 0
   switch (remainder) {
     case 15:
       k2 = x64Xor(k2, x64LeftShift([0, key[i + 14]], 48))
@@ -205,7 +207,7 @@ export function x64hash128(input: string, seed?: number): string {
     case 9:
       k2 = x64Xor(k2, [0, key[i + 8]])
       k2 = x64Multiply(k2, c2)
-      k2 = x64Rotl(k2, 33)
+      x64Rotl(k2, 33)
       k2 = x64Multiply(k2, c1)
       h2 = x64Xor(h2, k2)
     // fallthrough
@@ -233,7 +235,7 @@ export function x64hash128(input: string, seed?: number): string {
     case 1:
       k1 = x64Xor(k1, [0, key[i]])
       k1 = x64Multiply(k1, c1)
-      k1 = x64Rotl(k1, 31)
+      x64Rotl(k1, 31)
       k1 = x64Multiply(k1, c2)
       h1 = x64Xor(h1, k1)
     // fallthrough
