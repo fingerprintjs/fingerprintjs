@@ -149,3 +149,42 @@ export function maxInIterator<T>(iterator: Iterator<T>, getItemScore: (item: T) 
 
   return maxItem
 }
+
+function encode(text: string): Uint8Array {
+  // Benchmark: https://jsbench.me/b6klaaxgwq/1
+  // If you want to just count bytes, see solutions at https://jsbench.me/ehklab415e/1
+  if (typeof TextEncoder === 'function') {
+    return new TextEncoder().encode(text) // From https://stackoverflow.com/a/11411402/1118709
+  }
+
+  // From https://stackoverflow.com/a/18722848/1118709
+  const binaryText = unescape(encodeURI(text))
+  const bytes = new Uint8Array(binaryText.length)
+
+  for (let i = 0; i < binaryText.length; ++i) {
+    bytes[i] = binaryText.charCodeAt(i)
+  }
+
+  return bytes
+}
+
+/**
+ * Converts a string to UTF8 bytes
+ *
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
+ */
+export function getUTF8Bytes(input: string): Uint8Array {
+  const result = new Uint8Array(input.length)
+  for (let i = 0; i < input.length; i++) {
+    // `charCode` is faster than encoding so we prefer that when it's possible
+    const charCode = input.charCodeAt(i)
+
+    // In case of non-ASCII symbols we use proper encoding
+    if (charCode < 0 || charCode > 127) {
+      return encode(input)
+    }
+    result[i] = charCode
+  }
+  return result
+}

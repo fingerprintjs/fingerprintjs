@@ -2,6 +2,8 @@
  * Taken from https://github.com/karanlyons/murmurHash3.js/blob/a33d0723127e2e5415056c455f8aed2451ace208/murmurHash3.js
  */
 
+import { getUTF8Bytes } from './data'
+
 /**
  * Adds two 64-bit values (provided as tuples of 32-bit values)
  * and updates (mutates) first value to write the result
@@ -123,12 +125,12 @@ function x64LeftShift(m: number[], bits: number): void {
  * Result is written back to the first value
  */
 function x64Xor(m: number[], n: number[]): void {
-  m[0] = m[0] ^ n[0]
-  m[1] = m[1] ^ n[1]
+  m[0] ^= n[0]
+  m[1] ^= n[1]
 }
 
-const f1 = [0xff51afd7, 0xed558ccd]
-const f2 = [0xc4ceb9fe, 0x1a85ec53]
+const F1 = [0xff51afd7, 0xed558ccd]
+const F2 = [0xc4ceb9fe, 0x1a85ec53]
 /**
  * Calculates murmurHash3's final x64 mix of that block and writes result back to the input value.
  * (`[0, h[0] >>> 1]` is a 33 bit unsigned right shift. This is the
@@ -137,51 +139,23 @@ const f2 = [0xc4ceb9fe, 0x1a85ec53]
 function x64Fmix(h: number[]): void {
   const shifted = [0, h[0] >>> 1]
   x64Xor(h, shifted)
-  x64Multiply(h, f1)
+  x64Multiply(h, F1)
   shifted[1] = h[0] >>> 1
   x64Xor(h, shifted)
-  x64Multiply(h, f2)
+  x64Multiply(h, F2)
   shifted[1] = h[0] >>> 1
   x64Xor(h, shifted)
 }
 
-function encode(text: string): Uint8Array {
-  // Benchmark: https://jsbench.me/b6klaaxgwq/1
-  // If you want to just count bytes, see solutions at https://jsbench.me/ehklab415e/1
-  if (typeof TextEncoder === 'function') {
-    return new TextEncoder().encode(text) // From https://stackoverflow.com/a/11411402/1118709
-  }
-
-  // From https://stackoverflow.com/a/18722848/1118709
-  const binaryText = unescape(encodeURI(text))
-  const bytes = new Uint8Array(binaryText.length)
-
-  for (let i = 0; i < binaryText.length; ++i) {
-    bytes[i] = binaryText.charCodeAt(i)
-  }
-
-  return bytes
-}
-
-function getUTF8Bytes(input: string) {
-  const result = new Uint8Array(input.length)
-  for (let i = 0; i < input.length; i++) {
-    // `charCode` is faster than encoding so we prefer that when it's possible
-    const charCode = input.charCodeAt(i)
-
-    // In case of non-ASCII symbols we use proper encoding
-    if (charCode < 0 || charCode > 127) {
-      return encode(input)
-    }
-    result[i] = charCode
-  }
-  return result
-}
-
-//
-// Given a string and an optional seed as an int, returns a 128 bit
-// hash using the x64 flavor of MurmurHash3, as an unsigned hex.
-//
+const C1 = [0x87c37b91, 0x114253d5]
+const C2 = [0x4cf5ad43, 0x2745937f]
+const M = [0, 5]
+const N1 = [0, 0x52dce729]
+const N2 = [0, 0x38495ab5]
+/**
+ * Given a string and an optional seed as an int, returns a 128 bit
+ * hash using the x64 flavor of MurmurHash3, as an unsigned hex.
+ */
 export function x64hash128(input: string, seed?: number): string {
   const key = getUTF8Bytes(input)
   seed = seed || 0
@@ -192,11 +166,7 @@ export function x64hash128(input: string, seed?: number): string {
   const h2 = [0, seed]
   const k1 = [0, 0]
   const k2 = [0, 0]
-  const c1 = [0x87c37b91, 0x114253d5]
-  const c2 = [0x4cf5ad43, 0x2745937f]
-  const m = [0, 5]
-  const n1 = [0, 0x52dce729]
-  const n2 = [0, 0x38495ab5]
+
   let i: number
   for (i = 0; i < bytes; i = i + 16) {
     k1[0] = key[i + 4] | (key[i + 5] << 8) | (key[i + 6] << 16) | (key[i + 7] << 24)
@@ -204,22 +174,22 @@ export function x64hash128(input: string, seed?: number): string {
     k2[0] = key[i + 12] | (key[i + 13] << 8) | (key[i + 14] << 16) | (key[i + 15] << 24)
     k2[1] = key[i + 8] | (key[i + 9] << 8) | (key[i + 10] << 16) | (key[i + 11] << 24)
 
-    x64Multiply(k1, c1)
+    x64Multiply(k1, C1)
     x64Rotl(k1, 31)
-    x64Multiply(k1, c2)
+    x64Multiply(k1, C2)
     x64Xor(h1, k1)
     x64Rotl(h1, 27)
     x64Add(h1, h2)
-    x64Multiply(h1, m)
-    x64Add(h1, n1)
-    x64Multiply(k2, c2)
+    x64Multiply(h1, M)
+    x64Add(h1, N1)
+    x64Multiply(k2, C2)
     x64Rotl(k2, 33)
-    x64Multiply(k2, c1)
+    x64Multiply(k2, C1)
     x64Xor(h2, k2)
     x64Rotl(h2, 31)
     x64Add(h2, h1)
-    x64Multiply(h2, m)
-    x64Add(h2, n2)
+    x64Multiply(h2, M)
+    x64Add(h2, N2)
   }
   k1[0] = 0
   k1[1] = 0
@@ -261,9 +231,9 @@ export function x64hash128(input: string, seed?: number): string {
       val[1] = key[i + 8]
 
       x64Xor(k2, val)
-      x64Multiply(k2, c2)
+      x64Multiply(k2, C2)
       x64Rotl(k2, 33)
-      x64Multiply(k2, c1)
+      x64Multiply(k2, C1)
       x64Xor(h2, k2)
     // fallthrough
     case 8:
@@ -305,9 +275,9 @@ export function x64hash128(input: string, seed?: number): string {
       val[1] = key[i]
 
       x64Xor(k1, val)
-      x64Multiply(k1, c1)
+      x64Multiply(k1, C1)
       x64Rotl(k1, 31)
-      x64Multiply(k1, c2)
+      x64Multiply(k1, C2)
       x64Xor(h1, k1)
     // fallthrough
   }
