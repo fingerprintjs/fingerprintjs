@@ -8,7 +8,7 @@ import { getUTF8Bytes } from './data'
  * Adds two 64-bit values (provided as tuples of 32-bit values)
  * and updates (mutates) first value to write the result
  */
-function x64Add(m: number[], n: number[]) {
+function x64Add(m: number[], n: number[]): void {
   const m0 = m[0] >>> 16,
     m1 = m[0] & 0xffff,
     m2 = m[1] >>> 16,
@@ -37,7 +37,6 @@ function x64Add(m: number[], n: number[]) {
 
   m[0] = (o0 << 16) | o1
   m[1] = (o2 << 16) | o3
-  return m
 }
 
 /**
