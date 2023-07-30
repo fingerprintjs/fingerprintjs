@@ -29,41 +29,51 @@ function x64Add(m: number[], n: number[]) {
 
 /**
  * Multiplies two 64-bit values (provided as tuples of 32-bit values)
- * and updates (mutates first value to write the result
+ * and updates (mutates) first value to write the result
  */
-function x64Multiply(m: number[], n: number[]) {
-  m = [m[0] >>> 16, m[0] & 0xffff, m[1] >>> 16, m[1] & 0xffff]
-  n = [n[0] >>> 16, n[0] & 0xffff, n[1] >>> 16, n[1] & 0xffff]
+function x64Multiply(m: number[], n: number[]): void {
+  const m0 = m[0] >>> 16,
+    m1 = m[0] & 0xffff,
+    m2 = m[1] >>> 16,
+    m3 = m[1] & 0xffff
+
+  const n0 = n[0] >>> 16,
+    n1 = n[0] & 0xffff,
+    n2 = n[1] >>> 16,
+    n3 = n[1] & 0xffff
   let o0 = 0,
     o1 = 0,
     o2 = 0,
     o3 = 0
-  o3 += m[3] * n[3]
+
+  o3 += m3 * n3
   o2 += o3 >>> 16
   o3 &= 0xffff
-  o2 += m[2] * n[3]
+  o2 += m2 * n3
   o1 += o2 >>> 16
   o2 &= 0xffff
-  o2 += m[3] * n[2]
+  o2 += m3 * n2
   o1 += o2 >>> 16
   o2 &= 0xffff
-  o1 += m[1] * n[3]
+  o1 += m1 * n3
   o0 += o1 >>> 16
   o1 &= 0xffff
-  o1 += m[2] * n[2]
+  o1 += m2 * n2
   o0 += o1 >>> 16
   o1 &= 0xffff
-  o1 += m[3] * n[1]
+  o1 += m3 * n1
   o0 += o1 >>> 16
   o1 &= 0xffff
-  o0 += m[0] * n[3] + m[1] * n[2] + m[2] * n[1] + m[3] * n[0]
+  o0 += m0 * n3 + m1 * n2 + m2 * n1 + m3 * n0
   o0 &= 0xffff
-  return [(o0 << 16) | o1, (o2 << 16) | o3]
+
+  m[0] = (o0 << 16) | o1
+  m[1] = (o2 << 16) | o3
 }
 
 /**
  * Provides left rotation of the given int64 value (provided as tuple of two int32)
- * by given number of bits
+ * by given number of bits. Result is written back to the value
  */
 function x64Rotl(m: number[], bits: number): void {
   const m0 = m[0]
@@ -111,9 +121,9 @@ function x64Xor(m: number[], n: number[]) {
 //
 function x64Fmix(h: number[]) {
   h = x64Xor(h, [0, h[0] >>> 1])
-  h = x64Multiply(h, [0xff51afd7, 0xed558ccd])
+  x64Multiply(h, [0xff51afd7, 0xed558ccd])
   h = x64Xor(h, [0, h[0] >>> 1])
-  h = x64Multiply(h, [0xc4ceb9fe, 0x1a85ec53])
+  x64Multiply(h, [0xc4ceb9fe, 0x1a85ec53])
   h = x64Xor(h, [0, h[0] >>> 1])
   return h
 }
@@ -166,6 +176,9 @@ export function x64hash128(input: string, seed?: number): string {
   let k2 = [0, 0]
   const c1 = [0x87c37b91, 0x114253d5]
   const c2 = [0x4cf5ad43, 0x2745937f]
+  const m = [0, 5]
+  const n1 = [0, 0x52dce729]
+  const n2 = [0, 0x38495ab5]
   let i: number
   for (i = 0; i < bytes; i = i + 16) {
     k1[0] = key[i + 4] | (key[i + 5] << 8) | (key[i + 6] << 16) | (key[i + 7] << 24)
@@ -173,20 +186,22 @@ export function x64hash128(input: string, seed?: number): string {
     k2[0] = key[i + 12] | (key[i + 13] << 8) | (key[i + 14] << 16) | (key[i + 15] << 24)
     k2[1] = key[i + 8] | (key[i + 9] << 8) | (key[i + 10] << 16) | (key[i + 11] << 24)
 
-    k1 = x64Multiply(k1, c1)
+    x64Multiply(k1, c1)
     x64Rotl(k1, 31)
-    k1 = x64Multiply(k1, c2)
+    x64Multiply(k1, c2)
     h1 = x64Xor(h1, k1)
     x64Rotl(h1, 27)
     h1 = x64Add(h1, h2)
-    h1 = x64Add(x64Multiply(h1, [0, 5]), [0, 0x52dce729])
-    k2 = x64Multiply(k2, c2)
+    x64Multiply(h1, m)
+    h1 = x64Add(h1, n1)
+    x64Multiply(k2, c2)
     x64Rotl(k2, 33)
-    k2 = x64Multiply(k2, c1)
+    x64Multiply(k2, c1)
     h2 = x64Xor(h2, k2)
     x64Rotl(h2, 31)
     h2 = x64Add(h2, h1)
-    h2 = x64Add(x64Multiply(h2, [0, 5]), [0, 0x38495ab5])
+    x64Multiply(h2, m)
+    h2 = x64Add(h2, n2)
   }
   k1[0] = 0
   k1[1] = 0
@@ -226,9 +241,9 @@ export function x64hash128(input: string, seed?: number): string {
     // fallthrough
     case 9:
       k2 = x64Xor(k2, [0, key[i + 8]])
-      k2 = x64Multiply(k2, c2)
+      x64Multiply(k2, c2)
       x64Rotl(k2, 33)
-      k2 = x64Multiply(k2, c1)
+      x64Multiply(k2, c1)
       h2 = x64Xor(h2, k2)
     // fallthrough
     case 8:
@@ -268,9 +283,9 @@ export function x64hash128(input: string, seed?: number): string {
     // fallthrough
     case 1:
       k1 = x64Xor(k1, [0, key[i]])
-      k1 = x64Multiply(k1, c1)
+      x64Multiply(k1, c1)
       x64Rotl(k1, 31)
-      k1 = x64Multiply(k1, c2)
+      x64Multiply(k1, c2)
       h1 = x64Xor(h1, k1)
     // fallthrough
   }
