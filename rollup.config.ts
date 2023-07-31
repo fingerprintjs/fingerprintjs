@@ -4,8 +4,6 @@ import jsonPlugin from '@rollup/plugin-json'
 import nodeResolvePlugin from '@rollup/plugin-node-resolve'
 import typescriptPlugin from '@rollup/plugin-typescript'
 import terserPlugin from '@rollup/plugin-terser'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore Otherwise ts-node reject to run make_selectors_tester.ts
 import dtsPlugin from 'rollup-plugin-dts'
 import licensePlugin from 'rollup-plugin-license'
 import terserConfig from './terser.config'
