@@ -12,19 +12,11 @@ const INT64_MAX = BigInt('0xffffffffffffffff')
 const INT64_LENGTH = BigInt(64)
 const UINT64_MIN = BigInt(0)
 
-/**
- * Provides left rotation of the given int64 value (provided as tuple of two int32)
- * by given number of bits. Result is written back to the value
- */
 function rotl(m: bigint, bits: bigint): bigint {
   bits %= BigInt(64)
 
   return ((m << bits) | (m >> (INT64_LENGTH - bits))) & INT64_MAX
 }
-
-const F1 = BigInt('0xff51afd7ed558ccd')
-const F2 = BigInt('0xc4ceb9fe1a85ec53')
-const F_NUM_OF_BITS = BigInt(33)
 
 function mul(a: bigint, b: bigint) {
   return (a * b) & INT64_MAX
@@ -34,11 +26,10 @@ function add(a: bigint, b: bigint) {
   return (a + b) & INT64_MAX
 }
 
-/**
- * Calculates murmurHash3's final x64 mix of that block and writes result back to the input value.
- * (`[0, h[0] >>> 1]` is a 33 bit unsigned right shift. This is the
- * only place where we need to right shift 64bit ints.)
- */
+const F1 = BigInt('0xff51afd7ed558ccd')
+const F2 = BigInt('0xc4ceb9fe1a85ec53')
+const F_NUM_OF_BITS = BigInt(33)
+
 function fmix(h: bigint): bigint {
   h ^= h >> F_NUM_OF_BITS
   h = mul(h, F1)
@@ -47,12 +38,10 @@ function fmix(h: bigint): bigint {
   h ^= h >> F_NUM_OF_BITS
   return h
 }
+
 /**
- * Returns a 128-bit hash of the given string (as a hex string)
- * using the x64 flavor of MurmurHash3, as an unsigned hex.
- * All internal functions mutates passed value to achieve minimal memory allocations and GC load
- *
- * Benchmark https://jsbench.me/p4lkpaoabi/1
+ * Returns a 128-bit hash of the given string (as a hex string) using the x64 flavor of MurmurHash3, as an unsigned hex.
+ * Implementation respects non-ASCII characters to achieve best compatibility with implementations in other languages
  */
 export function x64hash128(input: string, seed?: number): string {
   const data = getUTF8Bytes(input)
