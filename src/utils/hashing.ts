@@ -1,7 +1,3 @@
-/*
- * Taken from https://github.com/karanlyons/murmurHash3.js/blob/a33d0723127e2e5415056c455f8aed2451ace208/murmurHash3.js
- */
-
 /**
  * Adds two 64-bit values (provided as tuples of 32-bit values)
  * and updates (mutates) first value to write the result
@@ -185,14 +181,14 @@ export function x64hash128(key: string, seed?: number): string {
 
       // UTF-8 encoding algorithm
       if (codePoint < 0x80) {
-        chunk[j] = (codePoint & 0x7f) | 0x00
+        chunk[j] = codePoint
         j++
       } else if (codePoint < 0x0800) {
-        chunk[j] = ((codePoint >> 6) & 0x1f) | 0xc0
+        chunk[j] = (codePoint >> 6) | 0xc0
         chunk[j + 1] = (codePoint & 0x3f) | 0x80
         j += 2
       } else if (codePoint < 0x010000) {
-        chunk[j] = ((codePoint >> 12) & 0x0f) | 0xe0
+        chunk[j] = (codePoint >> 12) | 0xe0
         chunk[j + 1] = ((codePoint >> 6) & 0x3f) | 0x80
         chunk[j + 2] = (codePoint & 0x3f) | 0x80
         j += 3
@@ -212,12 +208,12 @@ export function x64hash128(key: string, seed?: number): string {
       break
     }
 
-    byteLength += 16
-
     // If we have more than 16 bytes - we need to process the overflow in the next iteration
     if (j > 16) {
       overflow = j - 16
     }
+
+    byteLength += 16
 
     k1[0] = chunk[4] | (chunk[5] << 8) | (chunk[6] << 16) | (chunk[7] << 24)
     k1[1] = chunk[0] | (chunk[1] << 8) | (chunk[2] << 16) | (chunk[3] << 24)
