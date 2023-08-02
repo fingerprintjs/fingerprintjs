@@ -25,10 +25,10 @@ Change the package name:
 
 ```bash
 npm remove fingerprintjs2
-npm install @fingerprintjs/fingerprintjs
+npm install @fingerprintjs/fingerprintjs@^3
 # or
 yarn remove fingerprintjs2
-yarn add @fingerprintjs/fingerprintjs
+yarn add @fingerprintjs/fingerprintjs@^3
 ```
 
 The new version sends HTTP requests to collect usage statistics, they can be disabled.
