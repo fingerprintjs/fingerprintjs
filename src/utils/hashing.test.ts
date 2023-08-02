@@ -31,7 +31,12 @@ describe('Murmur3', () => {
     const inputGreaterThanChunk = 'Hello, world, hi!'
     const inputGreaterThan2Chunks = 'Hello, world, hi, Hello, world, hi'
 
-    const nonAsciiInput = 'ňťŬŬůĬĠŷůŲŬŤĬĠŨũ' // 'Hello, world, hi' + 256 codepoints for each to make it non-ASCII
+    // Value: 'ňťŬŬůĬĠŷůŲŬŤĬĠŨũ'
+    const nonAsciiInput = input
+      .split('')
+      .map((char) => String.fromCharCode(char.charCodeAt(0) + 256))
+      .join('')
+
     const shortInput = 'hello'
 
     expect(x64hash128(input)).not.toBe(x64hash128(nonAsciiInput))
