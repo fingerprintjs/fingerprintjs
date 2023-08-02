@@ -150,7 +150,7 @@ const N2 = [0, 0x38495ab5]
  * hash using the x64 flavor of MurmurHash3, as an unsigned hex.
  * All internal functions mutates passed value to achieve minimal memory allocations and GC load
  *
- * Benchmark https://jsbench.me/p4lkpaoabi/1
+ * Benchmark https://jsbench.me/p4lkpaoabi/2
  */
 export function x64hash128(key: string, seed?: number): string {
   seed = seed || 0
@@ -179,7 +179,7 @@ export function x64hash128(key: string, seed?: number): string {
         i++
       }
 
-      // UTF-8 encoding algorithm
+      // UTF-8 encoding algorithm https://www.herongyang.com/Unicode/UTF-8-UTF-8-Encoding.html
       if (codePoint < 0x80) {
         chunk[j] = codePoint
         j++
