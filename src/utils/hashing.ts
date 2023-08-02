@@ -2,8 +2,6 @@
  * Taken from https://github.com/karanlyons/murmurHash3.js/blob/a33d0723127e2e5415056c455f8aed2451ace208/murmurHash3.js
  */
 
-import { getUTF8Bytes } from './data'
-
 /**
  * Adds two 64-bit values (provided as tuples of 32-bit values)
  * and updates (mutates) first value to write the result
@@ -158,23 +156,73 @@ const N2 = [0, 0x38495ab5]
  *
  * Benchmark https://jsbench.me/p4lkpaoabi/1
  */
-export function x64hash128(input: string, seed?: number): string {
-  const key = getUTF8Bytes(input)
+export function x64hash128(key: string, seed?: number): string {
   seed = seed || 0
-  const length = [0, key.length]
-  const remainder = length[1] % 16
-  const bytes = length[1] - remainder
   const h1 = [0, seed]
   const h2 = [0, seed]
   const k1 = [0, 0]
   const k2 = [0, 0]
+  const length = key.length
+  let byteLength = 0
 
-  let i: number
-  for (i = 0; i < bytes; i = i + 16) {
-    k1[0] = key[i + 4] | (key[i + 5] << 8) | (key[i + 6] << 16) | (key[i + 7] << 24)
-    k1[1] = key[i] | (key[i + 1] << 8) | (key[i + 2] << 16) | (key[i + 3] << 24)
-    k2[0] = key[i + 12] | (key[i + 13] << 8) | (key[i + 14] << 16) | (key[i + 15] << 24)
-    k2[1] = key[i + 8] | (key[i + 9] << 8) | (key[i + 10] << 16) | (key[i + 11] << 24)
+  let i = 0
+  let remainder = 0
+  let overflow = 0
+  const chunk = new Array(20) // legnth calculated as 16 + 4 to respect 4-byte overflow
+
+  while (i < length) {
+    for (let k = 0; k < overflow; k++) {
+      chunk[k] = chunk[16 + k]
+    }
+    let j = overflow
+    overflow = 0
+    while (j < 16 && i < length) {
+      const codePoint = key.codePointAt(i) as number
+      if (isSurrogatePairCodePoint(codePoint)) {
+        // Skips next char since it's a part of the current code point
+        i++
+      }
+
+      // UTF-8 encoding algorithm
+      if (codePoint < 0x80) {
+        chunk[j] = (codePoint & 0x7f) | 0x00
+        j++
+      } else if (codePoint < 0x0800) {
+        chunk[j] = ((codePoint >> 6) & 0x1f) | 0xc0
+        chunk[j + 1] = (codePoint & 0x3f) | 0x80
+        j += 2
+      } else if (codePoint < 0x010000) {
+        chunk[j] = ((codePoint >> 12) & 0x0f) | 0xe0
+        chunk[j + 1] = ((codePoint >> 6) & 0x3f) | 0x80
+        chunk[j + 2] = (codePoint & 0x3f) | 0x80
+        j += 3
+      } else {
+        chunk[j] = ((codePoint >> 18) & 0x07) | 0xf0
+        chunk[j + 1] = ((codePoint >> 12) & 0x3f) | 0x80
+        chunk[j + 2] = ((codePoint >> 6) & 0x3f) | 0x80
+        chunk[j + 3] = (codePoint & 0x3f) | 0x80
+        j += 4
+      }
+      i++
+    }
+
+    // If we have less than 16 bytes - go straight to remainder logic
+    if (j < 16) {
+      remainder = j
+      break
+    }
+
+    byteLength += 16
+
+    // If we have more than 16 bytes - we need to process the overflow in the next iteration
+    if (j > 16) {
+      overflow = j - 16
+    }
+
+    k1[0] = chunk[4] | (chunk[5] << 8) | (chunk[6] << 16) | (chunk[7] << 24)
+    k1[1] = chunk[0] | (chunk[1] << 8) | (chunk[2] << 16) | (chunk[3] << 24)
+    k2[0] = chunk[12] | (chunk[13] << 8) | (chunk[14] << 16) | (chunk[15] << 24)
+    k2[1] = chunk[8] | (chunk[9] << 8) | (chunk[10] << 16) | (chunk[11] << 24)
 
     x64Multiply(k1, C1)
     x64Rotl(k1, 31)
@@ -193,44 +241,49 @@ export function x64hash128(input: string, seed?: number): string {
     x64Multiply(h2, M)
     x64Add(h2, N2)
   }
+
+  byteLength += remainder
+
   k1[0] = 0
   k1[1] = 0
   k2[0] = 0
   k2[1] = 0
+
   const val = [0, 0]
+
   switch (remainder) {
     case 15:
-      val[1] = key[i + 14]
+      val[1] = chunk[14]
       x64LeftShift(val, 48)
       x64Xor(k2, val)
     // fallthrough
     case 14:
-      val[1] = key[i + 13]
+      val[1] = chunk[13]
       x64LeftShift(val, 40)
       x64Xor(k2, val)
     // fallthrough
     case 13:
-      val[1] = key[i + 12]
+      val[1] = chunk[12]
       x64LeftShift(val, 32)
       x64Xor(k2, val)
     // fallthrough
     case 12:
-      val[1] = key[i + 11]
+      val[1] = chunk[11]
       x64LeftShift(val, 24)
       x64Xor(k2, val)
     // fallthrough
     case 11:
-      val[1] = key[i + 10]
+      val[1] = chunk[10]
       x64LeftShift(val, 16)
       x64Xor(k2, val)
     // fallthrough
     case 10:
-      val[1] = key[i + 9]
+      val[1] = chunk[9]
       x64LeftShift(val, 8)
       x64Xor(k2, val)
     // fallthrough
     case 9:
-      val[1] = key[i + 8]
+      val[1] = chunk[8]
 
       x64Xor(k2, val)
       x64Multiply(k2, C2)
@@ -239,42 +292,42 @@ export function x64hash128(input: string, seed?: number): string {
       x64Xor(h2, k2)
     // fallthrough
     case 8:
-      val[1] = key[i + 7]
+      val[1] = chunk[7]
       x64LeftShift(val, 56)
       x64Xor(k1, val)
     // fallthrough
     case 7:
-      val[1] = key[i + 6]
+      val[1] = chunk[6]
       x64LeftShift(val, 48)
       x64Xor(k1, val)
     // fallthrough
     case 6:
-      val[1] = key[i + 5]
+      val[1] = chunk[5]
       x64LeftShift(val, 40)
       x64Xor(k1, val)
     // fallthrough
     case 5:
-      val[1] = key[i + 4]
+      val[1] = chunk[4]
       x64LeftShift(val, 32)
       x64Xor(k1, val)
     // fallthrough
     case 4:
-      val[1] = key[i + 3]
+      val[1] = chunk[3]
       x64LeftShift(val, 24)
       x64Xor(k1, val)
     // fallthrough
     case 3:
-      val[1] = key[i + 2]
+      val[1] = chunk[2]
       x64LeftShift(val, 16)
       x64Xor(k1, val)
     // fallthrough
     case 2:
-      val[1] = key[i + 1]
+      val[1] = chunk[1]
       x64LeftShift(val, 8)
       x64Xor(k1, val)
     // fallthrough
     case 1:
-      val[1] = key[i]
+      val[1] = chunk[0]
 
       x64Xor(k1, val)
       x64Multiply(k1, C1)
@@ -283,8 +336,10 @@ export function x64hash128(input: string, seed?: number): string {
       x64Xor(h1, k1)
     // fallthrough
   }
-  x64Xor(h1, length)
-  x64Xor(h2, length)
+
+  const byteLength64 = [0, byteLength]
+  x64Xor(h1, byteLength64)
+  x64Xor(h2, byteLength64)
   x64Add(h1, h2)
   x64Add(h2, h1)
   x64Fmix(h1)
@@ -297,4 +352,8 @@ export function x64hash128(input: string, seed?: number): string {
     ('00000000' + (h2[0] >>> 0).toString(16)).slice(-8) +
     ('00000000' + (h2[1] >>> 0).toString(16)).slice(-8)
   )
+}
+
+function isSurrogatePairCodePoint(codePoint: number) {
+  return codePoint > 0xffff
 }
