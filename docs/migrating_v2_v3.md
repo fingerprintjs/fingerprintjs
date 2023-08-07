@@ -24,9 +24,9 @@ Bower support is dropped, choose another installation method.
 Update the package version:
 
 ```bash
-npm install @fingerprintjs/fingerprintjs
+npm install @fingerprintjs/fingerprintjs@^3
 # or
-yarn add @fingerprintjs/fingerprintjs
+yarn add @fingerprintjs/fingerprintjs@^3
 ```
 
 The new version sends HTTP requests to collect usage statistics, they can be disabled.

@@ -4,9 +4,9 @@ FingerprintJS has built-in TypeScript types.
 In order to use them, just install the library and import it in a `.ts` file:
 
 ```bash
-npm i @fingerprintjs/fingerprintjs
+npm i @fingerprintjs/fingerprintjs@^3
 # or
-yarn add @fingerprintjs/fingerprintjs
+yarn add @fingerprintjs/fingerprintjs@^3
 ```
 
 ```ts
