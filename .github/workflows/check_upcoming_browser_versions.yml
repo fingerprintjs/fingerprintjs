@@ -45,6 +45,6 @@ jobs:
         id: slack
         uses: slackapi/slack-github-action@v1.23.0
         with:
-          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          channel-id: ${{ vars.SLACK_CHANNEL_ID }}
           slack-message: "An issue was found when running unit tests against beta versions of the browsers.\nPlease check the build:\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         if: ${{ failure() }}
