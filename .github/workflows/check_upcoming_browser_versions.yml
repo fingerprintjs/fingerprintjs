@@ -22,7 +22,7 @@ jobs:
         id: slack
         uses: slackapi/slack-github-action@v1.23.0
         with:
-          channel-id: ${{ env.SLACK_CHANNEL_ID }}
+          channel-id: ${{ vars.SLACK_CHANNEL_ID }}
           slack-message: "testing"
         if: ${{ always() }}
   unit_tests:
