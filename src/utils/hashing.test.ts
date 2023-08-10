@@ -26,7 +26,27 @@ const longText =
 
 describe('Murmur3', () => {
   it('makes x64 128 bit hash', () => {
-    expect(x64hash128('Hello, world')).toBe('ebd28b45027ab97477416103e3fff7b8')
+    const input = 'Hello, world, hi'
+    const inputLessThanChunk = 'Hello, world, h'
+    const inputGreaterThanChunk = 'Hello, world, hi!'
+    const inputGreaterThan2Chunks = 'Hello, world, hi, Hello, world, hi'
+
+    // Value: 'ňťŬŬůĬĠŷůŲŬŤĬĠŨũ'
+    const nonAsciiInput = input
+      .split('')
+      .map((char) => String.fromCharCode(char.charCodeAt(0) + 256))
+      .join('')
+
+    const shortInput = 'hello'
+
+    expect(x64hash128(input)).not.toBe(x64hash128(nonAsciiInput))
+
+    expect(x64hash128(input)).toBe('9a66b4567d520770dc8eaf9a508ecf1b')
+    expect(x64hash128(nonAsciiInput)).toBe('460892d2cab76edff07f62a97e106f6b')
+    expect(x64hash128(shortInput)).toBe('cbd8a7b341bd9b025b1e906a48ae1d19')
     expect(x64hash128(longText)).toBe('211a6f425b82e115fb52ccdc51edb290')
+    expect(x64hash128(inputLessThanChunk)).toBe('4552c6409e0a7bd3b0f9eb318bb35f05')
+    expect(x64hash128(inputGreaterThanChunk)).toBe('dce3e02d43da4d2374e84e484c566492')
+    expect(x64hash128(inputGreaterThan2Chunks)).toBe('d49c261c833b671870b471c42df4dbf0')
   })
 })

@@ -149,3 +149,25 @@ export function maxInIterator<T>(iterator: Iterator<T>, getItemScore: (item: T) 
 
   return maxItem
 }
+
+/**
+ * Converts a string to UTF8 bytes
+ *
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
+ */
+export function getUTF8Bytes(input: string): Uint8Array {
+  // If you want to just count bytes, see solutions at https://jsbench.me/ehklab415e/1
+  const result = new Uint8Array(input.length)
+  for (let i = 0; i < input.length; i++) {
+    // `charCode` is faster than encoding so we prefer that when it's possible
+    const charCode = input.charCodeAt(i)
+
+    // In case of non-ASCII symbols we use proper encoding
+    if (charCode < 0 || charCode > 127) {
+      return new TextEncoder().encode(input)
+    }
+    result[i] = charCode
+  }
+  return result
+}

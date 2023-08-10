@@ -48,3 +48,4 @@ export {
   UnknownSources,
 } from './utils/entropy_source'
 export { withIframe } from './utils/dom'
+export { getUTF8Bytes } from './utils/data'
