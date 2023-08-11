@@ -5,7 +5,7 @@ import { x64hash128 } from './utils/hashing'
 import { errorToObject } from './utils/misc'
 import loadBuiltinSources, { BuiltinComponents } from './sources'
 import getConfidence, { Confidence } from './confidence'
-import init from '../wasm-rust/pkg/rust_hash'
+import { initSync } from '../wasm-rust/pkg/rust_hash'
 // @ts-expect-error ignoring just for the experiment
 import wasmModule from '../wasm-rust/pkg/rust_hash_bg.wasm'
 
@@ -200,8 +200,8 @@ function monitor() {
   }
 }
 
-export async function initWasm() {
-  await init(await wasmModule())
+export function initWasm() {
+  initSync(wasmModule())
 }
 
 /**
@@ -211,7 +211,7 @@ export async function load({ delayFallback, debug, monitoring = true }: Readonly
   if (monitoring) {
     monitor()
   }
-  await init()
+  initWasm()
   await prepareForSources(delayFallback)
   const getComponents = loadBuiltinSources({ cache: {}, debug })
   return makeAgent(getComponents, debug)

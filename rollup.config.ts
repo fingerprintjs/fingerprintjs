@@ -17,7 +17,12 @@ const outputDirectory = 'dist'
 
 const commonInput = {
   input: 'src/index.ts',
-  plugins: [nodeResolvePlugin(), jsonPlugin(), typescriptPlugin(), wasm({ maxFileSize: 10000000 })],
+  plugins: [
+    nodeResolvePlugin(),
+    jsonPlugin(),
+    typescriptPlugin(),
+    wasm({ maxFileSize: 10000000, sync: ['wasm-rust/pkg/rust_hash_bg.wasm'] }),
+  ],
 }
 
 const commonOutput = {
