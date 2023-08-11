@@ -1,7 +1,8 @@
-import * as FingerprintJS from '../src'
+// import * as FingerprintJS from '../src'
 import { errorToObject } from '../src/utils/misc'
 
 type Text = string | { html: string }
+const FingerprintJS = (window as any).FingerprintJS
 
 async function getVisitorData() {
   const fp = await FingerprintJS.load({ debug: true })

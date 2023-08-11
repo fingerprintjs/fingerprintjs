@@ -5,6 +5,9 @@ import { x64hash128 } from './utils/hashing'
 import { errorToObject } from './utils/misc'
 import loadBuiltinSources, { BuiltinComponents } from './sources'
 import getConfidence, { Confidence } from './confidence'
+import init from '../wasm-rust/pkg/rust_hash'
+// @ts-expect-error ignoring just for the experiment
+import wasmModule from '../wasm-rust/pkg/rust_hash_bg.wasm'
 
 /**
  * Options for Fingerprint class loading
@@ -197,6 +200,10 @@ function monitor() {
   }
 }
 
+export async function initWasm() {
+  await init(await wasmModule())
+}
+
 /**
  * Builds an instance of Agent and waits a delay required for a proper operation.
  */
@@ -204,6 +211,7 @@ export async function load({ delayFallback, debug, monitoring = true }: Readonly
   if (monitoring) {
     monitor()
   }
+  await init()
   await prepareForSources(delayFallback)
   const getComponents = loadBuiltinSources({ cache: {}, debug })
   return makeAgent(getComponents, debug)
