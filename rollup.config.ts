@@ -9,6 +9,7 @@ import terserPlugin from '@rollup/plugin-terser'
 import dtsPlugin from 'rollup-plugin-dts'
 import licensePlugin from 'rollup-plugin-license'
 import terserConfig from './terser.config'
+import { wasm } from '@rollup/plugin-wasm'
 
 const { dependencies } = JSON.parse(fs.readFileSync('package.json', 'utf8'))
 
@@ -16,7 +17,7 @@ const outputDirectory = 'dist'
 
 const commonInput = {
   input: 'src/index.ts',
-  plugins: [nodeResolvePlugin(), jsonPlugin(), typescriptPlugin()],
+  plugins: [nodeResolvePlugin(), jsonPlugin(), typescriptPlugin(), wasm({ maxFileSize: 10000000 })],
 }
 
 const commonOutput = {

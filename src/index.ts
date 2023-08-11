@@ -1,4 +1,13 @@
-import { load, Agent, LoadOptions, GetOptions, GetResult, hashComponents, componentsToDebugString } from './agent'
+import {
+  load,
+  Agent,
+  LoadOptions,
+  GetOptions,
+  GetResult,
+  hashComponents,
+  componentsToDebugString,
+  initWasm,
+} from './agent'
 import { BuiltinComponents } from './sources'
 import { Confidence } from './confidence'
 import { Component, UnknownComponents } from './utils/entropy_source'
@@ -17,6 +26,7 @@ export {
   UnknownComponents,
   BuiltinComponents,
   Confidence,
+  initWasm,
 }
 // The default export is a syntax sugar (`import * as FP from '...' → import FP from '...'`).
 // It should contain all the public exported values.
