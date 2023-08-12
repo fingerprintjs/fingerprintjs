@@ -15,4 +15,4 @@ wasm-bindgen = "0.2"
 
 [profile.release]
 lto = true
-opt-level = 's'
+opt-level = 'z'
