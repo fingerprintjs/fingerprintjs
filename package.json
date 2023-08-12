@@ -77,7 +77,7 @@
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
     "rollup": "^3.3.0",
-    "rollup-plugin-dts": "^5.2.0",
+    "rollup-plugin-dts": "^5.3.1",
     "rollup-plugin-license": "^3.0.1",
     "terser-webpack-plugin": "^5.3.6",
     "ts-loader": "^9.4.2",
