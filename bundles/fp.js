@@ -187,119 +187,6 @@ var FingerprintJSRust = (function (exports) {
         promise.then(undefined, function () { return undefined; });
     }
 
-    let wasm;
-
-    let cachedUint8Memory0 = null;
-
-    function getUint8Memory0() {
-        if (cachedUint8Memory0 === null || cachedUint8Memory0.byteLength === 0) {
-            cachedUint8Memory0 = new Uint8Array(wasm.memory.buffer);
-        }
-        return cachedUint8Memory0;
-    }
-
-    let WASM_VECTOR_LEN = 0;
-
-    function passArray8ToWasm0(arg, malloc) {
-        const ptr = malloc(arg.length * 1, 1) >>> 0;
-        getUint8Memory0().set(arg, ptr / 1);
-        WASM_VECTOR_LEN = arg.length;
-        return ptr;
-    }
-
-    let cachedInt32Memory0 = null;
-
-    function getInt32Memory0() {
-        if (cachedInt32Memory0 === null || cachedInt32Memory0.byteLength === 0) {
-            cachedInt32Memory0 = new Int32Array(wasm.memory.buffer);
-        }
-        return cachedInt32Memory0;
-    }
-
-    function getArrayU8FromWasm0(ptr, len) {
-        ptr = ptr >>> 0;
-        return getUint8Memory0().subarray(ptr / 1, ptr / 1 + len);
-    }
-    /**
-    * @param {Uint8Array} s
-    * @param {number} seed
-    * @returns {Uint8Array}
-    */
-    function hash(s, seed) {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            const ptr0 = passArray8ToWasm0(s, wasm.__wbindgen_malloc);
-            const len0 = WASM_VECTOR_LEN;
-            wasm.hash(retptr, ptr0, len0, seed);
-            var r0 = getInt32Memory0()[retptr / 4 + 0];
-            var r1 = getInt32Memory0()[retptr / 4 + 1];
-            var v2 = getArrayU8FromWasm0(r0, r1).slice();
-            wasm.__wbindgen_free(r0, r1 * 1);
-            return v2;
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-        }
-    }
-
-    function __wbg_get_imports() {
-        const imports = {};
-        imports.wbg = {};
-
-        return imports;
-    }
-
-    function __wbg_finalize_init(instance, module) {
-        wasm = instance.exports;
-        cachedInt32Memory0 = null;
-        cachedUint8Memory0 = null;
-
-
-        return wasm;
-    }
-
-    function initSync(module) {
-        if (wasm !== undefined) return wasm;
-
-        const imports = __wbg_get_imports();
-
-        if (!(module instanceof WebAssembly.Module)) {
-            module = new WebAssembly.Module(module);
-        }
-
-        const instance = new WebAssembly.Instance(module, imports);
-
-        return __wbg_finalize_init(instance);
-    }
-
-    var cachedTextEncoder = new TextEncoder();
-    function x64hash128(key, seed) {
-        var inputBytes = cachedTextEncoder.encode(key);
-        var outputBytes = hash(inputBytes, seed || 0);
-        return bytesToHex(outputBytes);
-    }
-    function bytesToHex(input) {
-        var alpha = 'a'.charCodeAt(0) - 10;
-        var digit = '0'.charCodeAt(0);
-        var chars = new Uint8Array(input.length * 2);
-        var p = 0;
-        for (var i = 0; i < input.length; i++) {
-            var nibble = input[i] >>> 4;
-            chars[p++] = nibble > 9 ? nibble + alpha : nibble + digit;
-            nibble = input[i] & 0xf;
-            chars[p++] = nibble > 9 ? nibble + alpha : nibble + digit;
-        }
-        return String.fromCharCode.apply(null, chars);
-    }
-
-    /**
-     * Converts an error object to a plain object that can be used with `JSON.stringify`.
-     * If you just run `JSON.stringify(error)`, you'll get `'{}'`.
-     */
-    function errorToObject(error) {
-        var _a;
-        return __assign({ name: error.name, message: error.message, stack: (_a = error.stack) === null || _a === void 0 ? void 0 : _a.split('\n') }, error);
-    }
-
     /*
      * This file contains functions to work with pure data only (no browser features, DOM, side effects, etc).
      */
@@ -415,6 +302,118 @@ var FingerprintJSRust = (function (exports) {
             result[i] = charCode;
         }
         return result;
+    }
+
+    let wasm;
+
+    let cachedUint8Memory0 = null;
+
+    function getUint8Memory0() {
+        if (cachedUint8Memory0 === null || cachedUint8Memory0.byteLength === 0) {
+            cachedUint8Memory0 = new Uint8Array(wasm.memory.buffer);
+        }
+        return cachedUint8Memory0;
+    }
+
+    let WASM_VECTOR_LEN = 0;
+
+    function passArray8ToWasm0(arg, malloc) {
+        const ptr = malloc(arg.length * 1, 1) >>> 0;
+        getUint8Memory0().set(arg, ptr / 1);
+        WASM_VECTOR_LEN = arg.length;
+        return ptr;
+    }
+
+    let cachedInt32Memory0 = null;
+
+    function getInt32Memory0() {
+        if (cachedInt32Memory0 === null || cachedInt32Memory0.byteLength === 0) {
+            cachedInt32Memory0 = new Int32Array(wasm.memory.buffer);
+        }
+        return cachedInt32Memory0;
+    }
+
+    function getArrayU8FromWasm0(ptr, len) {
+        ptr = ptr >>> 0;
+        return getUint8Memory0().subarray(ptr / 1, ptr / 1 + len);
+    }
+    /**
+    * @param {Uint8Array} s
+    * @param {number} seed
+    * @returns {Uint8Array}
+    */
+    function hash(s, seed) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            const ptr0 = passArray8ToWasm0(s, wasm.__wbindgen_malloc);
+            const len0 = WASM_VECTOR_LEN;
+            wasm.hash(retptr, ptr0, len0, seed);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var v2 = getArrayU8FromWasm0(r0, r1).slice();
+            wasm.__wbindgen_free(r0, r1 * 1);
+            return v2;
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+
+    function __wbg_get_imports() {
+        const imports = {};
+        imports.wbg = {};
+
+        return imports;
+    }
+
+    function __wbg_finalize_init(instance, module) {
+        wasm = instance.exports;
+        cachedInt32Memory0 = null;
+        cachedUint8Memory0 = null;
+
+
+        return wasm;
+    }
+
+    function initSync(module) {
+        if (wasm !== undefined) return wasm;
+
+        const imports = __wbg_get_imports();
+
+        if (!(module instanceof WebAssembly.Module)) {
+            module = new WebAssembly.Module(module);
+        }
+
+        const instance = new WebAssembly.Instance(module, imports);
+
+        return __wbg_finalize_init(instance);
+    }
+
+    function x64hash128(key, seed) {
+        var inputBytes = getUTF8Bytes(key);
+        var outputBytes = hash(inputBytes, seed || 0);
+        return bytesToHex(outputBytes);
+    }
+    function bytesToHex(input) {
+        var alpha = 'a'.charCodeAt(0) - 10;
+        var digit = '0'.charCodeAt(0);
+        var chars = new Uint8Array(input.length * 2);
+        var p = 0;
+        for (var i = 0; i < input.length; i++) {
+            var nibble = input[i] >>> 4;
+            chars[p++] = nibble > 9 ? nibble + alpha : nibble + digit;
+            nibble = input[i] & 0xf;
+            chars[p++] = nibble > 9 ? nibble + alpha : nibble + digit;
+        }
+        return String.fromCharCode.apply(null, chars);
+    }
+
+    /**
+     * Converts an error object to a plain object that can be used with `JSON.stringify`.
+     * If you just run `JSON.stringify(error)`, you'll get `'{}'`.
+     */
+    function errorToObject(error) {
+        var _a;
+        return __assign({ name: error.name, message: error.message, stack: (_a = error.stack) === null || _a === void 0 ? void 0 : _a.split('\n') }, error);
     }
 
     function isFinalResultLoaded(loadResult) {
