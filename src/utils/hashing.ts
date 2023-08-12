@@ -1,8 +1,8 @@
+import { getUTF8Bytes } from './data'
 import { hash } from '../../wasm-rust/pkg/rust_hash'
 
-const cachedTextEncoder = new TextEncoder()
 export function x64hash128(key: string, seed?: number): string {
-  const inputBytes = cachedTextEncoder.encode(key)
+  const inputBytes = getUTF8Bytes(key)
   const outputBytes = hash(inputBytes, seed || 0)
 
   return bytesToHex(outputBytes)
