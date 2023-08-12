@@ -10,7 +10,7 @@
  * Copyright 2015-present FingerprintJS, Inc.
  */
 
-var FingerprintJSOld = (function (exports) {
+var FingerprintJSCurrent = (function (exports) {
     'use strict';
 
     /******************************************************************************
