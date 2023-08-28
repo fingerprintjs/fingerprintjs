@@ -99,6 +99,7 @@ export function isWebKit(): boolean {
  */
 export function isDesktopSafari(): boolean {
   const w = window
+  const { HTMLElement, Document } = w
 
   return (
     countTruthy([
@@ -106,8 +107,8 @@ export function isDesktopSafari(): boolean {
       !('ongestureend' in w),
       !('TouchEvent' in w),
       !('orientation' in w),
-      'HTMLElement' in w && !('autocapitalize' in HTMLElement.prototype),
-      'Document' in w && 'pointerLockElement' in Document.prototype,
+      HTMLElement && !('autocapitalize' in HTMLElement.prototype),
+      Document && 'pointerLockElement' in Document.prototype,
     ]) >= 4
   )
 }
@@ -156,7 +157,7 @@ export function isChromium86OrNewer(): boolean {
  * Checks whether the browser is based on WebKit version ≥606 (Safari ≥12) without using user-agent.
  * It doesn't check that the browser is based on WebKit, there is a separate function for this.
  *
- * @link https://en.wikipedia.org/wiki/Safari_version_history#Release_history Safari-WebKit versions map
+ * @see https://en.wikipedia.org/wiki/Safari_version_history#Release_history Safari-WebKit versions map
  */
 export function isWebKit606OrNewer(): boolean {
   // Checked in Safari 9–14
@@ -169,6 +170,29 @@ export function isWebKit606OrNewer(): boolean {
       'SVGGeometryElement' in w,
       'ontransitioncancel' in w,
     ]) >= 3
+  )
+}
+
+/**
+ * Checks whether the browser is based on WebKit version ≥616 (Safari ≥17) without using user-agent.
+ * It doesn't check that the browser is based on WebKit, there is a separate function for this.
+ *
+ * @see https://developer.apple.com/documentation/safari-release-notes/safari-17-release-notes Safari 17 release notes
+ * @see https://tauri.app/v1/references/webview-versions/#webkit-versions-in-safari Safari-WebKit versions map
+ */
+export function isWebKit616OrNewer(): boolean {
+  const w = window
+  const n = navigator
+  const { CSS, HTMLButtonElement } = w
+
+  return (
+    countTruthy([
+      !('getStorageUpdates' in n),
+      HTMLButtonElement && 'popover' in HTMLButtonElement.prototype,
+      'CSSCounterStyleRule' in w,
+      CSS.supports('font-size-adjust: ex-height 0.5'),
+      CSS.supports('text-transform: full-width'),
+    ]) >= 4
   )
 }
 
