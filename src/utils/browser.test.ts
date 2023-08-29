@@ -46,6 +46,13 @@ describe('Browser utilities', () => {
       expect(browser.isWebKit606OrNewer()).toBe((utils.getBrowserMajorVersion() ?? 0) >= 12)
     })
 
+    it('detects Safari 17+', () => {
+      if (!utils.isSafari()) {
+        return
+      }
+      expect(browser.isWebKit616OrNewer()).toBe((utils.getBrowserMajorVersion() ?? 0) >= 17)
+    })
+
     it('detects iPad', () => {
       // Unfortunately, UA-parser can't detect an iPad that pretends to be a Mac
       if (!utils.isWebKit() || !(utils.isMobile() || utils.isTablet())) {
