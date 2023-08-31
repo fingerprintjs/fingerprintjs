@@ -15,6 +15,8 @@ const filterCodeRegex = /(\n(?:export )?function getFilters\(\)(?:: [\w<>,\s]+)?
 
 type Filters = Record<string, string[]>
 
+run()
+
 async function run() {
   const [uniqueSelectors, currentFilters] = await Promise.all([
     fsAsync.readFile(uniqueSelectorsFile, 'utf8').then<Filters>(JSON.parse),
@@ -119,9 +121,3 @@ function isInappropriateSelector(selector: string) {
 
   return probes.some((probe) => probe.test(selector))
 }
-
-run().catch((error) => {
-  // eslint-disable-next-line no-console
-  console.error(error)
-  process.exitCode = 1
-})

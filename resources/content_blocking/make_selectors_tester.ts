@@ -12,6 +12,8 @@ import { fetchFilter } from './utils'
 const inputScript = path.join(__dirname, 'selectors_tester.ts')
 const outputFile = path.join(__dirname, 'selectors_tester.html')
 
+run()
+
 async function run() {
   const uniqueSelectors = await fetchUniqueSelectors(filterConfig)
   const testerHtml = await makeTesterHtml(uniqueSelectors)
@@ -115,9 +117,3 @@ async function getJsToDetectBlockedSelectors(selectors: readonly string[]) {
   })
   return output[0].code.replace(/\[\s*\/\*\s*selectors\s*\*\/\s*]/g, JSON.stringify(selectors))
 }
-
-run().catch((error) => {
-  // eslint-disable-next-line no-console
-  console.error(error)
-  process.exitCode = 1
-})
