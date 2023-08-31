@@ -10,6 +10,8 @@ import { eachLineInFile } from './utils'
 const inputDirectory = path.join(__dirname, 'blocked_selectors')
 const outputFile = path.join(__dirname, 'unique_filter_selectors.json')
 
+run()
+
 async function run() {
   const filterSelectors = await getUniqueFilterSelectors(inputDirectory)
   await fsAsync.writeFile(outputFile, stringifyResult(filterSelectors))
@@ -148,9 +150,3 @@ function print(message: string) {
   // eslint-disable-next-line no-console
   console.log(message)
 }
-
-run().catch((error) => {
-  // eslint-disable-next-line no-console
-  console.error(error)
-  process.exitCode = 1
-})
