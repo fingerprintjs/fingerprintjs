@@ -160,7 +160,7 @@ export function isChromium86OrNewer(): boolean {
  * @see https://en.wikipedia.org/wiki/Safari_version_history#Release_history Safari-WebKit versions map
  */
 export function isWebKit606OrNewer(): boolean {
-  // Checked in Safari 9–14
+  // Checked in Safari 9–17
   const w = window
 
   return (
@@ -202,10 +202,10 @@ export function isWebKit616OrNewer(): boolean {
  */
 export function isIPad(): boolean {
   // Checked on:
-  // Safari on iPadOS (both mobile and desktop modes): 8, 11, 12, 13, 14
-  // Chrome on iPadOS (both mobile and desktop modes): 11, 12, 13, 14
-  // Safari on iOS (both mobile and desktop modes): 9, 10, 11, 12, 13, 14
-  // Chrome on iOS (both mobile and desktop modes): 9, 10, 11, 12, 13, 14
+  // Safari on iPadOS (both mobile and desktop modes): 8, 11-17
+  // Chrome on iPadOS (both mobile and desktop modes): 11-17
+  // Safari on iOS (both mobile and desktop modes): 9-17
+  // Chrome on iOS (both mobile and desktop modes): 9-17
 
   // Before iOS 13. Safari tampers the value in "request desktop site" mode since iOS 13.
   if (navigator.platform === 'iPad') {
@@ -219,7 +219,7 @@ export function isIPad(): boolean {
     countTruthy([
       'MediaSource' in window, // Since iOS 13
       !!Element.prototype.webkitRequestFullscreen, // Since iOS 12
-      // iPhone 4S that runs iOS 9 matches this. But it won't match the criteria above, so it won't be detected as iPad.
+      // iPhone 4S that runs iOS 9 matches this, but it is not supported
       screenRatio > 0.65 && screenRatio < 1.53,
     ]) >= 2
   )
