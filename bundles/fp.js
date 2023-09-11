@@ -358,6 +358,37 @@ var FingerprintJSRust = (function (exports) {
         }
     }
 
+    async function __wbg_load(module, imports) {
+        if (typeof Response === 'function' && module instanceof Response) {
+            if (typeof WebAssembly.instantiateStreaming === 'function') {
+                try {
+                    return await WebAssembly.instantiateStreaming(module, imports);
+
+                } catch (e) {
+                    if (module.headers.get('Content-Type') != 'application/wasm') {
+                        console.warn("`WebAssembly.instantiateStreaming` failed because your server does not serve wasm with `application/wasm` MIME type. Falling back to `WebAssembly.instantiate` which is slower. Original error:\n", e);
+
+                    } else {
+                        throw e;
+                    }
+                }
+            }
+
+            const bytes = await module.arrayBuffer();
+            return await WebAssembly.instantiate(bytes, imports);
+
+        } else {
+            const instance = await WebAssembly.instantiate(module, imports);
+
+            if (instance instanceof WebAssembly.Instance) {
+                return { instance, module };
+
+            } else {
+                return instance;
+            }
+        }
+    }
+
     function __wbg_get_imports() {
         const imports = {};
         imports.wbg = {};
@@ -367,6 +398,7 @@ var FingerprintJSRust = (function (exports) {
 
     function __wbg_finalize_init(instance, module) {
         wasm = instance.exports;
+        __wbg_init.__wbindgen_wasm_module = module;
         cachedInt32Memory0 = null;
         cachedUint8Memory0 = null;
 
@@ -374,18 +406,21 @@ var FingerprintJSRust = (function (exports) {
         return wasm;
     }
 
-    function initSync(module) {
+    async function __wbg_init(input) {
         if (wasm !== undefined) return wasm;
 
+        if (typeof input === 'undefined') {
+            input = new URL('rust_hash_bg.wasm', (document.currentScript && document.currentScript.src || new URL('fp.js', document.baseURI).href));
+        }
         const imports = __wbg_get_imports();
 
-        if (!(module instanceof WebAssembly.Module)) {
-            module = new WebAssembly.Module(module);
+        if (typeof input === 'string' || (typeof Request === 'function' && input instanceof Request) || (typeof URL === 'function' && input instanceof URL)) {
+            input = fetch(input);
         }
 
-        const instance = new WebAssembly.Instance(module, imports);
+        const { instance, module } = await __wbg_load(await input, imports);
 
-        return __wbg_finalize_init(instance);
+        return __wbg_finalize_init(instance, module);
     }
 
     function x64hash128(key, seed) {
@@ -2913,7 +2948,16 @@ var FingerprintJSRust = (function (exports) {
         }
     }
     function initWasm() {
-        initSync(wasmModule());
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, __wbg_init(wasmModule())];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
     }
     /**
      * Builds an instance of Agent and waits a delay required for a proper operation.
@@ -2928,9 +2972,11 @@ var FingerprintJSRust = (function (exports) {
                         if (monitoring) {
                             monitor();
                         }
-                        initWasm();
-                        return [4 /*yield*/, prepareForSources(delayFallback)];
+                        return [4 /*yield*/, initWasm()];
                     case 1:
+                        _d.sent();
+                        return [4 /*yield*/, prepareForSources(delayFallback)];
+                    case 2:
                         _d.sent();
                         getComponents = loadBuiltinSources({ cache: {}, debug: debug });
                         return [2 /*return*/, makeAgent(getComponents, debug)];
