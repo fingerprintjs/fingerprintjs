@@ -1,4 +1,5 @@
 import { loadSources, SourcesToComponents } from '../utils/entropy_source'
+import getOpenPorts from './open_ports'
 import getAudioFingerprint from './audio'
 import getFonts from './fonts'
 import getPlugins from './plugins'
@@ -53,6 +54,7 @@ export const sources = {
 
   // The sources run in this exact order.
   // The asynchronous sources are at the start to run in parallel with other sources.
+  openPorts: getOpenPorts,
   fonts: getFonts,
   domBlockers: getDomBlockers,
   fontPreferences: getFontPreferences,
