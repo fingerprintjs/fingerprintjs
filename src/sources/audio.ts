@@ -22,10 +22,10 @@ const enum InnerErrorName {
  * Inspired by and based on https://github.com/cozylife/audio-fingerprint
  *
  * A version of the entropy source with stabilization to make it suitable for static fingerprinting.
- * Audio signal is noised in private mode of Safari 17.
+ * Audio signal is noised in private mode of Safari 17, so audio fingerprinting is skipped in Safari 17.
  */
 export default function getAudioFingerprint(): number | (() => Promise<number>) {
-  if (doesCurrentBrowserPerformAntifingerprinting()) {
+  if (doesBrowserPerformAntifingerprinting()) {
     return SpecialFingerprint.KnownForAntifingerprinting
   }
 
@@ -49,7 +49,7 @@ export function getRawAudioFingerprint(): number | (() => Promise<number>) {
   // (e.g. a click or a tap). It prevents audio fingerprint from being taken at an arbitrary moment of time.
   // Such browsers are old and unpopular, so the audio fingerprinting is just skipped in them.
   // See a similar case explanation at https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
-  if (doesCurrentBrowserSuspendAudioContext()) {
+  if (doesBrowserSuspendAudioContext()) {
     return SpecialFingerprint.KnownForSuspending
   }
 
@@ -95,7 +95,7 @@ export function getRawAudioFingerprint(): number | (() => Promise<number>) {
 /**
  * Checks if the current browser is known for always suspending audio context
  */
-function doesCurrentBrowserSuspendAudioContext() {
+function doesBrowserSuspendAudioContext() {
   // Mobile Safari 11 and older
   return isWebKit() && !isDesktopSafari() && !isWebKit606OrNewer()
 }
@@ -103,7 +103,7 @@ function doesCurrentBrowserSuspendAudioContext() {
 /**
  * Checks if the current browser is known for applying anti-fingerprinting measures in all or some critical modes
  */
-function doesCurrentBrowserPerformAntifingerprinting() {
+function doesBrowserPerformAntifingerprinting() {
   // Safari 17
   return isWebKit() && isWebKit616OrNewer()
 }

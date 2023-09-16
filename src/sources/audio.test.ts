@@ -6,9 +6,9 @@ describe('Sources', () => {
     it('returns expected value type depending on the browser', async () => {
       const result = getAudioFingerprint()
 
-      if (isAntifingerprintingBrowser()) {
+      if (doesBrowserPerformAntifingerprinting()) {
         expect(result).toBe(SpecialFingerprint.KnownForAntifingerprinting)
-      } else if (isSuspendingBrowser()) {
+      } else if (doesBrowserSuspendAudioContext()) {
         expect(result).toBe(SpecialFingerprint.KnownForSuspending)
       } else {
         // A type guard
@@ -39,11 +39,11 @@ describe('Sources', () => {
   })
 })
 
-function isAntifingerprintingBrowser() {
+function doesBrowserPerformAntifingerprinting() {
   return isSafari() && (getBrowserMajorVersion() ?? 0) >= 17
 }
 
-function isSuspendingBrowser() {
+function doesBrowserSuspendAudioContext() {
   // WebKit has stopped telling its real version in the user-agent string since version 605.1.15,
   // therefore the browser version has to be checked instead of the engine version.
   return isSafari() && isMobile() && (getBrowserMajorVersion() ?? 0) < 12

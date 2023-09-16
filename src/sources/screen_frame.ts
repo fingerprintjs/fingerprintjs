@@ -96,7 +96,7 @@ export function getRawScreenFrame(): () => Promise<FrameSize> {
  * Sometimes the available screen resolution changes a bit, e.g. 1900x1440 → 1900x1439. A possible reason: macOS Dock
  * shrinks to fit more icons when there is too little space. The rounding is used to mitigate the difference.
  *
- * The frame width is always 0 in private mode of Safari 17.
+ * The frame width is always 0 in private mode of Safari 17, so the frame is not used in Safari 17.
  */
 export default function getScreenFrame(): () => Promise<FrameSize | undefined> {
   if (isWebKit() && isWebKit616OrNewer()) {

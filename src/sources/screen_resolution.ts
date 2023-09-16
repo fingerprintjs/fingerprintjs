@@ -5,7 +5,8 @@ type ScreenResolution = [number | null, number | null]
 
 /**
  * A version of the entropy source with stabilization to make it suitable for static fingerprinting.
- * The window resolution is always the document size in private mode of Safari 17.
+ * The window resolution is always the document size in private mode of Safari 17,
+ * so the window resolution is not used in Safari 17.
  */
 export default function getScreenResolution(): ScreenResolution | undefined {
   if (isWebKit() && isWebKit616OrNewer()) {

@@ -1,4 +1,5 @@
 import { releaseEventLoop } from '../utils/async'
+import { isWebKit, isWebKit616OrNewer } from '../utils/browser'
 
 export interface CanvasFingerprint {
   winding: boolean
@@ -6,37 +7,43 @@ export interface CanvasFingerprint {
   text: string
 }
 
-// https://www.browserleaks.com/canvas#how-does-it-work
-export default async function getCanvasFingerprint(): Promise<CanvasFingerprint> {
+export const enum ImageStatus {
+  Unsupported = 'unsupported',
+  Skipped = 'skipped',
+  Unstable = 'unstable',
+}
+
+/**
+ * @see https://www.browserleaks.com/canvas#how-does-it-work
+ *
+ * A version of the entropy source with stabilization to make it suitable for static fingerprinting.
+ * Canvas image is noised in private mode of Safari 17, so image rendering is skipped in Safari 17.
+ */
+export default function getCanvasFingerprint(): Promise<CanvasFingerprint> {
+  return getRawCanvasFingerprint(doesBrowserPerformAntifingerprinting())
+}
+
+/**
+ * A version of the entropy source without stabilization.
+ *
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
+ */
+export async function getRawCanvasFingerprint(skipImages?: boolean): Promise<CanvasFingerprint> {
   let winding = false
   let geometry: string
   let text: string
 
   const [canvas, context] = makeCanvasContext()
   if (!isSupported(canvas, context)) {
-    geometry = text = 'unsupported'
+    geometry = text = ImageStatus.Unsupported
   } else {
     winding = doesSupportWinding(context)
 
-    renderTextImage(canvas, context)
-    await releaseEventLoop()
-    const textImage1 = canvasToString(canvas)
-    const textImage2 = canvasToString(canvas) // It's slightly faster to double-encode the text image
-
-    // Some browsers add a noise to the canvas: https://github.com/fingerprintjs/fingerprintjs/issues/791
-    // The canvas is excluded from the fingerprint in this case
-    if (textImage1 !== textImage2) {
-      geometry = text = 'unstable'
+    if (skipImages) {
+      geometry = text = ImageStatus.Skipped
     } else {
-      text = textImage1
-
-      // Text is unstable:
-      // https://github.com/fingerprintjs/fingerprintjs/issues/583
-      // https://github.com/fingerprintjs/fingerprintjs/issues/103
-      // Therefore it's extracted into a separate image.
-      renderGeometryImage(canvas, context)
-      await releaseEventLoop()
-      geometry = canvasToString(canvas)
+      ;[geometry, text] = await renderImages(canvas, context)
     }
   }
 
@@ -63,6 +70,31 @@ function doesSupportWinding(context: CanvasRenderingContext2D) {
   context.rect(0, 0, 10, 10)
   context.rect(2, 2, 6, 6)
   return !context.isPointInPath(5, 5, 'evenodd')
+}
+
+async function renderImages(
+  canvas: HTMLCanvasElement,
+  context: CanvasRenderingContext2D,
+): Promise<[geometry: string, text: string]> {
+  renderTextImage(canvas, context)
+  await releaseEventLoop()
+  const textImage1 = canvasToString(canvas)
+  const textImage2 = canvasToString(canvas) // It's slightly faster to double-encode the text image
+
+  // Some browsers add a noise to the canvas: https://github.com/fingerprintjs/fingerprintjs/issues/791
+  // The canvas is excluded from the fingerprint in this case
+  if (textImage1 !== textImage2) {
+    return [ImageStatus.Unstable, ImageStatus.Unstable]
+  }
+
+  // Text is unstable:
+  // https://github.com/fingerprintjs/fingerprintjs/issues/583
+  // https://github.com/fingerprintjs/fingerprintjs/issues/103
+  // Therefore it's extracted into a separate image.
+  renderGeometryImage(canvas, context)
+  await releaseEventLoop()
+  const geometryImage = canvasToString(canvas)
+  return [textImage1, geometryImage]
 }
 
 function renderTextImage(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
@@ -123,4 +155,12 @@ function renderGeometryImage(canvas: HTMLCanvasElement, context: CanvasRendering
 
 function canvasToString(canvas: HTMLCanvasElement) {
   return canvas.toDataURL()
+}
+
+/**
+ * Checks if the current browser is known for applying anti-fingerprinting measures in all or some critical modes
+ */
+function doesBrowserPerformAntifingerprinting() {
+  // Safari 17
+  return isWebKit() && isWebKit616OrNewer()
 }
