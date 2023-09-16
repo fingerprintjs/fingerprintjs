@@ -91,16 +91,6 @@ A request includes the following information:
 - The HTTP headers that the client sends, including the origin and the referrer of the page where the library runs
 - The IP of the client
 
-You can turn off these requests by using the `monitoring` option:
-
-```diff
-const fpPromise = FingerprintJS.load({
-+ monitoring: false
-})
-```
-
-💡 Scripts downloaded from our CDN (https://openfpcdn.io) have monitoring disabled by default.
-
 If you have a TypeScript error that occurs in a FingerprintJS file,
 see the [TypeScript support guide](typescript_support.md).
 
@@ -120,15 +110,13 @@ fpPromise
 
 ## API
 
-#### `FingerprintJS.load({ delayFallback?: number, debug?: boolean, monitoring?: boolean }): Promise<Agent>`
+#### `FingerprintJS.load({ delayFallback?: number, debug?: boolean }): Promise<Agent>`
 
 Builds an instance of Agent and waits a delay required for a proper operation.
 We recommend calling it as soon as possible.
 `delayFallback` is an optional parameter that sets duration (milliseconds) of the fallback for browsers that don't support [requestIdleCallback](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback);
 it has a good default value which we don't recommend to change.
 `debug: true` prints debug messages to the console.
-`monitoring: false` disables the AJAX request that the library sends to a FingerprintJS server to collect usage statistics
-(it's always disabled in the CDN version).
 
 #### `agent.get(): Promise<GetResult>`
 
