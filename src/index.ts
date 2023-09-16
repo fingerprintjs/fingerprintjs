@@ -27,6 +27,7 @@ export default { load, hashComponents, componentsToDebugString }
 export const murmurX64Hash128 = x64hash128
 export { prepareForSources } from './agent'
 export { sources } from './sources'
+export { getRawAudioFingerprint } from './sources/audio'
 export { getRawScreenFrame } from './sources/screen_frame'
 export { getRawScreenResolution } from './sources/screen_resolution'
 export { getStateFromError as handleApplePayError } from './sources/apple_pay'
