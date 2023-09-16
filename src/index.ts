@@ -27,7 +27,7 @@ export default { load, hashComponents, componentsToDebugString }
 export const murmurX64Hash128 = x64hash128
 export { prepareForSources } from './agent'
 export { sources } from './sources'
-export { getScreenFrame } from './sources/screen_frame'
+export { getRawScreenFrame } from './sources/screen_frame'
 export { getStateFromError as handleApplePayError } from './sources/apple_pay'
 export { getWebGLContext } from './sources/webgl'
 export {

@@ -9,7 +9,7 @@ import getLanguages from './languages'
 import getColorDepth from './color_depth'
 import getDeviceMemory from './device_memory'
 import getScreenResolution from './screen_resolution'
-import { getRoundedScreenFrame } from './screen_frame'
+import getScreenFrame from './screen_frame'
 import getHardwareConcurrency from './hardware_concurrency'
 import getTimezone from './timezone'
 import getSessionStorage from './session_storage'
@@ -57,7 +57,7 @@ export const sources = {
   domBlockers: getDomBlockers,
   fontPreferences: getFontPreferences,
   audio: getAudioFingerprint,
-  screenFrame: getRoundedScreenFrame,
+  screenFrame: getScreenFrame,
   canvas: getCanvasFingerprint,
 
   osCpu: getOsCpu,
