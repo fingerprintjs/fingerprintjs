@@ -1,6 +1,6 @@
 import { BuiltinComponents } from './sources'
 import { round } from './utils/data'
-import { isAndroid, isWebKit, isDesktopSafari } from './utils/browser'
+import { isAndroid, isWebKit, isDesktopWebKit, isWebKit616OrNewer, isSafariWebKit } from './utils/browser'
 
 export interface Confidence {
   /**
@@ -32,7 +32,7 @@ function getOpenConfidenceScore(components: Pick<BuiltinComponents, 'platform'>)
 
   // Safari (mobile and desktop)
   if (isWebKit()) {
-    return isDesktopSafari() ? 0.5 : 0.3
+    return isDesktopWebKit() && !(isWebKit616OrNewer() && isSafariWebKit()) ? 0.5 : 0.3
   }
 
   const platform = 'value' in components.platform ? components.platform.value : ''

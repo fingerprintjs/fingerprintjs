@@ -1,5 +1,5 @@
 import { replaceNaN, round, toFloat } from '../utils/data'
-import { exitFullscreen, getFullscreenElement } from '../utils/browser'
+import { exitFullscreen, getFullscreenElement, isSafariWebKit, isWebKit, isWebKit616OrNewer } from '../utils/browser'
 
 /**
  * The order matches the CSS side order: top, right, bottom, left.
@@ -57,10 +57,12 @@ export function hasScreenFrameBackup(): boolean {
 }
 
 /**
+ * A version of the entropy source without stabilization.
+ *
  * Warning for package users:
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
-export function getScreenFrame(): () => Promise<FrameSize> {
+export function getRawScreenFrame(): () => Promise<FrameSize> {
   watchScreenFrame()
 
   return async () => {
@@ -89,11 +91,19 @@ export function getScreenFrame(): () => Promise<FrameSize> {
 }
 
 /**
+ * A version of the entropy source with stabilization to make it suitable for static fingerprinting.
+ *
  * Sometimes the available screen resolution changes a bit, e.g. 1900x1440 → 1900x1439. A possible reason: macOS Dock
  * shrinks to fit more icons when there is too little space. The rounding is used to mitigate the difference.
+ *
+ * The frame width is always 0 in private mode of Safari 17, so the frame is not used in Safari 17.
  */
-export function getRoundedScreenFrame(): () => Promise<FrameSize> {
-  const screenFrameGetter = getScreenFrame()
+export default function getScreenFrame(): () => Promise<FrameSize | undefined> {
+  if (isWebKit() && isWebKit616OrNewer() && isSafariWebKit()) {
+    return () => Promise.resolve(undefined)
+  }
+
+  const screenFrameGetter = getRawScreenFrame()
 
   return async () => {
     const frameSize = await screenFrameGetter()
