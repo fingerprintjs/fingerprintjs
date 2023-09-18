@@ -1,5 +1,5 @@
 import { replaceNaN, round, toFloat } from '../utils/data'
-import { exitFullscreen, getFullscreenElement, isWebKit, isWebKit616OrNewer } from '../utils/browser'
+import { exitFullscreen, getFullscreenElement, isSafariWebKit, isWebKit, isWebKit616OrNewer } from '../utils/browser'
 
 /**
  * The order matches the CSS side order: top, right, bottom, left.
@@ -99,7 +99,7 @@ export function getRawScreenFrame(): () => Promise<FrameSize> {
  * The frame width is always 0 in private mode of Safari 17, so the frame is not used in Safari 17.
  */
 export default function getScreenFrame(): () => Promise<FrameSize | undefined> {
-  if (isWebKit() && isWebKit616OrNewer()) {
+  if (isWebKit() && isWebKit616OrNewer() && isSafariWebKit()) {
     return () => Promise.resolve(undefined)
   }
 

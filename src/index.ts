@@ -41,7 +41,7 @@ export {
   isChromium,
   isWebKit,
   isGecko,
-  isDesktopSafari,
+  isDesktopWebKit,
 } from './utils/browser'
 export {
   loadSources,

@@ -1,5 +1,5 @@
 import { replaceNaN, toInt } from '../utils/data'
-import { isWebKit, isWebKit616OrNewer } from '../utils/browser'
+import { isSafariWebKit, isWebKit, isWebKit616OrNewer } from '../utils/browser'
 
 type ScreenResolution = [number | null, number | null]
 
@@ -9,7 +9,7 @@ type ScreenResolution = [number | null, number | null]
  * so the window resolution is not used in Safari 17.
  */
 export default function getScreenResolution(): ScreenResolution | undefined {
-  if (isWebKit() && isWebKit616OrNewer()) {
+  if (isWebKit() && isWebKit616OrNewer() && isSafariWebKit()) {
     return undefined
   }
 

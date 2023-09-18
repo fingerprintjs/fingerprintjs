@@ -1,5 +1,5 @@
 import { releaseEventLoop } from '../utils/async'
-import { isWebKit, isWebKit616OrNewer } from '../utils/browser'
+import { isSafariWebKit, isWebKit, isWebKit616OrNewer } from '../utils/browser'
 
 export interface CanvasFingerprint {
   winding: boolean
@@ -162,5 +162,5 @@ function canvasToString(canvas: HTMLCanvasElement) {
  */
 function doesBrowserPerformAntifingerprinting() {
   // Safari 17
-  return isWebKit() && isWebKit616OrNewer()
+  return isWebKit() && isWebKit616OrNewer() && isSafariWebKit()
 }

@@ -23,11 +23,11 @@ describe('Browser utilities', () => {
       expect(browser.isWebKit()).toBe(utils.isWebKit())
     })
 
-    it('detects desktop Safari', () => {
+    it('detects desktop WebKit', () => {
       if (!utils.isWebKit()) {
         return
       }
-      expect(browser.isDesktopSafari()).toBe(!utils.isMobile() && !utils.isTablet())
+      expect(browser.isDesktopWebKit()).toBe(!utils.isMobile() && !utils.isTablet())
     })
 
     it('detects Chromium 86+', () => {
@@ -59,6 +59,13 @@ describe('Browser utilities', () => {
         return
       }
       expect(browser.isIPad()).toBe(utils.isTablet())
+    })
+
+    it('detects Safari', () => {
+      if (!utils.isWebKit() || (utils.getBrowserMajorVersion() ?? 0) < 15) {
+        return
+      }
+      expect(browser.isSafariWebKit()).toBe(utils.isSafari())
     })
   })
 

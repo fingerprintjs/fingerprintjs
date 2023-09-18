@@ -1,4 +1,4 @@
-import { isDesktopSafari, isWebKit, isWebKit606OrNewer, isWebKit616OrNewer } from '../utils/browser'
+import { isDesktopWebKit, isSafariWebKit, isWebKit, isWebKit606OrNewer, isWebKit616OrNewer } from '../utils/browser'
 import { isPromise, suppressUnhandledRejectionWarning } from '../utils/async'
 
 export const enum SpecialFingerprint {
@@ -97,7 +97,7 @@ export function getRawAudioFingerprint(): number | (() => Promise<number>) {
  */
 function doesBrowserSuspendAudioContext() {
   // Mobile Safari 11 and older
-  return isWebKit() && !isDesktopSafari() && !isWebKit606OrNewer()
+  return isWebKit() && !isDesktopWebKit() && !isWebKit606OrNewer()
 }
 
 /**
@@ -105,7 +105,7 @@ function doesBrowserSuspendAudioContext() {
  */
 function doesBrowserPerformAntifingerprinting() {
   // Safari 17
-  return isWebKit() && isWebKit616OrNewer()
+  return isWebKit() && isWebKit616OrNewer() && isSafariWebKit()
 }
 
 /**

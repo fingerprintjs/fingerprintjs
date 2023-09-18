@@ -1,4 +1,4 @@
-import { isDesktopSafari, isIPad, isWebKit } from '../utils/browser'
+import { isDesktopWebKit, isIPad, isWebKit } from '../utils/browser'
 
 export default function getPlatform(): string {
   // Android Chrome 86 and 87 and Android Firefox 80 and 84 don't mock the platform value when desktop mode is requested
@@ -9,7 +9,7 @@ export default function getPlatform(): string {
   // The value is 'MacIntel' on M1 Macs
   // The value is 'iPhone' on iPod Touch
   if (platform === 'MacIntel') {
-    if (isWebKit() && !isDesktopSafari()) {
+    if (isWebKit() && !isDesktopWebKit()) {
       return isIPad() ? 'iPad' : 'iPhone'
     }
   }

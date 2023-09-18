@@ -11,3 +11,7 @@ export function errorToObject(error: Readonly<Error>): Record<string, unknown> {
     ...(error as Omit<Error, 'name' | 'message'>),
   }
 }
+
+export function isFunctionNative(func: (...args: unknown[]) => unknown): boolean {
+  return /^function\s.*?\{\s*\[native code]\s*}$/.test(String(func))
+}
