@@ -29,10 +29,7 @@ downloadButton.addEventListener('click', (event) => {
   document.body.removeChild(downloader)
 })
 
-document.body.appendChild(display)
-document.body.appendChild(copyButton)
-document.body.appendChild(document.createTextNode(' '))
-document.body.appendChild(downloadButton)
+document.body.append(display, copyButton, document.createTextNode(' '), downloadButton)
 
 // Wait a bit to draw the initial UI
 setTimeout(async () => {

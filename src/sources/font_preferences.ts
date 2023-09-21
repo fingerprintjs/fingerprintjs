@@ -73,8 +73,7 @@ export default function getFontPreferences(): Promise<Record<string, number>> {
       }
 
       elements[key] = element
-      container.appendChild(document.createElement('br'))
-      container.appendChild(element)
+      container.append(document.createElement('br'), element)
     }
 
     // Then measure the created elements
