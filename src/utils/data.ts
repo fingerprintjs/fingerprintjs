@@ -124,13 +124,7 @@ export function areSetsEqual(set1: Set<unknown>, set2: Set<unknown>): boolean {
     return true
   } else {
     // An implementation for browsers that don't support Set iterators
-    let areEqual = true
-    set1.forEach((value) => {
-      if (areEqual && !set2.has(value)) {
-        areEqual = false
-      }
-    })
-    return areEqual
+    return set1.every((value) => set2.has(value));
   }
 }
 
