@@ -115,23 +115,12 @@ export function areSetsEqual(set1: Set<unknown>, set2: Set<unknown>): boolean {
     return false
   }
 
-  if (set1.values) {
-    for (let iter = set1.values(), step = iter.next(); !step.done; step = iter.next()) {
-      if (!set2.has(step.value)) {
-        return false
-      }
+  for (let iter = set1.values(), step = iter.next(); !step.done; step = iter.next()) {
+    if (!set2.has(step.value)) {
+      return false
     }
-    return true
-  } else {
-    // An implementation for browsers that don't support Set iterators
-    let areEqual = true
-    set1.forEach((value) => {
-      if (areEqual && !set2.has(value)) {
-        areEqual = false
-      }
-    })
-    return areEqual
   }
+  return true
 }
 
 export function maxInIterator<T>(iterator: Iterator<T>, getItemScore: (item: T) => number): T | undefined {
