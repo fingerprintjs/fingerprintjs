@@ -28,6 +28,7 @@ import areColorsForced from './forced_colors'
 import getMonochromeDepth from './monochrome'
 import getContrastPreference from './contrast'
 import isMotionReduced from './reduced_motion'
+import isTransparencyReduced from './reduced_transparency'
 import isHDR from './hdr'
 import getMathFingerprint from './math'
 import getFontPreferences from './font_preferences'
@@ -84,6 +85,7 @@ export const sources = {
   monochrome: getMonochromeDepth,
   contrast: getContrastPreference,
   reducedMotion: isMotionReduced,
+  reducedTransparency: isTransparencyReduced,
   hdr: isHDR,
   math: getMathFingerprint,
   pdfViewerEnabled: isPdfViewerEnabled,
