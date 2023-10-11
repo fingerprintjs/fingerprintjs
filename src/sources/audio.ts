@@ -1,5 +1,6 @@
 import { isDesktopWebKit, isWebKit, isWebKit606OrNewer } from '../utils/browser'
 import { isPromise, suppressUnhandledRejectionWarning, wait } from '../utils/async'
+import { whenDocumentVisible } from '../utils/dom'
 
 export const enum SpecialFingerprint {
   /** The browser is known for always suspending audio context, thus making fingerprinting impossible */
@@ -35,7 +36,9 @@ export default async function getAudioFingerprint(): Promise<() => number> {
 export async function getRawAudioFingerprint(): Promise<() => number> {
   let fingerprintResult: [true, number] | [false, unknown] | undefined
 
-  const timeoutPromise = wait(500)
+  // The timeout is not started until the browser tab becomes visible because some browsers may not want to render
+  // an audio context in background.
+  const timeoutPromise = whenDocumentVisible().then(() => wait(500))
   const fingerprintPromise = getAudioFingerprintWithoutTimeout().then(
     (result) => (fingerprintResult = [true, result]),
     (error) => (fingerprintResult = [false, error]),
@@ -93,9 +96,12 @@ async function getAudioFingerprintWithoutTimeout(): Promise<number> {
 }
 
 /**
- * Checks if the current browser is known for always suspending audio context
+ * Checks if the current browser is known for always suspending audio context.
+ *
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
-function doesBrowserSuspendAudioContext() {
+export function doesBrowserSuspendAudioContext() {
   // Mobile Safari 11 and older
   return isWebKit() && !isDesktopWebKit() && !isWebKit606OrNewer()
 }
@@ -134,11 +140,14 @@ async function getBaseSignal(AudioContext: typeof OfflineAudioContext) {
 /**
  * Renders the given audio context with configured nodes.
  * Returns `null` when the rendering runs out of attempts.
+ *
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
-function renderAudio(context: OfflineAudioContext) {
+export function renderAudio(context: OfflineAudioContext) {
   return new Promise<AudioBuffer | null>((resolve, reject) => {
-    const retryDelay = 500
-    let attemptsLeft = 10
+    const retryDelay = 200
+    let attemptsLeft = 25
 
     context.oncomplete = (event) => resolve(event.renderedBuffer)
 

@@ -28,9 +28,12 @@ describe('Sources', () => {
     })
 
     it('returns a stable value', async () => {
-      const first = (await getAudioFingerprint())()
-      const second = (await getAudioFingerprint())()
+      const finishFirst = await getAudioFingerprint()
+      const first = finishFirst()
+      const finishSecond = await getAudioFingerprint()
+      const second = finishSecond()
       expect(first).toBe(second)
+      expect(finishFirst()).toBe(first)
     })
   })
 
