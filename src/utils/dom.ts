@@ -118,3 +118,22 @@ export function addStyleString(style: CSSStyleDeclaration, source: string): void
     }
   }
 }
+
+/**
+ * The returned promise resolves when the tab becomes visible (in foreground).
+ * If the tab is already visible, resolves immediately.
+ */
+export function whenDocumentVisible(): Promise<void> {
+  return new Promise((resolve) => {
+    const d = document
+    const eventName = 'visibilitychange'
+    const handleVisibilityChange = () => {
+      if (!d.hidden) {
+        d.removeEventListener(eventName, handleVisibilityChange)
+        resolve()
+      }
+    }
+    d.addEventListener(eventName, handleVisibilityChange)
+    handleVisibilityChange()
+  })
+}

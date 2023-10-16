@@ -1,7 +1,7 @@
 import { getBrowserMajorVersion, isSafari, withMockProperties } from '../../tests/utils'
 import getScreenFrame, {
   FrameSize,
-  getRawScreenFrame,
+  getUnstableScreenFrame,
   resetScreenFrameWatch,
   screenFrameCheckInterval,
 } from './screen_frame'
@@ -24,7 +24,7 @@ describe('Sources', () => {
           availTop: { get: () => 11 },
         },
         async () => {
-          const frame = await getRawScreenFrame()()
+          const frame = await getUnstableScreenFrame()()
           expect(frame).toEqual([11, 24, 36, 49])
 
           const roundedFrame = await getScreenFrame()()
@@ -45,7 +45,7 @@ describe('Sources', () => {
           availTop: { get: () => 0 },
         },
         async () => {
-          const frame = await getRawScreenFrame()()
+          const frame = await getUnstableScreenFrame()()
           expect(frame).toEqual([0, 0, 0, 0])
 
           const roundedFrame = await getScreenFrame()()
@@ -66,7 +66,7 @@ describe('Sources', () => {
           availTop: { get: () => undefined },
         },
         async () => {
-          const frame = await getRawScreenFrame()()
+          const frame = await getUnstableScreenFrame()()
           expect(frame).toEqual([null, 98, 24, null])
 
           const roundedFrame = await getScreenFrame()()
@@ -93,7 +93,7 @@ describe('Sources', () => {
             availTop: { get: () => 0 },
           },
           async () => {
-            screenFrameGetter = getRawScreenFrame()
+            screenFrameGetter = getUnstableScreenFrame()
 
             // The screen frame is null now
             const frame = await screenFrameGetter()
@@ -128,7 +128,7 @@ describe('Sources', () => {
             availTop: { get: () => 0 },
           },
           async () => {
-            // The screen frame has become null again, `getRawScreenFrame` shall return the remembered non-null frame
+            // The screen frame is null again, `getUnstableScreenFrame` shall return the remembered non-null frame
             jasmine.clock().tick(screenFrameCheckInterval)
             const frame = await screenFrameGetter()
             expect(frame).toEqual([30, 30, 50, 10])
@@ -146,7 +146,7 @@ describe('Sources', () => {
             availTop: { get: () => 10 },
           },
           async () => {
-            // The screen frame has become non-null, `getRawScreenFrame` shall return the new size and remember it
+            // The screen frame has become non-null, `getUnstableScreenFrame` shall return the new size and remember it
             jasmine.clock().tick(screenFrameCheckInterval)
             const frame = await screenFrameGetter()
             expect(frame).toEqual([10, 10, 70, 30])
@@ -164,7 +164,7 @@ describe('Sources', () => {
             availTop: { get: () => 0 },
           },
           async () => {
-            // The screen frame has become null again, `getRawScreenFrame` shall return the new non-null frame
+            // The screen frame has become null again, `getUnstableScreenFrame` shall return the new non-null frame
             jasmine.clock().tick(screenFrameCheckInterval)
             const frame = await screenFrameGetter()
             expect(frame).toEqual([10, 10, 70, 30])

@@ -20,7 +20,7 @@ export const enum ImageStatus {
  * Canvas image is noised in private mode of Safari 17, so image rendering is skipped in Safari 17.
  */
 export default function getCanvasFingerprint(): Promise<CanvasFingerprint> {
-  return getRawCanvasFingerprint(doesBrowserPerformAntifingerprinting())
+  return getUnstableCanvasFingerprint(doesBrowserPerformAntifingerprinting())
 }
 
 /**
@@ -29,7 +29,7 @@ export default function getCanvasFingerprint(): Promise<CanvasFingerprint> {
  * Warning for package users:
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
-export async function getRawCanvasFingerprint(skipImages?: boolean): Promise<CanvasFingerprint> {
+export async function getUnstableCanvasFingerprint(skipImages?: boolean): Promise<CanvasFingerprint> {
   let winding = false
   let geometry: string
   let text: string

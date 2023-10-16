@@ -13,7 +13,7 @@ export default function getScreenResolution(): ScreenResolution | undefined {
     return undefined
   }
 
-  return getRawScreenResolution()
+  return getUnstableScreenResolution()
 }
 
 /**
@@ -22,7 +22,7 @@ export default function getScreenResolution(): ScreenResolution | undefined {
  * Warning for package users:
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
-export function getRawScreenResolution(): ScreenResolution {
+export function getUnstableScreenResolution(): ScreenResolution {
   const s = screen
 
   // Some browsers return screen resolution as strings, e.g. "1200", instead of a number, e.g. 1200.
