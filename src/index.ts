@@ -27,10 +27,10 @@ export default { load, hashComponents, componentsToDebugString }
 export const murmurX64Hash128 = x64hash128
 export { prepareForSources } from './agent'
 export { sources } from './sources'
-export { getRawAudioFingerprint, doesBrowserSuspendAudioContext, renderAudio } from './sources/audio'
-export { getRawCanvasFingerprint } from './sources/canvas'
-export { getRawScreenFrame } from './sources/screen_frame'
-export { getRawScreenResolution } from './sources/screen_resolution'
+export { getUnstableAudioFingerprint, doesBrowserSuspendAudioContext, renderAudio } from './sources/audio'
+export { getUnstableCanvasFingerprint } from './sources/canvas'
+export { getUnstableScreenFrame } from './sources/screen_frame'
+export { getUnstableScreenResolution } from './sources/screen_resolution'
 export { getStateFromError as handleApplePayError } from './sources/apple_pay'
 export { getWebGLContext } from './sources/webgl'
 export {

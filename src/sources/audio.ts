@@ -20,7 +20,7 @@ const stabilizationPrecision = 6.2
  * Audio signal is noised in private mode of Safari 17.
  */
 export default async function getAudioFingerprint(): Promise<() => number> {
-  const finish = await getRawAudioFingerprint()
+  const finish = await getUnstableAudioFingerprint()
   return () => {
     const rawFingerprint = finish()
     return stabilize(rawFingerprint, stabilizationPrecision)
@@ -33,13 +33,13 @@ export default async function getAudioFingerprint(): Promise<() => number> {
  * Warning for package users:
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
-export async function getRawAudioFingerprint(): Promise<() => number> {
+export async function getUnstableAudioFingerprint(): Promise<() => number> {
   let fingerprintResult: [true, number] | [false, unknown] | undefined
 
   // The timeout is not started until the browser tab becomes visible because some browsers may not want to render
   // an audio context in background.
   const timeoutPromise = whenDocumentVisible().then(() => wait(500))
-  const fingerprintPromise = getAudioFingerprintWithoutTimeout().then(
+  const fingerprintPromise = getBaseAudioFingerprint().then(
     (result) => (fingerprintResult = [true, result]),
     (error) => (fingerprintResult = [false, error]),
   )
@@ -56,7 +56,7 @@ export async function getRawAudioFingerprint(): Promise<() => number> {
   }
 }
 
-async function getAudioFingerprintWithoutTimeout(): Promise<number> {
+async function getBaseAudioFingerprint(): Promise<number> {
   const w = window
   const AudioContext = w.OfflineAudioContext || w.webkitOfflineAudioContext
   if (!AudioContext) {

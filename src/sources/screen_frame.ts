@@ -62,7 +62,7 @@ export function hasScreenFrameBackup(): boolean {
  * Warning for package users:
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
-export function getRawScreenFrame(): () => Promise<FrameSize> {
+export function getUnstableScreenFrame(): () => Promise<FrameSize> {
   watchScreenFrame()
 
   return async () => {
@@ -103,7 +103,7 @@ export default function getScreenFrame(): () => Promise<FrameSize | undefined> {
     return () => Promise.resolve(undefined)
   }
 
-  const screenFrameGetter = getRawScreenFrame()
+  const screenFrameGetter = getUnstableScreenFrame()
 
   return async () => {
     const frameSize = await screenFrameGetter()
