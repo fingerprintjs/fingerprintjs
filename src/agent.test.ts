@@ -1,8 +1,7 @@
 import { version } from '../package.json'
-import { withMockProperties } from '../tests/utils'
 import { load as loadAgent } from './agent'
 import { sources } from './sources'
-import { hasScreenFrameBackup, resetScreenFrameWatch } from './sources/screen_frame'
+import { isSourceLoaded } from './sources/cpu_class'
 import { wait } from './utils/async'
 
 describe('Agent', () => {
@@ -27,34 +26,15 @@ describe('Agent', () => {
   })
 
   it('loads entropy sources when created', async () => {
-    // Checking whether agent loads entropy sources when created by checking whether the screen frame is watched
-    resetScreenFrameWatch()
+    isSourceLoaded.x = false
+    const agent = await loadAgent({ delayFallback: 0 })
 
-    await withMockProperties(
-      screen,
-      {
-        width: { get: () => 1200 },
-        height: { get: () => 800 },
-        availWidth: { get: () => 1100 },
-        availHeight: { get: () => 760 },
-        availLeft: { get: () => 100 },
-        availTop: { get: () => 0 },
-      },
-      async () => {
-        const agent = await loadAgent({ delayFallback: 0 })
-        let areSourcesLoaded = false
+    // The entropy sources may be not loaded yet at this moment of time, so we need to wait
+    for (let i = 0; i < 20 && !isSourceLoaded.x; ++i) {
+      await wait(50)
+    }
 
-        // The screen frame source may be not loaded yet at this moment of time, so we need to wait
-        for (let i = 0; i < 20 && !areSourcesLoaded; ++i) {
-          if (hasScreenFrameBackup()) {
-            areSourcesLoaded = true
-          }
-          await wait(50)
-        }
-
-        expect(areSourcesLoaded).withContext('Entropy sources are not loaded').toBeTrue()
-        await agent.get() // To wait until the background processes complete
-      },
-    )
+    expect(isSourceLoaded.x).withContext('Entropy sources are not loaded').toBeTrue()
+    await agent.get() // To wait until the background processes complete
   })
 })
