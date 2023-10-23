@@ -50,13 +50,6 @@ export function resetScreenFrameWatch(): void {
 }
 
 /**
- * For tests only
- */
-export function hasScreenFrameBackup(): boolean {
-  return !!screenFrameBackup
-}
-
-/**
  * A version of the entropy source without stabilization.
  *
  * Warning for package users:
