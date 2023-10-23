@@ -57,14 +57,14 @@ const browserstackBrowsers = {
   OSX14_FirefoxLatest: { platform: 'OS X', osVersion: 'Sonoma', browserName: 'Firefox', browserVersion: 'latest-beta', useHttps: true },
   // OSX14_FirefoxLatest_Incognito: { platform: 'OS X', osVersion: 'Sonoma', browserName: 'Firefox', browserVersion: 'latest-beta, ...firefoxIncognitoCapabilities },
   OSX14_EdgeLatest: { platform: 'OS X', osVersion: 'Sonoma', browserName: 'Edge', browserVersion: 'latest-beta', useHttps: true },
-  Android13_ChromeLatest: { deviceName: ['Google Pixel 7', 'Google Pixel 7 Pro', 'Google Pixel 6 Pro'], platform: 'Android', osVersion: '13.0', browserName: 'Chrome', browserVersion: 'latest-beta', useHttps: true, flags: [BrowserFlags.MobileUserAgent]},
-  iOS11_Safari: { deviceName: ['iPhone X', 'iPhone 8', 'iPhone 8 Plus'], platform: 'iOS', osVersion: '11', browserName: 'Safari', useHttps: true, flags: [BrowserFlags.MobileUserAgent]},
-  iOS12_Safari: { deviceName: ['iPhone XS', 'iPhone 8', 'iPhone 8 Plus', 'iPhone XR'], platform: 'iOS', osVersion: '12', browserName: 'Safari', useHttps: true, flags: [BrowserFlags.MobileUserAgent]},
-  iOS13_Safari: { deviceName: ['iPhone 11 Pro', 'iPhone 8', 'iPhone XS', 'iPhone 11 Pro Max'], platform: 'iOS', osVersion: '13', browserName: 'Safari', useHttps: true, flags: [BrowserFlags.MobileUserAgent]},
-  iOS14_Safari: { deviceName: ['iPhone 11', 'iPhone XS', 'iPhone 12 Pro', 'iPhone 12 mini'], platform: 'iOS', osVersion: '14', browserName: 'Safari', useHttps: true, flags: [BrowserFlags.MobileUserAgent]},
-  iOS15_Safari: { deviceName: ['iPhone 13', 'iPhone 13 Mini', 'iPhone 11 Pro', 'iPhone 11'], platform: 'iOS', osVersion: '15', browserName: 'Safari', useHttps: true, flags: [BrowserFlags.MobileUserAgent]},
-  iOS16_Safari: { deviceName: ['iPhone 14', 'iPhone 14 Plus', 'iPhone 14 Pro', 'iPhone 14 Pro Max'], platform: 'iOS', osVersion: '16', browserName: 'Safari', useHttps: true, flags: [BrowserFlags.MobileUserAgent]},
-  iOS17_Safari: { deviceName: ['iPhone 15', 'iPhone 15 Plus', 'iPhone 15 Pro', 'iPhone 15 Pro Max'], platform: 'iOS', osVersion: '17', browserName: 'Safari', useHttps: false, flags: [BrowserFlags.MobileUserAgent]},
+  Android13_ChromeLatest: { deviceName: ['Google Pixel 7', 'Google Pixel 7 Pro', 'Google Pixel 6 Pro'], platform: 'Android', osVersion: '13.0', browserName: 'Chrome', browserVersion: 'latest-beta', useHttps: true, flags: [BrowserFlags.MobileUserAgent] },
+  iOS11_Safari: { deviceName: ['iPhone X', 'iPhone 8', 'iPhone 8 Plus'], platform: 'iOS', osVersion: '11', browserName: 'Safari', useHttps: true, flags: [BrowserFlags.MobileUserAgent] },
+  iOS12_Safari: { deviceName: ['iPhone XS', 'iPhone 8', 'iPhone 8 Plus', 'iPhone XR'], platform: 'iOS', osVersion: '12', browserName: 'Safari', useHttps: true, flags: [BrowserFlags.MobileUserAgent] },
+  iOS13_Safari: { deviceName: ['iPhone 11 Pro', 'iPhone 8', 'iPhone XS', 'iPhone 11 Pro Max'], platform: 'iOS', osVersion: '13', browserName: 'Safari', useHttps: true, flags: [BrowserFlags.MobileUserAgent] },
+  iOS14_Safari: { deviceName: ['iPhone 11', 'iPhone XS', 'iPhone 12 Pro', 'iPhone 12 mini'], platform: 'iOS', osVersion: '14', browserName: 'Safari', useHttps: true, flags: [BrowserFlags.MobileUserAgent] },
+  iOS15_Safari: { deviceName: ['iPhone 13', 'iPhone 13 Mini', 'iPhone 11 Pro', 'iPhone 11'], platform: 'iOS', osVersion: '15', browserName: 'Safari', useHttps: true, flags: [BrowserFlags.MobileUserAgent] },
+  iOS16_Safari: { deviceName: ['iPhone 14', 'iPhone 14 Plus', 'iPhone 14 Pro', 'iPhone 14 Pro Max'], platform: 'iOS', osVersion: '16', browserName: 'Safari', useHttps: true, flags: [BrowserFlags.MobileUserAgent] },
+  iOS17_Safari: { deviceName: ['iPhone 15', 'iPhone 15 Plus', 'iPhone 15 Pro', 'iPhone 15 Pro Max'], platform: 'iOS', osVersion: '17', browserName: 'Safari', useHttps: false, flags: [BrowserFlags.MobileUserAgent] },
 }
 /* eslint-enable max-len */
 
