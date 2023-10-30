@@ -6,10 +6,10 @@ We aim to cover at least 99% of all users according to the Fingerprint Pro stati
 At the moment, these browsers are:
 
 - **Edge** 105+
-- **Chrome** 57+
-- **Firefox** 67+
+- **Chrome** 65+
+- **Firefox** 75+
 - **Desktop Safari** 12.1+
-- **Mobile Safari** 11.0+
+- **Mobile Safari** 12.0+
 - **Samsung Internet** 14.0+
 
 Other browsers will probably also work, but we don't guarantee it.
