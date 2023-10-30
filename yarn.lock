@@ -233,14 +233,21 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@fpjs-incubator/broyster@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@fpjs-incubator/broyster/-/broyster-0.1.4.tgz#ede85a12c22cd32a782ef459299c4f0f2a306f11"
-  integrity sha512-6tWyydx0D/RmW/zK0CRWZkwbqsWgJfvD2/6Y9t+Ag0uKzL1dTnVndmRQeuYQ/k4Uws0rRxx6qD3h8cD118HYsQ==
+"@fpjs-incubator/broyster@^0.1.7":
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/@fpjs-incubator/broyster/-/broyster-0.1.7.tgz#42a3d83aaf38d033fd3bf5d473ccd6503e4d869b"
+  integrity sha512-ZqfYa20hVjlVLDFyHdxicH9AAROVLTiqpZG00VSX1GaiCYTimd9mYQ7/k5vv+5ISry3HeZri+S+8BVGIsJ3TGA==
   dependencies:
+    "@types/karma" "^6.3.3"
     async-lock "^1.4.0"
-    browserstack "~1.5.1"
-    browserstack-local "^1.5.1"
+    browserstack "~1.6.1"
+    browserstack-local "^1.5.5"
+    karma-chrome-launcher "^3.1.1"
+    karma-firefox-launcher "^2.1.2"
+    karma-jasmine "^4.0.2"
+    karma-spec-reporter "^0.0.35"
+    karma-summary-reporter "^3.1.1"
+    karma-typescript "^5.5.3"
     selenium-webdriver "^4.7.0"
     tslib "^2.4.1"
 
@@ -548,21 +555,7 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.11.tgz#d421b6c527a3037f7c84433fd2c4229e016863d3"
   integrity sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==
 
-"@types/karma-spec-reporter@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@types/karma-spec-reporter/-/karma-spec-reporter-0.0.3.tgz#f70bad339e2f84ad3dac995f41f67c74a68308cf"
-  integrity sha512-ol9pUJxw5hHyNOGaAhJULMNXEhUyJUh5G7sLTMvWzMmEgRsqX+nOMfwGluftJd++6Vu6f4SS7LPuMF6TKlQ5Dw==
-  dependencies:
-    "@types/karma" "*"
-
-"@types/karma-summary-reporter@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@types/karma-summary-reporter/-/karma-summary-reporter-3.1.0.tgz#78770cdb689506eb649042c951a13ad5327c2bcf"
-  integrity sha512-pO+qcPpYx/MakkH9XzOMPNKrlv5LFU6o4vgVHGFNAMf1ptQ+FXvbQ4FUQ36RmtztBqIXG5Asglgzwf2bAFZUEw==
-  dependencies:
-    "@types/karma" "*"
-
-"@types/karma@*", "@types/karma@^6.3.3":
+"@types/karma@^6.3.3":
   version "6.3.3"
   resolved "https://registry.yarnpkg.com/@types/karma/-/karma-6.3.3.tgz#fc48cc53d13ec9beeea3a2a47a2036ed7647ba29"
   integrity sha512-nRMec4mTCt+tkpRqh5/pAxmnjzEgAaalIq7mdfLFH88gSRC8+bxejLiSjHMMT/vHIhJHqg4GPIGCnCFbwvDRww==
@@ -1232,10 +1225,10 @@ browserslist@^4.14.5, browserslist@^4.21.9:
     node-releases "^2.0.13"
     update-browserslist-db "^1.0.13"
 
-browserstack-local@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/browserstack-local/-/browserstack-local-1.5.1.tgz#0d424474cc2b74a9d9a22d00a2282941ff636f34"
-  integrity sha512-T/wxyWDzvBHbDvl7fZKpFU7mYze6nrUkBhNy+d+8bXBqgQX10HTYvajIGO0wb49oGSLCPM0CMZTV/s7e6LF0sA==
+browserstack-local@^1.5.5:
+  version "1.5.5"
+  resolved "https://registry.yarnpkg.com/browserstack-local/-/browserstack-local-1.5.5.tgz#f36b625f3b8bfd053f673d85fd1082f2d0759693"
+  integrity sha512-jKne7yosrMcptj3hqxp36TP9k0ZW2sCqhyurX24rUL4G3eT7OLgv+CSQN8iq5dtkv5IK+g+v8fWvsiC/S9KxMg==
   dependencies:
     agent-base "^6.0.2"
     https-proxy-agent "^5.0.1"
@@ -1243,10 +1236,10 @@ browserstack-local@^1.5.1:
     ps-tree "=1.2.0"
     temp-fs "^0.9.9"
 
-browserstack@~1.5.1:
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/browserstack/-/browserstack-1.5.3.tgz#93ab48799a12ef99dbd074dd595410ddb196a7ac"
-  integrity sha512-AO+mECXsW4QcqC9bxwM29O7qWa7bJT94uBFzeb5brylIQwawuEziwq20dPYbins95GlWzOawgyDNdjYAo32EKg==
+browserstack@~1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/browserstack/-/browserstack-1.6.1.tgz#e051f9733ec3b507659f395c7a4765a1b1e358b3"
+  integrity sha512-GxtFjpIaKdbAyzHfFDKixKO8IBT7wR3NjbzrGc78nNs/Ciys9wU3/nBtsqsWv5nDSrdI5tz0peKuzCPuNXNUiw==
   dependencies:
     https-proxy-agent "^2.2.1"
 
@@ -1443,7 +1436,7 @@ colorette@^2.0.10, colorette@^2.0.14:
   resolved "https://registry.yarnpkg.com/colorette/-/colorette-2.0.19.tgz#cdf044f47ad41a0f4b56b3a0d5b4e6e1a2d5a798"
   integrity sha512-3tlv/dIP7FWvj3BsbHrGLJ6l/oKh1O3TcgBqMn+yyCagOxc23fyzDS6HypQbgxWbkpDnf52p1LuR4eWDQ/K9WQ==
 
-colors@1.4.0:
+colors@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.4.0.tgz#c50491479d4c1bdaed2c9ced32cf7c7dc2360f78"
   integrity sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==
@@ -3140,12 +3133,12 @@ karma-jasmine@^4.0.2:
   dependencies:
     jasmine-core "^3.6.0"
 
-karma-spec-reporter@^0.0.34:
-  version "0.0.34"
-  resolved "https://registry.yarnpkg.com/karma-spec-reporter/-/karma-spec-reporter-0.0.34.tgz#7dc79cdc76b0e37f17006921439600ae3c648669"
-  integrity sha512-l5H/Nh9q4g2Ysx2CDU2m+NIPyLQpCVbk9c4V02BTZHw3NM6RO1dq3eRpKXCSSdPt4RGfhHk8jDt3XYkGp+5PWg==
+karma-spec-reporter@^0.0.35:
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/karma-spec-reporter/-/karma-spec-reporter-0.0.35.tgz#845d9f8b047a452f36fca493d63a72bcc3c865c7"
+  integrity sha512-ejUIU6yzD2bgcn573ypcRfF1IDnLwkxnSMqXsmmvF/PiOwmQgaLRr8H8blBZmrgxH8qhp+W90Q94h16kEQDWzw==
   dependencies:
-    colors "1.4.0"
+    colors "^1.4.0"
 
 karma-summary-reporter@^3.1.1:
   version "3.1.1"
