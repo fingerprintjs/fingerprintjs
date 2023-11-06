@@ -55,3 +55,7 @@ interface HTMLAnchorElement {
   /** Before Safari 15.4. The value is a string in Safari 14. */
   attributionsourceid?: number | string
 }
+
+interface HTMLMediaElement {
+  sinkId?: string
+}

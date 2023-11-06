@@ -281,23 +281,30 @@ export function exitFullscreen(): Promise<void> {
 export function isAndroid(): boolean {
   const isItChromium = isChromium()
   const isItGecko = isGecko()
-
-  // Only 2 browser engines are presented on Android.
-  // Actually, there is also Android 4.1 browser, but it's not worth detecting it at the moment.
-  if (!isItChromium && !isItGecko) {
-    return false
-  }
-
   const w = window
 
   // Chrome removes all words "Android" from `navigator` when desktop version is requested
   // Firefox keeps "Android" in `navigator.appVersion` when desktop version is requested
-  return (
-    countTruthy([
-      'onorientationchange' in w,
-      'orientation' in w,
-      isItChromium && !('SharedWorker' in w),
-      isItGecko && /android/i.test(navigator.appVersion),
-    ]) >= 2
-  )
+  if (isItChromium) {
+    return countTruthy([!('SharedWorker' in w), isAndroidNotificationError(), 'sinkId' in new window.Audio()]) >= 2
+  } else if (isItGecko) {
+    return countTruthy(['onorientationchange' in w, 'orientation' in w, /android/i.test(navigator.appVersion)]) >= 2
+  } else {
+    // Only 2 browser engines are presented on Android.
+    // Actually, there is also Android 4.1 browser, but it's not worth detecting it at the moment.
+    return false
+  }
+}
+
+function isAndroidNotificationError() {
+  try {
+    new Notification('')
+    return false
+  } catch (error: unknown) {
+    // Details https://bugs.chromium.org/p/chromium/issues/detail?id=481856
+    if (error instanceof Error && error.message.includes('ServiceWorkerRegistration.showNotification()')) {
+      return true
+    }
+  }
+  return false
 }
