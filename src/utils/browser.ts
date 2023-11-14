@@ -282,11 +282,21 @@ export function isAndroid(): boolean {
   const isItChromium = isChromium()
   const isItGecko = isGecko()
   const w = window
+  const n = navigator
+  const c = 'connection'
 
   // Chrome removes all words "Android" from `navigator` when desktop version is requested
   // Firefox keeps "Android" in `navigator.appVersion` when desktop version is requested
   if (isItChromium) {
-    return countTruthy([!('SharedWorker' in w), isAndroidNotificationError(), !('sinkId' in new window.Audio())]) >= 2
+    return (
+      countTruthy([
+        !('SharedWorker' in w),
+        // `typechange` is deprecated, but it's still present on Android (tested on Chrome Mobile 117)
+        // Removal proposal https://bugs.chromium.org/p/chromium/issues/detail?id=699892
+        n[c] && 'ontypechange' in n[c],
+        !('sinkId' in new window.Audio()),
+      ]) >= 2
+    )
   } else if (isItGecko) {
     return countTruthy(['onorientationchange' in w, 'orientation' in w, /android/i.test(navigator.appVersion)]) >= 2
   } else {
@@ -294,17 +304,4 @@ export function isAndroid(): boolean {
     // Actually, there is also Android 4.1 browser, but it's not worth detecting it at the moment.
     return false
   }
-}
-
-function isAndroidNotificationError() {
-  try {
-    new Notification('')
-    return false
-  } catch (error: unknown) {
-    // Details https://bugs.chromium.org/p/chromium/issues/detail?id=481856
-    if (error instanceof Error && error.message.includes('ServiceWorkerRegistration.showNotification()')) {
-      return true
-    }
-  }
-  return false
 }
