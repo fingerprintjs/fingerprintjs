@@ -293,6 +293,7 @@ export function isAndroid(): boolean {
         !('SharedWorker' in w),
         // `typechange` is deprecated, but it's still present on Android (tested on Chrome Mobile 117)
         // Removal proposal https://bugs.chromium.org/p/chromium/issues/detail?id=699892
+        // Note: this expression returns true on ChromeOS, so additional detectors are required to avoid false-positives
         n[c] && 'ontypechange' in n[c],
         !('sinkId' in new window.Audio()),
       ]) >= 2
