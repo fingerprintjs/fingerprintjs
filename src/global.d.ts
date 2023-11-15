@@ -15,6 +15,9 @@ interface Navigator {
   deviceMemory?: number
   cpuClass?: string
   readonly msMaxTouchPoints?: number
+  connection?: {
+    ontypechange?: () => void
+  }
 }
 
 interface Document {
