@@ -23,7 +23,7 @@
 </p>
 <p align="center">
   <a href="https://discord.gg/39EpE2neBg">
-    <img src="https://img.shields.io/discord/852099967190433792?style=for-the-badge&label=Discord&logo=Discord&logoColor=white" alt="Discord server">
+    <img src="https://img.shields.io/discord/852099967190433792?style=for-the-badge&label=Discord&logo=Discord&logoColor=white&color=5865F2" alt="Discord server">
   </a>
 </p>
 
