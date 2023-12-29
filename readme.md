@@ -55,7 +55,8 @@ Now, try visiting the same page in private / incognito mode and notice how the v
 ```html
 <script>
   // Initialize the agent at application startup.
-  // If you're using an ad blocker or Brave/Firefox, this import will not work, use an NPM package instead
+  // If you're using an ad blocker or Brave/Firefox, this import will not work.
+  // Please use the NPM package instead: https://t.ly/ORyXk
   const fpPromise = import('https://openfpcdn.io/fingerprintjs/v4')
     .then(FingerprintJS => FingerprintJS.load())
 
