@@ -71,6 +71,31 @@ Now, try visiting the same page in private / incognito mode and notice how the v
 </script>
 ```
 
+##In ReactJs 
+
+```html
+import { useEffect, useState } from "react";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
+export default function () {
+  const [fingerPrintId, setFingerPrintId] = useState("");
+  useEffect(() => {
+    const fetch = async () => {
+      const fp = await FingerprintJS.load();
+      const { visitorId } = await fp.get();
+      setFingerPrintId(visitorId);
+    };
+
+    fetch();
+  }, []);
+  return (
+    <>
+      <h2>Visitor Id: fingerPrintId</h2>
+    </>
+  );
+}
+
+```
+
 [Run this code](https://stackblitz.com/edit/fpjs-4-cdn?file=index.html&devtoolsheight=100)
 
 ### Resources
