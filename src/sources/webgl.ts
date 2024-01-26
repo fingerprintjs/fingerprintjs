@@ -1,4 +1,4 @@
-import { isGecko } from '../utils/browser'
+import { isChromium, isGecko, isWebKit } from '../utils/browser'
 
 // Types and constants are used instead of interfaces and enums to avoid this error in projects which use this library:
 // Exported variable '...' has or is using name '...' from external module "..." but cannot be named.
@@ -133,8 +133,10 @@ export function getWebGlExtensions({ cache }: Options): WebGlExtensionsPayload |
   // Extension parameters
   if (extensions) {
     for (const name of extensions) {
-      // The "polygon mode" extension causes a console warning in Chromium and WebKit
-      if (name === polygonModeExtensionName || (name === rendererInfoExtensionName && shouldAvoidDebugRendererInfo())) {
+      if (
+        (name === rendererInfoExtensionName && shouldAvoidDebugRendererInfo()) ||
+        (name === polygonModeExtensionName && shouldAvoidPolygonModeExtensions())
+      ) {
         continue
       }
 
@@ -234,6 +236,14 @@ function isConstantLike<K>(key: K): key is Extract<K, string> {
  */
 export function shouldAvoidDebugRendererInfo(): boolean {
   return isGecko()
+}
+
+/**
+ * Some browsers print a console warning when the WEBGL_polygon_mode extension is requested.
+ * JS Agent aims to avoid printing messages to console, so we avoid this extension in that browsers.
+ */
+export function shouldAvoidPolygonModeExtensions(): boolean {
+  return isChromium() || isWebKit()
 }
 
 /**
