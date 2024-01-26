@@ -67,6 +67,7 @@ const validExtensionParams = new Set([
 const shaderTypes = ['FRAGMENT_SHADER', 'VERTEX_SHADER'] as const
 const precisionTypes = ['LOW_FLOAT', 'MEDIUM_FLOAT', 'HIGH_FLOAT', 'LOW_INT', 'MEDIUM_INT', 'HIGH_INT'] as const
 const rendererInfoExtensionName = 'WEBGL_debug_renderer_info'
+const polygonModeExtensionName = 'WEBGL_polygon_mode'
 
 /**
  * Gets the basic and simple WebGL parameters
@@ -132,7 +133,8 @@ export function getWebGlExtensions({ cache }: Options): WebGlExtensionsPayload |
   // Extension parameters
   if (extensions) {
     for (const name of extensions) {
-      if (name === rendererInfoExtensionName && shouldAvoidDebugRendererInfo()) {
+      // The "polygon mode" extension causes a console warning in Chromium and WebKit
+      if (name === polygonModeExtensionName || (name === rendererInfoExtensionName && shouldAvoidDebugRendererInfo())) {
         continue
       }
 
