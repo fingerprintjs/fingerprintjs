@@ -1,4 +1,4 @@
-import { isGecko } from '../utils/browser'
+import { isChromium, isGecko, isWebKit } from '../utils/browser'
 
 // Types and constants are used instead of interfaces and enums to avoid this error in projects which use this library:
 // Exported variable '...' has or is using name '...' from external module "..." but cannot be named.
@@ -67,6 +67,7 @@ const validExtensionParams = new Set([
 const shaderTypes = ['FRAGMENT_SHADER', 'VERTEX_SHADER'] as const
 const precisionTypes = ['LOW_FLOAT', 'MEDIUM_FLOAT', 'HIGH_FLOAT', 'LOW_INT', 'MEDIUM_INT', 'HIGH_INT'] as const
 const rendererInfoExtensionName = 'WEBGL_debug_renderer_info'
+const polygonModeExtensionName = 'WEBGL_polygon_mode'
 
 /**
  * Gets the basic and simple WebGL parameters
@@ -132,7 +133,10 @@ export function getWebGlExtensions({ cache }: Options): WebGlExtensionsPayload |
   // Extension parameters
   if (extensions) {
     for (const name of extensions) {
-      if (name === rendererInfoExtensionName && shouldAvoidDebugRendererInfo()) {
+      if (
+        (name === rendererInfoExtensionName && shouldAvoidDebugRendererInfo()) ||
+        (name === polygonModeExtensionName && shouldAvoidPolygonModeExtensions())
+      ) {
         continue
       }
 
@@ -232,6 +236,14 @@ function isConstantLike<K>(key: K): key is Extract<K, string> {
  */
 export function shouldAvoidDebugRendererInfo(): boolean {
   return isGecko()
+}
+
+/**
+ * Some browsers print a console warning when the WEBGL_polygon_mode extension is requested.
+ * JS Agent aims to avoid printing messages to console, so we avoid this extension in that browsers.
+ */
+export function shouldAvoidPolygonModeExtensions(): boolean {
+  return isChromium() || isWebKit()
 }
 
 /**
