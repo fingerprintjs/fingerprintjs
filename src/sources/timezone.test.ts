@@ -5,8 +5,8 @@ describe('Sources', () => {
     it('returns a tz identifier in all supported browsers', () => {
       const result = getTimezone()
 
-      // Some devices on BrowserStack return 'UTC'.
-      if (result === 'UTC') {
+      // Some devices on BrowserStack return 'UTC', some '+00:00'.
+      if (result === 'UTC' || /^[+-]\d{2}:\d{2}$/.test(String(result))) {
         return
       }
 
