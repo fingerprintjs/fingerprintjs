@@ -12,7 +12,7 @@ export default function getTimezone(): string {
   // For browsers that don't support timezone names
   // The minus is intentional because the JS offset is opposite to the real offset
   const offset = -getTimezoneOffset()
-  return `UTC${offset >= 0 ? '+' : ''}${Math.abs(offset)}`
+  return `UTC${offset >= 0 ? '+' : ''}${offset}`
 }
 
 function getTimezoneOffset(): number {
