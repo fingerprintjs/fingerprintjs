@@ -93,7 +93,7 @@ Because of how the fingerprints are processed and generated from within the brow
 
 Fingerprint Identification is able to achieve 99.5% accuracy, because it processes the browser attributes on the server and also analyzes vast amounts of auxiliary data (e.g. IP addresses, time of visit patterns, URL changes, etc.). Because of these advanced matching techniques, Fingerprint Identification is able to reliably deduplicate different users that have identical devices. For a comprehensive list of advantages over FingerprintJS, please visit [Fingerprint Identification vs. FingerprintJS](https://dev.fingerprint.com/docs/identification-vs-fingerprintjs).
 
-Fingerprint Identification is available for Web, Android, iOS, and other platforms. Our [plans start at $400 per month](https://fingerprint.com/pricing/) and include with them 100K API calls. You can easily get started by [signing up](https://dashboard.fingerprint.com/signup) for a free, no-obligation 14-day trial.
+Fingerprint Identification is available for Web, Android, iOS, and other platforms. Our [plans start at $99 per month](https://fingerprint.com/pricing/) and include with them 20K API calls. You can easily get started by [signing up](https://dashboard.fingerprint.com/signup) for a free, no-obligation 14-day trial.
 
 ### Resources
 
