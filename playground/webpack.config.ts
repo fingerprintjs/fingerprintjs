@@ -4,6 +4,9 @@ import * as HtmlWebpackPlugin from 'html-webpack-plugin'
 import * as TerserPlugin from 'terser-webpack-plugin'
 import terserConfig from '../terser.config'
 
+const port = process.env.FPJS_PORT || 8080
+const host = process.env.FPJS_HOST || '0.0.0.0'
+
 const configurationFactory: ConfigOptions = (_env, { mode = 'development' }) => ({
   entry: './index.ts',
   mode,
@@ -45,7 +48,8 @@ const configurationFactory: ConfigOptions = (_env, { mode = 'development' }) => 
     filename: '[name].js?[contenthash]',
   },
   devServer: {
-    host: '0.0.0.0',
+    host: host,
+    port: port,
     allowedHosts: 'all',
   } satisfies DevServer,
   plugins: [
