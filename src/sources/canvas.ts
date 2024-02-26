@@ -94,7 +94,7 @@ async function renderImages(
   renderGeometryImage(canvas, context)
   await releaseEventLoop()
   const geometryImage = canvasToString(canvas)
-  return [textImage1, geometryImage]
+  return [geometryImage, textImage1]
 }
 
 function renderTextImage(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
