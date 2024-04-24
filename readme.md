@@ -8,18 +8,10 @@
   </a>
 </p>
 <p align="center">
-  <a href="https://github.com/fingerprintjs/fingerprintjs/actions/workflows/test.yml">
-    <img src="https://github.com/fingerprintjs/fingerprintjs/actions/workflows/test.yml/badge.svg?branch=v2" alt="Build status">
-  </a>
-  <a href="https://www.npmjs.com/package/@fingerprintjs/fingerprintjs">
-    <img src="https://img.shields.io/npm/v/@fingerprintjs/fingerprintjs.svg" alt="Current NPM version">
-  </a>
-  <a href="https://www.npmjs.com/package/@fingerprintjs/fingerprintjs">
-    <img src="https://img.shields.io/npm/dm/@fingerprintjs/fingerprintjs.svg" alt="Monthly downloads from NPM">
-  </a>
-  <a href="https://www.jsdelivr.com/package/npm/@fingerprintjs/fingerprintjs">
-    <img src="https://img.shields.io/jsdelivr/npm/hm/@fingerprintjs/fingerprintjs.svg" alt="Monthly downloads from jsDelivr">
-  </a>
+  <a href="https://github.com/fingerprintjs/fingerprintjs/actions/workflows/test.yml"><img src="https://github.com/fingerprintjs/fingerprintjs/actions/workflows/test.yml/badge.svg?branch=v2" alt="Build status"></a>
+  <a href="https://www.npmjs.com/package/@fingerprintjs/fingerprintjs"><img src="https://img.shields.io/npm/v/@fingerprintjs/fingerprintjs.svg" alt="Current NPM version"></a>
+  <a href="https://www.npmjs.com/package/@fingerprintjs/fingerprintjs"><img src="https://img.shields.io/npm/dm/@fingerprintjs/fingerprintjs.svg" alt="Monthly downloads from NPM"></a>
+  <a href="https://www.jsdelivr.com/package/npm/@fingerprintjs/fingerprintjs"><img src="https://img.shields.io/jsdelivr/npm/hm/@fingerprintjs/fingerprintjs.svg" alt="Monthly downloads from jsDelivr"></a>
 </p>
 <p align="center">
   <a href="https://discord.gg/39EpE2neBg">
