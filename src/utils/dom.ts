@@ -12,7 +12,7 @@ import { parseSimpleCssSelector } from './data'
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export async function withIframe<T>(
-  action: (iframe: HTMLIFrameElement, iWindow: Window) => MaybePromise<T>,
+  action: (iframe: HTMLIFrameElement, iWindow: typeof window) => MaybePromise<T>,
   initialHtml?: string,
   domPollInterval = 50,
 ): Promise<T> {
@@ -78,7 +78,7 @@ export async function withIframe<T>(
       await wait(domPollInterval)
     }
 
-    return await action(iframe, iframe.contentWindow)
+    return await action(iframe, iframe.contentWindow as typeof window)
   } finally {
     iframe.parentNode?.removeChild(iframe)
   }
