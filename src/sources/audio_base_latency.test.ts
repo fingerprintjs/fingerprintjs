@@ -2,7 +2,7 @@ import { getBrowserVersion, isGecko, isWebKit } from '../../tests/utils'
 import getAudioBaseLatency from './audio_base_latency'
 
 describe('Sources', () => {
-  describe('audio base latency', () => {
+  describe('audioBaseLatency', () => {
     it("doesn't fail", () => {
       const result = getAudioBaseLatency()
       if (!hasBaseLatencySupport()) {
@@ -30,7 +30,7 @@ function hasBaseLatencySupport() {
     const { major, minor } = getBrowserVersion() || { major: 0, minor: 0 }
     if (major < 14) {
       return false
-    } else {
+    } else if (major == 14) {
       return minor >= 1
     }
   }
