@@ -23,7 +23,7 @@ describe('Sources', () => {
           ApplePaySession: undefined,
         },
         async () => {
-          expect(await getApplePayState()).toBe(ApplePayState.NoAPI)
+          expect(getApplePayState()).toBe(ApplePayState.NoAPI)
         },
       )
     })
