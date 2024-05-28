@@ -31,7 +31,6 @@ export { getUnstableAudioFingerprint, doesBrowserSuspendAudioContext, renderAudi
 export { getUnstableCanvasFingerprint } from './sources/canvas'
 export { getUnstableScreenFrame } from './sources/screen_frame'
 export { getUnstableScreenResolution } from './sources/screen_resolution'
-export { getStateFromError as handleApplePayError } from './sources/apple_pay'
 export { getWebGLContext } from './sources/webgl'
 export {
   getFullscreenElement,

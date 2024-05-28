@@ -14,7 +14,7 @@ export const enum ApplePayState {
   NotAvailableInFrame = -3,
 }
 
-export default function getApplePayState(): ApplePayState {
+export default function getApplePayState(): 0 | 1 | -1 | -2 | -3 {
   const { ApplePaySession } = window
 
   if (typeof ApplePaySession?.canMakePayments !== 'function') {
@@ -35,7 +35,7 @@ export default function getApplePayState(): ApplePayState {
  * Warning for package users:
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
-export function getStateFromError(error: unknown): -2 | -3 {
+function getStateFromError(error: unknown): -2 | -3 {
   if (error instanceof Error) {
     // See full expected error messages in the test
     if (error.name === 'InvalidAccessError') {
