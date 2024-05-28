@@ -35,7 +35,7 @@ export default function getApplePayState(): 0 | 1 | -1 | -2 | -3 {
  * Warning for package users:
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
-function getStateFromError(error: unknown): -2 | -3 {
+export function getStateFromError(error: unknown): -2 | -3 {
   if (error instanceof Error) {
     // See full expected error messages in the test
     if (error.name === 'InvalidAccessError') {
