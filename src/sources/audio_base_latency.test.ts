@@ -1,19 +1,18 @@
-import { getBrowserVersion, isAndroid, isChromium, isGecko, isWebKit } from '../../tests/utils'
-import getAudioBaseLatency from './audio_base_latency'
+import { getBrowserVersion, isAndroid, isGecko, isWebKit } from '../../tests/utils'
+import getAudioBaseLatency, { SpecialFingerprint } from './audio_base_latency'
 
 describe('Sources', () => {
   describe('audioBaseLatency', () => {
     it("doesn't fail", () => {
       const result = getAudioBaseLatency()
-
-      const isAllowedPlatform = isAndroid() && isChromium()
+      const isAllowedPlatform = isAndroid() || isWebKit()
       if (!isAllowedPlatform) {
-        expect(result).toBe(undefined)
+        expect(result).toBe(SpecialFingerprint.Disabled)
         return
       }
 
       if (!hasBaseLatencySupport()) {
-        expect(result).toBe(undefined)
+        expect(result).toBe(SpecialFingerprint.NotSupported)
         return
       }
 
