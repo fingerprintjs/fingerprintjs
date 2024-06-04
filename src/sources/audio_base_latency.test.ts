@@ -1,10 +1,17 @@
-import { getBrowserVersion, isGecko, isWebKit } from '../../tests/utils'
+import { getBrowserVersion, isAndroid, isChromium, isGecko, isWebKit } from '../../tests/utils'
 import getAudioBaseLatency from './audio_base_latency'
 
 describe('Sources', () => {
   describe('audioBaseLatency', () => {
     it("doesn't fail", () => {
       const result = getAudioBaseLatency()
+
+      const isAllowedPlatform = isAndroid() && isChromium()
+      if (!isAllowedPlatform) {
+        expect(result).toBe(undefined)
+        return
+      }
+
       if (!hasBaseLatencySupport()) {
         expect(result).toBe(undefined)
         return
