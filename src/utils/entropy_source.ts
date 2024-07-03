@@ -125,6 +125,7 @@ export function loadSources<TSourceOptions, TSources extends UnknownSources<TSou
   sources: TSources,
   sourceOptions: TSourceOptions,
   excludeSources: readonly TExclude[],
+  loopReleaseInterval?: number,
 ): () => Promise<Omit<SourcesToComponents<TSources>, TExclude>> {
   const includedSources = Object.keys(sources).filter((sourceKey) => excludes(excludeSources, sourceKey)) as Exclude<
     keyof TSources,
@@ -132,19 +133,25 @@ export function loadSources<TSourceOptions, TSources extends UnknownSources<TSou
   >[]
   // Using `mapWithBreaks` allows asynchronous sources to complete between synchronous sources
   // and measure the duration correctly
-  const sourceGettersPromise = mapWithBreaks(includedSources, (sourceKey) =>
-    loadSource(sources[sourceKey], sourceOptions),
+  const sourceGettersPromise = mapWithBreaks(
+    includedSources,
+    (sourceKey) => loadSource(sources[sourceKey], sourceOptions),
+    loopReleaseInterval,
   )
   suppressUnhandledRejectionWarning(sourceGettersPromise)
 
   return async function getComponents() {
     const sourceGetters = await sourceGettersPromise
 
-    const componentPromises = await mapWithBreaks(sourceGetters, (sourceGetter) => {
-      const componentPromise = sourceGetter()
-      suppressUnhandledRejectionWarning(componentPromise)
-      return componentPromise
-    })
+    const componentPromises = await mapWithBreaks(
+      sourceGetters,
+      (sourceGetter) => {
+        const componentPromise = sourceGetter()
+        suppressUnhandledRejectionWarning(componentPromise)
+        return componentPromise
+      },
+      loopReleaseInterval,
+    )
 
     const componentArray = await Promise.all(componentPromises)
     // Keeping the component keys order the same as the source keys order
