@@ -60,8 +60,8 @@ export const sources = {
   fontPreferences: getFontPreferences,
   audio: getAudioFingerprint,
   screenFrame: getScreenFrame,
-  canvas: getCanvasFingerprint,
 
+  canvas: getCanvasFingerprint,
   osCpu: getOsCpu,
   languages: getLanguages,
   colorDepth: getColorDepth,

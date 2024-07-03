@@ -1,4 +1,3 @@
-import { releaseEventLoop } from '../utils/async'
 import { isSafariWebKit, isWebKit, isWebKit616OrNewer } from '../utils/browser'
 
 export interface CanvasFingerprint {
@@ -19,7 +18,7 @@ export const enum ImageStatus {
  * A version of the entropy source with stabilization to make it suitable for static fingerprinting.
  * Canvas image is noised in private mode of Safari 17, so image rendering is skipped in Safari 17.
  */
-export default function getCanvasFingerprint(): Promise<CanvasFingerprint> {
+export default function getCanvasFingerprint(): CanvasFingerprint {
   return getUnstableCanvasFingerprint(doesBrowserPerformAntifingerprinting())
 }
 
@@ -29,7 +28,7 @@ export default function getCanvasFingerprint(): Promise<CanvasFingerprint> {
  * Warning for package users:
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
-export async function getUnstableCanvasFingerprint(skipImages?: boolean): Promise<CanvasFingerprint> {
+export function getUnstableCanvasFingerprint(skipImages?: boolean): CanvasFingerprint {
   let winding = false
   let geometry: string
   let text: string
@@ -43,7 +42,7 @@ export async function getUnstableCanvasFingerprint(skipImages?: boolean): Promis
     if (skipImages) {
       geometry = text = ImageStatus.Skipped
     } else {
-      ;[geometry, text] = await renderImages(canvas, context)
+      ;[geometry, text] = renderImages(canvas, context)
     }
   }
 
@@ -72,12 +71,8 @@ function doesSupportWinding(context: CanvasRenderingContext2D) {
   return !context.isPointInPath(5, 5, 'evenodd')
 }
 
-async function renderImages(
-  canvas: HTMLCanvasElement,
-  context: CanvasRenderingContext2D,
-): Promise<[geometry: string, text: string]> {
+function renderImages(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D): [geometry: string, text: string] {
   renderTextImage(canvas, context)
-  await releaseEventLoop()
   const textImage1 = canvasToString(canvas)
   const textImage2 = canvasToString(canvas) // It's slightly faster to double-encode the text image
 
@@ -92,7 +87,6 @@ async function renderImages(
   // https://github.com/fingerprintjs/fingerprintjs/issues/103
   // Therefore it's extracted into a separate image.
   renderGeometryImage(canvas, context)
-  await releaseEventLoop()
   const geometryImage = canvasToString(canvas)
   return [geometryImage, textImage1]
 }
