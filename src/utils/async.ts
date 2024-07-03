@@ -7,8 +7,16 @@ export function wait<T = void>(durationMs: number, resolveWith?: T): Promise<T> 
 /**
  * Allows asynchronous actions and microtasks to happen.
  */
-export function releaseEventLoop(): Promise<void> {
-  return wait(0)
+function releaseEventLoop(): Promise<void> {
+  // Don't use setTimeout because Chrome throttles it in some cases causing very long agent execution:
+  // https://stackoverflow.com/a/6032591/1118709
+  // https://github.com/chromium/chromium/commit/0295dd09496330f3a9103ef7e543fa9b6050409b
+  // Reusing a MessageChannel object gives no noticeable benefits
+  return new Promise((resolve) => {
+    const channel = new MessageChannel()
+    channel.port1.onmessage = () => resolve()
+    channel.port2.postMessage(null)
+  })
 }
 
 export function requestIdleCallbackIfAvailable(fallbackTimeout: number, deadlineTimeout = Infinity): Promise<void> {
@@ -78,8 +86,7 @@ export async function mapWithBreaks<T, U>(
     const now = Date.now()
     if (now >= lastLoopReleaseTime + loopReleaseInterval) {
       lastLoopReleaseTime = now
-      // Allows asynchronous actions and microtasks to happen
-      await wait(0)
+      await releaseEventLoop()
     }
   }
 

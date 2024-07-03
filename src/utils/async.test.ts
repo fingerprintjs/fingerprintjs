@@ -125,7 +125,7 @@ describe('Async utilities', () => {
       let intervalFireCounter = 0
       const intervalId = setInterval(() => ++intervalFireCounter, 1)
       try {
-        await mapWithBreaks(Array(13), () => holdLoop(1), 3)
+        await mapWithBreaks(Array(10), () => holdLoop(5), 10)
       } finally {
         clearInterval(intervalId)
       }
