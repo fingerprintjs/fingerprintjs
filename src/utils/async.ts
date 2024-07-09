@@ -96,9 +96,11 @@ export async function mapWithBreaks<T, U>(
 /**
  * Makes the given promise never emit an unhandled promise rejection console warning.
  * The promise will still pass errors to the next promises.
+ * Returns the input promise for convenience.
  *
  * Otherwise, promise emits a console warning unless it has a `catch` listener.
  */
-export function suppressUnhandledRejectionWarning(promise: PromiseLike<unknown>): void {
+export function suppressUnhandledRejectionWarning<T extends PromiseLike<unknown>>(promise: T): T {
   promise.then(undefined, () => undefined)
+  return promise
 }
