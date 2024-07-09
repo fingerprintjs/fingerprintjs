@@ -73,18 +73,18 @@ export function getUnstableAudioFingerprint(): number | (() => Promise<number>) 
   oscillator.start(0)
 
   const [renderPromise, finishRendering] = startRenderingAudio(context)
-  const fingerprintPromise = renderPromise.then(
-    (buffer) => getHash(buffer.getChannelData(0).subarray(hashFromIndex)),
-    (error) => {
-      if (error.name === InnerErrorName.Timeout || error.name === InnerErrorName.Suspended) {
-        return SpecialFingerprint.Timeout
-      }
-      throw error
-    },
-  )
-
   // Suppresses the console error message in case when the fingerprint fails before requested
-  suppressUnhandledRejectionWarning(fingerprintPromise)
+  const fingerprintPromise = suppressUnhandledRejectionWarning(
+    renderPromise.then(
+      (buffer) => getHash(buffer.getChannelData(0).subarray(hashFromIndex)),
+      (error) => {
+        if (error.name === InnerErrorName.Timeout || error.name === InnerErrorName.Suspended) {
+          return SpecialFingerprint.Timeout
+        }
+        throw error
+      },
+    ),
+  )
 
   return () => {
     finishRendering()
@@ -139,7 +139,7 @@ function startRenderingAudio(context: OfflineAudioContext) {
 
         // `context.startRendering` has two APIs: Promise and callback, we check that it's really a promise just in case
         if (isPromise(renderingPromise)) {
-          // Suppresses all unhadled rejections in case of scheduled redundant retries after successful rendering
+          // Suppresses all unhandled rejections in case of scheduled redundant retries after successful rendering
           suppressUnhandledRejectionWarning(renderingPromise)
         }
 
