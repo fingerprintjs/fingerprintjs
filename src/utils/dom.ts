@@ -118,3 +118,31 @@ export function addStyleString(style: CSSStyleDeclaration, source: string): void
     }
   }
 }
+
+/**
+ * Returns true if the code runs in an iframe, and any parent page's origin doesn't match the current origin
+ */
+export function isAnyParentCrossOrigin(): boolean {
+  let currentWindow: Window = window
+
+  for (;;) {
+    const parentWindow = currentWindow.parent
+    if (!parentWindow || parentWindow === currentWindow) {
+      return false // The top page is reached
+    }
+
+    try {
+      if (parentWindow.location.origin !== currentWindow.location.origin) {
+        return true
+      }
+    } catch (error) {
+      // The error is thrown when `origin` is accessed on `parentWindow.location` when the parent is cross-origin
+      if (error instanceof Error && error.name === 'SecurityError') {
+        return true
+      }
+      throw error
+    }
+
+    currentWindow = parentWindow
+  }
+}
