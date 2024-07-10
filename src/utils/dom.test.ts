@@ -1,4 +1,4 @@
-import { addStyleString } from './dom'
+import { addStyleString, isAnyParentCrossOrigin } from './dom'
 
 describe('DOM utilities', () => {
   it('adds style string', () => {
@@ -10,5 +10,10 @@ describe('DOM utilities', () => {
       'text-align: center',
       'width: 450px',
     ])
+  })
+
+  it('checks for cross-origin iframe', () => {
+    // Assuming the tests run only with Karma, which doesn't run tests inside an iframe
+    expect(isAnyParentCrossOrigin()).toBeFalse()
   })
 })
