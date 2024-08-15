@@ -6,7 +6,7 @@
 
 name: Check upcoming browser versions
 
-on: 
+on:
   schedule:
     - cron: '0 17 ? * MON-FRI'
 env:
@@ -22,7 +22,7 @@ jobs:
     concurrency: browserstack
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache the Node modules
         uses: actions/cache@v3
         with:
@@ -34,7 +34,7 @@ jobs:
       - name: Build
         run: yarn build
       - name: Run unit tests
-        uses: nick-fields/retry@v2
+        uses: nick-fields/retry@v3
         with:
           timeout_minutes: 5
           max_attempts: 2
@@ -43,7 +43,7 @@ jobs:
           new_command_on_retry: yarn test:browserstack:beta --log-level debug
       - name: Post to a Slack channel
         id: slack
-        uses: slackapi/slack-github-action@v1.23.0
+        uses: slackapi/slack-github-action@v1
         with:
           channel-id: ${{ vars.SLACK_CHANNEL_ID }}
           slack-message: "An issue was found when running unit tests against beta versions of the browsers.\nPlease check the build:\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
