@@ -48,7 +48,7 @@
     "tslib": "^2.4.1"
   },
   "devDependencies": {
-    "@fpjs-incubator/broyster": "^0.1.8",
+    "@fpjs-incubator/broyster": "^0.2.0",
     "@rollup/plugin-json": "^5.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-terser": "^0.2.1",

@@ -233,17 +233,17 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@fpjs-incubator/broyster@^0.1.8":
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/@fpjs-incubator/broyster/-/broyster-0.1.8.tgz#fd9a29454c49cd38503a8b07f5eb3e527499ded0"
-  integrity sha512-ZtqaqbJoEQ4g9jBf2ZXGKIGJgeQHaTfhF1DYJ41AEFPaJKdtfvHrpdaTtVybD2HBACqSkR3S5o6MZqDYBfumog==
+"@fpjs-incubator/broyster@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@fpjs-incubator/broyster/-/broyster-0.2.0.tgz#b2f5a190732279dee12039f6746e56d7b8236a72"
+  integrity sha512-26peB8A9XNZ28n61GW4Veq77eJtwQO79iXgamLXGzzbscf8XzV8tqBsO0SeU7I0nN6JN3QXBY6jsRVEZ0Y7crA==
   dependencies:
     "@types/karma" "^6.3.3"
     async-lock "^1.4.0"
     browserstack "~1.6.1"
     browserstack-local "^1.5.5"
     karma-chrome-launcher "^3.1.1"
-    karma-firefox-launcher "^2.1.2"
+    karma-firefox-launcher "^2.1.3"
     karma-jasmine "^4.0.2"
     karma-spec-reporter "^0.0.35"
     karma-summary-reporter "^3.1.1"
@@ -3118,7 +3118,7 @@ karma-chrome-launcher@^3.1.1:
   dependencies:
     which "^1.2.1"
 
-karma-firefox-launcher@^2.1.2:
+karma-firefox-launcher@^2.1.3:
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/karma-firefox-launcher/-/karma-firefox-launcher-2.1.3.tgz#b278a4cbffa92ab81394b1a398813847b0624a85"
   integrity sha512-LMM2bseebLbYjODBOVt7TCPP9OI2vZIXCavIXhkO9m+10Uj5l7u/SKoeRmYx8FYHTVGZSpk6peX+3BMHC1WwNw==
