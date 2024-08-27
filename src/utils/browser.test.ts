@@ -62,7 +62,8 @@ describe('Browser utilities', () => {
     })
 
     it('detects Safari', () => {
-      if (!utils.isWebKit() || (utils.getBrowserMajorVersion() ?? 0) < 15) {
+      const version = utils.getBrowserVersion()
+      if (!utils.isWebKit() || !version || version.major < 15 || (version.major === 15 && version.minor < 4)) {
         return
       }
       expect(browser.isSafariWebKit()).toBe(utils.isSafari())

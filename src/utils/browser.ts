@@ -121,27 +121,21 @@ export function isDesktopWebKit(): boolean {
  * Checks whether this WebKit browser is Safari.
  * It doesn't check that the browser is based on WebKit, there is a separate function for this.
  *
- * Warning! The function works properly only for Safari version 15 and newer.
+ * Warning! The function works properly only for Safari version 15.4 and newer.
  */
 export function isSafariWebKit(): boolean {
   // Checked in Safari, Chrome, Firefox, Yandex, UC Browser, Opera, Edge and DuckDuckGo.
-  // iOS Safari and Chrome were checked on iOS 11-17. DuckDuckGo was checked on iOS 17 and macOS 14.
-  // Desktop Safari versions 12-17 were checked.
-  // The other browsers were checked on iOS 17; there was no chance to check them on the other OS versions.
+  // iOS Safari and Chrome were checked on iOS 11-18. DuckDuckGo was checked on iOS 17 and macOS 14.
+  // Desktop Safari versions 12-18 were checked.
+  // The other browsers were checked on iOS 17 and 18; there was no chance to check them on the other OS versions.
 
   const w = window
 
-  if (!isFunctionNative(w.print)) {
-    return false // Chrome, Firefox, Yandex, DuckDuckGo macOS, Edge
-  }
-
   return (
-    countTruthy([
-      // Incorrect in Safari <= 14 (iOS and macOS)
-      String((w as unknown as Record<string, unknown>).browser) === '[object WebPageNamespace]',
-      // Incorrect in desktop Safari and iOS Safari <= 15
-      'MicrodataExtractor' in w,
-    ]) >= 1
+    // Filters-out Chrome, Yandex, DuckDuckGo (macOS and iOS), Edge
+    isFunctionNative(w.print) &&
+    // Doesn't work in Safari < 15.4
+    String((w as unknown as Record<string, unknown>).browser) === '[object WebPageNamespace]'
   )
 }
 
