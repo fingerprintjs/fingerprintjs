@@ -76,7 +76,7 @@ export function isChromium(): boolean {
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function isWebKit(): boolean {
-  // Based on research in September 2020
+  // Based on research in August 2024
   const w = window
   const n = navigator
 
@@ -86,7 +86,7 @@ export function isWebKit(): boolean {
       'CSSPrimitiveValue' in w,
       'Counter' in w,
       n.vendor.indexOf('Apple') === 0,
-      'getStorageUpdates' in n,
+      'RGBColor' in w,
       'WebKitMediaKeys' in w,
     ]) >= 4
   )
