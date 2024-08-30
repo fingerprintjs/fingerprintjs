@@ -136,8 +136,9 @@ export function getWebGlExtensions({ cache }: Options): WebGlExtensionsPayload |
   if (extensions) {
     for (const name of extensions) {
       const extension = gl.getExtension(name)
+      const extensionSupported = extension != null
 
-      supported.push(extension != null)
+      supported.push(extensionSupported)
 
       if (
         (name === rendererInfoExtensionName && shouldAvoidDebugRendererInfo()) ||
@@ -146,7 +147,7 @@ export function getWebGlExtensions({ cache }: Options): WebGlExtensionsPayload |
         continue
       }
 
-      if (!extension) {
+      if (!extensionSupported) {
         continue
       }
 
