@@ -24,7 +24,7 @@ type WebGlExtensionsPayload = {
   shaderPrecisions: string[] // ['FRAGMENT_SHADER.LOW_FLOAT=127,127,23...
   extensions: string[] | null // ['ANGLE_instanced_arrays', 'EXT_blend_minmax', 'EXT_color...
   extensionParameters: string[] // ['COMPRESSED_RGB_S3TC_DXT1_EXT(33776)', 'COMPR...
-  supported: boolean[] | null
+  supported: boolean[]
 }
 
 type CanvasContext = WebGLRenderingContext & { readonly canvas: HTMLCanvasElement }
@@ -110,7 +110,7 @@ export function getWebGlExtensions({ cache }: Options): WebGlExtensionsPayload |
 
   const extensions = gl.getSupportedExtensions()
   const contextAttributes = gl.getContextAttributes()
-  const supported = extensions == null ? null : extensions.map((name) => gl.getExtension(name) != null)
+  const supported: boolean[] = []
 
   // Features
   const attributes: string[] = []
@@ -135,6 +135,10 @@ export function getWebGlExtensions({ cache }: Options): WebGlExtensionsPayload |
   // Extension parameters
   if (extensions) {
     for (const name of extensions) {
+      const extension = gl.getExtension(name)
+
+      supported.push(extension != null)
+
       if (
         (name === rendererInfoExtensionName && shouldAvoidDebugRendererInfo()) ||
         (name === polygonModeExtensionName && shouldAvoidPolygonModeExtensions())
@@ -142,7 +146,6 @@ export function getWebGlExtensions({ cache }: Options): WebGlExtensionsPayload |
         continue
       }
 
-      const extension = gl.getExtension(name)
       if (!extension) {
         continue
       }
