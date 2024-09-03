@@ -77,9 +77,7 @@ describe('Sources', () => {
         } else {
           expect(value).withContext(key).toBeInstanceOf(Array)
           for (let i = 0; i < value.length; ++i) {
-            expect(value[i])
-              .withContext(`${key}[${i}]`)
-              .toBeInstanceOf(key === 'supported' ? Boolean : String)
+            expect(value[i]).withContext(`${key}[${i}]`).toBeInstanceOf(String)
           }
         }
       }
