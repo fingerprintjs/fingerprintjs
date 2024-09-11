@@ -21,7 +21,7 @@
 
 FingerprintJS is a [source-available](docs/licensing.md), client-side, browser fingerprinting library that queries browser attributes and computes a hashed visitor identifier from them. Unlike cookies and local storage, a fingerprint stays the same in incognito/private mode and even when browser data is purged.
 
-FingerprntJS is available under a [BSL license](docs/licensing.md) for non-production purposes.
+FingerprintJS is available under a [BSL license](docs/licensing.md) for non-production purposes.
 
 _FingerprintJS is different from [Fingerprint Identification](https://dev.fingerprint.com/docs/introduction#fingerprint-identification-vs-fingerprintjs), our more detailed and accurate commercial product. See below for [more information](#995-accuracy-with-fingerprint-identification)._
 
