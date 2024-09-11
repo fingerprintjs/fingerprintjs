@@ -65,7 +65,7 @@ Now, try visiting the same page in private / incognito mode and notice how the v
 ## Limitations
 
 ### Accuracy
-Since FingerprintJS processes and generates the fingerprints from within the browser itself, the accuracy is limited (40% - 60%). For example, when 2 different users send requests using identical (i.e. same version, same vendor, same platform), browsers, FingerprintJS will not be able to tell these two browsers apart, primarily because the attribitutes from these browsers will be identical.
+Since FingerprintJS processes and generates the fingerprints from within the browser itself, the accuracy is limited (40% - 60%). For example, when 2 different users send requests using identical (i.e. same version, same vendor, same platform), browsers, FingerprintJS will not be able to tell these two browsers apart, primarily because the attributes from these browsers will be identical.
 
 ### Security
 Because of how the fingerprints are processed and generated from within the browser itself, they are vulnerable to spoofing and reverse engineering.
