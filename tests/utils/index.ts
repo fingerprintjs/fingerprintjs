@@ -26,10 +26,6 @@ export function isChromium(): boolean {
   return new UAParser().getEngine().name === 'Blink'
 }
 
-export function isHeadlessChrome(): boolean {
-  return navigator.userAgent.includes('HeadlessChrome')
-}
-
 export function isGecko(): boolean {
   return new UAParser().getEngine().name === 'Gecko'
 }
