@@ -1,4 +1,4 @@
-import { isChromium, isGecko, isHeadlessChrome, isMobile, isSafari, isWebKit } from '../../tests/utils'
+import { isChromium, isGecko, isMobile, isSafari, isWebKit } from '../../tests/utils'
 import getVendorFlavors from './vendor_flavors'
 
 describe('Sources', () => {
@@ -17,7 +17,7 @@ describe('Sources', () => {
       const result = getVendorFlavors()
 
       if (isChromium()) {
-        expect(result).toEqual(isHeadlessChrome() ? [] : ['chrome'])
+        expect(result).toEqual(['chrome'])
         return
       }
 
