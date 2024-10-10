@@ -62,6 +62,11 @@ export function isSafari(): boolean {
   return browserName === 'Safari' || browserName === 'Mobile Safari'
 }
 
+export function isSamsungInternet(): boolean {
+  const browserName = new UAParser().getBrowser().name
+  return browserName === 'Samsung Internet'
+}
+
 /**
  * Probably you should use `getBrowserEngineMajorVersion` instead
  */

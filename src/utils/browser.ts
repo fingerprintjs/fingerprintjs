@@ -180,6 +180,25 @@ export function isChromium86OrNewer(): boolean {
 }
 
 /**
+ * Checks whether the browser is based on Chromium version ≥122 without using user-agent.
+ * It doesn't check that the browser is based on Chromium, there is a separate function for this.
+ */
+export function isChromium122OrNewer(): boolean {
+  // Checked in Chrome 121 vs Chrome 122 and 129 both on desktop and Android
+  const w = window
+  const { URLPattern } = w
+
+  return (
+    countTruthy([
+      'union' in Set.prototype,
+      'Iterator' in w,
+      URLPattern && 'hasRegExpGroups' in URLPattern.prototype,
+      'RGB8' in WebGLRenderingContext.prototype,
+    ]) >= 3
+  )
+}
+
+/**
  * Checks whether the browser is based on WebKit version ≥606 (Safari ≥12) without using user-agent.
  * It doesn't check that the browser is based on WebKit, there is a separate function for this.
  *
@@ -302,4 +321,26 @@ export function isAndroid(): boolean {
     // Actually, there is also Android 4.1 browser, but it's not worth detecting it at the moment.
     return false
   }
+}
+
+/**
+ * Checks whether the browser is Samsung Internet without using user-agent.
+ * It doesn't check that the browser is based on Chromium, please use `isChromium` before using this function.
+ */
+export function isSamsungInternet(): boolean {
+  // Checked in Samsung Internet 21, 25 and 27
+  const n = navigator
+  const w = window
+  const audioPrototype = Audio.prototype
+  const { visualViewport } = w
+
+  return (
+    countTruthy([
+      'srLatency' in audioPrototype,
+      'srChannelCount' in audioPrototype,
+      'devicePosture' in n, // Not available in HTTP
+      visualViewport && 'segments' in visualViewport,
+      'getTextInformation' in Image.prototype, // Not available in Samsung Internet 21
+    ]) >= 3
+  )
 }
