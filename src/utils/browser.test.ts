@@ -37,6 +37,13 @@ describe('Browser utilities', () => {
       expect(browser.isChromium86OrNewer()).toBe((utils.getBrowserEngineMajorVersion() ?? 0) >= 86)
     })
 
+    it('detects Chromium 122+', () => {
+      if (!utils.isChromium()) {
+        return
+      }
+      expect(browser.isChromium122OrNewer()).toBe((utils.getBrowserEngineMajorVersion() ?? 0) >= 122)
+    })
+
     // WebKit has stopped telling its real version in the user-agent string since version 605.1.15,
     // therefore the browser version has to be checked instead of the engine version.
     it('detects Safari 12+', () => {
@@ -67,6 +74,13 @@ describe('Browser utilities', () => {
         return
       }
       expect(browser.isSafariWebKit()).toBe(utils.isSafari())
+    })
+
+    it('detects Samsung Internet', () => {
+      if (!utils.isChromium()) {
+        return
+      }
+      expect(browser.isSamsungInternet()).toBe(utils.isSamsungInternet())
     })
   })
 
