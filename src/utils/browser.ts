@@ -326,6 +326,9 @@ export function isAndroid(): boolean {
 /**
  * Checks whether the browser is Samsung Internet without using user-agent.
  * It doesn't check that the browser is based on Chromium, please use `isChromium` before using this function.
+ *
+ * Warning for package users:
+ * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export function isSamsungInternet(): boolean {
   // Checked in Samsung Internet 21, 25 and 27
