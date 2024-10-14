@@ -1,23 +1,83 @@
 # Contributing to FingerprintJS
 
+Thanks for taking the time to contribute!
+Here you can find ways to make FingerprintJS better, as well as tips and guidelines.
+
+This project and everyone participating in it is governed by the [Code of Conduct](code_of_conduct.md).
+By participating, you are expected to uphold this code.
+
+## How you can contribute
+
+### Reporting an issue
+
+If you've noticed a bug, have an idea or a question,
+feel free to [create an issue](https://github.com/fingerprintjs/fingerprintjs/issues/new/choose) or [start a discussion](https://github.com/fingerprintjs/fingerprintjs/discussions/new/choose).
+
+Before you start, please [search](https://github.com/search?q=repo%3Afingerprintjs%2Ffingerprintjs&type=code) for your topic.
+There is a chance it has already been discussed.
+
+When you create an issue, the description is pre-filled with a template text.
+Please fill the missing information carefully, it will help us solve your issue faster.
+If you want to show a code or a FingerprintJS output, wrap it in ` ``` ` blocks and don't truncate.
+
+### Creating a pull request
+
+If you want to fix a bug, add an entropy source or make another change to the code, you can [create a pull request](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project).
+
+After you clone the repository, check the [Working with the code](#working-with-the-code) section to learn how to run, check and build the code.
+
+Please follow these guidelines so that we can accept your code changes:
+- Your code quality should be at least as good as the code that you modify;
+- Your code style (syntax, naming, coding patterns, etc) should follow the style of the other repository code;
+- The new code should be covered with automatic tests;
+- All the checks described in the [Working with the code](#working-with-the-code) section must pass successfully.
+    You may create a draft pull request in this repository to run the checks automatically by GitHub Actions,
+    but the tests won't run on BrowserStack until a FingerprintJS maintainer approves it;
+- If you want to add an entropy source (fingerprint component), follow the [How to make an entropy source](#how-to-make-an-entropy-source) instructions carefully;
+- The change shouldn't be breaking, that is FingerprintJS users don't need to change code on their side after your changes;
+- Don't add dependencies (such as Node packages) unless necessary;
+- Don't make changes not related to the PR goal, try to keep your changes as small as possible;
+- Don't change opinionated things, such as the code style or TypeScript configuration.
+
+If you want to do something more complex than fixing a small bug, or unsure whether you changes will meet the requirements, or want to violate a guideline,
+please [start a discussion](https://github.com/fingerprintjs/fingerprintjs/discussions/new/choose) before making a pull request.
+It will let you avoid wasting your time, and will improve your contributing experience.
+
+### Helping with existing issues
+
+If you want to contribute but don't know what to improve,
+check [the open issues](https://github.com/fingerprintjs/fingerprintjs/issues),
+especially those that are marked with a [help wanted](https://github.com/fingerprintjs/fingerprintjs/labels/help%20wanted) label.
+You can help by sharing knowledge or creating a pull request.
+Feel free to ask questions in the issues if you need more details.
+
 ## Working with the code
 
-Make sure you have [Yarn](https://yarnpkg.com) installed.
+This section describes how to deploy the repository locally, change the code and check your changes.
+
+First, make sure you have [Git](https://git-scm.com), [Node.js](https://nodejs.org/en) and [Yarn](https://yarnpkg.com) installed.
+Clone the code and install the dependencies:
+
+```bash
+git clone https://github.com/fingerprintjs/fingerprintjs.git
+cd fingerprintjs
+yarn install
+```
 
 ### Development playground
 
-It's a page that runs the library once opened.
-It's a quick way to debug the code.
+Development playground allows to run FingerprintJS locally. Run this command to start a playground:
 
 ```bash
-yarn install
 yarn playground:start # Add '--port 8765' to change the server port
 ```
 
 Then open http://localhost:8080 in a browser.
-It's reloaded every time the source code is changed.
+FingerprintJS will execute immediately and print the result on the page.
+The page reloads every time you change the source code.
 The code of the playground itself is located in the [playground](playground) directory.
-Use a tool like [Ngrok](https://ngrok.com) to open the playground on a remote device.
+
+If you want to open the playground on a device outside your local network, use a tool like [Ngrok](https://ngrok.com).
 
 To build the playground distribution code (e.g. to upload to a static server), run:
 
@@ -25,10 +85,11 @@ To build the playground distribution code (e.g. to upload to a static server), r
 yarn playground:build
 ```
 
-The result will appear at `playground/dist`.
+The static webpage files will be saved to the `playground/dist` directory.
 
 ### Code style
 
+Follow the repository's code style.
 The code style is controlled by [ESLint](https://eslint.org) and [Prettier](https://prettier.io).
 Run to check that the code style is ok:
 
@@ -45,13 +106,13 @@ yarn lint:fix
 
 ### How to build
 
-To build the distribution files of the library, run:
+To build the distribution files of FingerprintJS, that can be used in browser directly, run:
 
 ```bash
 yarn build
 ```
 
-The files will appear at `dist`.
+The files will be saved to the `dist` directory.
 
 ### Pitfalls
 
@@ -133,6 +194,16 @@ yarn check:ssr
 Entropy source is a function that gets a piece of data about the browser a.k.a. a fingerprint component.
 Entropy sources are located in the [src/sources](src/sources) directory.
 Entropy component must be a simple JS value that can be JSON-encoded.
+
+Entropy source must meet the following requirements:
+- It is stable, that is always or almost always produces the same value in each browser, including incognito, guest and desktop modes;
+- It is selective, that is produces different values in different browsers, OSs or devices.
+    A good entropy source represents the browser, OS or device settings;
+- It produces no side effects, such as messages in browser console, DOM changes, modal windows, notifications and sounds;
+- It is fast. An entropy source should take not more than 1 second to complete;
+- It doesn't represent only the browser version. An example of such signal is a JS feature probing.
+    It's not a good entropy source because the return value is likely to change due to automatic browser updates,
+    the selectivity is low, and the same entropy can be achieved by involving the User-Agent string.
 
 Entropy source runs in 2 stages: "load" and "get":
 - "Load" runs once when the agent's `load` function is called.
@@ -248,18 +319,4 @@ For inspiration see existing tests in [src/sources/](src/sources/).
 
 ### How to publish
 
-This section is for repository maintainers.
-
-1. Bump the version. Search the current version number in the code to know where to change it.
-2. Build and test the project.
-3. See what will get into the NPM package, make sure it contains the distributive files and no excess files.
-    To see, run `yarn pack`, an archive will appear nearby, open it with any archive browser.
-4. Run
-    ```bash
-    # Add '--tag beta' (without the quotes) if you release a beta version
-    # Add '--tag dev' if you release a development version (which is expected to get new features)
-    yarn publish --access public
-    ```
-5. Push the changes to the repository, and a version tag like `v1.3.4` to the commit.
-6. Describe the version changes at the [releases section](https://github.com/fingerprintjs/fingerprintjs/releases).
-7. Update agent at https://stackblitz.com/edit/fpjs-4-npm (find "dependencies" and click the round arrow)
+See the [publishing guide](publishing.md) (for FingerprintJS maintainers only).
