@@ -319,4 +319,4 @@ For inspiration see existing tests in [src/sources/](src/sources/).
 
 ### How to publish
 
-See the [publishing guide](publishing.md) (for FingerprintJS maintainers only).
+See the [publishing guide](docs/publishing.md) (for FingerprintJS maintainers only).
