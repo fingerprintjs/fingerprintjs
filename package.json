@@ -48,13 +48,13 @@
     "tslib": "^2.4.1"
   },
   "devDependencies": {
-    "@fpjs-incubator/broyster": "^0.2.1",
+    "@fpjs-incubator/broyster": "^0.2.2",
     "@rollup/plugin-json": "^5.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-terser": "^0.2.1",
     "@rollup/plugin-typescript": "^10.0.1",
     "@types/jasmine": "^3.10.3",
-    "@types/ua-parser-js": "^0.7.36",
+    "@types/ua-parser-js": "^0.7.39",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "eslint": "^8.27.0",
@@ -73,7 +73,7 @@
     "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6",
-    "ua-parser-js": "^0.7.32",
+    "ua-parser-js": "^1.0.39",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1"
