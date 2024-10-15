@@ -192,7 +192,7 @@ yarn check:ssr
 An entropy source is a function that gets a piece of data about the browser.
 The value returned by an entropy source is used to produce the visitor identifier and called an entropy component.
 Entropy sources are located in the [src/sources](src/sources) directory.
-Entropy components must be simple JS values that can be JSON-encoded.
+All entropy components must be simple JavaScript values that can be encoded into JSON.
 
 Entropy source must meet the following requirements:
 - It is stable, that is always or almost always produces the same value in each browser, including incognito, guest and desktop modes;
