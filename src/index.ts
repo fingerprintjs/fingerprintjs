@@ -41,6 +41,7 @@ export {
   isWebKit,
   isGecko,
   isDesktopWebKit,
+  isSamsungInternet,
 } from './utils/browser'
 export {
   loadSources,

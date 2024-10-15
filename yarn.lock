@@ -233,10 +233,10 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@fpjs-incubator/broyster@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@fpjs-incubator/broyster/-/broyster-0.2.1.tgz#05fb1052da23e53aebedd9f62b4ecab61e27ff4c"
-  integrity sha512-GmE8/6wrACogDszd8Z5y52z/rGRPvhKvYTmuVFmmIe7udSELpRC+F1qliBD4Oa/lJUY4GKqiDKOSjc91hxLntA==
+"@fpjs-incubator/broyster@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@fpjs-incubator/broyster/-/broyster-0.2.2.tgz#9de37fefe7aa5df37647cf261051c13fbd8ffc07"
+  integrity sha512-qVvr9GXrbMqGbI/p/P6iUotK2FeUExyzw8J+FeRaiREU5JvNOHo1KAAroigZFLh/apNh1RpieIKHaMdqQqKIeg==
   dependencies:
     "@types/karma" "^6.3.3"
     async-lock "^1.4.0"
@@ -613,10 +613,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/ua-parser-js@^0.7.36":
-  version "0.7.36"
-  resolved "https://registry.yarnpkg.com/@types/ua-parser-js/-/ua-parser-js-0.7.36.tgz#9bd0b47f26b5a3151be21ba4ce9f5fa457c5f190"
-  integrity sha512-N1rW+njavs70y2cApeIw1vLMYXRwfBy+7trgavGuuTfOd7j1Yh7QTRc/yqsPl6ncokt72ZXuxEU0PiCp9bSwNQ==
+"@types/ua-parser-js@^0.7.39":
+  version "0.7.39"
+  resolved "https://registry.yarnpkg.com/@types/ua-parser-js/-/ua-parser-js-0.7.39.tgz#832c58e460c9435e4e34bb866e85e9146e12cdbb"
+  integrity sha512-P/oDfpofrdtF5xw433SPALpdSchtJmY7nsJItf8h3KXqOslkbySh8zq4dSWXH2oTjRvJ5PczVEoCZPow6GicLg==
 
 "@types/ws@^8.5.1":
   version "8.5.3"
@@ -4794,10 +4794,15 @@ typescript@^5.1.6:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.1.6.tgz#02f8ac202b6dad2c0dd5e0913745b47a37998274"
   integrity sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==
 
-ua-parser-js@^0.7.30, ua-parser-js@^0.7.32:
+ua-parser-js@^0.7.30:
   version "0.7.33"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.33.tgz#1d04acb4ccef9293df6f70f2c3d22f3030d8b532"
   integrity sha512-s8ax/CeZdK9R/56Sui0WM6y9OFREJarMRHqLB2EwkovemBxNQ+Bqu8GAsUnVcXKgphb++ghr/B2BZx4mahujPw==
+
+ua-parser-js@^1.0.39:
+  version "1.0.39"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-1.0.39.tgz#bfc07f361549bf249bd8f4589a4cccec18fd2018"
+  integrity sha512-k24RCVWlEcjkdOxYmVJgeD/0a1TiSpqLg+ZalVGV9lsnr4yqu0w7tX/x2xX6G4zpkgQnRf89lxuZ1wsbjXM8lw==
 
 universalify@^0.1.0:
   version "0.1.2"

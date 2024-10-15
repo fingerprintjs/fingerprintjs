@@ -1,4 +1,4 @@
-import { isDesktopWebKit, isSafariWebKit, isWebKit, isWebKit606OrNewer, isWebKit616OrNewer } from '../utils/browser'
+import * as browser from '../utils/browser'
 import { isPromise, suppressUnhandledRejectionWarning } from '../utils/async'
 
 export const enum SpecialFingerprint {
@@ -97,15 +97,19 @@ export function getUnstableAudioFingerprint(): number | (() => Promise<number>) 
  */
 function doesBrowserSuspendAudioContext() {
   // Mobile Safari 11 and older
-  return isWebKit() && !isDesktopWebKit() && !isWebKit606OrNewer()
+  return browser.isWebKit() && !browser.isDesktopWebKit() && !browser.isWebKit606OrNewer()
 }
 
 /**
  * Checks if the current browser is known for applying anti-fingerprinting measures in all or some critical modes
  */
 function doesBrowserPerformAntifingerprinting() {
-  // Safari 17
-  return isWebKit() && isWebKit616OrNewer() && isSafariWebKit()
+  return (
+    // Safari ≥17
+    (browser.isWebKit() && browser.isWebKit616OrNewer() && browser.isSafariWebKit()) ||
+    // Samsung Internet ≥26
+    (browser.isChromium() && browser.isSamsungInternet() && browser.isChromium122OrNewer())
+  )
 }
 
 /**
