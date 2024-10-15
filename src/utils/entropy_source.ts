@@ -5,7 +5,7 @@ import { excludes } from './data'
 /**
  * A functions that returns data with entropy to identify visitor.
  *
- * See https://github.com/fingerprintjs/fingerprintjs/blob/master/contributing.md#how-to-make-an-entropy-source
+ * See https://github.com/fingerprintjs/fingerprintjs/blob/master/contributing.md#how-to-add-an-entropy-source
  * to learn how entropy source works and how to make your own.
  */
 export type Source<TOptions, TValue> = (options: TOptions) => MaybePromise<TValue | (() => MaybePromise<TValue>)>

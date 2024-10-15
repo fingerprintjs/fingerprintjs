@@ -18,45 +18,43 @@ There is a chance it has already been discussed.
 
 When you create an issue, the description is pre-filled with a template text.
 Please fill the missing information carefully, it will help us solve your issue faster.
-If you want to show a code or a FingerprintJS output, wrap it in ` ``` ` blocks and don't truncate.
+If you want share a piece of code or the library output with us, please wrap it in a ` ``` ` block and make sure you include all the information.
 
 ### Creating a pull request
 
-If you want to fix a bug, add an entropy source or make another change to the code, you can [create a pull request](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project).
+If you want to fix a bug, add a source of entropy or make any other code contribution, please [create a pull request](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project).
 
-After you clone the repository, check the [Working with the code](#working-with-the-code) section to learn how to run, check and build the code.
+After you clone the repository, check the [Working with code](#working-with-code) section to learn how to run, check and build the code.
 
-Please follow these guidelines so that we can accept your code changes:
+In order for us to review and accept your code contributions, please follow these rules:
 - Your code quality should be at least as good as the code that you modify;
-- Your code style (syntax, naming, coding patterns, etc) should follow the style of the other repository code;
-- The new code should be covered with automatic tests;
-- All the checks described in the [Working with the code](#working-with-the-code) section must pass successfully.
+- Your code style (syntax, naming, coding patterns, etc) should follow the FingerprintJS style;
+- All the new code should be covered with automated tests;
+- All the checks described in the [Working with code](#working-with-code) section must pass successfully.
     You may create a draft pull request in this repository to run the checks automatically by GitHub Actions,
-    but the tests won't run on BrowserStack until a FingerprintJS maintainer approves it;
-- If you want to add an entropy source (fingerprint component), follow the [How to make an entropy source](#how-to-make-an-entropy-source) instructions carefully;
-- The change shouldn't be breaking, that is FingerprintJS users don't need to change code on their side after your changes;
+    but the tests won't run on BrowserStack until a FingerprintJS maintainer approves them;
+- If you want to add an entropy source (component), follow the [How to add an entropy source](#how-to-add-an-entropy-source) instructions carefully;
+- The changes should be backwards compatible, ensuring FingerprintJS users continue to use the library without any modifications;
 - Don't add dependencies (such as Node packages) unless necessary;
-- Don't make changes not related to the PR goal, try to keep your changes as small as possible;
-- Don't change opinionated things, such as the code style or TypeScript configuration.
+- Don't make changes unrelated the stated pull request purpose. Please strive to introduce as few changes as possible;
+- Don't change FingerprintJS code style, its TypeScript configuration or other subjective things.
 
-If you want to do something more complex than fixing a small bug, or unsure whether you changes will meet the requirements, or want to violate a guideline,
-please [start a discussion](https://github.com/fingerprintjs/fingerprintjs/discussions/new/choose) before making a pull request.
-It will let you avoid wasting your time, and will improve your contributing experience.
+If you want to do something more complex than fixing a small bug, or if you're not sure if your changes meet the project requirements, please [start a discussion](https://github.com/fingerprintjs/fingerprintjs/discussions/new/choose).
+We encourage starting a discussion if you want to propose changing a rule from this guide.
+Doing so ensures we discuss all opinions, creating a good contribution experience for everyone.
 
 ### Helping with existing issues
 
-If you want to contribute but don't know what to improve,
-check [the open issues](https://github.com/fingerprintjs/fingerprintjs/issues),
-especially those that are marked with a [help wanted](https://github.com/fingerprintjs/fingerprintjs/labels/help%20wanted) label.
+If you want to help, but don't know where to start, take a look at the ["help wanted" issues](https://github.com/fingerprintjs/fingerprintjs/labels/help%20wanted).
 You can help by sharing knowledge or creating a pull request.
 Feel free to ask questions in the issues if you need more details.
 
-## Working with the code
+## Working with code
 
-This section describes how to deploy the repository locally, change the code and check your changes.
+This section describes how to deploy the repository locally, make changes to the code and verify your work.
 
 First, make sure you have [Git](https://git-scm.com), [Node.js](https://nodejs.org/en) and [Yarn](https://yarnpkg.com) installed.
-Clone the code and install the dependencies:
+Then clone the repository and install the dependencies:
 
 ```bash
 git clone https://github.com/fingerprintjs/fingerprintjs.git
@@ -79,7 +77,7 @@ The code of the playground itself is located in the [playground](playground) dir
 
 If you want to open the playground on a device outside your local network, use a tool like [Ngrok](https://ngrok.com).
 
-To build the playground distribution code (e.g. to upload to a static server), run:
+To build the playground distribution code (e.g. to upload it to a web server), run:
 
 ```bash
 yarn playground:build
@@ -189,11 +187,12 @@ To check that the package is compatible with server side rendering, build the pr
 yarn check:ssr
 ```
 
-### How to make an entropy source
+### How to add an entropy source
 
-Entropy source is a function that gets a piece of data about the browser a.k.a. a fingerprint component.
+An entropy source is a function that gets a piece of data about the browser.
+The value returned by an entropy source is used to produce the visitor identifier and called an entropy component.
 Entropy sources are located in the [src/sources](src/sources) directory.
-Entropy component must be a simple JS value that can be JSON-encoded.
+Entropy components must be simple JS values that can be JSON-encoded.
 
 Entropy source must meet the following requirements:
 - It is stable, that is always or almost always produces the same value in each browser, including incognito, guest and desktop modes;
@@ -250,7 +249,7 @@ The "get" phase can be omitted:
 async function entropySource() {
   const finalData = await doLongAction()
 
-  // If the source's returned value isn't a function, it's considered as a fingerprint component
+  // If the source's returned value is not a function, it's considered as an entropy component
   return finalData // Equivalent to: return () => finalData
 }
 ```
@@ -282,7 +281,7 @@ async function entropySource() {
 ```
 
 Entropy source must handle expected and only expected errors.
-The expected errors must be turned into fingerprint components.
+The expected errors must be turned into special entropy component values.
 Pay attention to potential asynchronous errors.
 If you handle unexpected errors, you won't know what's going wrong inside the entropy source.
 Example:
