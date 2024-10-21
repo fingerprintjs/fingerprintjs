@@ -27,16 +27,16 @@ If you want to fix a bug, add a source of entropy or make any other code contrib
 After you clone the repository, check the [Working with code](#working-with-code) section to learn how to run, check and build the code.
 
 In order for us to review and accept your code contributions, please follow these rules:
-- Your code quality should be at least as good as the code that you modify;
-- Your code style (syntax, naming, coding patterns, etc) should follow the FingerprintJS style;
-- All the new code should be covered with automated tests;
+- Your code quality should be at least as good as the code you modify.
+- Your code style (syntax, naming, coding patterns, etc) should follow the FingerprintJS style.
+- All the new code should be covered with automated tests.
 - All the checks described in the [Working with code](#working-with-code) section must pass successfully.
     You may create a draft pull request in this repository to run the checks automatically by GitHub Actions,
-    but the tests won't run on BrowserStack until a FingerprintJS maintainer approves them;
-- If you want to add an entropy source (component), follow the [How to add an entropy source](#how-to-add-an-entropy-source) instructions carefully;
-- The changes should be backwards compatible, ensuring FingerprintJS users continue to use the library without any modifications;
-- Don't add dependencies (such as Node packages) unless necessary;
-- Don't make changes unrelated the stated pull request purpose. Please strive to introduce as few changes as possible;
+    but the tests won't run on BrowserStack until a FingerprintJS maintainer approves them.
+- If you want to add an entropy source (component), follow the [How to add an entropy source](#how-to-add-an-entropy-source) instructions carefully.
+- The changes should be backwards compatible, ensuring FingerprintJS users continue to use the library without any modifications.
+- Don't add dependencies (such as Node packages) unless necessary.
+- Don't make changes unrelated to the stated purpose of your pull request. Please strive to introduce as few changes as possible.
 - Don't change FingerprintJS code style, its TypeScript configuration or other subjective things.
 
 If you want to do something more complex than fixing a small bug, or if you're not sure if your changes meet the project requirements, please [start a discussion](https://github.com/fingerprintjs/fingerprintjs/discussions/new/choose).
@@ -51,7 +51,7 @@ Feel free to ask questions in the issues if you need more details.
 
 ## Working with code
 
-This section describes how to deploy the repository locally, make changes to the code and verify your work.
+This section describes how to deploy the repository locally, make changes to the code, and verify your work.
 
 First, make sure you have [Git](https://git-scm.com), [Node.js](https://nodejs.org/en) and [Yarn](https://yarnpkg.com) installed.
 Then clone the repository and install the dependencies:
@@ -64,7 +64,7 @@ yarn install
 
 ### Development playground
 
-Development playground allows to run FingerprintJS locally. Run this command to start a playground:
+Development playground lets you run FingerprintJS locally. Run this command to start a playground:
 
 ```bash
 yarn playground:start # Add '--port 8765' to change the server port
@@ -190,19 +190,19 @@ yarn check:ssr
 ### How to add an entropy source
 
 An entropy source is a function that gets a piece of data about the browser.
-The value returned by an entropy source is used to produce the visitor identifier and called an entropy component.
+The value returned by an entropy source (also called an entropy component) is used to produce the visitor identifier.
 Entropy sources are located in the [src/sources](src/sources) directory.
 All entropy components must be simple JavaScript values that can be encoded into JSON.
 
 Entropy source must meet the following requirements:
-- It is stable, that is always or almost always produces the same value in each browser, including incognito, guest and desktop modes;
-- It is selective, that is produces different values in different browsers, OSs or devices.
-    A good entropy source represents the browser, OS or device settings;
-- It produces no side effects, such as messages in browser console, DOM changes, modal windows, notifications and sounds;
-- It is fast. An entropy source should take not more than 1 second to complete;
-- It doesn't represent only the browser version. An example of such signal is a JS feature probing.
+- It is stable — it always or almost always produces the same value in each browser, including incognito, guest, and desktop modes.
+- It is selective — it produces different values in different browsers, operating systems, or devices.
+    A good entropy source represents the browser, operating system, or device settings.
+- It produces no side effects, such as messages in the browser console, DOM changes, modal windows, notifications, and sounds.
+- It is fast. An entropy source should take not more than 1 second to complete.
+- It doesn't represent only the browser version. An example of such a signal is a JavaScript feature probing.
     It's not a good entropy source because the return value is likely to change due to automatic browser updates,
-    the selectivity is low, and the same entropy can be achieved by involving the User-Agent string.
+    the selectivity is low, and the same entropy can be achieved by just using the User-Agent string.
 
 Entropy source runs in 2 stages: "load" and "get":
 - "Load" runs once when the agent's `load` function is called.
