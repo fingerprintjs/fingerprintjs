@@ -18,11 +18,11 @@ There is a chance it has already been discussed.
 
 When you create an issue, the description is pre-filled with a template text.
 Please fill in the missing information carefully, it will help us solve your issue faster.
-If you want share a piece of code or the library output with us, please wrap it in a ` ``` ` block and make sure you include all the information.
+If you want to share a piece of code or the library output with us, please wrap it in a ` ``` ` block and make sure you include all the information.
 
 ### Creating a pull request
 
-If you want to fix a bug, add a source of entropy or make any other code contribution, please [create a pull request](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project).
+If you want to fix a bug, add a source of entropy, or make any other code contribution, please [create a pull request](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project).
 
 After you clone the repository, check the [Working with code](#working-with-code) section to learn how to run, check, and build the code.
 
@@ -37,7 +37,7 @@ In order for us to review and accept your code contributions, please follow thes
 - The changes should be backward compatible, ensuring FingerprintJS users continue to use the library without any modifications.
 - Don't add dependencies (such as Node packages) unless necessary.
 - Don't make changes unrelated to the stated purpose of your pull request. Please strive to introduce as few changes as possible.
-- Don't change FingerprintJS code style, its TypeScript configuration or other subjective things.
+- Don't change FingerprintJS code style, its TypeScript configuration, or other subjective things.
 
 If you want to do something more complex than fixing a small bug, or if you're not sure if your changes meet the project requirements, please [start a discussion](https://github.com/fingerprintjs/fingerprintjs/discussions/new/choose).
 We encourage starting a discussion if you want to propose changing a rule from this guide.
@@ -104,7 +104,7 @@ yarn lint:fix
 
 ### How to build
 
-To build the distribution files of FingerprintJS that can be used in browser directly, run:
+To build the distribution files of FingerprintJS that can be used in a browser directly, run:
 
 ```bash
 yarn build
@@ -114,7 +114,7 @@ The files will be saved to the `dist` directory.
 
 ### Pitfalls
 
-Avoid running expression in top level of the modules.
+Avoid running expressions in the top level of the modules.
 It will help to tree-shake the library better:
 
 ```js
@@ -168,12 +168,12 @@ softwareupdate --install-rosetta
 ```
 
 Alternatively, make a PR to this repository, the test will run on BrowserStack automatically.
-But the test won't run when the PR is made from a fork repository, in this case a member will run the tests manually.
+But the test won't run when the PR is made from a fork repository, in this case, a member will run the tests manually.
 
 BrowserStack sessions are unstable, so a session can fail for no reason;
 restart the testing when you see no clear errors related to the tests.
 If you run the test command multiple times in parallel, BrowserStack will lose access to the Karma server
-(for some reason), that will cause the tests to hang infinitely, so try to run a single testing at once.
+(for some reason), which will cause the tests to hang infinitely, so try to run a single test command at once.
 
 To check the distribution TypeScript declarations, build the project and run:
 
@@ -181,7 +181,7 @@ To check the distribution TypeScript declarations, build the project and run:
 yarn check:dts
 ```
 
-To check that the package is compatible with server side rendering, build the project and run:
+To check that the package is compatible with server-side rendering, build the project and run:
 
 ```bash
 yarn check:ssr
@@ -194,17 +194,17 @@ The value returned by an entropy source (also called an entropy component) is us
 Entropy sources are located in the [src/sources](src/sources) directory.
 All entropy components must be simple JavaScript values that can be encoded into JSON.
 
-Entropy source must meet the following requirements:
+Entropy sources must meet the following requirements:
 - It is stable — it always or almost always produces the same value in each browser, including incognito, guest, and desktop modes.
 - It is selective — it produces different values in different browsers, operating systems, or devices.
     A good entropy source represents the browser, operating system, or device settings.
 - It produces no side effects, such as messages in the browser console, DOM changes, modal windows, notifications, and sounds.
-- It is fast. An entropy source should take not more than 1 second to complete.
+- It is fast. An entropy source should take no more than 1 second to complete.
 - It doesn't represent only the browser version. An example of such a signal is a JavaScript feature probing.
     It's not a good entropy source because the return value is likely to change due to automatic browser updates,
     the selectivity is low, and the same entropy can be achieved by just using the User-Agent string.
 
-Entropy source runs in 2 stages: "load" and "get":
+Entropy sources run in 2 stages: "load" and "get":
 - "Load" runs once when the agent's `load` function is called.
     It must do as much work on the source as possible to make the "get" phase as fast as possible.
     It may start background processes that will run indefinitely or until the "get" phase runs.
@@ -257,8 +257,8 @@ async function entropySource() {
 In fact, most entropy sources don't require a "get" phase.
 The "get" phase is required if the component can change after completing the load phase.
 
-In order for agent to measure the entropy source execution duration correctly,
-the "load" phase shouldn't run in background (after the source function returns).
+In order for the agent to measure the entropy source execution duration correctly,
+the "load" phase shouldn't run in the background (after the source function returns).
 On the other hand, in order not to block the whole agent, the "load" phase must contain only the necessary actions.
 Example:
 
@@ -267,7 +267,7 @@ async function entropySource() {
   // Wait for the required data to be calculated during the "load" phase
   let result = await doLongAction()
 
-  // Start watching optional data in background (this function doesn't block the execution)
+  // Start watching optional data in the background (this function doesn't block the execution)
   watchNextResults((newResult) => {
     result = newResult
   })
