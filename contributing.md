@@ -17,14 +17,14 @@ Before you start, please [search](https://github.com/search?q=repo%3Afingerprint
 There is a chance it has already been discussed.
 
 When you create an issue, the description is pre-filled with a template text.
-Please fill the missing information carefully, it will help us solve your issue faster.
+Please fill in the missing information carefully, it will help us solve your issue faster.
 If you want share a piece of code or the library output with us, please wrap it in a ` ``` ` block and make sure you include all the information.
 
 ### Creating a pull request
 
 If you want to fix a bug, add a source of entropy or make any other code contribution, please [create a pull request](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project).
 
-After you clone the repository, check the [Working with code](#working-with-code) section to learn how to run, check and build the code.
+After you clone the repository, check the [Working with code](#working-with-code) section to learn how to run, check, and build the code.
 
 In order for us to review and accept your code contributions, please follow these rules:
 - Your code quality should be at least as good as the code you modify.
@@ -34,7 +34,7 @@ In order for us to review and accept your code contributions, please follow thes
     You may create a draft pull request in this repository to run the checks automatically by GitHub Actions,
     but the tests won't run on BrowserStack until a FingerprintJS maintainer approves them.
 - If you want to add an entropy source (component), follow the [How to add an entropy source](#how-to-add-an-entropy-source) instructions carefully.
-- The changes should be backwards compatible, ensuring FingerprintJS users continue to use the library without any modifications.
+- The changes should be backward compatible, ensuring FingerprintJS users continue to use the library without any modifications.
 - Don't add dependencies (such as Node packages) unless necessary.
 - Don't make changes unrelated to the stated purpose of your pull request. Please strive to introduce as few changes as possible.
 - Don't change FingerprintJS code style, its TypeScript configuration or other subjective things.
@@ -104,7 +104,7 @@ yarn lint:fix
 
 ### How to build
 
-To build the distribution files of FingerprintJS, that can be used in browser directly, run:
+To build the distribution files of FingerprintJS that can be used in browser directly, run:
 
 ```bash
 yarn build
@@ -175,7 +175,7 @@ restart the testing when you see no clear errors related to the tests.
 If you run the test command multiple times in parallel, BrowserStack will lose access to the Karma server
 (for some reason), that will cause the tests to hang infinitely, so try to run a single testing at once.
 
-To check the distributive TypeScript declarations, build the project and run:
+To check the distribution TypeScript declarations, build the project and run:
 
 ```bash
 yarn check:dts
@@ -249,7 +249,7 @@ The "get" phase can be omitted:
 async function entropySource() {
   const finalData = await doLongAction()
 
-  // If the source's returned value is not a function, it's considered as an entropy component
+  // If the source's returned value is not a function, it's considered an entropy component
   return finalData // Equivalent to: return () => finalData
 }
 ```
@@ -280,7 +280,7 @@ async function entropySource() {
 }
 ```
 
-Entropy source must handle expected and only expected errors.
+Entropy sources must handle expected and only expected errors.
 The expected errors must be turned into special entropy component values.
 Pay attention to potential asynchronous errors.
 If you handle unexpected errors, you won't know what's going wrong inside the entropy source.

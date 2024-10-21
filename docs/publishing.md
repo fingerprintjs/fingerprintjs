@@ -4,7 +4,7 @@ This guide is for repository maintainers.
 
 1. Bump the version. Search the current version number in the code to know where to change it.
 2. Build and test the project.
-3. See what will get into the NPM package, make sure it contains the distributive files and no excess files.
+3. See what will get into the NPM package, make sure it contains the distribution files and no excess files.
    To see, run `yarn pack`. An archive will appear nearby. Open it with any archive browser.
 4. Run
     ```bash
