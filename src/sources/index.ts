@@ -50,7 +50,7 @@ import getAudioContextBaseLatency from './audio_base_latency'
  */
 export const sources = {
   // READ FIRST:
-  // See https://github.com/fingerprintjs/fingerprintjs/blob/master/contributing.md#how-to-make-an-entropy-source
+  // See https://github.com/fingerprintjs/fingerprintjs/blob/master/contributing.md#how-to-add-an-entropy-source
   // to learn how entropy source works and how to make your own.
 
   // The sources run in this exact order.

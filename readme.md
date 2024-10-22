@@ -118,4 +118,5 @@ If you require private support for FignerprintJS, please email us at [oss-suppor
 
 ## Contributing
 
-See the [contribution guidelines](contributing.md) to learn how to start a playground, test, and build.
+See the [Contribution guidelines](contributing.md) to learn how to contribute to the project or run the project locally.
+Please read it carefully before making a pull request.
