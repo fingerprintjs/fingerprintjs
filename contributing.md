@@ -33,6 +33,7 @@ In order for us to review and accept your code contributions, please follow thes
 - All the checks described in the [Working with code](#working-with-code) section must pass successfully.
     You may create a draft pull request in this repository to run the checks automatically by GitHub Actions,
     but the tests won't run on BrowserStack until a FingerprintJS maintainer approves them.
+- Follow the recommendations provided in the [Pitfalls](#pitfalls) section.
 - If you want to add an entropy source (component), follow the [How to add an entropy source](#how-to-add-an-entropy-source) instructions carefully.
 - The changes should be backward compatible, ensuring FingerprintJS users continue to use the library without any modifications.
 - Don't add dependencies (such as Node packages) unless necessary.
@@ -135,6 +136,10 @@ const var3 = var1.prop
 // No! Will be converted to `const var4 = {}; var4.bar = 'foo'`.
 const var4 = { [Enum.Member]: 'foo' }
 ```
+
+Avoid using `navigator.userAgent` or similar APIs, as they are frequently spoofed.
+Instead, for code that makes decisions based on browser name and version, use the functions available in [src/utils/browser.ts](src/utils/browser.ts).
+However, in tests, for greater reliability, use `navigator.userAgent` through the functions in [tests/utils/index.ts](tests/utils/index.ts).
 
 The `include` parameter of `tsconfig.json` files may contain only the entry files and the `.d.ts` files.
 
