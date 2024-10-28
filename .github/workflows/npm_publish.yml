@@ -1,0 +1,48 @@
+# Reference on this file: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+# In order to work properly, this workflow requires the repository to have an environment called "npm". The environment
+# must have a secret called NPM_ACCESS_TOKEN that holds an NPM access token that allows to publish the packages.
+# The environment should be protected to allow running only on the master branch.
+
+name: Publish to NPM
+on: [workflow_dispatch, push] # todo: Remove the temporary "push" trigger
+
+jobs:
+  publish:
+    name: Build and publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # environment: npm # todo: Uncomment
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: nodemodules-${{ hashFiles('yarn.lock') }}
+          restore-keys: nodemodules-
+      - name: Install Node packages
+        run: yarn install
+      - name: Build
+        run: yarn build
+      - name: Get the package version
+        id: version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+      - name: Publish to NPM
+        continue-on-error: true # todo: Remove this temporary option
+        # This command will automatically fail because of some common mistakes (this is a wanted behavior):
+        # - The current version is already published
+        # - The package uses a local directory as a dependency
+        # - The NPM access token is invalid or expired
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" > ~/.npmrc
+          tag=$(echo "${{ steps.version.outputs.version }}" | grep -oP '(?<=-)[^.]+' || echo "latest")
+          echo "Publishing version ${{ steps.version.outputs.version }} with tag: $tag"
+          yarn publish --access public --tag "$tag"
+      - name: Create a Git tag
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag: test-v${{ steps.version.outputs.version }}
+          message: ""
