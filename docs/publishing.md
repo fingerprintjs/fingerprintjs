@@ -2,16 +2,13 @@
 
 This guide is for repository maintainers.
 
-1. Bump the version. Search the current version number in the code to know where to change it.
-2. Build and test the project.
-3. See what will get into the NPM package, make sure it contains the distribution files and no excess files.
-   To see, run `yarn pack`. An archive will appear nearby. Open it with any archive browser.
-4. Run
-    ```bash
-    # Add '--tag beta' (without the quotes) if you release a beta version
-    # Add '--tag dev' if you release a development version (which is expected to get new features)
-    yarn publish --access public
-    ```
-5. Push the changes to the repository, and a version tag like `v1.3.4` to the commit.
-6. Describe the version changes in the [releases section](https://github.com/fingerprintjs/fingerprintjs/releases).
-7. Update the agent in https://stackblitz.com/edit/fpjs-4-npm (find "dependencies" and click the round arrow).
+1. Create a PR that bumps the version in [package.json](../package.json).
+2. [Build the project](../contributing.md#how-to-build) on your local machine and run `yarn pack`.
+    An archive will be created nearby in the repository root directory.
+    Open the archive and make sure it contains the distribution files and no excess files.
+    If there is something wrong, fix it and push to the PR.
+3. When the PR checks succeed and the PR is approved, merge it.
+4. Run the [Publish to NPM](https://github.com/fingerprintjs/fingerprintjs-pro/actions/workflows/npm_publish.yml) workflow by using the "Run workflow" button.
+    It will publish the current code to NPM and create a corresponding Git tag.
+5. Describe the version changes in the [releases section](https://github.com/fingerprintjs/fingerprintjs/releases) under the corresponding tag.
+6. Update the agent in https://stackblitz.com/edit/fpjs-4-npm (find "dependencies" and click the round arrow).
