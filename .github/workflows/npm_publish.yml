@@ -4,14 +4,14 @@
 # The environment should be protected to allow running only on the master branch.
 
 name: Publish to NPM
-on: [workflow_dispatch, push] # todo: Remove the temporary "push" trigger
+on: workflow_dispatch
 
 jobs:
   publish:
     name: Build and publish
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    # environment: npm # todo: Uncomment
+    environment: npm
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,7 +35,6 @@ jobs:
           echo -e "Version: $version\nVersion tag: $tag"
           echo -e "version=$version\ntag=$tag" >> $GITHUB_OUTPUT
       - name: Publish to NPM
-        continue-on-error: true # todo: Remove this temporary option
         # This command will automatically fail because of some common mistakes (this is a wanted behavior):
         # - The current version is already published
         # - The package uses a local directory as a dependency
@@ -46,5 +45,5 @@ jobs:
       - name: Create a Git tag
         uses: rickstaa/action-create-tag@v1
         with:
-          tag: test-v${{ steps.version.outputs.version }} # todo: Remove test-
+          tag: v${{ steps.version.outputs.version }}
           message: " "
