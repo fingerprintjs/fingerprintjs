@@ -1,0 +1,49 @@
+# Reference on this file: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+# In order to work properly, this workflow requires the repository to have an environment called "npm". The environment
+# must have a secret called NPM_ACCESS_TOKEN that holds an NPM access token that allows to publish the packages.
+# The environment should be protected to allow running only on the master branch.
+
+name: Publish to NPM
+on: workflow_dispatch
+
+jobs:
+  publish:
+    name: Build and publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: npm
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: nodemodules-${{ hashFiles('yarn.lock') }}
+          restore-keys: nodemodules-
+      - name: Install Node packages
+        run: yarn install
+      - name: Build
+        run: yarn build
+      - name: Get the package version
+        id: version
+        run: |
+          version=$(node -p "require('./package.json').version")
+          tag=$(echo "$version" | grep -oP '(?<=-)[^.]+' || echo "latest")
+          echo -e "Version: $version\nVersion tag: $tag"
+          echo -e "version=$version\ntag=$tag" >> $GITHUB_OUTPUT
+      - name: Publish to NPM
+        # This command will automatically fail because of some common mistakes (this is a wanted behavior):
+        # - The current version is already published
+        # - The package uses a local directory as a dependency
+        # - The NPM access token is invalid or expired
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" > ~/.npmrc
+          yarn publish --access public --tag "${{ steps.version.outputs.tag }}"
+      - name: Create a Git tag
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag: v${{ steps.version.outputs.version }}
+          message: " "
