@@ -90,7 +90,7 @@ Check out our [comparison table](docs/comparison.md) for a detailed breakdown of
 
 ▶️ [Video: Use Fingerprint Identification to prevent multiple signups by same user](https://www.youtube.com/watch?v=jWX9P5_jZn8)
 
-⏱️ [How to upgrade from FingerprintJS to Fingerprint Identification in 30 seconds](hhttps://dev.fingerprint.com/docs/migrating-from-fingerprintjs-to-fingerprint-pro#migrating-from-fingerprintjs-v4-source-available-to-pro)
+⏱️ [How to upgrade from FingerprintJS to Fingerprint Identification in 30 seconds](https://dev.fingerprint.com/docs/migrating-from-fingerprintjs-to-fingerprint-pro#migrating-from-fingerprintjs-v4-source-available-to-pro)
 
 ## Migrating to v4
 
