@@ -70,13 +70,13 @@ Since FingerprintJS processes and generates the fingerprints from within the bro
 ### Security
 Because of how the fingerprints are processed and generated from within the browser itself, they are vulnerable to spoofing and reverse engineering.
 
-## 99.5% accuracy with Fingerprint Identification
+## Industry-leading accuracy with Fingerprint Identification
 
 The main difference between FingerprintJS and [Fingerprint Identification](https://dev.fingerprint.com/docs/introduction) lies in the number of attributes collected from the browser, how they are processed, and the accuracy in identifying visitors.
 
 Fingerprint Identification is a **closed-source**, **commercial** device intelligence platform designed to prevent fraud and improve user experiences. It's an enhanced version of FingerprintJS and has been fully re-designed to solve the most challenging identification use cases. Its source is not available in this or any other public repository.
 
-Unlike FingerprintJS, Fingerprint Identification is able to achieve **99.5% accuracy** because it processes the browser attributes on the server and also analyzes vast amounts of auxiliary data (e.g. IP addresses, time of visit patterns, URL changes, etc.). Because of these advanced matching techniques, Fingerprint Identification is able to reliably deduplicate different visitors that have identical devices.
+Unlike FingerprintJS, Fingerprint Identification is able to achieve **industry-leading accuracy** because it processes the browser attributes on the server and also analyzes vast amounts of auxiliary data (e.g. IP addresses, time of visit patterns, URL changes, etc.). Because of these advanced matching techniques, Fingerprint Identification is able to reliably deduplicate different visitors that have identical devices.
 
 Fingerprint Identification is available for Web, Android, iOS, and other platforms. You can easily get started by [signing up](https://dashboard.fingerprint.com/signup) for a free, unlimited 14-day trial.
 
