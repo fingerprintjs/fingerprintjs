@@ -19,12 +19,10 @@ describe('DOM utilities', () => {
   })
 
   describe('withIframe', () => {
-    describe('with initial null document.body', () => {
-      let result: Promise<unknown> | null = null
-      beforeEach(() => jasmine.clock().install())
-      afterEach(() => jasmine.clock().uninstall())
-
-      it("doesn't fail when document loading is delayed", async () => {
+    it("doesn't fail when document loading is delayed", async () => {
+      try {
+        let result: Promise<unknown> | null = null
+        jasmine.clock().install()
         await withMockProperties(document, { body: { get: () => null } }, async () => {
           result = withIframe(() => ({}))
           // Ensure the promise remains pending while document.body is not available - for 500 ms
@@ -36,7 +34,9 @@ describe('DOM utilities', () => {
         // This is necessary because withIframe performs repeated checks to ensure the DOM is ready before proceeding.
         jasmine.clock().tick(50)
         await expectAsync(result).toBeResolved()
-      })
+      } finally {
+        jasmine.clock().uninstall()
+      }
     })
   })
 })
