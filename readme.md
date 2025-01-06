@@ -114,7 +114,7 @@ Using [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) and [Discu
 
 You can also join our [Discord server](https://discord.gg/ad6R2ttHVX) to ask questions, share feedback, and connect with other developers.
 
-If you require private support for FignerprintJS, please email us at [oss-support@fingerprint.com](mailto:oss-support@fingerprint.com).
+If you require private support for FingerprintJS, please email us at [oss-support@fingerprint.com](mailto:oss-support@fingerprint.com).
 
 ## Contributing
 
