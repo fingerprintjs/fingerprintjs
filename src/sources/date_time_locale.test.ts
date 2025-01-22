@@ -20,7 +20,6 @@ describe('Sources', () => {
         expect(result).toMatch(/^en(-[A-Z]{2})?$/)
       })
     })
-
     describe("edge cases for browsers that don't support Intl or locale", () => {
       let originalIntl: typeof Intl
 
