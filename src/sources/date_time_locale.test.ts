@@ -1,20 +1,12 @@
 import getDateTimeLocale from './date_time_locale'
 
+// This interface is not exported from lib.es5.d.ts, so it has been copy/pasted here to allow referencing it during
+// the initialization of the spy and to satisfy the TypeScript definition.
 interface ResolvedDateTimeFormatOptions {
   locale: string
   calendar: string
   numberingSystem: string
   timeZone: string
-  hour12?: boolean
-  weekday?: string
-  era?: string
-  year?: string
-  month?: string
-  day?: string
-  hour?: string
-  minute?: string
-  second?: string
-  timeZoneName?: string
 }
 
 describe('Sources', () => {
