@@ -11,7 +11,7 @@ interface ResolvedDateTimeFormatOptions {
 
 describe('Sources', () => {
   describe('dateTimeLocale', () => {
-    describe('cases for browsers that support Intl or locale', () => {
+    describe('cases for browsers that have support for DateTimeFormat locale', () => {
       it('returns string representing dateTime locale', () => {
         const result = getDateTimeLocale()
         expect(typeof result).toBe('string')
