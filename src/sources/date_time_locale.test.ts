@@ -1,6 +1,23 @@
 import getDateTimeLocale from './date_time_locale'
 
-fdescribe('Sources', () => {
+interface ResolvedDateTimeFormatOptions {
+  locale: string
+  calendar: string
+  numberingSystem: string
+  timeZone: string
+  hour12?: boolean
+  weekday?: string
+  era?: string
+  year?: string
+  month?: string
+  day?: string
+  hour?: string
+  minute?: string
+  second?: string
+  timeZoneName?: string
+}
+
+describe('Sources', () => {
   describe('dateTimeLocale', () => {
     describe("cases for browsers that don't support Intl or locale", () => {
       it('returns string representing dateTime locale', () => {
@@ -23,7 +40,7 @@ fdescribe('Sources', () => {
         window.Intl = originalIntl
       })
       it('should return an empty string if Intl.DateTimeFormat is not supported', () => {
-        window.Intl = undefined as any
+        window.Intl = undefined as unknown as typeof Intl
 
         const result = getDateTimeLocale()
         expect(result).toBe('')
@@ -31,7 +48,7 @@ fdescribe('Sources', () => {
 
       it('should return an empty string if resolvedOptions().locale is undefined', () => {
         spyOn(window.Intl, 'DateTimeFormat').and.returnValue({
-          resolvedOptions: () => ({ locale: undefined } as any),
+          resolvedOptions: () => ({ locale: undefined } as unknown as ResolvedDateTimeFormatOptions),
           format: () => '',
           formatToParts: () => [],
         })
