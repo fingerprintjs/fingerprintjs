@@ -38,6 +38,7 @@ import getApplePayState from './apple_pay'
 import getPrivateClickMeasurement from './private_click_measurement'
 import { getWebGlBasics, getWebGlExtensions } from './webgl'
 import getAudioContextBaseLatency from './audio_base_latency'
+import getDateTimeLocale from './date_time_locale'
 
 /**
  * The list of entropy sources used to make visitor identifiers.
@@ -94,7 +95,7 @@ export const sources = {
   applePay: getApplePayState,
   privateClickMeasurement: getPrivateClickMeasurement,
   audioBaseLatency: getAudioContextBaseLatency,
-
+  dateTimeLocale: getDateTimeLocale,
   // Some sources can affect other sources (e.g. WebGL can affect canvas), so it's important to run these sources
   // after other sources.
   webGlBasics: getWebGlBasics,
