@@ -96,6 +96,7 @@ export const sources = {
   privateClickMeasurement: getPrivateClickMeasurement,
   audioBaseLatency: getAudioContextBaseLatency,
   dateTimeLocale: getDateTimeLocale,
+
   // Some sources can affect other sources (e.g. WebGL can affect canvas), so it's important to run these sources
   // after other sources.
   webGlBasics: getWebGlBasics,
