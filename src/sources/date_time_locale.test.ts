@@ -19,6 +19,7 @@ describe('Sources', () => {
         expect(result).toMatch(localeRegex)
       })
     })
+
     describe("edge cases for browsers that don't support Intl or locale", () => {
       let originalIntl: typeof Intl
 
