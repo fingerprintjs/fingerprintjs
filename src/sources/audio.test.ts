@@ -1,4 +1,4 @@
-import { getBrowserMajorVersion, isMobile, isSafari } from '../../tests/utils'
+import { getBrowserMajorVersion, isMobile, isSafari, isSamsungInternet } from '../../tests/utils'
 import getAudioFingerprint, { SpecialFingerprint } from './audio'
 
 describe('Sources', () => {
@@ -40,9 +40,10 @@ describe('Sources', () => {
 })
 
 function doesBrowserPerformAntifingerprinting() {
-  return isSafari() && (getBrowserMajorVersion() ?? 0) >= 17
+  const isSafari17orNewer = isSafari() && (getBrowserMajorVersion() ?? 0) >= 17
+  const isSamsungInternet26orNewer = isSamsungInternet() && (getBrowserMajorVersion() ?? 0) >= 26
+  return isSafari17orNewer || isSamsungInternet26orNewer
 }
-
 function doesBrowserSuspendAudioContext() {
   // WebKit has stopped telling its real version in the user-agent string since version 605.1.15,
   // therefore the browser version has to be checked instead of the engine version.
