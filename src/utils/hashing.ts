@@ -119,6 +119,7 @@ function x64LeftShift(m: number[], bits: number): void {
     m[1] = 0
   }
 }
+
 /**
  * Provides a XOR of the given int64 values(provided as tuple of two int32).
  * Result is written back to the first value

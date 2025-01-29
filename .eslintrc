@@ -12,7 +12,11 @@
   "parser": "@typescript-eslint/parser",
   "rules": {
     "no-console": "warn",
-    "max-len": ["error", { "code": 120, "ignoreUrls": true }]
+    "max-len": ["error", { "code": 120, "ignoreUrls": true }],
+    "padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": "function", "next": "function" }
+    ]
   },
   "overrides": [
     {
@@ -28,7 +32,11 @@
       ],
       "rules": {
         "max-len": ["error", { "code": 120, "ignoreUrls": true }],
-        "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }]
+        "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }],
+        "padding-line-between-statements": [
+          "error",
+          { "blankLine": "always", "prev": "function", "next": "function" }
+        ]
       }
     }
   ]

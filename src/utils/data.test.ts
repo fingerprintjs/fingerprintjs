@@ -92,6 +92,7 @@ describe('Data utilities', () => {
       yield { val: 8 }
       yield { val: 7 }
     }
+
     function* emptyGenerator() {
       // Nothing
     }
