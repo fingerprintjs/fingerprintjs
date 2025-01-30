@@ -32,11 +32,7 @@
       ],
       "rules": {
         "max-len": ["error", { "code": 120, "ignoreUrls": true }],
-        "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }],
-        "padding-line-between-statements": [
-          "error",
-          { "blankLine": "always", "prev": "function", "next": "function" }
-        ]
+        "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }]
       }
     }
   ]
