@@ -44,6 +44,7 @@ function doesBrowserPerformAntifingerprinting() {
   const isSamsungInternet26orNewer = isSamsungInternet() && (getBrowserMajorVersion() ?? 0) >= 26
   return isSafari17orNewer || isSamsungInternet26orNewer
 }
+
 function doesBrowserSuspendAudioContext() {
   // WebKit has stopped telling its real version in the user-agent string since version 605.1.15,
   // therefore the browser version has to be checked instead of the engine version.
