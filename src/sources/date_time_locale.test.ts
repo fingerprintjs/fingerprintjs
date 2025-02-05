@@ -31,16 +31,33 @@ describe('Sources', () => {
         window.Intl = originalIntl
       })
 
-      it('should return an empty string if Intl.DateTimeFormat is not supported', () => {
+      it('should return IntlApiNotSupported signal when window.Intl is not available', () => {
         window.Intl = undefined as unknown as typeof Intl
 
         const result = getDateTimeLocale()
-        expect(result).toBe('')
+        expect(result).toBe(-1)
       })
 
-      it('should return an empty string if resolvedOptions().locale is undefined', () => {
+      it('should return DateTimeFormatNotSupported signal when window.Intl.DateTimeFormat is not available', () => {
+        window.Intl = {} as typeof Intl
+        const result = getDateTimeLocale()
+        expect(result).toBe(-2)
+      })
+
+      it('should return LocaleNotAvailable signal if resolvedOptions().locale is undefined', () => {
         spyOn(window.Intl, 'DateTimeFormat').and.returnValue({
           resolvedOptions: () => ({ locale: undefined } as unknown as Intl.ResolvedDateTimeFormatOptions),
+          format: () => '',
+          formatToParts: () => [],
+        })
+
+        const result = getDateTimeLocale()
+        expect(result).toBe(-3)
+      })
+
+      it('should return empty string when resolvedOptions().locale is an empty string', () => {
+        spyOn(window.Intl, 'DateTimeFormat').and.returnValue({
+          resolvedOptions: () => ({ locale: '' } as Intl.ResolvedDateTimeFormatOptions),
           format: () => '',
           formatToParts: () => [],
         })
