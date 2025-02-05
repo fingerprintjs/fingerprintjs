@@ -1,7 +1,7 @@
 export const enum SpecialFingerprint {
   /** The browser doesn't support Intl api */
   IntlApiNotSupported = -1,
-  /** The browser doesn't support Intl api */
+  /** The browser doesn't support DateTimeFormat constructor */
   DateTimeFormatNotSupported = -2,
   /** DateTimeFormat locale is undefined or null */
   LocaleNotAvailable = -3,
