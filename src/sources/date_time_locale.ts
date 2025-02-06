@@ -1,6 +1,6 @@
-export const enum SpecialFingerprint {
-  /** The browser doesn't support Intl api */
-  IntlApiNotSupported = -1,
+export const enum Status {
+  /** The browser doesn't support Intl API */
+  IntlAPINotSupported = -1,
   /** The browser doesn't support DateTimeFormat constructor */
   DateTimeFormatNotSupported = -2,
   /** DateTimeFormat locale is undefined or null */
@@ -10,21 +10,21 @@ export const enum SpecialFingerprint {
 /**
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/resolvedOptions
  */
-export default function getDateTimeLocale(): string | SpecialFingerprint {
+export default function getDateTimeLocale(): string | -1 | -2 | -3 {
   if (!window.Intl) {
-    return SpecialFingerprint.IntlApiNotSupported
+    return Status.IntlAPINotSupported
   }
 
   const DateTimeFormat = window.Intl.DateTimeFormat
 
   if (!DateTimeFormat) {
-    return SpecialFingerprint.DateTimeFormatNotSupported
+    return Status.DateTimeFormatNotSupported
   }
 
   const locale = DateTimeFormat().resolvedOptions().locale
 
   if (!locale && locale !== '') {
-    return SpecialFingerprint.LocaleNotAvailable
+    return Status.LocaleNotAvailable
   }
 
   return locale
