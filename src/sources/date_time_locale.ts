@@ -9,6 +9,9 @@ export const enum Status {
 
 /**
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/resolvedOptions
+ *
+ * The return type is a union instead of a const enum due to the difficulty of embedding const enums in other projects.
+ * This makes integration simpler and more elegant.
  */
 export default function getDateTimeLocale(): string | -1 | -2 | -3 {
   if (!window.Intl) {
