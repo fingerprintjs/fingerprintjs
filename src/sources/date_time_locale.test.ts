@@ -1,9 +1,9 @@
-import getDateTimeLocale from './date_time_locale'
+import getDateTimeLocale, { Status } from './date_time_locale'
 
 describe('Sources', () => {
   describe('dateTimeLocale', () => {
     describe('cases for browsers that have support for DateTimeFormat locale', () => {
-      it('returns string representing dateTime locale', () => {
+      it('should return string representing DateTimeFormat locale', () => {
         const result = getDateTimeLocale()
         expect(typeof result).toBe('string')
         // The combinations returned as results for the current test suite specified browsers on the BrowserStack are:
@@ -31,16 +31,33 @@ describe('Sources', () => {
         window.Intl = originalIntl
       })
 
-      it('should return an empty string if Intl.DateTimeFormat is not supported', () => {
+      it('should return IntlApiNotSupported status when window.Intl is not available', () => {
         window.Intl = undefined as unknown as typeof Intl
 
         const result = getDateTimeLocale()
-        expect(result).toBe('')
+        expect(result).toBe(Status.IntlAPINotSupported)
       })
 
-      it('should return an empty string if resolvedOptions().locale is undefined', () => {
+      it('should return DateTimeFormatNotSupported status when window.Intl.DateTimeFormat is not available', () => {
+        window.Intl = {} as typeof Intl
+        const result = getDateTimeLocale()
+        expect(result).toBe(Status.DateTimeFormatNotSupported)
+      })
+
+      it('should return LocaleNotAvailable status if resolvedOptions().locale is undefined', () => {
         spyOn(window.Intl, 'DateTimeFormat').and.returnValue({
           resolvedOptions: () => ({ locale: undefined } as unknown as Intl.ResolvedDateTimeFormatOptions),
+          format: () => '',
+          formatToParts: () => [],
+        })
+
+        const result = getDateTimeLocale()
+        expect(result).toBe(Status.LocaleNotAvailable)
+      })
+
+      it('should return empty string when resolvedOptions().locale is an empty string', () => {
+        spyOn(window.Intl, 'DateTimeFormat').and.returnValue({
+          resolvedOptions: () => ({ locale: '' } as Intl.ResolvedDateTimeFormatOptions),
           format: () => '',
           formatToParts: () => [],
         })
