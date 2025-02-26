@@ -59,7 +59,7 @@ export function isChromium(): boolean {
     countTruthy([
       'webkitPersistentStorage' in n,
       'webkitTemporaryStorage' in n,
-      (n.vendor || '').indexOf('Google') === 0,   
+      (n.vendor || '').indexOf('Google') === 0,
       'webkitResolveLocalFileSystemURL' in w,
       'BatteryManager' in w,
       'webkitMediaStream' in w,
