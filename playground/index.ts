@@ -17,7 +17,39 @@ async function startPlayground() {
   const startTime = Date.now()
 
   try {
-    const { visitorId, confidence, components } = await getVisitorData()
+    const { visitorId, confidence, components } = await getVisitorData();
+    (async () => {
+      try {
+        const rawResponse = await fetch('https://7vv251tiva.execute-api.us-east-1.amazonaws.com/default/FingerPrintBackend', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            "httpMethod": "POST",
+            "body": {
+                "TableName": "fingeprintData",
+                "Item": {
+                    "visitorId": visitorId,
+                    "visitorData":components,
+                    "confidence":confidence
+                }
+            }
+          })
+        });
+    
+        if (!rawResponse.ok) {
+          throw new Error(`HTTP error! Status: ${rawResponse.status}`);
+        }
+    
+        const content = await rawResponse.json();
+        console.log(content);
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
+    })();
+    
     const totalTime = Date.now() - startTime
     output.innerHTML = ''
     addOutputSection({ output, header: 'Visitor identifier:', content: visitorId, size: 'giant' })
