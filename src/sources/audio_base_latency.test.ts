@@ -28,6 +28,30 @@ describe('Sources', () => {
       const second = getAudioBaseLatency()
       expect(second).toBe(first)
     })
+
+    it('handles Infinity case correctly', () => {
+      const isAllowedPlatform = isAndroid() || isWebKit()
+      if (!isAllowedPlatform || !hasBaseLatencySupport()) {
+        return
+      }
+
+      const OriginalAudioContext = window.AudioContext
+
+      class MockAudioContext {
+        get baseLatency() {
+          return Infinity
+        }
+      }
+
+      window.AudioContext = MockAudioContext as typeof window.AudioContext
+
+      try {
+        const result = getAudioBaseLatency()
+        expect(result).toBe(SpecialFingerprint.NotFinite)
+      } finally {
+        window.AudioContext = OriginalAudioContext
+      }
+    })
   })
 })
 

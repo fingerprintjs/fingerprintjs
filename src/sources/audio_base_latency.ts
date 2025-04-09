@@ -5,6 +5,8 @@ export const enum SpecialFingerprint {
   NotSupported = -1,
   /** Entropy source is disabled because of console warnings */
   Disabled = -2,
+  /** Weird case where `baseLatency` is not a float number but `Infinity` instead */
+  NotFinite = -3,
 }
 
 export default function getAudioContextBaseLatency(): number {
@@ -18,5 +20,16 @@ export default function getAudioContextBaseLatency(): number {
   if (!window.AudioContext) {
     return SpecialFingerprint.NotSupported
   }
-  return new AudioContext().baseLatency ?? SpecialFingerprint.NotSupported
+
+  const latency = new AudioContext().baseLatency
+
+  if (latency === null || latency === undefined) {
+    return SpecialFingerprint.NotSupported
+  }
+
+  if (!isFinite(latency)) {
+    return SpecialFingerprint.NotFinite
+  }
+
+  return latency
 }
