@@ -1,8 +1,10 @@
 import { version } from '../package.json'
 import { requestIdleCallbackIfAvailable } from './utils/async'
+import { ERROR_SANDBOX_NOT_ALLOWED } from './constants'
 import { UnknownComponents } from './utils/entropy_source'
 import { x64hash128 } from './utils/hashing'
 import { errorToObject } from './utils/misc'
+import { isInsideSandboxIframe } from './utils/dom'
 import loadBuiltinSources, { BuiltinComponents } from './sources'
 import getConfidence, { Confidence } from './confidence'
 
@@ -196,6 +198,10 @@ function monitor() {
  * Builds an instance of Agent and waits a delay required for a proper operation.
  */
 export async function load(options: Readonly<LoadOptions> = {}): Promise<Agent> {
+  if (isInsideSandboxIframe()) {
+    throw new Error(ERROR_SANDBOX_NOT_ALLOWED)
+  }
+
   if ((options as { monitoring?: boolean }).monitoring ?? true) {
     monitor()
   }

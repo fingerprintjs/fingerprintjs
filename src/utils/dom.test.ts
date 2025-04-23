@@ -1,4 +1,4 @@
-import { addStyleString, isAnyParentCrossOrigin, withIframe } from './dom'
+import { addStyleString, isAnyParentCrossOrigin, withIframe, isInsideSandboxIframe } from './dom'
 import { withMockProperties } from '../../tests/utils'
 
 describe('DOM utilities', () => {
@@ -37,6 +37,27 @@ describe('DOM utilities', () => {
       } finally {
         jasmine.clock().uninstall()
       }
+    })
+  })
+
+  describe('isInsideSandboxIframe', () => {
+    // We are only mocking the window.origin because it is not possible to mock window.location
+    // And even if you somehow mock it when you try to set it back it would perform a page reload
+    const mockWindowOrigin = (origin: string) => ({
+      origin: { get: () => origin },
+    })
+
+    // The unit tests are done in 'http:' protocol by default
+    it('returns true "null" origin', async () => {
+      await withMockProperties(window, mockWindowOrigin('null'), () => {
+        expect(isInsideSandboxIframe()).toBeTrue()
+      })
+    })
+
+    it('returns false when both conditions are not met', async () => {
+      await withMockProperties(window, mockWindowOrigin('https://example.com'), () => {
+        expect(isInsideSandboxIframe()).toBeFalse()
+      })
     })
   })
 })

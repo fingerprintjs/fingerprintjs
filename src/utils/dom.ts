@@ -146,3 +146,8 @@ export function isAnyParentCrossOrigin(): boolean {
     currentWindow = parentWindow
   }
 }
+
+export function isInsideSandboxIframe() {
+  const w = window
+  return w.origin === 'null' && (w.location?.protocol === 'https:' || w.location?.protocol === 'http:')
+}
