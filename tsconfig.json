@@ -2,10 +2,10 @@
   "compilerOptions": {
     "module": "esnext",
     "moduleResolution": "node16",
-    "target": "es5",
+    "target": "es2018",
     "removeComments": false,
     "resolveJsonModule": true,
-    "importHelpers": true,
+    "importHelpers": false,
     "noErrorTruncation": true,
     "strict": true,
     "noUnusedLocals": true,
