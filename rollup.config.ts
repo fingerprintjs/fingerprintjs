@@ -8,7 +8,8 @@ import dtsPlugin from 'rollup-plugin-dts'
 import licensePlugin from 'rollup-plugin-license'
 import terserConfig from './terser.config'
 
-const { dependencies } = JSON.parse(fs.readFileSync('package.json', 'utf8'))
+const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'))
+const dependencies = pkg.dependencies || {}
 
 const outputDirectory = 'dist'
 
