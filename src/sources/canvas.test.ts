@@ -36,7 +36,7 @@ function shouldSkip() {
 }
 
 function shouldBeUnstable() {
-  return isSamsungInternet()
+  return isSamsungInternet() && (getBrowserMajorVersion() ?? 0) < 28
 }
 
 function isDataURL(url: string) {
