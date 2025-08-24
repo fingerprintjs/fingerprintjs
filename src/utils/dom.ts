@@ -12,7 +12,7 @@ import { parseSimpleCssSelector } from './data'
  * This function is out of Semantic Versioning, i.e. can change unexpectedly. Usage is at your own risk.
  */
 export async function withIframe<T>(
-  action: (iframe: HTMLIFrameElement, iWindow: Window) => MaybePromise<T>,
+  action: (iframe: HTMLIFrameElement, iWindow: typeof window) => MaybePromise<T>,
   initialHtml?: string,
   domPollInterval = 50,
 ): Promise<T> {
@@ -78,7 +78,7 @@ export async function withIframe<T>(
       await wait(domPollInterval)
     }
 
-    return await action(iframe, iframe.contentWindow)
+    return await action(iframe, iframe.contentWindow as typeof window)
   } finally {
     iframe.parentNode?.removeChild(iframe)
   }
@@ -120,20 +120,29 @@ export function addStyleString(style: CSSStyleDeclaration, source: string): void
 }
 
 /**
- * The returned promise resolves when the tab becomes visible (in foreground).
- * If the tab is already visible, resolves immediately.
+ * Returns true if the code runs in an iframe, and any parent page's origin doesn't match the current origin
  */
-export function whenDocumentVisible(): Promise<void> {
-  return new Promise((resolve) => {
-    const d = document
-    const eventName = 'visibilitychange'
-    const handleVisibilityChange = () => {
-      if (!d.hidden) {
-        d.removeEventListener(eventName, handleVisibilityChange)
-        resolve()
-      }
+export function isAnyParentCrossOrigin(): boolean {
+  let currentWindow: Window = window
+
+  for (;;) {
+    const parentWindow = currentWindow.parent
+    if (!parentWindow || parentWindow === currentWindow) {
+      return false // The top page is reached
     }
-    d.addEventListener(eventName, handleVisibilityChange)
-    handleVisibilityChange()
-  })
+
+    try {
+      if (parentWindow.location.origin !== currentWindow.location.origin) {
+        return true
+      }
+    } catch (error) {
+      // The error is thrown when `origin` is accessed on `parentWindow.location` when the parent is cross-origin
+      if (error instanceof Error && error.name === 'SecurityError') {
+        return true
+      }
+      throw error
+    }
+
+    currentWindow = parentWindow
+  }
 }

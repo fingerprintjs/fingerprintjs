@@ -1,4 +1,3 @@
-import { releaseEventLoop } from '../utils/async'
 import { withIframe } from '../utils/dom'
 
 // We use m or w because these two characters take up the maximum width.
@@ -136,8 +135,6 @@ export default function getFonts(): Promise<string[]> {
 
     // add all the spans to the DOM
     holder.appendChild(spansContainer)
-
-    await releaseEventLoop()
 
     // get the default width for the three base fonts
     for (let index = 0; index < baseFonts.length; index++) {

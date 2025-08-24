@@ -26,10 +26,6 @@ export function isChromium(): boolean {
   return new UAParser().getEngine().name === 'Blink'
 }
 
-export function isHeadlessChrome(): boolean {
-  return navigator.userAgent.includes('HeadlessChrome')
-}
-
 export function isGecko(): boolean {
   return new UAParser().getEngine().name === 'Gecko'
 }
@@ -64,6 +60,11 @@ export function isMacOS(): boolean {
 export function isSafari(): boolean {
   const browserName = new UAParser().getBrowser().name
   return browserName === 'Safari' || browserName === 'Mobile Safari'
+}
+
+export function isSamsungInternet(): boolean {
+  const browserName = new UAParser().getBrowser().name
+  return browserName === 'Samsung Internet'
 }
 
 /**

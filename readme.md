@@ -8,18 +8,10 @@
   </a>
 </p>
 <p align="center">
-  <a href="https://github.com/fingerprintjs/fingerprintjs/actions/workflows/test.yml">
-    <img src="https://github.com/fingerprintjs/fingerprintjs/actions/workflows/test.yml/badge.svg?branch=v2" alt="Build status">
-  </a>
-  <a href="https://www.npmjs.com/package/@fingerprintjs/fingerprintjs">
-    <img src="https://img.shields.io/npm/v/@fingerprintjs/fingerprintjs.svg" alt="Current NPM version">
-  </a>
-  <a href="https://www.npmjs.com/package/@fingerprintjs/fingerprintjs">
-    <img src="https://img.shields.io/npm/dm/@fingerprintjs/fingerprintjs.svg" alt="Monthly downloads from NPM">
-  </a>
-  <a href="https://www.jsdelivr.com/package/npm/@fingerprintjs/fingerprintjs">
-    <img src="https://img.shields.io/jsdelivr/npm/hm/@fingerprintjs/fingerprintjs.svg" alt="Monthly downloads from jsDelivr">
-  </a>
+  <a href="https://github.com/fingerprintjs/fingerprintjs/actions/workflows/test.yml"><img src="https://github.com/fingerprintjs/fingerprintjs/actions/workflows/test.yml/badge.svg" alt="Build status"></a>
+  <a href="https://www.npmjs.com/package/@fingerprintjs/fingerprintjs"><img src="https://img.shields.io/npm/v/@fingerprintjs/fingerprintjs.svg" alt="Current NPM version"></a>
+  <a href="https://www.npmjs.com/package/@fingerprintjs/fingerprintjs"><img src="https://img.shields.io/npm/dm/@fingerprintjs/fingerprintjs.svg" alt="Monthly downloads from NPM"></a>
+  <a href="https://www.jsdelivr.com/package/npm/@fingerprintjs/fingerprintjs"><img src="https://img.shields.io/jsdelivr/npm/hm/@fingerprintjs/fingerprintjs.svg" alt="Monthly downloads from jsDelivr"></a>
 </p>
 <p align="center">
   <a href="https://discord.gg/39EpE2neBg">
@@ -27,26 +19,15 @@
   </a>
 </p>
 
-FingerprintJS is a source-available, client-side, browser fingerprinting library that queries browser attributes and computes a hashed visitor identifier from them. Unlike cookies and local storage, a fingerprint stays the same in incognito/private mode and even when browser data is purged.
+FingerprintJS is a [source-available](docs/licensing.md), client-side, browser fingerprinting library that queries browser attributes and computes a hashed visitor identifier from them. Unlike cookies and local storage, a fingerprint stays the same in incognito/private mode and even when browser data is purged.
 
-## License
+FingerprintJS is available under a [BSL license](docs/licensing.md) for non-production purposes.
 
-Starting version 4.0.0, FingerprintJS is licensed under [Business Source License 1.1](LICENSE).
-The BSL allows use only for non-production purposes. You can learn more details in our [announcement](https://fingerprint.com/blog/fingerprintjs-license-change/).
-
-| Use Case | Is a commercial license required?|
-|----------|-----------|
-| Exploring FingerprintJS for your own research, hobbies, and testing purposes | **No** |
-| Using FingerprintJS to build a proof-of-concept application | **No** |
-| Using FingerprintJS to build revenue-generating applications | **Yes** |
-| Using FingerprintJS to build software that is provided as a service (SaaS) | **Yes** |
-| Forking FingerprintJS for any production purposes | **Yes** |
-
-To purchase a license for uses not authorized by BSL, please contact us at [sales@fingerprint.com](mailto:sales@fingerprint.com?subject=Interested%20in%20FingerprintJS%20commercial%20license).
+_FingerprintJS is different from [Fingerprint Identification](https://dev.fingerprint.com/docs/introduction#fingerprint-identification-vs-fingerprintjs), our more detailed and accurate commercial product. See below for [more information](#industry-leading-accuracy-with-fingerprint-identification)._
 
 ## Demo
 
-Visit https://fingerprintjs.github.io/fingerprintjs to know your visitor identifier.
+Visit https://fingerprintjs.github.io/fingerprintjs to see your visitor identifier.
 
 Now, try visiting the same page in private / incognito mode and notice how the visitor identifier remains the **same**!
 
@@ -79,33 +60,39 @@ Now, try visiting the same page in private / incognito mode and notice how the v
 
 ⚛️ [Sample usage with React on the StackBlitz platform](https://stackblitz.com/edit/fingerprintjs-react-demo)
 
+🔑 [FingerprintJS Licensing](docs/licensing.md)
+
 ## Limitations
 
 ### Accuracy
-Since FingerprintJS processes and generates the fingerprints from within the browser itself, the accuracy is limited (40% - 60%). For example, when 2 different users send requests using identical (i.e. same version, same vendor, same platform), browsers, FingerprintJS will not be able to tell these two browsers apart, primarily because the attribitutes from these browsers will be identical.
+
+Since FingerprintJS processes and generates the fingerprints from within the browser itself, the accuracy is limited (40% - 60%). For example, when 2 different users send requests using identical (i.e. same version, same vendor, same platform), browsers, FingerprintJS will not be able to tell these two browsers apart, primarily because the attributes from these browsers will be identical.
 
 ### Security
+
 Because of how the fingerprints are processed and generated from within the browser itself, they are vulnerable to spoofing and reverse engineering.
 
-## Get 99.5% accuracy
+## Industry-leading accuracy with Fingerprint Identification
 
-[Fingerprint Identification](https://fingerprint.com/github/) is a **closed-source**, **commercial** device identification product designed for fraud detection, device identification, marketing attribution, and analytics. This product is an enhanced version of FingerprintJS and has been fully re-designed to solve the most challenging identification use cases. Its source is not available in this or any other public repository.
+The main difference between FingerprintJS and [Fingerprint Identification](https://dev.fingerprint.com/docs/introduction) lies in the number of attributes collected from the browser, how they are processed, and the accuracy in identifying visitors.
 
-Fingerprint Identification is able to achieve 99.5% accuracy, because it processes the browser attributes on the server and also analyzes vast amounts of auxiliary data (e.g. IP addresses, time of visit patterns, URL changes, etc.). Because of these advanced matching techniques, Fingerprint Identification is able to reliably deduplicate different users that have identical devices. For a comprehensive list of advantages over FingerprintJS, please visit [Fingerprint Identification vs. FingerprintJS](https://dev.fingerprint.com/docs/identification-vs-fingerprintjs).
+Fingerprint Identification is a **closed-source**, **commercial** device intelligence platform designed to prevent fraud and improve user experiences. It's an enhanced version of FingerprintJS and has been fully re-designed to solve the most challenging identification use cases. Its source is not available in this or any other public repository.
 
-Fingerprint Identification is available for Web, Android, iOS, and other platforms. Our [plans start at $400 per month](https://fingerprint.com/pricing/) and include with them 100K API calls. You can easily get started by [signing up](https://dashboard.fingerprint.com/signup) for a free, no-obligation 14-day trial.
+Unlike FingerprintJS, Fingerprint Identification is able to achieve **industry-leading accuracy** because it processes the browser attributes on the server and also analyzes vast amounts of auxiliary data (e.g. IP addresses, time of visit patterns, URL changes, etc.). Because of these advanced matching techniques, Fingerprint Identification is able to reliably deduplicate different visitors that have identical devices.
 
-### Resources
+Fingerprint Identification is available for Web, Android, iOS, and other platforms. You can easily get started by [signing up](https://dashboard.fingerprint.com/signup) for a free, unlimited 14-day trial.
 
-🍿 [Fingerprint Identification live demo](https://fingerprint.com/demo)
+Check out our [comparison table](docs/comparison.md) for a detailed breakdown of the differences between FingerprintJS and Fingerprint Identification.
+
+### Fingerprint Identification resources
+
+🍿 [Fingerprint Identification live demo](https://demo.fingerprint.com/playground)
+
+📕 [Fingerprint Identification documentation](https://dev.fingerprint.com)
 
 ▶️ [Video: Use Fingerprint Identification to prevent multiple signups by same user](https://www.youtube.com/watch?v=jWX9P5_jZn8)
 
-🗂️ [Sample responses for the different Fingerprint Identification plans](https://fingerprinthub.com/playground)
-
-⏱️ [How to upgrade from FingerprintJS to Fingerprint Identification in 30 seconds](https://dev.fingerprint.com/v3/docs/migrating-from-source-available-v4)
-
-📕 [Fingerprint Identification documentation](https://dev.fingerprint.com)
+⏱️ [How to upgrade from FingerprintJS to Fingerprint Identification in 30 seconds](https://dev.fingerprint.com/docs/migrating-from-fingerprintjs-to-fingerprint-pro#migrating-from-fingerprintjs-v4-source-available-to-pro)
 
 ## Migrating to v4
 
@@ -121,14 +108,17 @@ See the compatibility policy for the API and visitor identifiers in the [version
 
 ## Supported browsers
 
-The library supports all popular browsers.
-See more details and learn how to run the library in old browsers in the [browser support guide](docs/browser_support.md).
+The library supports all popular browsers. See more details and learn how to run the library in old browsers in the [browser support guide](docs/browser_support.md).
 
 ## Where to get support
 
-Using [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) and [Discussions](https://github.com/fingerprintjs/fingerprintjs/discussions) publicly will help the open-source community and other users with similar issues.
-However, if you require private support, please email us at [oss-support@fingerprint.com](mailto:oss-support@fingerprint.com).
+Using [Issues](https://github.com/fingerprintjs/fingerprintjs/issues) and [Discussions](https://github.com/fingerprintjs/fingerprintjs/discussions) publicly will help the community and other users with similar issues.
+
+You can also join our [Discord server](https://discord.gg/ad6R2ttHVX) to ask questions, share feedback, and connect with other developers.
+
+If you require private support for FingerprintJS, please email us at [oss-support@fingerprint.com](mailto:oss-support@fingerprint.com).
 
 ## Contributing
 
-See the [contribution guidelines](contributing.md) to learn how to start a playground, test, and build.
+See the [Contribution guidelines](contributing.md) to learn how to contribute to the project or run the project locally.
+Please read it carefully before making a pull request.

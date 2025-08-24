@@ -5,6 +5,7 @@ interface Window {
   openDatabase?(...args: unknown[]): void
   ApplePaySession?: ApplePaySessionConstructor
   __fpjs_d_m?: unknown
+  URLPattern?: new (...args: unknown[]) => unknown
 }
 
 interface Navigator {

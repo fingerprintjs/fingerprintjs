@@ -5,7 +5,7 @@ import { excludes } from './data'
 /**
  * A functions that returns data with entropy to identify visitor.
  *
- * See https://github.com/fingerprintjs/fingerprintjs/blob/master/contributing.md#how-to-make-an-entropy-source
+ * See https://github.com/fingerprintjs/fingerprintjs/blob/master/contributing.md#how-to-add-an-entropy-source
  * to learn how entropy source works and how to make your own.
  */
 export type Source<TOptions, TValue> = (options: TOptions) => MaybePromise<TValue | (() => MaybePromise<TValue>)>
@@ -63,49 +63,49 @@ export function loadSource<TOptions, TValue>(
   source: Source<TOptions, TValue>,
   sourceOptions: TOptions,
 ): () => Promise<Component<TValue>> {
-  const sourceLoadPromise = new Promise<() => MaybePromise<Component<TValue>>>((resolveLoad) => {
-    const loadStartTime = Date.now()
+  const sourceLoadPromise = suppressUnhandledRejectionWarning(
+    new Promise<() => MaybePromise<Component<TValue>>>((resolveLoad) => {
+      const loadStartTime = Date.now()
 
-    // `awaitIfAsync` is used instead of just `await` in order to measure the duration of synchronous sources
-    // correctly (other microtasks won't affect the duration).
-    awaitIfAsync(source.bind(null, sourceOptions), (...loadArgs) => {
-      const loadDuration = Date.now() - loadStartTime
+      // `awaitIfAsync` is used instead of just `await` in order to measure the duration of synchronous sources
+      // correctly (other microtasks won't affect the duration).
+      awaitIfAsync(source.bind(null, sourceOptions), (...loadArgs) => {
+        const loadDuration = Date.now() - loadStartTime
 
-      // Source loading failed
-      if (!loadArgs[0]) {
-        return resolveLoad(() => ({ error: loadArgs[1], duration: loadDuration }))
-      }
+        // Source loading failed
+        if (!loadArgs[0]) {
+          return resolveLoad(() => ({ error: loadArgs[1], duration: loadDuration }))
+        }
 
-      const loadResult = loadArgs[1]
+        const loadResult = loadArgs[1]
 
-      // Source loaded with the final result
-      if (isFinalResultLoaded(loadResult)) {
-        return resolveLoad(() => ({ value: loadResult, duration: loadDuration }))
-      }
+        // Source loaded with the final result
+        if (isFinalResultLoaded(loadResult)) {
+          return resolveLoad(() => ({ value: loadResult, duration: loadDuration }))
+        }
 
-      // Source loaded with "get" stage
-      resolveLoad(
-        () =>
-          new Promise<Component<TValue>>((resolveGet) => {
-            const getStartTime = Date.now()
+        // Source loaded with "get" stage
+        resolveLoad(
+          () =>
+            new Promise<Component<TValue>>((resolveGet) => {
+              const getStartTime = Date.now()
 
-            awaitIfAsync(loadResult, (...getArgs) => {
-              const duration = loadDuration + Date.now() - getStartTime
+              awaitIfAsync(loadResult, (...getArgs) => {
+                const duration = loadDuration + Date.now() - getStartTime
 
-              // Source getting failed
-              if (!getArgs[0]) {
-                return resolveGet({ error: getArgs[1], duration })
-              }
+                // Source getting failed
+                if (!getArgs[0]) {
+                  return resolveGet({ error: getArgs[1], duration })
+                }
 
-              // Source getting succeeded
-              resolveGet({ value: getArgs[1], duration })
-            })
-          }),
-      )
-    })
-  })
-
-  suppressUnhandledRejectionWarning(sourceLoadPromise)
+                // Source getting succeeded
+                resolveGet({ value: getArgs[1], duration })
+              })
+            }),
+        )
+      })
+    }),
+  )
 
   return function getComponent() {
     return sourceLoadPromise.then((finalizeSource) => finalizeSource())
@@ -125,6 +125,7 @@ export function loadSources<TSourceOptions, TSources extends UnknownSources<TSou
   sources: TSources,
   sourceOptions: TSourceOptions,
   excludeSources: readonly TExclude[],
+  loopReleaseInterval?: number,
 ): () => Promise<Omit<SourcesToComponents<TSources>, TExclude>> {
   const includedSources = Object.keys(sources).filter((sourceKey) => excludes(excludeSources, sourceKey)) as Exclude<
     keyof TSources,
@@ -138,8 +139,9 @@ export function loadSources<TSourceOptions, TSources extends UnknownSources<TSou
   // and measure the duration correctly
   const sourceGettersPromise = mapWithBreaks(prioritizedSources, (sourceKey) =>
     loadSource(sources[sourceKey], sourceOptions),
+  const sourceGettersPromise = suppressUnhandledRejectionWarning(
+    mapWithBreaks(includedSources, (sourceKey) => loadSource(sources[sourceKey], sourceOptions), loopReleaseInterval),
   )
-  suppressUnhandledRejectionWarning(sourceGettersPromise)
 
   return async function getComponents() {
     const sourceGetters = await sourceGettersPromise
@@ -150,6 +152,11 @@ export function loadSources<TSourceOptions, TSources extends UnknownSources<TSou
       suppressUnhandledRejectionWarning(componentPromise)
       return componentPromise
     })
+    const componentPromises = await mapWithBreaks(
+      sourceGetters,
+      (sourceGetter) => suppressUnhandledRejectionWarning(sourceGetter()),
+      loopReleaseInterval,
+    )
 
     // Используем Promise.allSettled для лучшей обработки ошибок
     const componentResults = await Promise.allSettled(componentPromises)

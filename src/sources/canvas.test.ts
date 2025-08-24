@@ -1,4 +1,4 @@
-import { getBrowserMajorVersion, isSafari } from '../../tests/utils'
+import { getBrowserMajorVersion, isSafari, isSamsungInternet } from '../../tests/utils'
 import getCanvasFingerprint, { ImageStatus } from './canvas'
 
 describe('Sources', () => {
@@ -11,6 +11,9 @@ describe('Sources', () => {
       if (shouldSkip()) {
         expect(text).toBe(ImageStatus.Skipped)
         expect(geometry).toBe(ImageStatus.Skipped)
+      } else if (shouldBeUnstable()) {
+        expect(text).toBe(ImageStatus.Unstable)
+        expect(geometry).toBe(ImageStatus.Unstable)
       } else {
         expect(isDataURL(geometry)).toBeTrue()
         expect(isDataURL(text)).toBeTrue()
@@ -30,6 +33,10 @@ describe('Sources', () => {
 
 function shouldSkip() {
   return isSafari() && (getBrowserMajorVersion() ?? 0) >= 17
+}
+
+function shouldBeUnstable() {
+  return isSamsungInternet() && (getBrowserMajorVersion() ?? 0) < 28
 }
 
 function isDataURL(url: string) {

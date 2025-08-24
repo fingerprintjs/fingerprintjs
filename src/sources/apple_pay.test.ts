@@ -23,7 +23,7 @@ describe('Sources', () => {
           ApplePaySession: undefined,
         },
         async () => {
-          expect(await getApplePayState()).toBe(ApplePayState.NoAPI)
+          expect(getApplePayState()).toBe(ApplePayState.NoAPI)
         },
       )
     })
@@ -48,39 +48,6 @@ describe('Sources', () => {
           makeError('InvalidAccessError', 'Trying to start an Apple Pay session from an insecure document.'),
         ),
       ).toBe(ApplePayState.NotAvailableInInsecureContext)
-
-      // Safari 10
-      expect(
-        getStateFromError(
-          makeError(
-            'InvalidAccessError',
-            'Trying to call an ApplePaySession API ' +
-              'from a document with an different security origin than its top-level frame.',
-          ),
-        ),
-      ).toEqual(ApplePayState.NotAvailableInFrame)
-
-      // Safari 11-14
-      expect(
-        getStateFromError(
-          makeError(
-            'InvalidAccessError',
-            'Trying to start an Apple Pay session ' +
-              'from a document with an different security origin than its top-level frame.',
-          ),
-        ),
-      ).toEqual(ApplePayState.NotAvailableInFrame)
-
-      // Safari 15-16
-      expect(
-        getStateFromError(
-          makeError(
-            'SecurityError',
-            'Third-party iframes are not allowed to request payments ' +
-              'unless explicitly allowed via Feature-Policy (payment)',
-          ),
-        ),
-      ).toEqual(ApplePayState.NotAvailableInFrame)
 
       expect(() => getStateFromError(makeError('TypeError', 'Other error'))).toThrowMatching(
         (thrown) => thrown.name === 'TypeError' && thrown.message === 'Other error',

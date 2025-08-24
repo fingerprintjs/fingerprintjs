@@ -1,4 +1,4 @@
-import { getBrowserMajorVersion, isMobile, isSafari, isTablet, withMockProperties } from '../../tests/utils'
+import { isMobile, isTablet, withMockProperties } from '../../tests/utils'
 import getTouchSupport from './touch_support'
 
 describe('Sources', () => {
@@ -7,13 +7,7 @@ describe('Sources', () => {
       const touchSupport = getTouchSupport()
 
       if (isMobile() || isTablet()) {
-        // Unavailable in Safari on iOS until version 13.
-        if (isSafari() && (getBrowserMajorVersion() ?? 0) < 13) {
-          expect(touchSupport.maxTouchPoints).toBe(0)
-        } else {
-          expect(touchSupport.maxTouchPoints).toBeGreaterThan(0)
-        }
-
+        expect(touchSupport.maxTouchPoints).toBeGreaterThan(0)
         expect(touchSupport.touchEvent).toBe(true)
         expect(touchSupport.touchStart).toBe(true)
       } else {
