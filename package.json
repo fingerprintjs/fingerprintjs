@@ -42,7 +42,10 @@
     "test:browserstack": "karma start --preset browserstack --single-run",
     "test:browserstack:beta": "karma start --preset browserstack-beta --single-run",
     "check:dts": "tsc --isolatedModules --noEmit dist/fp.d.ts",
-    "check:ssr": "node --require './dist/fp.cjs.js' --eval '' || (echo \"The distributive files can't be used with server side rendering. Make sure the code doesn't use browser API until an exported function is called.\" && exit 1)"
+    "check:ssr": "node --require './dist/fp.cjs.js' --eval '' || (echo \"The distributive files can't be used with server side rendering. Make sure the code doesn't use browser API until an exported function is called.\" && exit 1)",
+    "benchmark": "ts-node examples/benchmark-runner.ts",
+    "test:optimizations": "ts-node examples/optimized-usage.ts",
+    "performance:test": "yarn build && node dist/fp.cjs.js --benchmark"
   },
   "dependencies": {
     "tslib": "^2.4.1"

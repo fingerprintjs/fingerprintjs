@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FingerprintJS Optimizations Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            background: #fafbfc;
+        }
+        
+        .section h2 {
+            color: #34495e;
+            margin-top: 0;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        
+        .button:hover {
+            background: #2980b9;
+        }
+        
+        .button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .success { color: #27ae60; }
+        .error { color: #e74c3c; }
+        .info { color: #3498db; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 FingerprintJS Optimizations Demo</h1>
+        
+        <div class="section">
+            <h2>📊 Performance Tests</h2>
+            <button class="button" onclick="runBenchmarks()">Run Benchmarks</button>
+            <button class="button" onclick="testOptimizations()">Test Optimizations</button>
+            <button class="button" onclick="clearOutput()">Clear Output</button>
+        </div>
+        
+        <div class="section">
+            <h2>📈 Statistics</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="cache-size">-</div>
+                    <div class="stat-label">Cache Size</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="hash-count">-</div>
+                    <div class="stat-label">Hash Count</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avg-time">-</div>
+                    <div class="stat-label">Avg Time (ms)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="memory-usage">-</div>
+                    <div class="stat-label">Memory (MB)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📝 Output</h2>
+            <div class="output" id="output">Ready to run tests...</div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Импортируем FingerprintJS
+        let FingerprintJS;
+        
+        async function loadFingerprintJS() {
+            try {
+                // Пытаемся загрузить из CDN
+                const response = await fetch('https://openfpcdn.io/fingerprintjs/v4');
+                const text = await response.text();
+                
+                // Создаем модуль из текста
+                const blob = new Blob([text], { type: 'application/javascript' });
+                const url = URL.createObjectURL(blob);
+                FingerprintJS = await import(url);
+                
+                log('✅ FingerprintJS loaded successfully', 'success');
+                return true;
+            } catch (error) {
+                log('❌ Failed to load FingerprintJS from CDN', 'error');
+                log('Error: ' + error.message, 'error');
+                return false;
+            }
+        }
+        
+        // Функция логирования
+        function log(message, type = 'info') {
+            const output = document.getElementById('output');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+            
+            output.innerHTML += `<span class="${className}">[${timestamp}] ${message}</span>\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        // Очистка вывода
+        window.clearOutput = function() {
+            document.getElementById('output').innerHTML = 'Output cleared...\n';
+        };
+        
+        // Запуск бенчмарков
+        window.runBenchmarks = async function() {
+            if (!FingerprintJS) {
+                log('❌ FingerprintJS not loaded', 'error');
+                return;
+            }
+            
+            log('🚀 Starting benchmarks...', 'info');
+            
+            try {
+                // Создаем агент
+                const agent = await FingerprintJS.load({
+                    enableCache: true,
+                    cacheTTL: 300000,
+                    delayFallback: 25,
+                    debug: false
+                });
+                
+                // Тест без кэша
+                log('📊 Testing without cache...', 'info');
+                const start1 = performance.now();
+                await agent.get();
+                const time1 = performance.now() - start1;
+                
+                // Тест с кэшем
+                log('📊 Testing with cache...', 'info');
+                const start2 = performance.now();
+                await agent.get();
+                const time2 = performance.now() - start2;
+                
+                // Результаты
+                log(`⏱️  Without cache: ${time1.toFixed(2)}ms`, 'info');
+                log(`⏱️  With cache: ${time2.toFixed(2)}ms`, 'info');
+                
+                const improvement = ((time1 - time2) / time1 * 100);
+                log(`🚀 Improvement: ${improvement.toFixed(1)}% faster with cache`, 'success');
+                
+                // Обновляем статистику
+                document.getElementById('avg-time').textContent = time2.toFixed(1);
+                
+            } catch (error) {
+                log('❌ Benchmark failed: ' + error.message, 'error');
+            }
+        };
+        
+        // Тест оптимизаций
+        window.testOptimizations = async function() {
+            if (!FingerprintJS) {
+                log('❌ FingerprintJS not loaded', 'error');
+                return;
+            }
+            
+            log('🧪 Testing optimizations...', 'info');
+            
+            try {
+                // Тестируем кэширование
+                log('🔍 Testing caching...', 'info');
+                const agent = await FingerprintJS.load({
+                    enableCache: true,
+                    cacheTTL: 300000
+                });
+                
+                // Первый вызов
+                const start1 = performance.now();
+                const result1 = await agent.get();
+                const time1 = performance.now() - start1;
+                
+                log(`📱 First call: ${time1.toFixed(2)}ms`, 'info');
+                log(`🆔 Visitor ID: ${result1.visitorId.substring(0, 16)}...`, 'info');
+                log(`🎯 Confidence: ${(result1.confidence.score * 100).toFixed(1)}%`, 'info');
+                
+                // Второй вызов (кэшированный)
+                const start2 = performance.now();
+                const result2 = await agent.get();
+                const time2 = performance.now() - start2;
+                
+                log(`⚡ Second call: ${time2.toFixed(2)}ms`, 'info');
+                
+                // Проверяем, что результаты одинаковые
+                if (result1.visitorId === result2.visitorId) {
+                    log('✅ Caching working correctly - same visitor ID', 'success');
+                } else {
+                    log('❌ Caching failed - different visitor IDs', 'error');
+                }
+                
+                // Обновляем статистику
+                document.getElementById('hash-count').textContent = '2';
+                document.getElementById('avg-time').textContent = time2.toFixed(1);
+                
+                // Тестируем память
+                if ('memory' in performance) {
+                    const memory = performance.memory;
+                    const memoryMB = (memory.usedJSHeapSize / 1024 / 1024).toFixed(2);
+                    document.getElementById('memory-usage').textContent = memoryMB;
+                    log(`💾 Memory usage: ${memoryMB}MB`, 'info');
+                }
+                
+            } catch (error) {
+                log('❌ Optimization test failed: ' + error.message, 'error');
+            }
+        };
+        
+        // Инициализация
+        window.addEventListener('load', async () => {
+            log('🔄 Loading FingerprintJS...', 'info');
+            const loaded = await loadFingerprintJS();
+            
+            if (loaded) {
+                log('🎉 Ready to run tests!', 'success');
+                log('💡 Click "Run Benchmarks" or "Test Optimizations" to start', 'info');
+            } else {
+                log('💡 Try refreshing the page or check your internet connection', 'info');
+            }
+        });
+    </script>
+</body>
+</html>
