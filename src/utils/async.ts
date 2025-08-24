@@ -11,15 +11,230 @@ export function releaseEventLoop(): Promise<void> {
   return wait(0)
 }
 
-export function requestIdleCallbackIfAvailable(fallbackTimeout: number, deadlineTimeout = Infinity): Promise<void> {
-  const { requestIdleCallback } = window
-  if (requestIdleCallback) {
-    // The function `requestIdleCallback` loses the binding to `window` here.
-    // `globalThis` isn't always equal `window` (see https://github.com/fingerprintjs/fingerprintjs/issues/683).
-    // Therefore, an error can occur. `call(window,` prevents the error.
-    return new Promise((resolve) => requestIdleCallback.call(window, () => resolve(), { timeout: deadlineTimeout }))
-  } else {
-    return wait(Math.min(fallbackTimeout, deadlineTimeout))
+/**
+ * Улучшенная версия requestIdleCallback с fallback и оптимизациями
+ */
+export function requestIdleCallbackIfAvailable(
+  delayFallback: number,
+  deadlineFallback: number,
+): Promise<void> {
+  return new Promise((resolve) => {
+    if (typeof requestIdleCallback === 'function') {
+      requestIdleCallback(() => resolve(), { timeout: deadlineFallback })
+    } else {
+      // Используем setTimeout с приоритизацией
+      setTimeout(resolve, delayFallback)
+    }
+  })
+}
+
+/**
+ * Параллельное выполнение с ограничением количества одновременных операций
+ */
+export async function parallelWithLimit<T>(
+  items: T[],
+  processor: (item: T) => Promise<any>,
+  concurrencyLimit: number = 4
+): Promise<any[]> {
+  const results: any[] = []
+  const executing: Promise<any>[] = []
+  
+  for (const item of items) {
+    const promise = processor(item).then(result => {
+      const index = executing.indexOf(promise)
+      if (index > -1) {
+        executing.splice(index, 1)
+      }
+      return result
+    })
+    
+    executing.push(promise)
+    results.push(promise)
+    
+    if (executing.length >= concurrencyLimit) {
+      await Promise.race(executing)
+    }
+  }
+  
+  return Promise.all(results)
+}
+
+/**
+ * Кэширование промисов для избежания дублирования запросов
+ */
+export class PromiseCache<K, V> {
+  private cache = new Map<K, Promise<V>>()
+  private maxSize: number
+  
+  constructor(maxSize: number = 100) {
+    this.maxSize = maxSize
+  }
+  
+  async get(key: K, factory: () => Promise<V>): Promise<V> {
+    if (this.cache.has(key)) {
+      return this.cache.get(key)!
+    }
+    
+    if (this.cache.size >= this.maxSize) {
+      // Удаляем старые записи
+      const firstKey = this.cache.keys().next().value
+      this.cache.delete(firstKey)
+    }
+    
+    const promise = factory()
+    this.cache.set(key, promise)
+    
+    // Удаляем из кэша при ошибке
+    promise.catch(() => {
+      this.cache.delete(key)
+    })
+    
+    return promise
+  }
+  
+  clear(): void {
+    this.cache.clear()
+  }
+  
+  get size(): number {
+    return this.cache.size
+  }
+}
+
+/**
+ * Оптимизированная функция ожидания с возможностью отмены
+ */
+export function waitWithTimeout(ms: number, signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      reject(new Error('Operation aborted'))
+      return
+    }
+    
+    const timeoutId = setTimeout(() => {
+      if (signal?.aborted) {
+        reject(new Error('Operation aborted'))
+      } else {
+        resolve()
+      }
+    }, ms)
+    
+    signal?.addEventListener('abort', () => {
+      clearTimeout(timeoutId)
+      reject(new Error('Operation aborted'))
+    })
+  })
+}
+
+/**
+ * Выполнение функции с повторными попытками
+ */
+export async function retryWithBackoff<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  baseDelay: number = 1000
+): Promise<T> {
+  let lastError: Error
+  
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn()
+    } catch (error) {
+      lastError = error as Error
+      
+      if (attempt === maxRetries) {
+        break
+      }
+      
+      const delay = baseDelay * Math.pow(2, attempt)
+      await waitWithTimeout(delay)
+    }
+  }
+  
+  throw lastError!
+}
+
+/**
+ * Батчинг операций для улучшения производительности
+ */
+export class BatchProcessor<T, R> {
+  private batch: T[] = []
+  private processing = false
+  private processor: (items: T[]) => Promise<R[]>
+  private batchSize: number
+  private batchTimeout: number
+  
+  constructor(
+    processor: (items: T[]) => Promise<R[]>,
+    batchSize: number = 10,
+    batchTimeout: number = 100
+  ) {
+    this.processor = processor
+    this.batchSize = batchSize
+    this.batchTimeout = batchTimeout
+  }
+  
+  async add(item: T): Promise<R> {
+    this.batch.push(item)
+    
+    if (this.batch.length >= this.batchSize) {
+      return this.processBatch()
+    }
+    
+    if (!this.processing) {
+      this.scheduleProcessing()
+    }
+    
+    // Возвращаем промис, который разрешится при обработке батча
+    return new Promise((resolve, reject) => {
+      const index = this.batch.length - 1
+      this.batch[index] = { item, resolve, reject } as any
+    })
+  }
+  
+  private scheduleProcessing(): void {
+    setTimeout(() => {
+      if (this.batch.length > 0) {
+        this.processBatch()
+      }
+    }, this.batchTimeout)
+  }
+  
+  private async processBatch(): Promise<R[]> {
+    if (this.processing || this.batch.length === 0) {
+      return []
+    }
+    
+    this.processing = true
+    const currentBatch = [...this.batch]
+    this.batch = []
+    
+    try {
+      const results = await this.processor(currentBatch.map(b => 'item' in b ? b.item : b))
+      
+      // Разрешаем промисы для элементов в батче
+      currentBatch.forEach((batchItem, index) => {
+        if ('resolve' in batchItem) {
+          batchItem.resolve(results[index])
+        }
+      })
+      
+      return results
+    } catch (error) {
+      // Отклоняем промисы при ошибке
+      currentBatch.forEach(batchItem => {
+        if ('reject' in batchItem) {
+          batchItem.reject(error)
+        }
+      })
+      throw error
+    } finally {
+      this.processing = false
+      
+      if (this.batch.length > 0) {
+        this.scheduleProcessing()
+      }
+    }
   }
 }
 

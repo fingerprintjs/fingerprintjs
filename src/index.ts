@@ -2,7 +2,7 @@ import { load, Agent, LoadOptions, GetOptions, GetResult, hashComponents, compon
 import { BuiltinComponents } from './sources'
 import { Confidence } from './confidence'
 import { Component, UnknownComponents } from './utils/entropy_source'
-import { x64hash128 } from './utils/hashing'
+import { x64hash128, clearHashCache, getHashCacheStats } from './utils/hashing'
 
 // Exports that are under Semantic versioning
 export {
@@ -51,3 +51,21 @@ export {
   UnknownSources,
 } from './utils/entropy_source'
 export { withIframe } from './utils/dom'
+
+// Новые оптимизированные экспорты
+export { clearHashCache, getHashCacheStats } from './utils/hashing'
+export {
+  parallelWithLimit,
+  PromiseCache,
+  waitWithTimeout,
+  retryWithBackoff,
+  BatchProcessor
+} from './utils/async'
+export {
+  benchmark,
+  compareBenchmarks,
+  runAllBenchmarks,
+  measureTime,
+  profileMemory
+} from './utils/benchmark'
+export { getOptimizedCanvasFingerprint, getWebGLCanvasFingerprint } from './sources/optimized_canvas'

@@ -130,9 +130,13 @@ export function loadSources<TSourceOptions, TSources extends UnknownSources<TSou
     keyof TSources,
     TExclude
   >[]
+  
+  // Приоритизируем источники для оптимального порядка загрузки
+  const prioritizedSources = prioritizeSources(includedSources)
+  
   // Using `mapWithBreaks` allows asynchronous sources to complete between synchronous sources
   // and measure the duration correctly
-  const sourceGettersPromise = mapWithBreaks(includedSources, (sourceKey) =>
+  const sourceGettersPromise = mapWithBreaks(prioritizedSources, (sourceKey) =>
     loadSource(sources[sourceKey], sourceOptions),
   )
   suppressUnhandledRejectionWarning(sourceGettersPromise)
@@ -140,21 +144,89 @@ export function loadSources<TSourceOptions, TSources extends UnknownSources<TSou
   return async function getComponents() {
     const sourceGetters = await sourceGettersPromise
 
+    // Загружаем компоненты параллельно с приоритизацией
     const componentPromises = await mapWithBreaks(sourceGetters, (sourceGetter) => {
       const componentPromise = sourceGetter()
       suppressUnhandledRejectionWarning(componentPromise)
       return componentPromise
     })
 
-    const componentArray = await Promise.all(componentPromises)
+    // Используем Promise.allSettled для лучшей обработки ошибок
+    const componentResults = await Promise.allSettled(componentPromises)
+    
     // Keeping the component keys order the same as the source keys order
     const components = {} as Omit<SourcesToComponents<TSources>, TExclude>
-    for (let index = 0; index < includedSources.length; ++index) {
-      components[includedSources[index]] = componentArray[index] as Component<any>
+    for (let index = 0; index < prioritizedSources.length; ++index) {
+      const result = componentResults[index]
+      if (result.status === 'fulfilled') {
+        components[prioritizedSources[index]] = result.value as Component<any>
+      } else {
+        // Если источник не загрузился, создаем компонент с ошибкой
+        components[prioritizedSources[index]] = {
+          error: result.reason,
+          duration: 0
+        } as Component<any>
+      }
     }
 
     return components
   }
+}
+
+/**
+ * Приоритизирует источники для оптимального порядка загрузки
+ */
+function prioritizeSources(sourceKeys: string[]): string[] {
+  // Источники с высоким приоритетом (быстрые и стабильные)
+  const highPriority = [
+    'platform', 'vendor', 'architecture', 'cpuClass', 'hardwareConcurrency',
+    'deviceMemory', 'colorDepth', 'screenResolution', 'timezone'
+  ]
+  
+  // Источники со средним приоритетом
+  const mediumPriority = [
+    'osCpu', 'languages', 'sessionStorage', 'localStorage', 'indexedDB',
+    'openDatabase', 'plugins', 'touchSupport', 'vendorFlavors', 'cookiesEnabled',
+    'colorGamut', 'invertedColors', 'forcedColors', 'monochrome', 'contrast',
+    'reducedMotion', 'reducedTransparency', 'hdr', 'math', 'pdfViewerEnabled',
+    'applePay', 'privateClickMeasurement'
+  ]
+  
+  // Источники с низким приоритетом (медленные, но важные)
+  const lowPriority = [
+    'fonts', 'domBlockers', 'fontPreferences', 'audio', 'screenFrame',
+    'canvas', 'webGlBasics', 'webGlExtensions'
+  ]
+  
+  const prioritized: string[] = []
+  
+  // Добавляем источники в порядке приоритета
+  for (const key of highPriority) {
+    if (sourceKeys.includes(key)) {
+      prioritized.push(key)
+    }
+  }
+  
+  for (const key of mediumPriority) {
+    if (sourceKeys.includes(key)) {
+      prioritized.push(key)
+    }
+  }
+  
+  for (const key of lowPriority) {
+    if (sourceKeys.includes(key)) {
+      prioritized.push(key)
+    }
+  }
+  
+  // Добавляем оставшиеся источники
+  for (const key of sourceKeys) {
+    if (!prioritized.includes(key)) {
+      prioritized.push(key)
+    }
+  }
+  
+  return prioritized
 }
 
 /**

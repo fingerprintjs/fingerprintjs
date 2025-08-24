@@ -6,6 +6,9 @@ import { errorToObject } from './utils/misc'
 import loadBuiltinSources, { BuiltinComponents } from './sources'
 import getConfidence, { Confidence } from './confidence'
 
+// Кэш для хранения результатов хеширования
+const hashCache = new Map<string, string>()
+
 /**
  * Options for Fingerprint class loading
  */
@@ -21,6 +24,16 @@ export interface LoadOptions {
    * Required to ease investigations of problems.
    */
   debug?: boolean
+  /**
+   * Enable caching for better performance
+   * @default true
+   */
+  enableCache?: boolean
+  /**
+   * Cache TTL in milliseconds
+   * @default 300000 (5 minutes)
+   */
+  cacheTTL?: number
 }
 
 /**
@@ -104,7 +117,7 @@ export function hashComponents(components: UnknownComponents): string {
  * Makes a GetResult implementation that calculates the visitor id hash on demand.
  * Designed for optimisation.
  */
-function makeLazyGetResult(components: BuiltinComponents): GetResult {
+function makeLazyGetResult(components: BuiltinComponents, enableCache = true): GetResult {
   let visitorIdCache: string | undefined
 
   // This function runs very fast, so there is no need to make it lazy
@@ -114,7 +127,23 @@ function makeLazyGetResult(components: BuiltinComponents): GetResult {
   return {
     get visitorId(): string {
       if (visitorIdCache === undefined) {
+        if (enableCache) {
+          // Попытка найти в кэше
+          const cacheKey = JSON.stringify(components)
+          const cached = hashCache.get(cacheKey)
+          if (cached) {
+            visitorIdCache = cached
+            return cached
+          }
+        }
+        
         visitorIdCache = hashComponents(this.components)
+        
+        if (enableCache) {
+          // Сохраняем в кэш
+          const cacheKey = JSON.stringify(components)
+          hashCache.set(cacheKey, visitorIdCache)
+        }
       }
       return visitorIdCache
     },
@@ -145,14 +174,32 @@ export function prepareForSources(delayFallback = 50): Promise<void> {
  * A factory function is used instead of a class to shorten the attribute names in the minified code.
  * Native private class fields could've been used, but TypeScript doesn't allow them with `"target": "es5"`.
  */
-function makeAgent(getComponents: () => Promise<BuiltinComponents>, debug?: boolean): Agent {
+function makeAgent(getComponents: () => Promise<BuiltinComponents>, debug?: boolean, enableCache = true): Agent {
   const creationTime = Date.now()
+  let lastComponents: BuiltinComponents | null = null
+  let lastResult: GetResult | null = null
 
   return {
     async get(options) {
       const startTime = Date.now()
       const components = await getComponents()
-      const result = makeLazyGetResult(components)
+      
+      // Проверяем, изменились ли компоненты
+      if (lastComponents && lastResult && enableCache) {
+        const componentsChanged = JSON.stringify(components) !== JSON.stringify(lastComponents)
+        if (!componentsChanged) {
+          // Возвращаем кэшированный результат, если компоненты не изменились
+          return lastResult
+        }
+      }
+      
+      const result = makeLazyGetResult(components, enableCache)
+      
+      // Кэшируем результат
+      if (enableCache) {
+        lastComponents = components
+        lastResult = result
+      }
 
       if (debug || options?.debug) {
         // console.log is ok here because it's under a debug clause
@@ -199,8 +246,16 @@ export async function load(options: Readonly<LoadOptions> = {}): Promise<Agent> 
   if ((options as { monitoring?: boolean }).monitoring ?? true) {
     monitor()
   }
-  const { delayFallback, debug } = options
+  const { delayFallback, debug, enableCache = true, cacheTTL = 300000 } = options
+  
+  // Очищаем устаревшие записи кэша
+  if (enableCache && cacheTTL > 0) {
+    setTimeout(() => {
+      hashCache.clear()
+    }, cacheTTL)
+  }
+  
   await prepareForSources(delayFallback)
   const getComponents = loadBuiltinSources({ cache: {}, debug })
-  return makeAgent(getComponents, debug)
+  return makeAgent(getComponents, debug, enableCache)
 }
