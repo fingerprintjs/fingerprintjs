@@ -15,7 +15,7 @@
     "privacy"
   ],
   "author": "FingerprintJS, Inc (https://fingerprint.com)",
-  "license": "BUSL-1.1",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/fingerprintjs/fingerprintjs.git"
