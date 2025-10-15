@@ -15,4 +15,4 @@ You can find scripts on the following URLs (you can replace the version with the
 ## Commercial alternatives
 
 - Sign up for a [14-day free trial](https://dashboard.fingerprint.com/signup) of Fingerprint Pro, which includes unlimited API calls. This includes both the CDN and NPM installation options as well as a [custom subdomain](https://dev.fingerprint.com/docs/subdomain-integration) that will prevent blocking of ad blockers.
-- Use the [paid tier for Fingerprint Pro](https://dashboard.fingerprint.com/signup), which allows making an unlimited number of identification events per month. This option supports both CDN and NPM installation options and the [custom subdomain](https://dev.fingerprint.com/docs/subdomain-integration) functionality too.
+- Use the [paid tier for Fingerprint Identification](https://dashboard.fingerprint.com/signup), which allows making an unlimited number of identification events per month. This option supports both CDN and NPM installation options and the [custom subdomain](https://dev.fingerprint.com/docs/subdomain-integration) functionality too.
