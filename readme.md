@@ -64,7 +64,7 @@ Now, try visiting the same page in private / incognito mode and notice how the v
 
 ### Accuracy
 
-Since FingerprintJS processes and generates the fingerprints from within the browser itself, the accuracy is significatnly lower than in the [commercial version](https://fingerprint.com/pricing)
+Since FingerprintJS processes and generates the fingerprints from within the browser itself, the accuracy is significantly lower than in the [commercial version](https://fingerprint.com/pricing)
 
 ### Security
 
