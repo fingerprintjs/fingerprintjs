@@ -61,9 +61,9 @@ require(
 
 ```bash
 # Install the package first:
-npm i @fingerprintjs/fingerprintjs
+npm i @fingerprintjs/fingerprintjs@^4
 # or
-yarn add @fingerprintjs/fingerprintjs
+yarn add @fingerprintjs/fingerprintjs@^4
 ```
 
 ```js
