@@ -36,7 +36,7 @@ Now, try visiting the same page in private / incognito mode and notice how the v
   // Initialize the agent at application startup.
   // If you're using an ad blocker or Brave/Firefox, this import will not work.
   // Please use the NPM package instead: https://t.ly/ORyXk
-  const fpPromise = import('https://openfpcdn.io/fingerprintjs/v4')
+  const fpPromise = import('https://openfpcdn.io/fingerprintjs/v5')
     .then(FingerprintJS => FingerprintJS.load())
 
   // Get the visitor identifier when you need it.
@@ -92,13 +92,12 @@ Check out our [comparison table](docs/comparison.md) for a detailed breakdown of
 
 ⏱️ [How to upgrade from FingerprintJS to Fingerprint Identification in 30 seconds](https://dev.fingerprint.com/docs/migrating-from-fingerprintjs-to-fingerprint-pro#migrating-from-fingerprintjs-v4-source-available-to-pro)
 
-## Migrating to v4
+## Migrating to v5
 
 | Migrating from | Migration Guide | Documentation |
 |----------|-----------|-----------|
-| **v3** | [Migrating from v3 to v4](docs/migration/v3_v4.md) | [v3 documentation](https://github.com/fingerprintjs/fingerprintjs/tree/v3) |
-| **v2** | [Migrating from v2 to v4](docs/migration/v2_v4.md) | [v2 documentation](https://github.com/fingerprintjs/fingerprintjs/tree/v2) |
-| **v1** | [Migrating from v1 to v4](docs/migration/v1_v4.md) | [v1 documentation](https://github.com/fingerprintjs/fingerprintjs/tree/1.8.6) |
+| **v4** | [Migrating from v4 to v5](docs/migration/v4_v5.md) | [v4 documentation](https://github.com/fingerprintjs/fingerprintjs/tree/v4) |
+| **v3** | [Migrating from v3 to v5](docs/migration/v3_v5.md) | [v3 documentation](https://github.com/fingerprintjs/fingerprintjs/tree/v3) |
 
 ## Version policy
 
