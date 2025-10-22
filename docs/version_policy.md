@@ -33,10 +33,10 @@ If this is an issue for you, you can implement the following strategy.
 When a new minor or major version is released, install it together with the current version:
 
 ```ts
-const oldFpPromise = import('https://openfpcdn.io/fingerprintjs/v4.0')
+const oldFpPromise = import('https://openfpcdn.io/fingerprintjs/v4.1')
   .then(FingerprintJS => FingerprintJS.load())
 
-const newFpPromise = import('https://openfpcdn.io/fingerprintjs/v4.1')
+const newFpPromise = import('https://openfpcdn.io/fingerprintjs/v5.0')
   .then(FingerprintJS => FingerprintJS.load())
 ```
 
@@ -52,8 +52,8 @@ Promise.all([
   // Handle both the results. For example, send to your server.
   return fetch(
     '/visitor'
-      + `?fingerprintV4_0=${encodeURIComponent(oldResult.visitorId)}`
-      + `&fingerprintV4_1=${encodeURIComponent(newResult.visitorId)}`
+      + `?fingerprintV4_1=${encodeURIComponent(oldResult.visitorId)}`
+      + `&fingerprintV5_0=${encodeURIComponent(newResult.visitorId)}`
   )
 })
 ```
@@ -65,18 +65,18 @@ Save the new identifier, there is no need to save the old identifier for new vis
 -- Getting the visitor
 SELECT * FROM visitors
 WHERE
-  fingerprintV4_0 = :fingerprintV4_0 OR
-  fingerprintV4_1 = :fingerprintV4_1;
+  fingerprintV4_1 = :fingerprintV4_1 OR
+  fingerprintV5_0 = :fingerprintV5_0;
 
 -- Update the visitor identifier
 -- to switch to the new fingerprint version
 UPDATE visitors
-SET fingerprintV4_1 = :fingerprintV4_1
-WHERE fingerprintV4_0 = :fingerprintV4_0;
+SET fingerprintV5_0 = :fingerprintV5_0
+WHERE fingerprintV4_1 = :fingerprintV4_1;
 
 -- Saving a new visitor
-INSERT INTO visitors (..., fingerprintV4_1)
-VALUES (..., :fingerprintV4_1);
+INSERT INTO visitors (..., fingerprintV5_0)
+VALUES (..., :fingerprintV5_0);
 ```
 
 Later, when you get many enough identifiers of the new version, remove the old library and the old identifiers.

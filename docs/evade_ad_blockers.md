@@ -8,9 +8,9 @@ Here are some generic options to circumvent this behavior.
 
 - Use the [NPM installation option](https://github.com/fingerprintjs/fingerprintjs/blob/master/docs/api.md#webpackrollupnpmyarn) for the open source FingerprintJS.
 - The less preferred way is to self-host the script on your own domain. It will make your script quickly outdated and it will stop working with new browsers as they get released in the future. Additionally, make sure the script's URL doesn't end with the `/fingerprint.js`, otherwise it will be blocked.
-You can find scripts on the following URLs (you can replace the version with the specific version e.g. with `v4.4.4`).
-  - ES Module download URL: `https://openfpcdn.io/fingerprintjs/v4/esm.min.js`.
-  - UMD download URL: `https://openfpcdn.io/fingerprintjs/v4/umd.min.js`.
+You can find scripts on the following URLs (you can replace the version with the specific version e.g. with `v5.0.0`).
+  - ES Module download URL: `https://openfpcdn.io/fingerprintjs/v5/esm.min.js`.
+  - UMD download URL: `https://openfpcdn.io/fingerprintjs/v5/umd.min.js`.
 
 ## Commercial alternatives
 
