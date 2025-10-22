@@ -9,8 +9,8 @@ The library supports all the popular installation methods:
 ```html
 <script>
   // Initialize the agent at application startup.
-  // You can also use https://openfpcdn.io/fingerprintjs/v4/esm.min.js
-  const fpPromise = import('https://openfpcdn.io/fingerprintjs/v4')
+  // You can also use https://openfpcdn.io/fingerprintjs/v5/esm.min.js
+  const fpPromise = import('https://openfpcdn.io/fingerprintjs/v5')
     .then(FingerprintJS => FingerprintJS.load())
 
   // Get the visitor identifier when you need it.
@@ -28,7 +28,7 @@ A synchronous code that pauses the other scripts during loading and therefore no
 
 ```html
 <!-- Note that we use iife.min.js -->
-<script src="https://openfpcdn.io/fingerprintjs/v4/iife.min.js"></script>
+<script src="https://openfpcdn.io/fingerprintjs/v5/iife.min.js"></script>
 <script>
   // Initialize the agent at application startup.
   var fpPromise = FingerprintJS.load()
@@ -44,7 +44,7 @@ A synchronous code that pauses the other scripts during loading and therefore no
 
 ```js
 require(
-  ['https://openfpcdn.io/fingerprintjs/v4/umd.min.js'],
+  ['https://openfpcdn.io/fingerprintjs/v5/umd.min.js'],
   FingerprintJS => {
     // Initialize the agent at application startup.
     const fpPromise = FingerprintJS.load()
