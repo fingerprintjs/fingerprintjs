@@ -12,4 +12,4 @@ This guide is for repository maintainers.
     It will publish the current code to NPM and create a corresponding Git tag.
     The NPM version tag will be derived automatically from the package version, for example `1.2.3` gives `latest` and `1.2.3-alpha.1` gives `alpha`.
 5. Describe the version changes in the [releases section](https://github.com/fingerprintjs/fingerprintjs/releases) under the corresponding tag.
-6. Update the agent in https://stackblitz.com/edit/fpjs-4-npm (find "dependencies" and click the round arrow).
+6. Update the agent in https://stackblitz.com/edit/fpjs-5-npm (find "dependencies" and click the round arrow).
