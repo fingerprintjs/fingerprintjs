@@ -33,10 +33,10 @@ If this is an issue for you, you can implement the following strategy.
 When a new minor or major version is released, install it together with the current version:
 
 ```ts
-const oldFpPromise = import('https://openfpcdn.io/fingerprintjs/v4.1')
+const oldFpPromise = import('https://openfpcdn.io/fingerprintjs/v5.1')
   .then(FingerprintJS => FingerprintJS.load())
 
-const newFpPromise = import('https://openfpcdn.io/fingerprintjs/v5.0')
+const newFpPromise = import('https://openfpcdn.io/fingerprintjs/v6.0')
   .then(FingerprintJS => FingerprintJS.load())
 ```
 
