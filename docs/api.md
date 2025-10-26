@@ -20,7 +20,7 @@ The library supports all the popular installation methods:
 </script>
 ```
 
-[Run this code](https://stackblitz.com/edit/fpjs-4-cdn?file=index.html&devtoolsheight=100)
+[Run this code](https://stackblitz.com/edit/fpjs-5-cdn?file=index.html&devtoolsheight=100)
 
 ### Browser `<script>` tag
 
@@ -80,7 +80,7 @@ const fpPromise = FingerprintJS.load()
 })()
 ```
 
-[Run this code](https://stackblitz.com/edit/fpjs-4-npm?file=index.js&devtoolsheight=100)
+[Run this code](https://stackblitz.com/edit/fpjs-5-npm?file=index.js&devtoolsheight=100)
 
 **When you run FingerprintJS installed with NPM or Yarn, the library will send AJAX requests to FingerprintJS servers to collect usage statistics.**
 When the `load` function runs, there is a 0.1% chance of sending a request.
