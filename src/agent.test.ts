@@ -37,4 +37,45 @@ describe('Agent', () => {
     expect(isSourceLoaded.x).withContext('Entropy sources are not loaded').toBeTrue()
     await agent.get() // To wait until the background processes complete
   })
+
+  describe('monitoring option', () => {
+    let mockXHR: {
+      open: jasmine.Spy
+      send: jasmine.Spy
+    }
+    let xmlHttpRequestSpy: jasmine.Spy
+
+    beforeEach(() => {
+      mockXHR = {
+        open: jasmine.createSpy('open'),
+        send: jasmine.createSpy('send'),
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      xmlHttpRequestSpy = spyOn(window as any, 'XMLHttpRequest').and.returnValue(mockXHR)
+    })
+
+    it('respects the monitoring option when set to false', async () => {
+      spyOn(Math, 'random').and.returnValue(0)
+      const agent = await loadAgent({ delayFallback: 0, monitoring: false })
+      await agent.get()
+
+      expect(xmlHttpRequestSpy).not.toHaveBeenCalled()
+      expect(mockXHR.open).not.toHaveBeenCalled()
+      expect(mockXHR.send).not.toHaveBeenCalled()
+    })
+
+    it('enables monitoring by default and when explicitly set to true', async () => {
+      spyOn(Math, 'random').and.returnValue(0)
+      const agent = await loadAgent({ delayFallback: 0 })
+      await agent.get()
+
+      expect(xmlHttpRequestSpy).toHaveBeenCalled()
+      expect(mockXHR.open).toHaveBeenCalledWith(
+        'get',
+        jasmine.stringMatching(/fingerprintjs\/v.*\/npm-monitoring/),
+        true,
+      )
+      expect(mockXHR.send).toHaveBeenCalled()
+    })
+  })
 })

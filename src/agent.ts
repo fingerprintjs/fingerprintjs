@@ -21,6 +21,11 @@ export interface LoadOptions {
    * Required to ease investigations of problems.
    */
   debug?: boolean
+  /**
+   * Set `false` to disable the unpersonalized AJAX request that the agent sends to collect installation statistics.
+   * It's always disabled in the version published to the FingerprintJS CDN.
+   */
+  monitoring?: boolean
 }
 
 /**
@@ -196,10 +201,10 @@ function monitor() {
  * Builds an instance of Agent and waits a delay required for a proper operation.
  */
 export async function load(options: Readonly<LoadOptions> = {}): Promise<Agent> {
-  if ((options as { monitoring?: boolean }).monitoring ?? true) {
+  const { delayFallback, debug, monitoring = true } = options
+  if (monitoring) {
     monitor()
   }
-  const { delayFallback, debug } = options
   await prepareForSources(delayFallback)
   const getComponents = loadBuiltinSources({ cache: {}, debug })
   return makeAgent(getComponents, debug)
