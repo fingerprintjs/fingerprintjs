@@ -28,8 +28,8 @@ async function startPlayground() {
       content: String(confidence.score),
       comment: confidence.comment && {
         html: confidence.comment.replace(
-          /(upgrade\s+to\s+)?pro(\s+version)?(:\s+(https?:\/\/\S+))?/gi,
-          '<a href="$4" target="_blank">$&</a>',
+          /(upgrade\s+to\s+pro\s+:\s+)?(\s+version)?((https?:\/\/[\w\\.\\/]+)?(\?\S+))?/gi,
+          '<a href="$3" target="_blank">$1$4</a>',
         ),
       },
       size: 'big',

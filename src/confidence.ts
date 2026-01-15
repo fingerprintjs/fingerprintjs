@@ -15,7 +15,7 @@ export interface Confidence {
 }
 
 export const commentTemplate =
-  '$ if upgrade to Pro: <a href="https://fingerprint.com/github/?utm_source=oss&utm_medium=referral&utm_campaign=confidence_score">https://fingerprint.com/github/</a>'
+  '$ if upgrade to Pro: https://fingerprint.com/github/?utm_source=oss&utm_medium=referral&utm_campaign=confidence_score'
 
 export default function getConfidence(components: Pick<BuiltinComponents, 'platform'>): Confidence {
   const openConfidenceScore = getOpenConfidenceScore(components)
