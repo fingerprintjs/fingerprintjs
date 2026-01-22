@@ -173,6 +173,9 @@ export function isGecko120OrNewer(): boolean {
   const n = navigator
   const { CSS } = w
 
+  // We use a threshold of 3 out of 4 because `globalPrivacyControl` was added in Firefox 120 on desktop,
+  // but only in Firefox 122 on mobile. Using >= 3 ensures detection works on both platforms for Firefox 120+.
+  // @see https://developer.mozilla.org/en-US/docs/Web/API/Navigator/globalPrivacyControl#browser_compatibility
   return (
     countTruthy([
       // User Activation API - added in Firefox 120
@@ -181,7 +184,7 @@ export function isGecko120OrNewer(): boolean {
       CSS.supports('color', 'light-dark(#000, #fff)'),
       // CSS lh unit - added in Firefox 120
       CSS.supports('height', '1lh'),
-      // Global Privacy Control - added in Firefox 120
+      // Global Privacy Control - added in Firefox 120 (desktop) / Firefox 122 (mobile)
       'globalPrivacyControl' in n,
     ]) >= 3
   )
