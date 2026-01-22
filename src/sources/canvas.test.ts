@@ -1,4 +1,4 @@
-import { getBrowserMajorVersion, isSafari, isSamsungInternet } from '../../tests/utils'
+import { getBrowserMajorVersion, isGecko, isSafari, isSamsungInternet } from '../../tests/utils'
 import getCanvasFingerprint, { ImageStatus } from './canvas'
 
 describe('Sources', () => {
@@ -32,7 +32,11 @@ describe('Sources', () => {
 })
 
 function shouldSkip() {
-  return isSafari() && (getBrowserMajorVersion() ?? 0) >= 17
+  const browserVersion = getBrowserMajorVersion() ?? 0
+  const isSafari17OrNewer = isSafari() && browserVersion >= 17
+  const isFirefox120OrNewer = isGecko() && browserVersion >= 120
+
+  return isSafari17OrNewer || isFirefox120OrNewer
 }
 
 function shouldBeUnstable() {

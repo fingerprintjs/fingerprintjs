@@ -162,6 +162,32 @@ export function isGecko(): boolean {
 }
 
 /**
+ * Checks whether the browser is based on Gecko version ≥120 (Firefox ≥120) without using user-agent.
+ * It doesn't check that the browser is based on Gecko; there is a separate function for this.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/120 Firefox 120 release notes
+ */
+export function isGecko120OrNewer(): boolean {
+  // Checked in Firefox 119 vs. Firefox 120+
+  const w = window
+  const n = navigator
+  const { CSS } = w
+
+  return (
+    countTruthy([
+      // User Activation API - added in Firefox 120
+      'userActivation' in n,
+      // CSS light-dark() function - added in Firefox 120
+      CSS.supports('color', 'light-dark(#000, #fff)'),
+      // CSS lh unit - added in Firefox 120
+      CSS.supports('height', '1lh'),
+      // Global Privacy Control - added in Firefox 120
+      'globalPrivacyControl' in n,
+    ]) >= 3
+  )
+}
+
+/**
  * Checks whether the browser is based on Chromium version ≥86 without using user-agent.
  * It doesn't check that the browser is based on Chromium, there is a separate function for this.
  */

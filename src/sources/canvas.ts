@@ -1,4 +1,4 @@
-import { isSafariWebKit, isWebKit, isWebKit616OrNewer } from '../utils/browser'
+import { isGecko, isGecko120OrNewer, isSafariWebKit, isWebKit, isWebKit616OrNewer } from '../utils/browser'
 
 export interface CanvasFingerprint {
   winding: boolean
@@ -156,5 +156,10 @@ function canvasToString(canvas: HTMLCanvasElement) {
  */
 function doesBrowserPerformAntifingerprinting() {
   // Safari 17
-  return isWebKit() && isWebKit616OrNewer() && isSafariWebKit()
+  if (isWebKit() && isWebKit616OrNewer() && isSafariWebKit()) {
+    return true
+  }
+
+  // Firefox 120+
+  return isGecko() && isGecko120OrNewer()
 }
