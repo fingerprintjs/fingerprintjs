@@ -19,7 +19,7 @@ export const enum ImageStatus {
  * Canvas image is noised in private mode of Safari 17, so image rendering is skipped in Safari 17.
  */
 export default function getCanvasFingerprint(): CanvasFingerprint {
-  return getUnstableCanvasFingerprint(doesBrowserPerformAntifingerprinting())
+  return getUnstableCanvasFingerprint(doesBrowserPerformAntiFingerprinting())
 }
 
 /**
@@ -154,12 +154,9 @@ function canvasToString(canvas: HTMLCanvasElement) {
 /**
  * Checks if the current browser is known for applying anti-fingerprinting measures in all or some critical modes
  */
-function doesBrowserPerformAntifingerprinting() {
-  // Safari 17
-  if (isWebKit() && isWebKit616OrNewer() && isSafariWebKit()) {
-    return true
-  }
+function doesBrowserPerformAntiFingerprinting() {
+  const isSafari17OrAbove = isWebKit() && isWebKit616OrNewer() && isSafariWebKit()
+  const isFirefox120OrAbove = isGecko() && isGecko120OrNewer()
 
-  // Firefox 120+
-  return isGecko() && isGecko120OrNewer()
+  return isSafari17OrAbove || isFirefox120OrAbove
 }

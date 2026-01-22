@@ -101,13 +101,10 @@ export function getUnstableScreenFrame(): () => Promise<FrameSize> {
  * Firefox 120+ spoofs screen frame in private browsing and strict ETP mode.
  */
 export default function getScreenFrame(): () => Promise<FrameSize | undefined> {
-  // Safari 17+
-  if (isWebKit() && isWebKit616OrNewer() && isSafariWebKit()) {
-    return () => Promise.resolve(undefined)
-  }
+  const isSafari17OrAbove = isWebKit() && isWebKit616OrNewer() && isSafariWebKit()
+  const isFirefox120OrAbove = isGecko() && isGecko120OrNewer()
 
-  // Firefox 120+
-  if (isGecko() && isGecko120OrNewer()) {
+  if (isSafari17OrAbove || isFirefox120OrAbove) {
     return () => Promise.resolve(undefined)
   }
 
