@@ -1,4 +1,4 @@
-import { getBrowserVersion, isSafari } from '../../tests/utils'
+import { getBrowserMajorVersion, getBrowserVersion, isGecko, isSafari } from '../../tests/utils'
 import getHardwareConcurrency from './hardware_concurrency'
 
 describe('Sources', () => {
@@ -14,6 +14,12 @@ describe('Sources', () => {
         return
       }
 
+      // Firefox 120+ spoofs hardwareConcurrency in private browsing and strict ETP mode
+      if (shouldSkip()) {
+        expect(result).toBe(undefined)
+        return
+      }
+
       expect(result).toBeGreaterThan(0)
     })
 
@@ -25,3 +31,8 @@ describe('Sources', () => {
     })
   })
 })
+
+function shouldSkip() {
+  const browserVersion = getBrowserMajorVersion() ?? 0
+  return isGecko() && browserVersion >= 120
+}
