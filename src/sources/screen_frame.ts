@@ -3,7 +3,7 @@ import {
   exitFullscreen,
   getFullscreenElement,
   isGecko,
-  isGecko120OrNewer,
+  isGecko143OrNewer,
   isSafariWebKit,
   isWebKit,
   isWebKit616OrNewer,
@@ -98,13 +98,16 @@ export function getUnstableScreenFrame(): () => Promise<FrameSize> {
  * shrinks to fit more icons when there is too little space. The rounding is used to mitigate the difference.
  *
  * The frame width is always 0 in the private mode of Safari 17, so the frame is not used in Safari 17.
- * Firefox 120+ spoofs screen frame in private browsing and strict ETP mode.
+ * Firefox 143+ spoofs screen frame (ScreenAvailRect) in private browsing and strict ETP mode,
+ * so the frame is not used in Firefox 143+.
+ *
+ * @see https://bugzilla.mozilla.org/show_bug.cgi?id=1978414 Firefox screen resolution spoofing
  */
 export default function getScreenFrame(): () => Promise<FrameSize | undefined> {
   const isSafari17OrAbove = isWebKit() && isWebKit616OrNewer() && isSafariWebKit()
-  const isFirefox120OrAbove = isGecko() && isGecko120OrNewer()
+  const isFirefox143OrAbove = isGecko() && isGecko143OrNewer()
 
-  if (isSafari17OrAbove || isFirefox120OrAbove) {
+  if (isSafari17OrAbove || isFirefox143OrAbove) {
     return () => Promise.resolve(undefined)
   }
 

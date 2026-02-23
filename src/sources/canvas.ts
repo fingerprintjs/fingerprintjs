@@ -13,10 +13,14 @@ export const enum ImageStatus {
 }
 
 /**
- * @see https://www.browserleaks.com/canvas#how-does-it-work
- *
  * A version of the entropy source with stabilization to make it suitable for static fingerprinting.
+ *
  * Canvas image is noised in private mode of Safari 17, so image rendering is skipped in Safari 17.
+ * Firefox 120+ randomizes canvas data in private browsing and strict ETP mode,
+ * so image rendering is skipped in Firefox 120+.
+ *
+ * @see https://www.browserleaks.com/canvas#how-does-it-work
+ * @see https://bugzilla.mozilla.org/show_bug.cgi?id=1816189 Firefox canvas randomization
  */
 export default function getCanvasFingerprint(): CanvasFingerprint {
   return getUnstableCanvasFingerprint(doesBrowserPerformAntiFingerprinting())
@@ -152,7 +156,11 @@ function canvasToString(canvas: HTMLCanvasElement) {
 }
 
 /**
- * Checks if the current browser is known for applying anti-fingerprinting measures in all or some critical modes
+ * Checks if the current browser is known for applying anti-fingerprinting measures in all or some critical modes:
+ * - Safari 17+: noises canvas image in private mode
+ * - Firefox 120+: randomizes canvas data in private browsing and strict ETP mode (CanvasRandomization)
+ *
+ * @see https://bugzilla.mozilla.org/show_bug.cgi?id=1816189 Firefox canvas randomization
  */
 function doesBrowserPerformAntiFingerprinting() {
   const isSafari17OrAbove = isWebKit() && isWebKit616OrNewer() && isSafariWebKit()

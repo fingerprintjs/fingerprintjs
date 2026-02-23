@@ -1,5 +1,5 @@
 import { getBrowserMajorVersion, getBrowserVersion, isGecko, isSafari } from '../../tests/utils'
-import getHardwareConcurrency from './hardware_concurrency'
+import getHardwareConcurrency, { getUnstableHardwareConcurrency } from './hardware_concurrency'
 
 describe('Sources', () => {
   describe('hardwareConcurrency', () => {
@@ -14,7 +14,7 @@ describe('Sources', () => {
         return
       }
 
-      // Firefox 120+ spoofs hardwareConcurrency in private browsing and strict ETP mode
+      // Firefox 143+ spoofs hardwareConcurrency in private browsing and strict ETP mode
       if (shouldSkip()) {
         expect(result).toBe(undefined)
         return
@@ -30,9 +30,32 @@ describe('Sources', () => {
       expect(second).toBe(first)
     })
   })
+
+  describe('unstableHardwareConcurrency', () => {
+    it('always returns the raw value regardless of browser', () => {
+      const result = getUnstableHardwareConcurrency()
+      const version = getBrowserVersion() ?? { major: 0, minor: 0 }
+
+      // In Safari the navigator.hardwareConcurrency is behind a build option,
+      // on BrowserStack it seems available starting with version 15.4.
+      if (isSafari() && (version.major < 15 || (version.major === 15 && version.minor < 4))) {
+        expect(result).toBe(undefined)
+        return
+      }
+
+      expect(result).toBeGreaterThan(0)
+    })
+
+    it('returns a stable value', () => {
+      const first = getUnstableHardwareConcurrency()
+      const second = getUnstableHardwareConcurrency()
+
+      expect(second).toBe(first)
+    })
+  })
 })
 
 function shouldSkip() {
   const browserVersion = getBrowserMajorVersion() ?? 0
-  return isGecko() && browserVersion >= 120
+  return isGecko() && browserVersion >= 143
 }

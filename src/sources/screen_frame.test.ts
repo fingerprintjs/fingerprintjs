@@ -187,7 +187,7 @@ describe('Sources', () => {
 function shouldTurnOff() {
   const browserVersion = getBrowserMajorVersion() ?? 0
   const isSafari17OrNewer = isSafari() && browserVersion >= 17
-  const isFirefox120OrNewer = isGecko() && browserVersion >= 120
+  const isFirefox143OrNewer = isGecko() && browserVersion >= 143
 
-  return isSafari17OrNewer || isFirefox120OrNewer
+  return isSafari17OrNewer || isFirefox143OrNewer
 }

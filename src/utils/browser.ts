@@ -191,6 +191,34 @@ export function isGecko120OrNewer(): boolean {
 }
 
 /**
+ * Checks whether the browser is based on Gecko version ≥143 (Firefox ≥143) without using user-agent.
+ * It doesn't check that the browser is based on Gecko; there is a separate function for this.
+ *
+ * Firefox 143 shipped Phase 2 fingerprinting protections (screen resolution, processor count, touch points)
+ * in Private Browsing and ETP Strict mode.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/143 Firefox 143 release notes
+ * @see https://bugzilla.mozilla.org/show_bug.cgi?id=1978414 Bug that shipped these protections
+ */
+export function isGecko143OrNewer(): boolean {
+  // Checked in Firefox 142 vs. Firefox 143+
+  const { CSS } = window
+
+  return (
+    countTruthy([
+      // CSS ::details-content pseudo-element - added in Firefox 143
+      CSS.supports('selector(::details-content)'),
+      // CSS ::before::marker nested pseudo-element - added in Firefox 143
+      CSS.supports('selector(::before::marker)'),
+      // CSS ::after::marker nested pseudo-element - added in Firefox 143
+      CSS.supports('selector(::after::marker)'),
+      // CompositionEvent.locale property - removed in Firefox 143 (Bug 1700969)
+      !('locale' in CompositionEvent.prototype),
+    ]) >= 3
+  )
+}
+
+/**
  * Checks whether the browser is based on Chromium version ≥86 without using user-agent.
  * It doesn't check that the browser is based on Chromium, there is a separate function for this.
  */
