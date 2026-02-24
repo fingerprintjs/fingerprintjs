@@ -60,6 +60,20 @@ describe('Browser utilities', () => {
       expect(browser.isWebKit616OrNewer()).toBe((utils.getBrowserMajorVersion() ?? 0) >= 17)
     })
 
+    it('detects Gecko 120+', () => {
+      if (!utils.isGecko()) {
+        return
+      }
+      expect(browser.isGecko120OrNewer()).toBe((utils.getBrowserMajorVersion() ?? 0) >= 120)
+    })
+
+    it('detects Gecko 143+', () => {
+      if (!utils.isGecko()) {
+        return
+      }
+      expect(browser.isGecko143OrNewer()).toBe((utils.getBrowserMajorVersion() ?? 0) >= 143)
+    })
+
     it('detects iPad', () => {
       // Unfortunately, UA-parser can't detect an iPad that pretends to be a Mac
       if (!utils.isWebKit() || !(utils.isMobile() || utils.isTablet())) {
