@@ -14,9 +14,9 @@ describe('Sources', () => {
         return
       }
 
-      // Firefox 143+ spoofs hardwareConcurrency in private browsing and strict ETP mode
-      if (shouldSkip()) {
-        expect(result).toBe(undefined)
+      // Firefox 143+ returns a tiered value (4 or 8) to stabilize fingerprint across browsing modes
+      if (isFirefox143OrNewer()) {
+        expect(result === 4 || result === 8).toBeTrue()
         return
       }
 
@@ -55,7 +55,7 @@ describe('Sources', () => {
   })
 })
 
-function shouldSkip() {
+function isFirefox143OrNewer() {
   const browserVersion = getBrowserMajorVersion() ?? 0
   return isGecko() && browserVersion >= 143
 }
