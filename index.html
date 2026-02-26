@@ -1,0 +1,131 @@
+<!doctype html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>FingerprintJS Demo</title><link rel="icon" type="image/x-icon" href="assets/favicon.ico?e3f73b3427329bc781d8cc93644405dd"/><style>/* The full-height solution for IE 11 is taken from https://gist.github.com/palicko/26b327cd2198e52c25b13485b4dd02bc */
+    html {
+      display: flex;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      min-height: 100vh;
+      padding: 0;
+      margin: 0;
+      font-family: sans-serif;
+    }
+    .content {
+      flex: 1;
+      width: 100%;
+      max-width: 60em;
+      box-sizing: border-box;
+      margin: 0 auto;
+      padding: 1.25em;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      flex: none;
+      margin-bottom: 1.2vh;
+    }
+    header img {
+      height: 5vh;
+      max-width: 100%;
+    }
+    button {
+      border: none;
+      background: #f04405;
+      color: #fff;
+      font: inherit;
+      font-size: 88%;
+      font-weight: 600;
+      line-height: 1.2;
+      border-radius: 0.57em;
+      cursor: pointer;
+      margin: 0;
+      padding: 0.85em 1.7em;
+      text-align: center;
+      outline: none;
+      transition: all 0.25s ease-out;
+    }
+    button:hover {
+      background: #8c2703;
+    }
+    button:active {
+      background: #cd3f10;
+    }
+    button:disabled {
+      cursor: not-allowed;
+      background: #e9987c;
+    }
+    .buttons {
+      flex: none;
+    }
+    .buttons button {
+      margin: 0 0.8em 0.8em 0;
+    }
+    .outputHolder {
+      flex: 1;
+      min-height: 4em;
+      position: relative;
+    }
+    .output {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      background: #282c34;
+      box-shadow: 0 0 1.25em rgba(0, 0, 0, 0.2);
+      border-radius: 0.7em;
+      padding: 1em 1.25em;
+      color: #e1e5ea;
+      overflow: auto;
+    }
+    .output pre {
+      padding: 0;
+      margin: 0;
+      font-size: 100%;
+      font-family: monospace;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .output pre.big {
+      font-size: 123%;
+    }
+    .output pre.giant {
+      font-size: 200%;
+    }
+    .output .heading {
+      font-size: 81%;
+      margin-bottom: 0.5em;
+      color: #eac4a6;
+    }
+    .output .heading:not(:first-child) {
+      margin-top: 2em;
+    }
+    .output .comment {
+      font-size: 87%;
+      margin-top: 0.6em;
+      color: #a3a7ad;
+    }
+    .output a {
+      color: inherit;
+      -webkit-text-decoration: dotted underline;
+      text-decoration: dotted underline;
+    }
+    .output a:hover {
+      color: inherit;
+      -webkit-text-decoration: underline;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px), (max-height: 568px) {
+      .content {
+        padding: 1em;
+      }
+      button {
+        padding: 0.7em 1em;
+      }
+      .output {
+        padding: 0.75em 1em;
+      }
+    }</style><script defer="defer" src="main.js?95ef59cae1d707cf89ef"></script></head><body><div class="content"><header><a href="https://github.com/fingerprintjs/fingerprintjs"><img src="assets/logo_dark.svg?54e0f0c935e49f84ea15fec7098d7361" alt="FingerprintJS logo"></a></header><div class="buttons"><button disabled="disabled" id="debugCopy">Copy Debug Data</button> <button disabled="disabled" id="debugShare">Share Debug Data</button></div><div class="outputHolder"><section class="output"><div class="heading">Getting the visitor identifier...</div></section></div></div></body></html>
