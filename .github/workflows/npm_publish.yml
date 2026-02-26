@@ -6,6 +6,10 @@
 name: Publish to NPM
 on: workflow_dispatch
 
+permissions:
+  id-token: write # Required for OIDC
+  contents: read
+
 jobs:
   publish:
     name: Build and publish
@@ -17,6 +21,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
+      - name: Setup Node.js
+        uses: actions/setup-node@v4 # Required for OIDC
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org' # Required for OIDC
       - name: Cache
         uses: actions/cache@v4
         with:
@@ -27,21 +36,15 @@ jobs:
         run: yarn install
       - name: Build
         run: yarn build
-      - name: Get the package version
-        id: version
-        run: |
-          version=$(node -p "require('./package.json').version")
-          tag=$(echo "$version" | grep -oP '(?<=-)[^.]+' || echo "latest")
-          echo -e "Version: $version\nVersion tag: $tag"
-          echo -e "version=$version\ntag=$tag" >> $GITHUB_OUTPUT
       - name: Publish to NPM
         # This command will automatically fail because of some common mistakes (this is a wanted behavior):
         # - The current version is already published
         # - The package uses a local directory as a dependency
-        # - The NPM access token is invalid or expired
         run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" > ~/.npmrc
-          yarn publish --access public --tag "${{ steps.version.outputs.tag }}"
+          version=$(node -p "require('./package.json').version")
+          tag=$(echo "$version" | grep -oP '(?<=-)[^.]+' || echo "latest")
+          echo "Publishing version $version with tag: $tag"
+          npm publish --access public --tag "$tag"
       - name: Create a Git tag
         uses: rickstaa/action-create-tag@v1
         with:
