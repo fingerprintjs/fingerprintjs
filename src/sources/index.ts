@@ -116,6 +116,7 @@ export type BuiltinComponents = SourcesToComponents<typeof sources>
 export interface BuiltinSourceOptions {
   debug?: boolean
   cache: Record<string, unknown>
+  excludeSources?: readonly string[]
 }
 
 /**
@@ -123,5 +124,8 @@ export interface BuiltinSourceOptions {
  * Returns a function that collects the entropy components to make the visitor identifier.
  */
 export default function loadBuiltinSources(options: BuiltinSourceOptions): () => Promise<BuiltinComponents> {
-  return loadSources(sources, options, [])
+  const { excludeSources = [] } = options
+  // The cast is safe because the actual return type is a subset of BuiltinComponents.
+  // We use BuiltinComponents for the public API for consistency, even when sources are excluded.
+  return loadSources(sources, options, excludeSources) as () => Promise<BuiltinComponents>
 }

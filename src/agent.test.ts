@@ -78,4 +78,48 @@ describe('Agent', () => {
       expect(mockXHR.send).toHaveBeenCalled()
     })
   })
+
+  describe('excludeSources option', () => {
+    it('excludes sources when excludeSources option is provided', async () => {
+      const agent = await loadAgent({ delayFallback: 0, excludeSources: ['fonts'] })
+      const result = await agent.get()
+
+      expect(result.components.fonts).toBeUndefined()
+    })
+
+    it('excludes multiple sources when provided', async () => {
+      const agent = await loadAgent({ delayFallback: 0, excludeSources: ['fonts', 'audio'] })
+      const result = await agent.get()
+
+      expect(result.components.fonts).toBeUndefined()
+      expect(result.components.audio).toBeUndefined()
+    })
+
+    it('includes non-excluded sources', async () => {
+      const agent = await loadAgent({ delayFallback: 0, excludeSources: ['fonts'] })
+      const result = await agent.get()
+
+      const expectedComponents = Object.keys(sources)
+        .filter((key) => key !== 'fonts')
+        .sort() as Array<keyof typeof sources>
+
+      expect(Object.keys(result.components).sort()).toEqual(expectedComponents)
+    })
+
+    it('collects all sources when excludeSources is not provided', async () => {
+      const agent = await loadAgent({ delayFallback: 0 })
+      const result = await agent.get()
+
+      const expectedComponents = Object.keys(sources).sort() as Array<keyof typeof sources>
+      expect(Object.keys(result.components).sort()).toEqual(expectedComponents)
+    })
+
+    it('collects all sources when excludeSources is empty', async () => {
+      const agent = await loadAgent({ delayFallback: 0, excludeSources: [] })
+      const result = await agent.get()
+
+      const expectedComponents = Object.keys(sources).sort() as Array<keyof typeof sources>
+      expect(Object.keys(result.components).sort()).toEqual(expectedComponents)
+    })
+  })
 })

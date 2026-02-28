@@ -26,6 +26,11 @@ export interface LoadOptions {
    * It's always disabled in the version published to the FingerprintJS CDN.
    */
   monitoring?: boolean
+  /**
+   * A list of entropy sources to exclude from collection.
+   * By default, all sources are collected.
+   */
+  excludeSources?: readonly string[]
 }
 
 /**
@@ -201,11 +206,11 @@ function monitor() {
  * Builds an instance of Agent and waits a delay required for a proper operation.
  */
 export async function load(options: Readonly<LoadOptions> = {}): Promise<Agent> {
-  const { delayFallback, debug, monitoring = true } = options
+  const { delayFallback, debug, monitoring = true, excludeSources } = options
   if (monitoring) {
     monitor()
   }
   await prepareForSources(delayFallback)
-  const getComponents = loadBuiltinSources({ cache: {}, debug })
+  const getComponents = loadBuiltinSources({ cache: {}, debug, excludeSources })
   return makeAgent(getComponents, debug)
 }
