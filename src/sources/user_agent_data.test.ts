@@ -15,10 +15,12 @@ describe('Sources', () => {
         return
       }
       const result = await getUserAgentData()
-      expect(result).not.toBeUndefined()
-      expect(Array.isArray(result!.brands)).toBe(true)
-      expect(typeof result!.mobile).toBe('boolean')
-      expect(typeof result!.platform).toBe('string')
+      if (result === undefined) {
+        throw new Error('Expected userAgentData to be defined on a Chromium browser')
+      }
+      expect(Array.isArray(result.brands)).toBe(true)
+      expect(typeof result.mobile).toBe('boolean')
+      expect(typeof result.platform).toBe('string')
     })
 
     it('returns undefined when userAgentData is absent', async () => {
@@ -57,10 +59,13 @@ describe('Sources', () => {
       }
       await withMockProperties(navigator, { userAgentData: { get: () => mockUAData } }, async () => {
         const result = await getUserAgentData()
-        expect(result?.platformVersion).toBe('10.0.0')
-        expect(result?.architecture).toBe('x86')
-        expect(result?.model).toBe('')
-        expect(result?.uaFullVersion).toBe('120.0.6099.129')
+        if (result === undefined) {
+          throw new Error('Expected userAgentData result to be defined')
+        }
+        expect(result.platformVersion).toBe('10.0.0')
+        expect(result.architecture).toBe('x86')
+        expect(result.model).toBe('')
+        expect(result.uaFullVersion).toBe('120.0.6099.129')
       })
     })
 
