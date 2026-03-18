@@ -45,7 +45,7 @@
     "check:ssr": "node --require './dist/fp.cjs.js' --eval '' || (echo \"The distributive files can't be used with server side rendering. Make sure the code doesn't use browser API until an exported function is called.\" && exit 1)"
   },
   "devDependencies": {
-    "@fpjs-incubator/broyster": "^0.2.3",
+    "@fpjs-incubator/broyster": "^0.3.0",
     "@rollup/plugin-json": "^5.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-terser": "^0.2.1",
