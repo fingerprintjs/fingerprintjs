@@ -39,6 +39,7 @@ import getPrivateClickMeasurement from './private_click_measurement'
 import { getWebGlBasics, getWebGlExtensions } from './webgl'
 import getAudioContextBaseLatency from './audio_base_latency'
 import getDateTimeLocale from './date_time_locale'
+import getUserAgentData from './user_agent_data'
 
 /**
  * The list of entropy sources used to make visitor identifiers.
@@ -56,6 +57,7 @@ export const sources = {
 
   // The sources run in this exact order.
   // The asynchronous sources are at the start to run in parallel with other sources.
+  userAgentData: getUserAgentData,
   fonts: getFonts,
   domBlockers: getDomBlockers,
   fontPreferences: getFontPreferences,
