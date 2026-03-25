@@ -158,6 +158,13 @@ describe('Sources', () => {
       })
     })
 
+    it('returns a stable value', async () => {
+      const first = await getUserAgentData()
+      const second = await getUserAgentData()
+
+      expect(second).toEqual(first)
+    })
+
     it('re-throws unexpected errors from getHighEntropyValues', async () => {
       const unexpectedError = new TypeError('Internal browser error')
       const mockUAData = {

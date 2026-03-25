@@ -1,27 +1,30 @@
-// https://developer.mozilla.org/en-US/docs/Web/API/NavigatorUAData
-interface UADataValues {
-  brands: Array<{ brand: string; version: string }>
-  mobile: boolean
-  platform: string
-  platformVersion: string
-  architecture: string
-  bitness: string
-  model: string
+type HighEntropyValues = {
+  architecture?: string
+  bitness?: string
+  model?: string
+  platformVersion?: string
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/NavigatorUAData
 interface NavigatorUAData {
   brands: Array<{ brand: string; version: string }>
   mobile: boolean
   platform: string
-  getHighEntropyValues(hints: string[]): Promise<Partial<UADataValues>>
+  getHighEntropyValues(hints: string[]): Promise<HighEntropyValues>
 }
 
 // GREASE (Generate Random Extensions and Sustain Extensibility) brands are
 // intentionally fake entries added by browsers to prevent API ossification.
 // They match patterns like "Not_A Brand", "Not(A:Brand", " Not;A Brand", etc.
-const isGreaseBrand = (brand: string): boolean => /not/i.test(brand)
+//
+// Chromium reference:
+// https://chromium.googlesource.com/chromium/src/+/a893d7b670a423c604b1a1bbdc98f79dc16b2b79/components/embedder_support/user_agent_utils.cc
 
-export interface StableUserAgentData {
+function isGreaseBrand(brand: string): boolean {
+  return /not/i.test(brand)
+}
+
+export type StableUserAgentData = {
   brands: string[]
   mobile: boolean
   platform: string
@@ -44,9 +47,9 @@ export default async function getUserAgentData(): Promise<StableUserAgentData | 
     return undefined
   }
 
-  const brands = uaData.brands
-    .filter(({ brand }) => !isGreaseBrand(brand) && brand !== 'Chromium')
-    .map(({ brand }) => brand)
+  const filteredBrands = uaData.brands.filter(({ brand }) => !isGreaseBrand(brand)).map(({ brand }) => brand)
+
+  const brands = filteredBrands.length > 1 ? filteredBrands.filter((b) => b !== 'Chromium') : filteredBrands
 
   const result: StableUserAgentData = {
     brands,
