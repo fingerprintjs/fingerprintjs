@@ -139,7 +139,7 @@ describe('Sources', () => {
       })
     })
 
-    it('falls back to low-entropy fields only when getHighEntropyValues throws NotAllowedError', async () => {
+    it('sets highEntropyStatus to not_allowed when getHighEntropyValues throws NotAllowedError', async () => {
       const mockUAData = {
         brands: [{ brand: 'Google Chrome', version: '120' }],
         mobile: false,
@@ -154,7 +154,26 @@ describe('Sources', () => {
           brands: ['Google Chrome'],
           mobile: false,
           platform: 'Linux',
+          highEntropyStatus: 'not_allowed',
         })
+      })
+    })
+
+    it('does not set highEntropyStatus when getHighEntropyValues resolves successfully', async () => {
+      const mockUAData = {
+        brands: [{ brand: 'Google Chrome', version: '120' }],
+        mobile: false,
+        platform: 'Windows',
+        getHighEntropyValues: async () => ({
+          architecture: 'x86',
+          bitness: '64',
+          model: '',
+          platformVersion: '10.0.0',
+        }),
+      }
+      await withMockProperties(navigator, { userAgentData: { get: () => mockUAData } }, async () => {
+        const result = await getUserAgentData()
+        expect(result?.highEntropyStatus).toBeUndefined()
       })
     })
 

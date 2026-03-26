@@ -24,6 +24,11 @@ function isGreaseBrand(brand: string): boolean {
   return /not/i.test(brand)
 }
 
+export const enum HighEntropyStatus {
+  /** getHighEntropyValues() was blocked by a Permissions Policy */
+  NotAllowed = 'not_allowed',
+}
+
 export type StableUserAgentData = {
   brands: string[]
   mobile: boolean
@@ -32,6 +37,11 @@ export type StableUserAgentData = {
   bitness?: string
   model?: string
   platformVersion?: string
+  /**
+   * Present only when high-entropy value collection was blocked by a Permissions Policy.
+   * The value is a stable string so it contributes to the fingerprint hash.
+   */
+  highEntropyStatus?: 'not_allowed'
 }
 
 /**
@@ -66,7 +76,7 @@ export default async function getUserAgentData(): Promise<StableUserAgentData | 
       result.platformVersion = highEntropy.platformVersion
     } catch (error) {
       if (error instanceof DOMException && error.name === 'NotAllowedError') {
-        // getHighEntropyValues() can be blocked by a Permissions Policy
+        result.highEntropyStatus = HighEntropyStatus.NotAllowed
       } else {
         throw error
       }
