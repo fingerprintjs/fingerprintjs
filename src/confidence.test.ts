@@ -25,4 +25,14 @@ describe('Confidence', () => {
       expect(confidence).toEqual({ score: 0.7, comment: commentTemplate.replace(/\$/g, '0.997') })
     }
   })
+  it('handles platform excluded', async () => {
+    const getComponents = loadSources({ platform: getPlatform }, undefined, ['platform'])
+    const components = await getComponents()
+    const confidence = getConfidence(components)
+
+    expect(confidence).toEqual({
+      score: 0,
+      comment: commentTemplate.replace(/\$/g, 'platform missing/excluded from components'),
+    })
+  })
 })

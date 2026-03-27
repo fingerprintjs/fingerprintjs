@@ -124,6 +124,9 @@ export interface BuiltinSourceOptions {
  * Loads the built-in entropy sources.
  * Returns a function that collects the entropy components to make the visitor identifier.
  */
-export default function loadBuiltinSources(options: BuiltinSourceOptions): () => Promise<BuiltinComponents> {
-  return loadSources(sources, options, [])
+export default function loadBuiltinSources<TExclude extends keyof BuiltinComponents>(
+  options: BuiltinSourceOptions,
+  excludeSources: readonly TExclude[],
+): () => Promise<Omit<BuiltinComponents, TExclude>> {
+  return loadSources(sources, options, excludeSources || [])
 }
