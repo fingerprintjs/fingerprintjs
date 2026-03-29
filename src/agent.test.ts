@@ -1,8 +1,9 @@
 import { version } from '../package.json'
 import { load as loadAgent } from './agent'
-import { sources } from './sources'
+import { BuiltinComponents, sources } from './sources'
 import { isSourceLoaded } from './sources/cpu_class'
 import { wait } from './utils/async'
+import { UnknownComponents } from './utils/entropy_source'
 
 describe('Agent', () => {
   it('collects all components without unexpected errors and makes visitorId', async () => {
@@ -18,7 +19,30 @@ describe('Agent', () => {
     expect(expectedComponents.length).toBeGreaterThan(10) // To check the test itself
     expect(Object.keys(result.components).sort()).toEqual(expectedComponents)
     for (const componentName of expectedComponents) {
-      const component = result.components[componentName]
+      const component = (result.components as BuiltinComponents)[componentName]
+      expect('error' in component ? component.error : undefined)
+        .withContext(`Unexpected error in the "${componentName}" component`)
+        .toBeUndefined()
+    }
+  })
+
+  it('validate excludeSources', async () => {
+    const excludeSources: (keyof typeof sources)[] = ['applePay', 'platform']
+    const agent = await loadAgent({ delayFallback: 0, excludeSources })
+    const result = await agent.get()
+    expect(typeof result.visitorId).toBe('string')
+    expect(result.visitorId).not.toEqual('')
+    expect(typeof result.confidence.score).toBe('number')
+    expect(typeof result.confidence.comment).toBe('string')
+    expect(result.version).toBe(version)
+
+    const expectedComponents = Object.keys(sources)
+      .filter((x) => !excludeSources.includes(x as keyof typeof sources))
+      .sort() as Array<keyof typeof sources>
+
+    expect(Object.keys(result.components).sort()).toEqual(expectedComponents)
+    for (const componentName of expectedComponents) {
+      const component = (result.components as UnknownComponents)[componentName]
       expect('error' in component ? component.error : undefined)
         .withContext(`Unexpected error in the "${componentName}" component`)
         .toBeUndefined()

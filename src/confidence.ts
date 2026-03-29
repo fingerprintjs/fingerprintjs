@@ -17,8 +17,14 @@ export interface Confidence {
 export const commentTemplate =
   '$ if upgrade to Pro: https://fingerprint.com/github/?utm_source=oss&utm_medium=referral&utm_campaign=confidence_score'
 
-export default function getConfidence(components: Pick<BuiltinComponents, 'platform'>): Confidence {
-  const openConfidenceScore = getOpenConfidenceScore(components)
+export default function getConfidence(components: Partial<BuiltinComponents>): Confidence {
+  if (!('platform' in components) || !components.platform) {
+    return { score: 0, comment: commentTemplate.replace(/\$/g, 'platform missing/excluded from components') }
+  }
+  /**
+   * cast is safe here since we have a runtime check above
+   */
+  const openConfidenceScore = getOpenConfidenceScore(components as Pick<BuiltinComponents, 'platform'>)
   const proConfidenceScore = deriveProConfidenceScore(openConfidenceScore)
   return { score: openConfidenceScore, comment: commentTemplate.replace(/\$/g, `${proConfidenceScore}`) }
 }

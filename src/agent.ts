@@ -9,7 +9,7 @@ import getConfidence, { Confidence } from './confidence'
 /**
  * Options for Fingerprint class loading
  */
-export interface LoadOptions {
+export interface LoadOptions<TExclude extends keyof BuiltinComponents> {
   /**
    * When browser doesn't support `requestIdleCallback` a `setTimeout` will be used. This number is only for Safari and
    * old Edge, because Chrome/Blink based browsers support `requestIdleCallback`. The value is in milliseconds.
@@ -26,6 +26,11 @@ export interface LoadOptions {
    * It's always disabled in the version published to the FingerprintJS CDN.
    */
   monitoring?: boolean
+  /**
+   * Excludes the specified list of entropies from collection
+   * By default, nothing is excluded
+   */
+  excludeSources?: readonly TExclude[]
 }
 
 /**
@@ -43,7 +48,7 @@ export interface GetOptions {
 /**
  * Result of getting a visitor identifier
  */
-export interface GetResult {
+export interface GetResult<TExclude extends keyof BuiltinComponents> {
   /**
    * The visitor identifier
    */
@@ -59,7 +64,7 @@ export interface GetResult {
    * within a major version. If you want to avoid breaking changes, treat the property as having type
    * `UnknownComponents` that is more generic but guarantees backward compatibility within a major version.
    */
-  components: BuiltinComponents
+  components: Omit<BuiltinComponents, TExclude>
   /**
    * The fingerprinting algorithm version
    *
@@ -71,11 +76,11 @@ export interface GetResult {
 /**
  * Agent object that can get visitor identifier
  */
-export interface Agent {
+export interface Agent<TExclude extends keyof BuiltinComponents> {
   /**
    * Gets the visitor identifier
    */
-  get(options?: Readonly<GetOptions>): Promise<GetResult>
+  get(options?: Readonly<GetOptions>): Promise<GetResult<TExclude>>
 }
 
 function componentsToCanonicalString(components: UnknownComponents) {
@@ -109,7 +114,9 @@ export function hashComponents(components: UnknownComponents): string {
  * Makes a GetResult implementation that calculates the visitor id hash on demand.
  * Designed for optimisation.
  */
-function makeLazyGetResult(components: BuiltinComponents): GetResult {
+function makeLazyGetResult<TExclude extends keyof BuiltinComponents>(
+  components: Omit<BuiltinComponents, TExclude>,
+): GetResult<TExclude> {
   let visitorIdCache: string | undefined
 
   // This function runs very fast, so there is no need to make it lazy
@@ -150,7 +157,10 @@ export function prepareForSources(delayFallback = 50): Promise<void> {
  * A factory function is used instead of a class to shorten the attribute names in the minified code.
  * Native private class fields could've been used, but TypeScript doesn't allow them with `"target": "es5"`.
  */
-function makeAgent(getComponents: () => Promise<BuiltinComponents>, debug?: boolean): Agent {
+function makeAgent<TExclude extends keyof BuiltinComponents>(
+  getComponents: () => Promise<Omit<BuiltinComponents, TExclude>>,
+  debug?: boolean,
+): Agent<TExclude> {
   const creationTime = Date.now()
 
   return {
@@ -200,12 +210,14 @@ function monitor() {
 /**
  * Builds an instance of Agent and waits a delay required for a proper operation.
  */
-export async function load(options: Readonly<LoadOptions> = {}): Promise<Agent> {
-  const { delayFallback, debug, monitoring = true } = options
+export async function load<TExclude extends keyof BuiltinComponents>(
+  options: Readonly<LoadOptions<TExclude>> = {},
+): Promise<Agent<TExclude>> {
+  const { delayFallback, debug, monitoring = true, excludeSources = [] } = options
   if (monitoring) {
     monitor()
   }
   await prepareForSources(delayFallback)
-  const getComponents = loadBuiltinSources({ cache: {}, debug })
+  const getComponents = loadBuiltinSources({ cache: {}, debug }, excludeSources)
   return makeAgent(getComponents, debug)
 }
