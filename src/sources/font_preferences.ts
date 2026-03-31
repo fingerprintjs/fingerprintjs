@@ -1,4 +1,4 @@
-import { isChromium, isWebKit } from '../utils/browser'
+import { isChromium, isChromium128OrNewer, isWebKit } from '../utils/browser'
 import { withIframe } from '../utils/dom'
 import { MaybePromise } from '../utils/async'
 
@@ -52,7 +52,7 @@ export const presets: Record<string, Preset> = {
  * The "min" and the "mono" (only on Windows) value may change when the page is zoomed in Firefox 87.
  */
 export default function getFontPreferences(): Promise<Record<string, number>> {
-  return withNaturalFonts((document, container) => {
+  return withNaturalFonts((document, container, iframeWindow) => {
     const elements: Record<string, HTMLElement> = {}
     const sizes: Record<string, number> = {}
 
@@ -77,12 +77,29 @@ export default function getFontPreferences(): Promise<Record<string, number>> {
     }
 
     // Then measure the created elements
-    for (const key of Object.keys(presets)) {
-      sizes[key] = elements[key].getBoundingClientRect().width
+    // For Chromium 128+: multiply by devicePixelRatio to reverse the CSS zoom effect
+    if (isChromium() && isChromium128OrNewer()) {
+      for (const key of Object.keys(presets)) {
+        const rawWidth = elements[key].getBoundingClientRect().width
+        sizes[key] = roundFontMeasurement(rawWidth * iframeWindow.devicePixelRatio)
+      }
+    } else {
+      for (const key of Object.keys(presets)) {
+        const rawWidth = elements[key].getBoundingClientRect().width
+        sizes[key] = roundFontMeasurement(rawWidth)
+      }
     }
 
     return sizes
   })
+}
+
+/**
+ * Round font measurement values to reduce floating-point errors and maintain stability
+ * Uses Math.floor with 3 decimal places to always round down consistently
+ */
+function roundFontMeasurement(value: number): number {
+  return Math.floor(value * 1000) / 1000
 }
 
 /**
@@ -91,7 +108,7 @@ export default function getFontPreferences(): Promise<Record<string, number>> {
  * Don't put a content to measure inside an absolutely positioned element.
  */
 function withNaturalFonts<T>(
-  action: (document: Document, container: HTMLElement) => MaybePromise<T>,
+  action: (document: Document, container: HTMLElement, iframeWindow: Window) => MaybePromise<T>,
   containerWidthPx = 4000,
 ): Promise<T> {
   /*
@@ -144,7 +161,8 @@ function withNaturalFonts<T>(
 
     const bodyStyle = iframeBody.style
     bodyStyle.width = `${containerWidthPx}px`
-    bodyStyle.webkitTextSizeAdjust = bodyStyle.textSizeAdjust = 'none'
+    bodyStyle.webkitTextSizeAdjust = 'none'
+    bodyStyle.setProperty('text-size-adjust', 'none')
 
     // See the big comment above
     if (isChromium()) {
@@ -158,6 +176,6 @@ function withNaturalFonts<T>(
     linesOfText.textContent = [...Array((containerWidthPx / 20) << 0)].map(() => 'word').join(' ')
     iframeBody.appendChild(linesOfText)
 
-    return action(iframeDocument, iframeBody)
+    return action(iframeDocument, iframeBody, iframeWindow)
   }, '<!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1">')
 }

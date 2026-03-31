@@ -44,6 +44,13 @@ describe('Browser utilities', () => {
       expect(browser.isChromium122OrNewer()).toBe((utils.getBrowserEngineMajorVersion() ?? 0) >= 122)
     })
 
+    it('detects Chromium 128+', () => {
+      if (!utils.isChromium()) {
+        return
+      }
+      expect(browser.isChromium128OrNewer()).toBe((utils.getBrowserEngineMajorVersion() ?? 0) >= 128)
+    })
+
     // WebKit has stopped telling its real version in the user-agent string since version 605.1.15,
     // therefore the browser version has to be checked instead of the engine version.
     it('detects Safari 12+', () => {
