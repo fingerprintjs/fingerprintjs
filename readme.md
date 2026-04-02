@@ -41,9 +41,9 @@ npm install @fingerprintjs/fingerprintjs
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
 
 // Initialize the agent at application startup.
-const fpPromise = FingerprintJS.load()
+const fpPromise = FingerprintJS.load();
 
-;(async () => {
+(async () => {
   // Get the visitor identifier when you need it.
   const fp = await fpPromise
   const result = await fp.get()
@@ -59,9 +59,9 @@ const fpPromise = FingerprintJS.load()
   // If you're using an ad blocker or Brave/Firefox, this import will not work.
   // Please use the npm package instead: https://t.ly/ORyXk
   const fpPromise = import('https://openfpcdn.io/fingerprintjs/v5')
-    .then(FingerprintJS => FingerprintJS.load())
+    .then(FingerprintJS => FingerprintJS.load());
 
-  ;(async () => {
+  (async () => {
     // Get the visitor identifier when you need it.
     const fp = await fpPromise
     const result = await fp.get()
