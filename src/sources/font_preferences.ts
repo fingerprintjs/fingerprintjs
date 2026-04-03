@@ -1,4 +1,4 @@
-import { isChromium, isChromium128OrNewer, isWebKit } from '../utils/browser'
+import { isAndroid, isChromium, isChromium128OrNewer, isWebKit } from '../utils/browser'
 import { withIframe } from '../utils/dom'
 import { MaybePromise } from '../utils/async'
 
@@ -84,9 +84,9 @@ export default function getFontPreferences(): Promise<Record<string, number>> {
         sizes[key] = roundFontMeasurement(rawWidth * iframeWindow.devicePixelRatio)
       }
     } else {
+      // Firefox/Safari/older Chrome: CSS zoom is applied ('reset' for WebKit), use raw measurements
       for (const key of Object.keys(presets)) {
-        const rawWidth = elements[key].getBoundingClientRect().width
-        sizes[key] = roundFontMeasurement(rawWidth)
+        sizes[key] = elements[key].getBoundingClientRect().width
       }
     }
 
@@ -96,10 +96,13 @@ export default function getFontPreferences(): Promise<Record<string, number>> {
 
 /**
  * Round font measurement values to reduce floating-point errors and maintain stability
- * Uses Math.floor with 3 decimal places to always round down consistently
+ * - On Android: rounds to whole numbers for maximum stability across devices
+ * - On other platforms: rounds down to 3 decimal places
  */
 function roundFontMeasurement(value: number): number {
-  return Math.floor(value * 1000) / 1000
+  const decimals = isAndroid() ? 0 : 3
+  const pow = Math.pow(10, decimals)
+  return Math.floor(value * pow) / pow
 }
 
 /**
