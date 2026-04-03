@@ -78,16 +78,13 @@ export default function getFontPreferences(): Promise<Record<string, number>> {
 
     // Then measure the created elements
     // For Chromium 128+: multiply by devicePixelRatio to reverse the CSS zoom effect
-    if (isChromium() && isChromium128OrNewer()) {
-      for (const key of Object.keys(presets)) {
-        const rawWidth = elements[key].getBoundingClientRect().width
-        sizes[key] = roundFontMeasurement(rawWidth * iframeWindow.devicePixelRatio)
-      }
-    } else {
-      // Firefox/Safari/older Chrome: CSS zoom is applied ('reset' for WebKit), use raw measurements
-      for (const key of Object.keys(presets)) {
-        sizes[key] = elements[key].getBoundingClientRect().width
-      }
+    // Firefox/Safari/older Chrome: CSS zoom is applied ('reset' for WebKit), use raw measurements
+    const shouldNormalizeMeasurement = isChromium() && isChromium128OrNewer()
+    for (const key of Object.keys(presets)) {
+      const rawWidth = elements[key].getBoundingClientRect().width
+      sizes[key] = shouldNormalizeMeasurement
+        ? normalizeFontMeasurement(rawWidth * iframeWindow.devicePixelRatio)
+        : rawWidth
     }
 
     return sizes
@@ -99,7 +96,7 @@ export default function getFontPreferences(): Promise<Record<string, number>> {
  * - On Android: rounds to whole numbers for maximum stability across devices
  * - On other platforms: rounds down to 3 decimal places
  */
-function roundFontMeasurement(value: number): number {
+function normalizeFontMeasurement(value: number): number {
   const decimals = isAndroid() ? 0 : 3
   const pow = Math.pow(10, decimals)
   return Math.floor(value * pow) / pow
