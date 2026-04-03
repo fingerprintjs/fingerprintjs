@@ -92,7 +92,7 @@ export default function getFontPreferences(): Promise<Record<string, number>> {
 }
 
 /**
- * Round font measurement values to reduce floating-point errors and maintain stability
+ * Floor font measurement values to reduce floating-point errors and maintain stability
  * - On Android: rounds to whole numbers for maximum stability across devices
  * - On other platforms: rounds down to 3 decimal places
  */
