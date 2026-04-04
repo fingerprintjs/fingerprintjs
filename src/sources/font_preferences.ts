@@ -161,8 +161,7 @@ function withNaturalFonts<T>(
 
     const bodyStyle = iframeBody.style
     bodyStyle.width = `${containerWidthPx}px`
-    bodyStyle.webkitTextSizeAdjust = 'none'
-    bodyStyle.setProperty('text-size-adjust', 'none')
+    bodyStyle.webkitTextSizeAdjust = bodyStyle.textSizeAdjust = 'none'
 
     // See the big comment above
     if (isChromium()) {
