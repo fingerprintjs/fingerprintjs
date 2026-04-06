@@ -25,28 +25,48 @@ FingerprintJS is available under the [MIT license](docs/licensing.md).
 
 ## Demo
 
-Visit https://fingerprintjs.github.io/fingerprintjs to see your visitor identifier.
+Visit [https://fingerprintjs.github.io/fingerprintjs](https://fingerprintjs.github.io/fingerprintjs) to see your visitor identifier.
 
-Now, try visiting the same page in private / incognito mode and notice how the visitor identifier remains the **same**!
+Now, try visiting the same page in private/incognito mode and notice that the visitor identifier remains the **same**!
 
-## Getting Started
+## Installation
+
+### npm
+
+```bash
+npm install @fingerprintjs/fingerprintjs
+```
+
+```jsx
+import FingerprintJS from '@fingerprintjs/fingerprintjs'
+
+// Initialize the agent at application startup.
+const fpPromise = FingerprintJS.load();
+
+(async () => {
+  // Get the visitor identifier when you need it.
+  const fp = await fpPromise
+  const result = await fp.get()
+  console.log(result.visitorId)
+})()
+```
+
+### CDN
 
 ```html
 <script>
   // Initialize the agent at application startup.
   // If you're using an ad blocker or Brave/Firefox, this import will not work.
-  // Please use the NPM package instead: https://t.ly/ORyXk
+  // Please use the npm package instead: https://t.ly/ORyXk
   const fpPromise = import('https://openfpcdn.io/fingerprintjs/v5')
-    .then(FingerprintJS => FingerprintJS.load())
+    .then(FingerprintJS => FingerprintJS.load());
 
-  // Get the visitor identifier when you need it.
-  fpPromise
-    .then(fp => fp.get())
-    .then(result => {
-      // This is the visitor identifier:
-      const visitorId = result.visitorId
-      console.log(visitorId)
-    })
+  (async () => {
+    // Get the visitor identifier when you need it.
+    const fp = await fpPromise
+    const result = await fp.get()
+    console.log(result.visitorId)
+  })()
 </script>
 ```
 
@@ -64,21 +84,19 @@ Now, try visiting the same page in private / incognito mode and notice how the v
 
 ### Accuracy
 
-Since FingerprintJS processes and generates the fingerprints from within the browser itself, the accuracy is significantly lower than in the [commercial version](https://fingerprint.com/pricing)
+Since FingerprintJS processes and generates fingerprints in the browser itself, the accuracy is significantly lower than in the [commercial version](https://fingerprint.com/pricing)
 
 ### Security
 
-Because of how the fingerprints are processed and generated from within the browser itself, they are vulnerable to spoofing and reverse engineering.
+Because fingerprints are generated and processed in the browser, they are vulnerable to spoofing and reverse engineering.
 
-## Industry-leading accuracy with Fingerprint Identification
+## Want higher accuracy? Upgrade to Fingerprint Identification for free
 
-The main difference between FingerprintJS and [Fingerprint Identification](https://dev.fingerprint.com/docs/introduction) lies in the number of attributes collected from the browser, how they are processed, and the accuracy in identifying visitors.
+FingerprintJS is great for getting started, but if you need production-grade accuracy for web or mobile, consider [**Fingerprint Identification**](https://fingerprint.com/products/identification/). You can [**sign up for a free account**](https://dashboard.fingerprint.com/signup) to get started.
 
-Fingerprint Identification is a **closed-source**, **commercial** device intelligence platform designed to prevent fraud and improve user experiences. It's an enhanced version of FingerprintJS and has been fully re-designed to solve the most challenging identification use cases. Its source is not available in this or any other public repository.
+Fingerprint Identification is a **closed-source, commercial** device intelligence platform designed to prevent fraud and improve user experiences. It's an enhanced version of FingerprintJS, fully redesigned to solve the most challenging identification use cases. Unlike FingerprintJS, it combines client-side signal collection with server-side processing. It collects over 100 browser and device signals, which are then analyzed server-side alongside network-level data, including signals that are entirely invisible to the browser, allowing it to reliably deduplicate visitors with identical devices. This server-side processing also validates that signals have not been tampered with or replayed, and generates a stable visitor identifier with **industry-leading accuracy** that is significantly harder to spoof than a purely client-side fingerprint.
 
-Unlike FingerprintJS, Fingerprint Identification is able to achieve **industry-leading accuracy** because it processes the browser attributes on the server and also analyzes vast amounts of auxiliary data (e.g. IP addresses, time of visit patterns, URL changes, etc.). Because of these advanced matching techniques, Fingerprint Identification is able to reliably deduplicate different visitors that have identical devices.
-
-Fingerprint Identification is available for Web, Android, iOS, and other platforms. You can easily get started by [signing up](https://dashboard.fingerprint.com/signup) for a free, unlimited 14-day trial.
+Upgrading for free also unlocks access to the [Fingerprint MCP Server](https://docs.fingerprint.com/docs/mcp-server), letting your AI coding assistant build and interact directly with Fingerprint. To access [Smart Signals](https://fingerprint.com/products/smart-signals/) (device signals such as bot detection, VPN detection, and browser tampering detection), a 14-day free trial of the full platform is available.
 
 Check out our [comparison table](docs/comparison.md) for a detailed breakdown of the differences between FingerprintJS and Fingerprint Identification.
 
@@ -88,7 +106,7 @@ Check out our [comparison table](docs/comparison.md) for a detailed breakdown of
 
 📕 [Fingerprint Identification documentation](https://dev.fingerprint.com)
 
-▶️ [Video: Use Fingerprint Identification to prevent multiple signups by same user](https://www.youtube.com/watch?v=jWX9P5_jZn8)
+▶️ [Video: Use Fingerprint Identification to prevent multiple signups by the same user](https://www.youtube.com/watch?v=jWX9P5_jZn8)
 
 ⏱️ [How to upgrade from FingerprintJS to Fingerprint Identification in 30 seconds](https://dev.fingerprint.com/docs/migrating-from-fingerprintjs-to-fingerprint-pro)
 
