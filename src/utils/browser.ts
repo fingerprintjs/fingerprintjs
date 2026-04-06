@@ -256,6 +256,26 @@ export function isChromium122OrNewer(): boolean {
 }
 
 /**
+ * Checks whether the browser is based on Chromium version ≥128 without using user-agent.
+ * It doesn't check that the browser is based on Chromium, there is a separate function for this.
+ */
+export function isChromium128OrNewer(): boolean {
+  // Checked in Chrome 127 vs Chrome 128+
+  const w = window
+  const d = document
+  const { CSS, Promise, AudioContext } = w
+
+  return (
+    countTruthy([
+      Promise && 'try' in Promise,
+      'caretPositionFromPoint' in d,
+      AudioContext && 'onerror' in AudioContext.prototype,
+      CSS.supports('ruby-align', 'space-around'),
+    ]) >= 3
+  )
+}
+
+/**
  * Checks whether the browser is based on WebKit version ≥606 (Safari ≥12) without using user-agent.
  * It doesn't check that the browser is based on WebKit, there is a separate function for this.
  *
