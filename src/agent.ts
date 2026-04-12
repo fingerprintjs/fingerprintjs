@@ -188,6 +188,9 @@ function monitor() {
   }
   try {
     const request = new XMLHttpRequest()
+    request.timeout = 5000
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    request.onerror = request.ontimeout = () => {}
     request.open('get', `https://m1.openfpcdn.io/fingerprintjs/v${version}/npm-monitoring`, true)
     request.send()
   } catch (error) {
