@@ -1,7 +1,7 @@
 import * as FingerprintJS from '../src'
 import { errorToObject } from '../src/utils/misc'
 
-type Text = string | { html: string }
+type Text = string | DocumentFragment
 
 async function getVisitorData() {
   const fp = await FingerprintJS.load({ debug: true })
@@ -26,12 +26,7 @@ async function startPlayground() {
       output,
       header: 'Confidence score:',
       content: String(confidence.score),
-      comment: confidence.comment && {
-        html: confidence.comment.replace(
-          /(upgrade\s+to\s+pro\s+:\s+)?(\s+version)?((https?:\/\/[\w\\.\\/]+)?(\?\S+))?/gi,
-          '<a href="$3" target="_blank">$1$4</a>',
-        ),
-      },
+      comment: confidence.comment && linkifyConfidenceComment(confidence.comment),
       size: 'big',
     })
     addOutputSection({ output, header: 'User agent:', content: navigator.userAgent })
@@ -152,17 +147,43 @@ Sharing is available in mobile browsers and only on HTTPS websites. ${
   }
 }
 
+function linkifyConfidenceComment(comment: string): DocumentFragment {
+  const fragment = document.createDocumentFragment()
+  const linkRegex = /(upgrade\s+to\s+pro\s*:\s*)?(https?:\/\/[\w./-]+)(\?\S+)?/gi
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+
+  while ((match = linkRegex.exec(comment)) !== null) {
+    if (match.index > lastIndex) {
+      fragment.appendChild(document.createTextNode(comment.slice(lastIndex, match.index)))
+    }
+
+    const prefix = match[1] || ''
+    const baseUrl = match[2]
+    const query = match[3] || ''
+
+    const anchor = document.createElement('a')
+    anchor.href = baseUrl + query
+    anchor.target = '_blank'
+    anchor.rel = 'noopener noreferrer'
+    anchor.textContent = prefix + baseUrl
+    fragment.appendChild(anchor)
+
+    lastIndex = match.index + match[0].length
+  }
+
+  if (lastIndex < comment.length) {
+    fragment.appendChild(document.createTextNode(comment.slice(lastIndex)))
+  }
+
+  return fragment
+}
+
 function textToDOM(text: Text): Node {
   if (typeof text === 'string') {
     return document.createTextNode(text)
   }
-  const container = document.createElement('div')
-  container.innerHTML = text.html
-  const fragment = document.createDocumentFragment()
-  while (container.firstChild) {
-    fragment.appendChild(container.firstChild)
-  }
-  return fragment
+  return text
 }
 
 startPlayground()
