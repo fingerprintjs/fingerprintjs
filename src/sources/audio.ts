@@ -118,6 +118,7 @@ function doesBrowserPerformAntifingerprinting() {
  */
 function startRenderingAudio(context: OfflineAudioContext) {
   const renderTryMaxCount = 3
+  const renderTotalTryMaxCount = renderTryMaxCount * 3 // absolute cap including background retries
   const renderRetryDelay = 500
   const runningMaxAwaitTime = 500
   const runningSufficientTime = 5000
@@ -126,6 +127,8 @@ function startRenderingAudio(context: OfflineAudioContext) {
   const resultPromise = new Promise<AudioBuffer>((resolve, reject) => {
     let isFinalized = false
     let renderTryCount = 0
+    let totalRenderTryCount = 0
+    let retryTimeoutId: ReturnType<typeof setTimeout> | undefined
     let startedRunningAt = 0
 
     context.oncomplete = (event) => resolve(event.renderedBuffer)
@@ -138,6 +141,7 @@ function startRenderingAudio(context: OfflineAudioContext) {
     }
 
     const tryRender = () => {
+      retryTimeoutId = undefined
       try {
         const renderingPromise = context.startRendering()
 
@@ -166,10 +170,14 @@ function startRenderingAudio(context: OfflineAudioContext) {
             if (!document.hidden) {
               renderTryCount++
             }
-            if (isFinalized && renderTryCount >= renderTryMaxCount) {
+            totalRenderTryCount++
+            if (
+              (isFinalized && renderTryCount >= renderTryMaxCount) ||
+              totalRenderTryCount >= renderTotalTryMaxCount
+            ) {
               reject(makeInnerError(InnerErrorName.Suspended))
             } else {
-              setTimeout(tryRender, renderRetryDelay)
+              retryTimeoutId = (setTimeout as typeof window.setTimeout)(tryRender, renderRetryDelay)
             }
             break
         }
@@ -183,6 +191,10 @@ function startRenderingAudio(context: OfflineAudioContext) {
     finalize = () => {
       if (!isFinalized) {
         isFinalized = true
+        if (retryTimeoutId !== undefined) {
+          clearTimeout(retryTimeoutId)
+          retryTimeoutId = undefined
+        }
         if (startedRunningAt > 0) {
           startRunningTimeout()
         }
