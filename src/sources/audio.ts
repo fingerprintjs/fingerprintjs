@@ -133,7 +133,7 @@ function startRenderingAudio(context: OfflineAudioContext) {
     const startRunningTimeout = () => {
       setTimeout(
         () => reject(makeInnerError(InnerErrorName.Timeout)),
-        Math.min(runningMaxAwaitTime, startedRunningAt + runningSufficientTime - Date.now()),
+        Math.max(0, Math.min(runningMaxAwaitTime, startedRunningAt + runningSufficientTime - Date.now())),
       )
     }
 
