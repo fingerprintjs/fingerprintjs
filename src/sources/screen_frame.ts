@@ -22,6 +22,7 @@ const roundingPrecision = 10
 // The type is readonly to protect from unwanted mutations
 let screenFrameBackup: Readonly<FrameSize> | undefined
 let screenFrameSizeTimeoutId: number | undefined
+let screenFrameWatchStarted = false
 
 /**
  * Starts watching the screen frame size. When a non-zero size appears, the size is saved and the watch is stopped.
@@ -31,9 +32,10 @@ let screenFrameSizeTimeoutId: number | undefined
  * See more on this at https://github.com/fingerprintjs/fingerprintjs/issues/568
  */
 function watchScreenFrame() {
-  if (screenFrameSizeTimeoutId !== undefined) {
+  if (screenFrameWatchStarted) {
     return
   }
+  screenFrameWatchStarted = true
   const checkScreenFrame = () => {
     const frameSize = getCurrentScreenFrame()
     if (isFrameSizeNull(frameSize)) {
@@ -55,6 +57,7 @@ export function resetScreenFrameWatch(): void {
     screenFrameSizeTimeoutId = undefined
   }
   screenFrameBackup = undefined
+  screenFrameWatchStarted = false
 }
 
 /**
