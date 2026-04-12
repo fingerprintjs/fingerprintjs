@@ -120,18 +120,27 @@ function initializeDebugButtons(debugText: string) {
   }
 }
 
-function copy(text: string) {
-  const textarea = document.createElement('textarea')
-  textarea.value = text
-  document.body.appendChild(textarea)
-  textarea.focus()
-  textarea.select()
-  try {
-    document.execCommand('copy')
-  } catch {
-    // Do nothing in case of a copying error
+async function copy(text: string) {
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text)
+    } catch {
+      // Do nothing in case of a copying error
+    }
+  } else {
+    // Legacy fallback for browsers that don't support the Clipboard API
+    const textarea = document.createElement('textarea')
+    textarea.value = text
+    document.body.appendChild(textarea)
+    textarea.focus()
+    textarea.select()
+    try {
+      document.execCommand('copy')
+    } catch {
+      // Do nothing in case of a copying error
+    }
+    document.body.removeChild(textarea)
   }
-  document.body.removeChild(textarea)
 }
 
 async function share(text: string) {
