@@ -75,7 +75,7 @@ export default async function getUserAgentData(): Promise<StableUserAgentData | 
       result.model = highEntropy.model
       result.platformVersion = highEntropy.platformVersion
     } catch (error) {
-      if (error instanceof DOMException && error.name === 'NotAllowedError') {
+      if (typeof DOMException !== 'undefined' && error instanceof DOMException && error.name === 'NotAllowedError') {
         result.highEntropyStatus = HighEntropyStatus.NotAllowed
       } else {
         throw error
