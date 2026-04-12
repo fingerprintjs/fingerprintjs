@@ -225,8 +225,11 @@ function getShaderPrecision(
 }
 
 function getConstantsFromPrototype<K>(obj: K): Array<Extract<keyof K, string>> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const keys = Object.keys((obj as any).__proto__) as Array<keyof K>
+  const proto = Object.getPrototypeOf(obj) as K | null
+  if (!proto) {
+    return []
+  }
+  const keys = Object.keys(proto) as Array<keyof K>
   return keys.filter(isConstantLike)
 }
 
