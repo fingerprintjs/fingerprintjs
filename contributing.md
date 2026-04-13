@@ -8,6 +8,11 @@ By participating, you are expected to uphold this code.
 
 ## How you can contribute
 
+### Contributions to the playground are not supported
+
+Due to limited team capacity, we cannot accept and process pull requests on the playground, but feel free to report any bugs you found in the playground. 
+If you want to submit a quality of life issue for the plaground, please start with a discussion first;
+
 ### Reporting an issue
 
 If you've noticed a bug, have an idea or a question,
@@ -20,9 +25,14 @@ When you create an issue, the description is pre-filled with a template text.
 Please fill in the missing information carefully, it will help us solve your issue faster.
 If you want to share a piece of code or the library output with us, please wrap it in a ` ``` ` block and make sure you include all the information.
 
+
 ### Creating a pull request
 
 If you want to fix a bug, add a source of entropy, or make any other code contribution, please [create a pull request](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project).
+
+We only support accepting pull requests for the issues marked as `help wanted` (green badge).
+If you noticed a problem with the library and want to fix it, please submit an issue first and discuss with our team before submitting a pull request. 
+Due to limited team capacity, we cannot accept pull requests for issues that were not previously reviewed.
 
 After you clone the repository, check the [Working with code](#working-with-code) section to learn how to run, check, and build the code.
 
@@ -85,6 +95,8 @@ yarn playground:build
 ```
 
 The static webpage files will be saved to the `playground/dist` directory.
+
+At this time, we do not accept pull requests for the playground without creating an issue or having a GitHub discussion prior to that. 
 
 ### Code style
 
