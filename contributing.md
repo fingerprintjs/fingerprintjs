@@ -96,7 +96,7 @@ yarn playground:build
 
 The static webpage files will be saved to the `playground/dist` directory.
 
-At this time, we do not accept pull requests for the plaground without creating an issue or having a GitHub discussion prior to that. 
+At this time, we do not accept pull requests for the playground without creating an issue or having a GitHub discussion prior to that. 
 
 ### Code style
 
