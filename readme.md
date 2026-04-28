@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/fingerprintjs-fingerprintjs-badge.png)](https://mseep.ai/app/fingerprintjs-fingerprintjs)
+
 <p align="center">
   <a href="https://fingerprint.com">
     <picture>
