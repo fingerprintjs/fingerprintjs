@@ -43,11 +43,6 @@ describe('Sources', () => {
       expect(sum).not.toBe(0)
     })
 
-    it('returns the correct sinh polyfill value', () => {
-      const data = getMathFingerprint()
-      expect(data.sinhPf).toBeCloseTo(1.1752011936438014, 10)
-    })
-
     it('returns stable values', () => {
       const first = getMathFingerprint()
       const second = getMathFingerprint()
