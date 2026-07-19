@@ -28,7 +28,7 @@ export default function getMathFingerprint(): Record<string, number> {
   const acoshPf = (value: number) => M.log(value + M.sqrt(value * value - 1))
   const asinhPf = (value: number) => M.log(value + M.sqrt(value * value + 1))
   const atanhPf = (value: number) => M.log((1 + value) / (1 - value)) / 2
-  const sinhPf = (value: number) => M.exp(value) - 1 / M.exp(value) / 2
+  const sinhPf = (value: number) => (M.exp(value) - 1 / M.exp(value)) / 2
   const coshPf = (value: number) => (M.exp(value) + 1 / M.exp(value)) / 2
   const expm1Pf = (value: number) => M.exp(value) - 1
   const tanhPf = (value: number) => (M.exp(2 * value) - 1) / (M.exp(2 * value) + 1)
