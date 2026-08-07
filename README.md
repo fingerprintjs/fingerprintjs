@@ -50,10 +50,12 @@ Python.
 
 ### 1. Install
 
-From this repository:
+Clone and install this repository:
 
 ```bash
-cd django-fingerprintjs
+git clone https://github.com/Midhun884/fingerprintjs.git
+cd fingerprintjs
+git switch agent/django-fingerprintjs
 python -m pip install -e .
 ```
 
@@ -279,4 +281,3 @@ owners.
 ## 📄 License
 
 This Django integration is released under the [MIT License](LICENSE).
-
