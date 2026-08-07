@@ -1,0 +1,12 @@
+{% load static %}
+<script
+  src="{% static 'django_fingerprintjs/client.js' %}"
+  data-fpjs-endpoint="{{ endpoint }}"
+  data-fpjs-script-url="{{ script_url }}"
+  data-fpjs-cache-key="{{ cache_key }}"
+  data-fpjs-cache-ttl="{{ cache_ttl }}"
+  data-fpjs-csrf-token="{{ csrf_token }}"
+  data-fpjs-auto="{{ auto|yesno:'true,false' }}"
+  data-fpjs-consent="{{ consent|yesno:'true,false' }}"
+  defer
+></script>

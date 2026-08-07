@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="180" viewBox="0 0 760 180" role="img" aria-labelledby="title description">
+  <title id="title">Django FingerprintJS</title>
+  <description id="description">A fingerprint inside a green shield beside the Django FingerprintJS name</description>
+  <defs>
+    <linearGradient id="shield" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#44b78b"/>
+      <stop offset="1" stop-color="#0c4b33"/>
+    </linearGradient>
+  </defs>
+  <rect width="760" height="180" rx="28" fill="#092e20"/>
+  <path d="M94 22 155 44v43c0 39-25 61-61 74-36-13-61-35-61-74V44z" fill="url(#shield)" stroke="#b8e8d5" stroke-width="3"/>
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-width="5">
+    <path d="M67 83c0-16 12-28 27-28s27 12 27 28"/>
+    <path d="M58 92c0-22 16-39 36-39 21 0 37 17 37 39 0 14-4 27-11 39"/>
+    <path d="M76 91c0-11 8-19 18-19s18 8 18 19c0 21-6 36-16 48"/>
+    <path d="M92 91c0 18-4 29-12 39"/>
+    <path d="M61 110c5 15 16 26 30 31"/>
+  </g>
+  <text x="185" y="83" fill="#fff" font-family="Segoe UI,Arial,sans-serif" font-size="47" font-weight="700">Django FingerprintJS</text>
+  <text x="188" y="124" fill="#b8e8d5" font-family="Segoe UI,Arial,sans-serif" font-size="22">Browser intelligence, packaged for Django.</text>
+</svg>
+

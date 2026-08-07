@@ -1,2 +1,0 @@
-# Files that are exceptions of .gitignore files get included into Yarn package.
-# The presence of this file makes Yarn not to consider .gitignore and therefore not include the excess files.

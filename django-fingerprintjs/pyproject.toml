@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-fingerprintjs"
+version = "0.1.0"
+description = "Reusable FingerprintJS integration for Django"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = ["Django>=4.2"]
+classifiers = [
+  "Framework :: Django",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+]
+
+[tool.setuptools.packages.find]
+include = ["django_fingerprintjs*"]
+
+[tool.setuptools.package-data]
+django_fingerprintjs = ["static/**/*.js", "templates/**/*.html"]
+
