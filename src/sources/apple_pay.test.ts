@@ -1,4 +1,5 @@
 import * as utils from '../../tests/utils'
+
 import getApplePayState, { ApplePayState, getStateFromError } from './apple_pay'
 
 describe('Sources', () => {

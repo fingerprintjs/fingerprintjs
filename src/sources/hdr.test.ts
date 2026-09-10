@@ -1,4 +1,5 @@
 import { withMockMatchMedia } from '../../tests/utils'
+
 import isHDR from './hdr'
 
 describe('Sources', () => {

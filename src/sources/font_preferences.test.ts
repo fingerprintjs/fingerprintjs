@@ -1,4 +1,5 @@
 import { withCSS } from '../../tests/utils'
+
 import getFontPreferences, { presets } from './font_preferences'
 
 describe('Sources', () => {

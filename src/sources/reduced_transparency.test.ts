@@ -1,4 +1,5 @@
 import { withMockMatchMedia } from '../../tests/utils'
+
 import isTransparencyReduced from './reduced_transparency'
 
 describe('Sources', () => {

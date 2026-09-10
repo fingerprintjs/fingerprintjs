@@ -1,4 +1,5 @@
 import { withMockMatchMedia } from '../../tests/utils'
+
 import getContrastPreference, { ContrastPreference } from './contrast'
 
 describe('Sources', () => {

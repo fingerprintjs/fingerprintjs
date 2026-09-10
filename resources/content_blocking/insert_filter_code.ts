@@ -2,8 +2,9 @@
  * See docs/content_blockers.md
  */
 
-import * as path from 'path'
 import { promises as fsAsync } from 'fs'
+import * as path from 'path'
+
 import { runCommand } from './utils'
 
 const uniqueSelectorsFile = path.join(__dirname, 'unique_filter_selectors.json')

@@ -1,4 +1,5 @@
 import { withMockProperties } from '../../tests/utils'
+
 import getTimezone from './timezone'
 
 describe('Sources', () => {

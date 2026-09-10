@@ -1,4 +1,5 @@
 import { withMockMatchMedia } from '../../tests/utils'
+
 import areColorsForced from './forced_colors'
 
 describe('Sources', () => {

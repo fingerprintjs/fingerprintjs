@@ -1,4 +1,5 @@
 import { getBrowserMajorVersion, isGecko, isSafari, isSamsungInternet } from '../../tests/utils'
+
 import getCanvasFingerprint, { ImageStatus } from './canvas'
 
 describe('Sources', () => {

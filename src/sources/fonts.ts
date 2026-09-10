@@ -72,7 +72,7 @@ export default function getFonts(): Promise<string[]> {
   // Running the script in an iframe makes it not affect the page look and not be affected by the page CSS. See:
   // https://github.com/fingerprintjs/fingerprintjs/issues/592
   // https://github.com/fingerprintjs/fingerprintjs/issues/628
-  return withIframe(async (_, { document }) => {
+  return withIframe((_, { document }) => {
     const holder = document.body
     holder.style.fontSize = textSize
 

@@ -1,10 +1,11 @@
 import { version } from '../package.json'
+
+import getConfidence, { Confidence } from './confidence'
+import loadBuiltinSources, { BuiltinComponents } from './sources'
 import { requestIdleCallbackIfAvailable } from './utils/async'
 import { UnknownComponents } from './utils/entropy_source'
 import { x64hash128 } from './utils/hashing'
 import { errorToObject } from './utils/misc'
-import loadBuiltinSources, { BuiltinComponents } from './sources'
-import getConfidence, { Confidence } from './confidence'
 
 /**
  * Options for Fingerprint class loading

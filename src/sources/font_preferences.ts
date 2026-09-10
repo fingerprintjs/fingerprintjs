@@ -1,6 +1,6 @@
+import { MaybePromise } from '../utils/async'
 import { isAndroid, isChromium, isChromium128OrNewer, isWebKit } from '../utils/browser'
 import { withIframe } from '../utils/dom'
-import { MaybePromise } from '../utils/async'
 
 type WritableCSSProperties = {
   [K in keyof CSSStyleDeclaration]: CSSStyleDeclaration[K] extends string ? K : never

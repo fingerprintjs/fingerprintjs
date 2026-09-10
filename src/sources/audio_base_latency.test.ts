@@ -1,4 +1,5 @@
 import { getBrowserVersion, isAndroid, isGecko, isWebKit } from '../../tests/utils'
+
 import getAudioBaseLatency, { SpecialFingerprint } from './audio_base_latency'
 
 describe('Sources', () => {
@@ -60,7 +61,7 @@ function hasBaseLatencySupport() {
     const { major, minor } = getBrowserVersion() || { major: 0, minor: 0 }
     if (major < 14) {
       return false
-    } else if (major == 14) {
+    } else if (major === 14) {
       return minor >= 1
     }
   }

@@ -131,6 +131,7 @@ function x64Xor(m: number[], n: number[]): void {
 
 const F1 = [0xff51afd7, 0xed558ccd]
 const F2 = [0xc4ceb9fe, 0x1a85ec53]
+
 /**
  * Calculates murmurHash3's final x64 mix of that block and writes result back to the input value.
  * (`[0, h[0] >>> 1]` is a 33 bit unsigned right shift. This is the
@@ -293,9 +294,9 @@ export function x64hash128(input: string, seed?: number): string {
   x64Add(h1, h2)
   x64Add(h2, h1)
   return (
-    ('00000000' + (h1[0] >>> 0).toString(16)).slice(-8) +
-    ('00000000' + (h1[1] >>> 0).toString(16)).slice(-8) +
-    ('00000000' + (h2[0] >>> 0).toString(16)).slice(-8) +
-    ('00000000' + (h2[1] >>> 0).toString(16)).slice(-8)
+    `00000000${(h1[0] >>> 0).toString(16)}`.slice(-8) +
+    `00000000${(h1[1] >>> 0).toString(16)}`.slice(-8) +
+    `00000000${(h2[0] >>> 0).toString(16)}`.slice(-8) +
+    `00000000${(h2[1] >>> 0).toString(16)}`.slice(-8)
   )
 }

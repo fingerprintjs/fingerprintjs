@@ -230,8 +230,8 @@ export function isChromium86OrNewer(): boolean {
     countTruthy([
       !('MediaSettingsRange' in w),
       'RTCEncodedAudioFrame' in w,
-      '' + w.Intl === '[object Intl]',
-      '' + w.Reflect === '[object Reflect]',
+      `${w.Intl}` === '[object Intl]',
+      `${w.Reflect}` === '[object Reflect]',
     ]) >= 3
   )
 }

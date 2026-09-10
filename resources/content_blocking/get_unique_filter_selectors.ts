@@ -2,9 +2,11 @@
  * See docs/content_blockers.md
  */
 
-import * as path from 'path'
 import { promises as fsAsync } from 'fs'
+import * as path from 'path'
+
 import { areSetsEqual, maxInIterator } from '../../src/utils/data'
+
 import { eachLineInFile } from './utils'
 
 const inputDirectory = path.join(__dirname, 'blocked_selectors')

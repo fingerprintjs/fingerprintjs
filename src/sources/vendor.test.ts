@@ -1,4 +1,5 @@
 import { isChromium, isGecko, isWebKit } from '../../tests/utils'
+
 import getVendor from './vendor'
 
 describe('Sources', () => {

@@ -1,5 +1,5 @@
-import * as browser from '../utils/browser'
 import { isPromise, suppressUnhandledRejectionWarning } from '../utils/async'
+import * as browser from '../utils/browser'
 
 export const enum SpecialFingerprint {
   /** The browser is known for always suspending audio context, thus making fingerprinting impossible */

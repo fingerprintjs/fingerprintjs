@@ -1,5 +1,5 @@
-import { replaceNaN, toInt } from '../utils/data'
 import { isSafariWebKit, isWebKit, isWebKit616OrNewer } from '../utils/browser'
+import { replaceNaN, toInt } from '../utils/data'
 
 type ScreenResolution = [number | null, number | null]
 

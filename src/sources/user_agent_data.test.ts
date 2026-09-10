@@ -1,4 +1,5 @@
 import { withMockProperties } from '../../tests/utils'
+
 import getUserAgentData from './user_agent_data'
 
 describe('Sources', () => {
