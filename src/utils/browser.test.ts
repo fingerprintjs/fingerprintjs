@@ -1,4 +1,5 @@
 import * as utils from '../../tests/utils'
+
 import * as browser from './browser'
 
 describe('Browser utilities', () => {

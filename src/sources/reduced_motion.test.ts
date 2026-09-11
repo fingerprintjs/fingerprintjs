@@ -1,4 +1,5 @@
 import { withMockMatchMedia } from '../../tests/utils'
+
 import isMotionReduced from './reduced_motion'
 
 describe('Sources', () => {

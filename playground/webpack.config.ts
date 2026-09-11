@@ -1,7 +1,8 @@
-import { ConfigOptions } from 'webpack-cli'
-import { Configuration as DevServer } from 'webpack-dev-server'
 import * as HtmlWebpackPlugin from 'html-webpack-plugin'
 import * as TerserPlugin from 'terser-webpack-plugin'
+import { ConfigOptions } from 'webpack-cli'
+import { Configuration as DevServer } from 'webpack-dev-server'
+
 import terserConfig from '../terser.config'
 
 const configurationFactory: ConfigOptions = (_env, { mode = 'development' }) => ({

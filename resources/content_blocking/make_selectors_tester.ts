@@ -2,10 +2,13 @@
  * See docs/content_blockers.md
  */
 
-import * as path from 'path'
 import { promises as fsAsync } from 'fs'
+import * as path from 'path'
+
 import * as rollup from 'rollup'
+
 import rollupConfig from '../../rollup.config'
+
 import filterConfig, { FilterList } from './filters'
 import { fetchFilter } from './utils'
 

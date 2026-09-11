@@ -1,4 +1,5 @@
 import { withMockMatchMedia } from '../../tests/utils'
+
 import getMonochromeDepth from './monochrome'
 
 describe('Sources', () => {

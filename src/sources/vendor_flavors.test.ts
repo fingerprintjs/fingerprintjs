@@ -1,4 +1,5 @@
 import { isChromium, isGecko, isMobile, isSafari, isWebKit } from '../../tests/utils'
+
 import getVendorFlavors from './vendor_flavors'
 
 describe('Sources', () => {

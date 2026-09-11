@@ -1,4 +1,5 @@
 import { isMobile, isTablet, withMockProperties } from '../../tests/utils'
+
 import getTouchSupport from './touch_support'
 
 describe('Sources', () => {

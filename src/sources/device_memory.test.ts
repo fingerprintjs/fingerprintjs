@@ -1,4 +1,5 @@
 import { withMockProperties } from '../../tests/utils'
+
 import getDeviceMemory from './device_memory'
 
 describe('Sources', () => {

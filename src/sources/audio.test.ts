@@ -1,4 +1,5 @@
 import { getBrowserMajorVersion, isMobile, isSafari, isSamsungInternet } from '../../tests/utils'
+
 import getAudioFingerprint, { SpecialFingerprint } from './audio'
 
 describe('Sources', () => {

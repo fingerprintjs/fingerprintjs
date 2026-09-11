@@ -1,4 +1,5 @@
 import { isAndroid, isMacOS, isMobile, isSafari, isTablet, isWindows } from '../../tests/utils'
+
 import getPlatform from './platform'
 
 describe('Sources', () => {

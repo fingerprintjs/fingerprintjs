@@ -1,4 +1,5 @@
 import { getBrowserMajorVersion, isSafari } from '../../tests/utils'
+
 import getScreenResolution from './screen_resolution'
 
 describe('Sources', () => {

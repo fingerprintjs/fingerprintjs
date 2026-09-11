@@ -1,7 +1,8 @@
 import { getBrowserMajorVersion, isAndroid, isMacOS, isMobile, isSafari, isTablet, isWindows } from '../tests/utils'
-import { loadSources } from './utils/entropy_source'
-import getPlatform from './sources/platform'
+
 import getConfidence, { commentTemplate } from './confidence'
+import getPlatform from './sources/platform'
+import { loadSources } from './utils/entropy_source'
 
 describe('Confidence', () => {
   it('matches the current platform', async () => {

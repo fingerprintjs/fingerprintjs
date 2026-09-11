@@ -1,6 +1,6 @@
 import { BuiltinComponents } from './sources'
-import { round } from './utils/data'
 import { isAndroid, isWebKit, isDesktopWebKit, isWebKit616OrNewer, isSafariWebKit } from './utils/browser'
+import { round } from './utils/data'
 
 export interface Confidence {
   /**

@@ -1,4 +1,5 @@
 import { getBrowserMajorVersion, getBrowserVersion, isGecko, isSafari } from '../../tests/utils'
+
 import getHardwareConcurrency, { getUnstableHardwareConcurrency } from './hardware_concurrency'
 
 describe('Sources', () => {

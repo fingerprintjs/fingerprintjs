@@ -8,6 +8,7 @@ import {
   isWebKit,
   isWindows,
 } from '../../tests/utils'
+
 import getFonts from './fonts'
 
 describe('Sources', () => {

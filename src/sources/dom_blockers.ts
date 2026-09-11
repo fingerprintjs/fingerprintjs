@@ -1,7 +1,7 @@
-import { isAndroid, isWebKit } from '../utils/browser'
-import { selectorToElement } from '../utils/dom'
-import { countTruthy } from '../utils/data'
 import { wait } from '../utils/async'
+import { isAndroid, isWebKit } from '../utils/browser'
+import { countTruthy } from '../utils/data'
+import { selectorToElement } from '../utils/dom'
 
 type Filters = Record<string, string[]>
 

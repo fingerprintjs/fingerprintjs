@@ -1,4 +1,5 @@
 import { version } from '../package.json'
+
 import { load as loadAgent } from './agent'
 import { sources } from './sources'
 import { isSourceLoaded } from './sources/cpu_class'

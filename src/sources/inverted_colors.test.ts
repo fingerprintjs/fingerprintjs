@@ -1,4 +1,5 @@
 import { withMockMatchMedia } from '../../tests/utils'
+
 import areColorsInverted from './inverted_colors'
 
 describe('Sources', () => {

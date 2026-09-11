@@ -38,6 +38,7 @@
     "playground:build": "cd playground && webpack --mode production",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore --max-warnings 0 .",
     "lint:fix": "yarn lint --fix",
+    "prepare": "husky",
     "test:local": "karma start --preset local --single-run",
     "test:browserstack": "karma start --preset browserstack --single-run",
     "test:browserstack:beta": "karma start --preset browserstack-beta --single-run",
@@ -56,11 +57,14 @@
     "@typescript-eslint/parser": "^5.62.0",
     "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "file-loader": "^6.2.0",
     "got": "^11.8.5",
     "html-webpack-plugin": "^5.5.0",
+    "husky": "^9.1.7",
     "karma": "^6.4.1",
+    "lint-staged": "^17.5.0",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
     "rollup": "^3.25.0",
@@ -74,5 +78,8 @@
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^5.2.1"
+  },
+  "lint-staged": {
+    "*.{js,ts}": "eslint --max-warnings 0 --fix"
   }
 }

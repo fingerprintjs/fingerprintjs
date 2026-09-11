@@ -1,7 +1,8 @@
 import { isChromium } from '../../tests/utils'
-import { selectorToElement } from '../utils/dom'
-import { parseSimpleCssSelector } from '../utils/data'
 import { MaybePromise } from '../utils/async'
+import { parseSimpleCssSelector } from '../utils/data'
+import { selectorToElement } from '../utils/dom'
+
 import getDomBlockers, { getFilters, isApplicable } from './dom_blockers'
 
 async function withBlockedSelectors<T>(selectors: string[], action: () => MaybePromise<T>): Promise<T> {

@@ -1,5 +1,6 @@
-import { addStyleString, isAnyParentCrossOrigin, withIframe } from './dom'
 import { withMockProperties } from '../../tests/utils'
+
+import { addStyleString, isAnyParentCrossOrigin, withIframe } from './dom'
 
 describe('DOM utilities', () => {
   it('adds style string', () => {

@@ -1,4 +1,5 @@
 import { holdLoop } from '../../tests/utils'
+
 import { awaitIfAsync, mapWithBreaks, wait } from './async'
 
 describe('Async utilities', () => {

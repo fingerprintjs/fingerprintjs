@@ -1,7 +1,8 @@
+import { spawn, SpawnOptions } from 'child_process'
 import * as fs from 'fs'
 import * as readline from 'readline'
-import { spawn, SpawnOptions } from 'child_process'
 import { URL } from 'url'
+
 import got from 'got'
 
 export async function eachLineInFile(

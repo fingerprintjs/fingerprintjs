@@ -96,6 +96,7 @@ describe('Data utilities', () => {
     function* emptyGenerator() {
       // Nothing
     }
+
     expect(maxInIterator(generator(), (item) => item.val)).toEqual({ val: 8 })
     expect(maxInIterator(generator(), (item) => -item.val)).toEqual({ val: 1 })
     expect(maxInIterator(generator(), (item) => (item.val % 2 === 0 ? item.val : item.val * 2))).toEqual({ val: 7 })

@@ -1,4 +1,3 @@
-import { replaceNaN, round, toFloat } from '../utils/data'
 import {
   exitFullscreen,
   getFullscreenElement,
@@ -8,6 +7,7 @@ import {
   isWebKit,
   isWebKit616OrNewer,
 } from '../utils/browser'
+import { replaceNaN, round, toFloat } from '../utils/data'
 
 /**
  * The order matches the CSS side order: top, right, bottom, left.

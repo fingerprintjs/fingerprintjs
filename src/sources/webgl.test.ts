@@ -1,4 +1,5 @@
 import { withMockProperties } from '../../tests/utils'
+
 import { getWebGlBasics, getWebGlExtensions, STATUS_GET_PARAMETER_NOT_A_FUNCTION, STATUS_NO_GL_CONTEXT } from './webgl'
 
 function isWebGLSupported() {

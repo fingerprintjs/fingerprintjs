@@ -1,4 +1,5 @@
 import { isGecko } from '../utils/browser'
+
 import getOsCpu from './os_cpu'
 
 describe('Sources', () => {

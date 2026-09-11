@@ -1,4 +1,5 @@
 import { withMockMatchMedia } from '../../tests/utils'
+
 import getColorGamut from './color_gamut'
 
 describe('Sources', () => {

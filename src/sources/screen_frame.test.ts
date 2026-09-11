@@ -1,4 +1,5 @@
 import { getBrowserMajorVersion, isGecko, isSafari, withMockProperties } from '../../tests/utils'
+
 import getScreenFrame, {
   FrameSize,
   getUnstableScreenFrame,

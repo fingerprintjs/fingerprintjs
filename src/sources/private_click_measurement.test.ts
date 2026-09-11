@@ -1,4 +1,5 @@
 import * as utils from '../../tests/utils'
+
 import getPrivateClickMeasurement from './private_click_measurement'
 
 describe('Sources', () => {
