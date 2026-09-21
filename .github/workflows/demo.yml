@@ -10,6 +10,13 @@ jobs:
     name: Publish the demo
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,13 +30,12 @@ jobs:
         run: yarn install
       - name: Build the demo
         run: yarn playground:build
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Upload the demo
+        uses: actions/upload-pages-artifact@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-pages
-          folder: playground/dist
-          clean: true
-          single-commit: true
+          path: playground/dist
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages/@v4
       - name: Print the demo URL
         run: echo "✅ The demo has been deployed to https://$(cut -d'/' -f1 <<< $GITHUB_REPOSITORY).github.io/$(cut -d'/' -f2 <<< $GITHUB_REPOSITORY)/"
