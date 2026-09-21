@@ -1,5 +1,5 @@
 # Reference on this file: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
-# To make it work, go to the repository settings, then Options, GitHub Pages and select `gh-pages` under Source.
+# To make it work, go to the repository settings, then Pages and select "GitHub Actions" as the source.
 name: Publish the demo
 on:
   push:
@@ -36,6 +36,6 @@ jobs:
           path: playground/dist
       - name: Deploy to GitHub Pages
         id: deploy
-        uses: actions/deploy-pages/@v4
+        uses: actions/deploy-pages@v4
       - name: Print the demo URL
         run: echo "✅ The demo has been deployed to https://$(cut -d'/' -f1 <<< $GITHUB_REPOSITORY).github.io/$(cut -d'/' -f2 <<< $GITHUB_REPOSITORY)/"
