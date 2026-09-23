@@ -376,18 +376,18 @@ export function isAndroid(): boolean {
   const isItGecko = isGecko()
   const w = window
   const n = navigator
-  const c = 'connection'
 
   // Chrome removes all words "Android" from `navigator` when desktop version is requested
   // Firefox keeps "Android" in `navigator.appVersion` when desktop version is requested
   if (isItChromium) {
     return (
       countTruthy([
-        !('SharedWorker' in w),
+        'ContentIndex' in w, // Since Chrome 84
+        'HTMLInputElement' in w && 'capture' in HTMLInputElement.prototype, // Since Chrome 25
         // `typechange` is deprecated, but it's still present on Android (tested on Chrome Mobile 117)
         // Removal proposal https://bugs.chromium.org/p/chromium/issues/detail?id=699892
         // Note: this expression returns true on ChromeOS, so additional detectors are required to avoid false-positives
-        n[c] && 'ontypechange' in n[c],
+        'NetworkInformation' in w && 'ontypechange' in (w.NetworkInformation?.prototype ?? {}),
         !('sinkId' in new Audio()),
       ]) >= 2
     )
