@@ -434,6 +434,6 @@ function hasDictCollation(): boolean {
   try {
     return !!window.Intl?.supportedValuesOf?.('collation').includes('dict')
   } catch {
-    return true
+    return false
   }
 }
