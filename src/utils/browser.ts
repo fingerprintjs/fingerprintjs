@@ -382,7 +382,7 @@ export function isAndroid(): boolean {
   if (isItChromium) {
     return (
       countTruthy([
-        'ContentIndex' in w, // Since Chrome 84
+        hasDictCollation(), // Since Chrome 99
         'HTMLInputElement' in w && 'capture' in HTMLInputElement.prototype, // Since Chrome 25
         // `typechange` is deprecated, but it's still present on Android (tested on Chrome Mobile 117)
         // Removal proposal https://bugs.chromium.org/p/chromium/issues/detail?id=699892
@@ -423,4 +423,17 @@ export function isSamsungInternet(): boolean {
       'getTextInformation' in Image.prototype, // Not available in Samsung Internet 21
     ]) >= 3
   )
+}
+
+/*
+ * Checks whether the browser supports the 'dict' collation, which Chrome supports only on Android.
+ * It doesn't check that the browser is based on Chromium, please use isChromium() before using this function.
+ * Note: it returns true in Edge, so additional detectors are required to avoid false-positives
+ */
+function hasDictCollation(): boolean {
+  try {
+    return !!window.Intl?.supportedValuesOf?.('collation').includes('dict')
+  } catch {
+    return true
+  }
 }
