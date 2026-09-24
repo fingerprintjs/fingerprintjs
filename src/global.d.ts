@@ -6,6 +6,11 @@ interface Window {
   ApplePaySession?: ApplePaySessionConstructor
   __fpjs_d_m?: unknown
   URLPattern?: new (...args: unknown[]) => unknown
+  NetworkInformation?: new (...args: unknown[]) => unknown
+  Intl?: {
+    /** See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/supportedValuesOf */
+    supportedValuesOf?(key: 'collation'): string[]
+  }
 }
 
 interface Navigator {

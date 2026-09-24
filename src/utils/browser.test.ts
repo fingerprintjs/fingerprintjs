@@ -110,5 +110,12 @@ describe('Browser utilities', () => {
     it('detects Android', () => {
       expect(browser.isAndroid()).toBe(utils.isAndroid())
     })
+
+    it('handles a throwing Intl.supportedValuesOf', async () => {
+      const supportedValuesOf = jasmine.createSpy().and.throwError('Artificial')
+      await utils.withMockProperties(Intl, { supportedValuesOf: { value: supportedValuesOf } }, () => {
+        expect(browser.isAndroid()).toBe(utils.isAndroid())
+      })
+    })
   })
 })
