@@ -376,18 +376,18 @@ export function isAndroid(): boolean {
   const isItGecko = isGecko()
   const w = window
   const n = navigator
-  const c = 'connection'
 
   // Chrome removes all words "Android" from `navigator` when desktop version is requested
   // Firefox keeps "Android" in `navigator.appVersion` when desktop version is requested
   if (isItChromium) {
     return (
       countTruthy([
-        !('SharedWorker' in w),
+        hasDictCollation(), // Since Chrome 99
+        'HTMLInputElement' in w && 'capture' in HTMLInputElement.prototype, // Since Chrome 25
         // `typechange` is deprecated, but it's still present on Android (tested on Chrome Mobile 117)
         // Removal proposal https://bugs.chromium.org/p/chromium/issues/detail?id=699892
         // Note: this expression returns true on ChromeOS, so additional detectors are required to avoid false-positives
-        n[c] && 'ontypechange' in n[c],
+        'NetworkInformation' in w && 'ontypechange' in (w.NetworkInformation?.prototype ?? {}),
         !('sinkId' in new Audio()),
       ]) >= 2
     )
@@ -423,4 +423,17 @@ export function isSamsungInternet(): boolean {
       'getTextInformation' in Image.prototype, // Not available in Samsung Internet 21
     ]) >= 3
   )
+}
+
+/*
+ * Checks whether the browser supports the 'dict' collation, which Chrome supports only on Android.
+ * It doesn't check that the browser is based on Chromium, please use isChromium() before using this function.
+ * Note: it returns true in Edge, so additional detectors are required to avoid false-positives
+ */
+function hasDictCollation(): boolean {
+  try {
+    return !!window.Intl?.supportedValuesOf?.('collation').includes('dict')
+  } catch {
+    return false
+  }
 }
