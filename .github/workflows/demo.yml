@@ -28,14 +28,14 @@ jobs:
           restore-keys: nodemodules-
       - name: Install Node packages
         run: yarn install
-      - name: Build the demo
+      - name: Build
         run: yarn playground:build
-      - name: Upload the demo
+      - name: Upload
         uses: actions/upload-pages-artifact@v4
         with:
           path: playground/dist
       - name: Deploy to GitHub Pages
         id: deploy
         uses: actions/deploy-pages@v4
-      - name: Print the demo URL
-        run: echo "✅ The demo has been deployed to https://$(cut -d'/' -f1 <<< $GITHUB_REPOSITORY).github.io/$(cut -d'/' -f2 <<< $GITHUB_REPOSITORY)/"
+      - name: Print the URL
+        run: echo "✅ The been deployed to https://$(cut -d'/' -f1 <<< $GITHUB_REPOSITORY).github.io/$(cut -d'/' -f2 <<< $GITHUB_REPOSITORY)/"
