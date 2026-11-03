@@ -39,5 +39,37 @@ describe('DOM utilities', () => {
         jasmine.clock().uninstall()
       }
     })
+
+    it('falls back to an empty document when the initial HTML is rejected by Trusted Types', async () => {
+      const result = await withMockProperties(
+        HTMLIFrameElement.prototype,
+        {
+          srcdoc: {
+            set: () => {
+              throw new TypeError("This document requires 'TrustedHTML' assignment.")
+            },
+          },
+        },
+        () => withIframe((iframe, iWindow) => [iframe.getAttribute('src'), !!iWindow.document.body], '<!doctype html>'),
+      )
+      expect(result).toEqual(['about:blank', true])
+    })
+
+    it('rethrows unexpected errors when setting the initial HTML', async () => {
+      const error = new Error('Unexpected')
+      await withMockProperties(
+        HTMLIFrameElement.prototype,
+        {
+          srcdoc: {
+            set: () => {
+              throw error
+            },
+          },
+        },
+        async () => {
+          await expectAsync(withIframe(() => null, '<!doctype html>')).toBeRejectedWith(error)
+        },
+      )
+    })
   })
 })
