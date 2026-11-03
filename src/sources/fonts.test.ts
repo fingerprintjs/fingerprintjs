@@ -16,6 +16,12 @@ describe('Sources', () => {
     it('returns expected fonts', async () => {
       const result = await getFonts()
 
+      // Firefox 120+ (fonts are hidden in private browsing and strict ETP mode)
+      if (isFirefox120OrNewer()) {
+        expect(result).toEqual([])
+        return
+      }
+
       // macOS (Firefox, Chromium, Safari)
       if (isMacOS()) {
         containsExpectedFonts(['Arial Unicode MS', 'Gill Sans', 'Helvetica Neue', 'Menlo'], result)
@@ -71,6 +77,11 @@ describe('Sources', () => {
     })
   })
 })
+
+function isFirefox120OrNewer() {
+  const browserVersion = getBrowserMajorVersion() ?? 0
+  return isGecko() && browserVersion >= 120
+}
 
 function containsExpectedFonts(expected: string[], actual: string[]) {
   for (const font of expected) {

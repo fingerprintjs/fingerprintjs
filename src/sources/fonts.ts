@@ -1,3 +1,4 @@
+import { isGecko, isGecko120OrNewer } from '../utils/browser'
 import { withIframe } from '../utils/dom'
 
 // We use m or w because these two characters take up the maximum width.
@@ -67,8 +68,19 @@ const fontList = [
   'ZWAdobeF',
 ] as const
 
+/**
+ * Firefox hides optional fonts (such as fonts installed by Microsoft Office or optional language packs) in private
+ * browsing and strict ETP mode (FontVisibilityLangPack), so the fonts are not used in Firefox 120+.
+ *
+ * @see https://github.com/fingerprintjs/fingerprintjs/issues/1226
+ * @see https://searchfox.org/mozilla-central/source/toolkit/components/resistfingerprinting/RFPTargetsDefault.inc
+ */
 // kudos to http://www.lalit.org/lab/javascript-css-font-detect/
 export default function getFonts(): Promise<string[]> {
+  if (isGecko() && isGecko120OrNewer()) {
+    return Promise.resolve([])
+  }
+
   // Running the script in an iframe makes it not affect the page look and not be affected by the page CSS. See:
   // https://github.com/fingerprintjs/fingerprintjs/issues/592
   // https://github.com/fingerprintjs/fingerprintjs/issues/628
