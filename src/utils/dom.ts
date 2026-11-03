@@ -46,7 +46,16 @@ export async function withIframe<T>(
       style.left = '0'
       style.visibility = 'hidden'
       if (initialHtml && 'srcdoc' in iframe) {
-        iframe.srcdoc = initialHtml
+        try {
+          iframe.srcdoc = initialHtml
+        } catch (error) {
+          // Pages that enforce Trusted Types (`require-trusted-types-for 'script'`) throw a TypeError here.
+          // See https://github.com/fingerprintjs/fingerprintjs/issues/1227
+          if (!(error instanceof TypeError)) {
+            throw error
+          }
+          iframe.src = 'about:blank'
+        }
       } else {
         iframe.src = 'about:blank'
       }
