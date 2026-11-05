@@ -21,7 +21,9 @@ function releaseEventLoop(): Promise<void> {
 
 export function requestIdleCallbackIfAvailable(fallbackTimeout: number, deadlineTimeout = Infinity): Promise<void> {
   const { requestIdleCallback } = window
-  if (requestIdleCallback) {
+  // A zero timeout means no deadline for `requestIdleCallback`, so a busy page can delay the callback for seconds.
+  // See https://github.com/fingerprintjs/fingerprintjs/issues/1231
+  if (requestIdleCallback && deadlineTimeout > 0) {
     // The function `requestIdleCallback` loses the binding to `window` here.
     // `globalThis` isn't always equal `window` (see https://github.com/fingerprintjs/fingerprintjs/issues/683).
     // Therefore, an error can occur. `call(window,` prevents the error.
