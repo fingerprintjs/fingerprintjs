@@ -1,6 +1,6 @@
-import { holdLoop } from '../../tests/utils'
+import { holdLoop, withMockProperties } from '../../tests/utils'
 
-import { awaitIfAsync, mapWithBreaks, wait } from './async'
+import { awaitIfAsync, mapWithBreaks, requestIdleCallbackIfAvailable, wait } from './async'
 
 describe('Async utilities', () => {
   describe('awaitIfAsync', () => {
@@ -149,6 +149,28 @@ describe('Async utilities', () => {
           throw error
         }),
       ).toBeRejectedWith(error)
+    })
+  })
+
+  describe('requestIdleCallbackIfAvailable', () => {
+    it('passes the deadline to requestIdleCallback', async () => {
+      const requestIdleCallback = jasmine.createSpy().and.callFake((callback: () => void) => {
+        callback()
+        return 0
+      })
+      await withMockProperties(window, { requestIdleCallback: { value: requestIdleCallback } }, () =>
+        requestIdleCallbackIfAvailable(50, 100),
+      )
+      expect(requestIdleCallback).toHaveBeenCalledWith(jasmine.any(Function), { timeout: 100 })
+    })
+
+    it("doesn't wait for an idle period when the deadline is 0", async () => {
+      // Simulates a busy page where the browser never calls the idle callback
+      await withMockProperties(window, { requestIdleCallback: { value: () => 0 } }, async () => {
+        const promise = requestIdleCallbackIfAvailable(0, 0)
+        await wait(50)
+        await expectAsync(promise).already.toBeResolved()
+      })
     })
   })
 })
